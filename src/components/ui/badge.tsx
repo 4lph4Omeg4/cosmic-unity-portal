@@ -15,6 +15,10 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        cosmic: "border-transparent bg-cosmic-gradient text-white shadow-cosmic",
+        mystical: "border-transparent bg-mystical-gradient text-white shadow-mystical",
+        energy: "border-transparent bg-energy-gradient text-cosmic-foreground shadow-energy",
+        divine: "border-transparent bg-divine-gradient text-white shadow-divine",
       },
     },
     defaultVariants: {

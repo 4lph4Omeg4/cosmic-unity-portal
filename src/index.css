@@ -1,42 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Cosmic Mystical Design System for SH4M4NI4K - The Chosen Ones */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Cosmic Background System */
+    --background: 240 15% 6%;
+    --foreground: 240 25% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card & Surface System */
+    --card: 240 20% 8%;
+    --card-foreground: 240 20% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 25% 10%;
+    --popover-foreground: 240 20% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Cosmic Primary - Deep Mystical Blue */
+    --primary: 240 80% 65%;
+    --primary-foreground: 240 15% 6%;
+    --primary-glow: 240 90% 75%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Sacred Secondary - Cosmic Purple */
+    --secondary: 280 70% 55%;
+    --secondary-foreground: 280 15% 95%;
+    --secondary-glow: 280 85% 70%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Mystical Accent - Turquoise Energy */
+    --accent: 180 100% 50%;
+    --accent-foreground: 180 15% 10%;
+    --accent-glow: 180 100% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Galactic Highlight - Fuchsia Power */
+    --cosmic: 320 100% 70%;
+    --cosmic-foreground: 320 15% 5%;
+    --cosmic-glow: 320 100% 85%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Muted System */
+    --muted: 240 15% 15%;
+    --muted-foreground: 240 15% 65%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Destructive Energy */
+    --destructive: 0 100% 65%;
+    --destructive-foreground: 0 15% 95%;
 
-    --radius: 0.5rem;
+    /* Borders & Inputs */
+    --border: 240 20% 20%;
+    --input: 240 25% 12%;
+    --ring: 240 80% 65%;
+
+    --radius: 0.75rem;
+
+    /* Sacred Geometry Gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-mystical: linear-gradient(45deg, hsl(var(--secondary)), hsl(var(--cosmic)));
+    --gradient-energy: linear-gradient(90deg, hsl(var(--accent)), hsl(var(--primary)));
+    --gradient-divine: linear-gradient(180deg, hsl(var(--cosmic)), hsl(var(--accent)));
+    
+    /* Sacred Shadows & Glows */
+    --shadow-cosmic: 0 10px 40px -10px hsl(var(--primary) / 0.4);
+    --shadow-mystical: 0 0 30px hsl(var(--secondary) / 0.3);
+    --shadow-energy: 0 0 20px hsl(var(--accent) / 0.5);
+    --shadow-divine: 0 0 50px hsl(var(--cosmic) / 0.4);
+    
+    /* Sacred Animations */
+    --transition-cosmic: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-mystical: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +132,148 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-rajdhani;
+    background-image: radial-gradient(circle at 20% 80%, hsl(var(--primary) / 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, hsl(var(--secondary) / 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 40% 40%, hsl(var(--accent) / 0.05) 0%, transparent 50%);
+  }
+}
+
+@layer components {
+  /* Sacred Typography */
+  .font-cosmic {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+  }
+  
+  .font-mystical {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+  }
+
+  /* Sacred Geometry Backgrounds */
+  .bg-cosmic-gradient {
+    background: var(--gradient-cosmic);
+  }
+  
+  .bg-mystical-gradient {
+    background: var(--gradient-mystical);
+  }
+  
+  .bg-energy-gradient {
+    background: var(--gradient-energy);
+  }
+  
+  .bg-divine-gradient {
+    background: var(--gradient-divine);
+  }
+
+  /* Sacred Shadows & Glows */
+  .shadow-cosmic {
+    box-shadow: var(--shadow-cosmic);
+  }
+  
+  .shadow-mystical {
+    box-shadow: var(--shadow-mystical);
+  }
+  
+  .shadow-energy {
+    box-shadow: var(--shadow-energy);
+  }
+  
+  .shadow-divine {
+    box-shadow: var(--shadow-divine);
+  }
+  
+  /* Cosmic Glow Effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.4);
+  }
+  
+  .glow-cosmic {
+    box-shadow: 0 0 20px hsl(var(--cosmic) / 0.6), 0 0 40px hsl(var(--cosmic) / 0.4);
+  }
+  
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.6), 0 0 40px hsl(var(--accent) / 0.4);
+  }
+
+  /* Sacred Animations */
+  .animate-cosmic-pulse {
+    animation: cosmic-pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-mystical-float {
+    animation: mystical-float 6s ease-in-out infinite;
+  }
+  
+  .animate-energy-flow {
+    animation: energy-flow 4s linear infinite;
+  }
+
+  /* Cosmic Hover Effects */
+  .cosmic-hover {
+    transition: var(--transition-cosmic);
+  }
+  
+  .cosmic-hover:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-cosmic);
+  }
+  
+  .mystical-hover {
+    transition: var(--transition-mystical);
+  }
+  
+  .mystical-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-mystical);
+  }
+}
+
+@layer utilities {
+  /* Sacred Geometry Keyframes */
+  @keyframes cosmic-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes mystical-float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes energy-flow {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  /* Sacred Text Effects */
+  .text-cosmic-gradient {
+    background: var(--gradient-cosmic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-mystical-gradient {
+    background: var(--gradient-mystical);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
