@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Star, Filter, Grid, List, ShoppingCart, ExternalLink } from 'lucide-react';
+import { Star, Filter, Grid, List, ShoppingCart, ExternalLink, Eye } from 'lucide-react';
 import { fetchCollections, fetchProducts, createCheckout } from '@/integrations/shopify/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface ShopifyCollection {
   id: string;
@@ -78,8 +80,11 @@ interface ShopifyProduct {
 }
 
 const Shop = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
 
@@ -92,6 +97,7 @@ const Shop = () => {
         ]);
         setCollections(fetchedCollections);
         setProducts(fetchedProducts);
+        setFilteredProducts(fetchedProducts);
       } catch (error) {
         console.error('Error loading shop data:', error);
       } finally {
@@ -102,14 +108,40 @@ const Shop = () => {
     loadData();
   }, []);
 
+  const handleCollectionFilter = (collectionHandle: string | null) => {
+    setSelectedCollection(collectionHandle);
+    
+    if (!collectionHandle) {
+      setFilteredProducts(products);
+    } else {
+      const collection = collections.find(c => c.handle === collectionHandle);
+      if (collection) {
+        const collectionProductIds = collection.products.edges.map(edge => edge.node.id);
+        const filtered = products.filter(product => 
+          collectionProductIds.includes(product.id)
+        );
+        setFilteredProducts(filtered);
+      }
+    }
+  };
+
   const handleAddToCart = async (variantId: string) => {
     try {
       const checkout = await createCheckout([{ variantId, quantity: 1 }]);
       if (checkout?.webUrl) {
         window.open(checkout.webUrl, '_blank');
+        toast({
+          title: "Toegevoegd aan winkelwagen",
+          description: "Je wordt doorgestuurd naar de checkout.",
+        });
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
+      toast({
+        title: "Fout bij toevoegen",
+        description: "Product kon niet worden toegevoegd aan de winkelwagen.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -199,9 +231,9 @@ const Shop = () => {
                     <Button 
                       variant="mystical" 
                       className="w-full"
-                      onClick={() => setSelectedCollection(collection.handle)}
+                      onClick={() => handleCollectionFilter(collection.handle)}
                     >
-                      Explore Collection
+                      Bekijk Collectie ({collection.products.edges.length})
                     </Button>
                   </CardContent>
                 </Card>
@@ -209,15 +241,43 @@ const Shop = () => {
             </div>
           ) : null}
 
+          {/* Filter Bar */}
+          {collections.length > 0 && (
+            <div className="mb-8">
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant={selectedCollection === null ? "mystical" : "outline"}
+                  onClick={() => handleCollectionFilter(null)}
+                >
+                  Alle Producten
+                </Button>
+                {collections.map((collection) => (
+                  <Button
+                    key={collection.id}
+                    variant={selectedCollection === collection.handle ? "mystical" : "outline"}
+                    onClick={() => handleCollectionFilter(collection.handle)}
+                  >
+                    {collection.title}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Products Grid */}
-          {products.length > 0 && (
+          {filteredProducts.length > 0 && (
             <div>
               <h2 className="font-cosmic text-3xl font-bold text-center mb-12">
-                <span className="text-mystical-gradient">Alle Producten</span>
+                <span className="text-mystical-gradient">
+                  {selectedCollection 
+                    ? collections.find(c => c.handle === selectedCollection)?.title || 'Producten'
+                    : 'Alle Producten'
+                  }
+                </span>
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <Card key={product.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
                     <div className="aspect-square overflow-hidden rounded-t-lg">
                       {product.images.edges.length > 0 ? (
@@ -256,23 +316,23 @@ const Shop = () => {
                     
                     <CardContent>
                       <div className="flex gap-2">
+                        <Button 
+                          variant="mystical" 
+                          className="flex-1"
+                          onClick={() => navigate(`/product/${product.handle}`)}
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Bekijk
+                        </Button>
                         {product.variants.edges.length > 0 && product.variants.edges[0].node.availableForSale && (
                           <Button 
-                            variant="mystical" 
-                            className="flex-1"
+                            variant="outline"
+                            size="icon"
                             onClick={() => handleAddToCart(product.variants.edges[0].node.id)}
                           >
-                            <ShoppingCart className="w-4 h-4 mr-2" />
-                            Add to Cart
+                            <ShoppingCart className="w-4 h-4" />
                           </Button>
                         )}
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => window.open(`https://rfih5t-ij.myshopify.com/products/${product.handle}`, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -282,7 +342,7 @@ const Shop = () => {
           )}
 
           {/* Empty State */}
-          {collections.length === 0 && products.length === 0 && !loading && (
+          {collections.length === 0 && filteredProducts.length === 0 && !loading && (
             <div className="text-center py-16">
               <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-cosmic animate-cosmic-pulse">
                 <Star className="w-8 h-8 text-white" />

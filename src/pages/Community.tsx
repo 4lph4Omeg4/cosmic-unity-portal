@@ -1,0 +1,425 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Star, Heart, MessageCircle, Plus, Send, Users } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+
+interface Profile {
+  id: string;
+  user_id: string;
+  display_name: string;
+  avatar_url?: string;
+}
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+  profiles: Profile;
+  likes: { id: string }[];
+  comments: { id: string; content: string; profiles: Profile; created_at: string }[];
+}
+
+const Community = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [newPost, setNewPost] = useState({ title: '', content: '' });
+  const [showNewPost, setShowNewPost] = useState(false);
+  const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    loadPosts();
+    setupRealtimeSubscription();
+  }, [user, navigate]);
+
+  const loadPosts = async () => {
+    try {
+      // First get posts with profiles
+      const { data: postsData, error: postsError } = await supabase
+        .from('posts')
+        .select(`
+          *,
+          profiles(id, user_id, display_name, avatar_url)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (postsError) throw postsError;
+
+      // Then get likes and comments for each post
+      const postsWithDetails = await Promise.all(
+        (postsData || []).map(async (post) => {
+          const [{ data: likes }, { data: comments }] = await Promise.all([
+            supabase.from('likes').select('id').eq('post_id', post.id),
+            supabase.from('comments').select(`
+              id, content, created_at,
+              profiles(id, user_id, display_name, avatar_url)
+            `).eq('post_id', post.id)
+          ]);
+
+          return {
+            ...post,
+            likes: likes || [],
+            comments: comments || []
+          };
+        })
+      );
+
+      setPosts(postsWithDetails as any);
+    } catch (error) {
+      console.error('Error loading posts:', error);
+      toast({
+        title: "Fout bij laden",
+        description: "Posts konden niet worden geladen.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setupRealtimeSubscription = () => {
+    const channel = supabase
+      .channel('community-updates')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
+        loadPosts();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, () => {
+        loadPosts();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'likes' }, () => {
+        loadPosts();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  };
+
+  const createPost = async () => {
+    if (!user || !newPost.title.trim() || !newPost.content.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .insert({
+          title: newPost.title,
+          content: newPost.content,
+          user_id: user.id
+        });
+
+      if (error) throw error;
+
+      setNewPost({ title: '', content: '' });
+      setShowNewPost(false);
+      toast({
+        title: "Post aangemaakt",
+        description: "Je bericht is gedeeld met de community.",
+      });
+    } catch (error) {
+      console.error('Error creating post:', error);
+      toast({
+        title: "Fout bij aanmaken",
+        description: "Post kon niet worden aangemaakt.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const toggleLike = async (postId: string) => {
+    if (!user) return;
+
+    try {
+      const post = posts.find(p => p.id === postId);
+      const isLiked = post?.likes.some(like => like.id === user.id);
+
+      if (isLiked) {
+        await supabase
+          .from('likes')
+          .delete()
+          .eq('post_id', postId)
+          .eq('user_id', user.id);
+      } else {
+        await supabase
+          .from('likes')
+          .insert({ post_id: postId, user_id: user.id });
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
+
+  const addComment = async (postId: string) => {
+    if (!user || !newComment[postId]?.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from('comments')
+        .insert({
+          post_id: postId,
+          content: newComment[postId],
+          user_id: user.id
+        });
+
+      if (error) throw error;
+
+      setNewComment({ ...newComment, [postId]: '' });
+      toast({
+        title: "Reactie toegevoegd",
+        description: "Je reactie is geplaatst.",
+      });
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast({
+        title: "Fout bij reactie",
+        description: "Reactie kon niet worden geplaatst.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('nl-NL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <div className="animate-cosmic-pulse">Loading cosmic community...</div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <main className="py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Page Header */}
+          <div className="text-center mb-12">
+            <div className="flex justify-center mb-6">
+              <div className="w-12 h-12 bg-cosmic-gradient rounded-full flex items-center justify-center shadow-cosmic animate-cosmic-pulse">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            
+            <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-cosmic-gradient">Cosmic</span>{' '}
+              <span className="text-mystical-gradient">Community</span>
+            </h1>
+            
+            <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+              Connect met medebewuste zielen op hun spirituele reis naar verlichting
+            </p>
+
+            {!showNewPost && (
+              <Button 
+                onClick={() => setShowNewPost(true)}
+                variant="mystical"
+                size="lg"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Nieuwe Post
+              </Button>
+            )}
+          </div>
+
+          {/* New Post Form */}
+          {showNewPost && (
+            <Card className="cosmic-hover bg-card/90 backdrop-blur-sm border-border/50 shadow-cosmic mb-8">
+              <CardHeader>
+                <CardTitle className="font-cosmic text-cosmic-gradient">
+                  Deel je kosmische inzicht
+                </CardTitle>
+                <CardDescription className="font-mystical">
+                  Inspireer anderen met je spirituele ervaring
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Input
+                  placeholder="Titel van je bericht..."
+                  value={newPost.title}
+                  onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                />
+                <Textarea
+                  placeholder="Wat wil je delen met de community?"
+                  value={newPost.content}
+                  onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                  rows={4}
+                />
+                <div className="flex gap-2">
+                  <Button onClick={createPost} variant="mystical">
+                    <Send className="w-4 h-4 mr-2" />
+                    Publiceren
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      setShowNewPost(false);
+                      setNewPost({ title: '', content: '' });
+                    }}
+                    variant="outline"
+                  >
+                    Annuleren
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Posts */}
+          <div className="space-y-6">
+            {posts.length === 0 ? (
+              <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+                <CardContent className="text-center py-12">
+                  <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-cosmic animate-cosmic-pulse">
+                    <Star className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-4">
+                    Geen berichten gevonden
+                  </h3>
+                  <p className="font-mystical text-muted-foreground mb-6">
+                    Wees de eerste om je kosmische inzicht te delen!
+                  </p>
+                  <Button onClick={() => setShowNewPost(true)} variant="mystical">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Eerste Post Maken
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              posts.map((post) => (
+                <Card key={post.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+                  <CardHeader>
+                    <div className="flex items-start gap-4">
+                      <Avatar>
+                        <AvatarImage src={post.profiles.avatar_url} />
+                        <AvatarFallback className="bg-cosmic-gradient text-white">
+                          {post.profiles.display_name?.charAt(0).toUpperCase() || '?'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-mystical font-semibold">{post.profiles.display_name}</h3>
+                          <Badge variant="cosmic" className="text-xs">Chosen One</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{formatDate(post.created_at)}</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <h2 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">
+                      {post.title}
+                    </h2>
+                    <p className="font-mystical text-muted-foreground mb-6 whitespace-pre-wrap">
+                      {post.content}
+                    </p>
+                    
+                    {/* Post Actions */}
+                    <div className="flex items-center gap-4 mb-6">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleLike(post.id)}
+                        className="gap-2"
+                      >
+                        <Heart className={`w-4 h-4 ${post.likes.length > 0 ? 'fill-cosmic text-cosmic' : ''}`} />
+                        {post.likes.length}
+                      </Button>
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <MessageCircle className="w-4 h-4" />
+                        {post.comments.length}
+                      </Button>
+                    </div>
+
+                    {/* Comments */}
+                    {post.comments.length > 0 && (
+                      <div className="space-y-3 mb-4">
+                        {post.comments.map((comment) => (
+                          <div key={comment.id} className="flex gap-3 p-3 bg-background/50 rounded-lg">
+                            <Avatar className="w-8 h-8">
+                              <AvatarImage src={comment.profiles.avatar_url} />
+                              <AvatarFallback className="bg-cosmic-gradient text-white text-xs">
+                                {comment.profiles.display_name?.charAt(0).toUpperCase() || '?'}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-mystical text-sm font-semibold">
+                                  {comment.profiles.display_name}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {formatDate(comment.created_at)}
+                                </span>
+                              </div>
+                              <p className="font-mystical text-sm text-muted-foreground">
+                                {comment.content}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Add Comment */}
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Deel je gedachten..."
+                        value={newComment[post.id] || ''}
+                        onChange={(e) => setNewComment({ ...newComment, [post.id]: e.target.value })}
+                        onKeyPress={(e) => e.key === 'Enter' && addComment(post.id)}
+                      />
+                      <Button 
+                        onClick={() => addComment(post.id)}
+                        variant="mystical"
+                        size="icon"
+                        disabled={!newComment[post.id]?.trim()}
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default Community;
