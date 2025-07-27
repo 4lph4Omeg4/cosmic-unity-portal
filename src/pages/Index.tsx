@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
 import FeaturedSection from '@/components/FeaturedSection';
+import LatestPosts from '@/components/LatestPosts';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -10,6 +11,7 @@ const Index = () => {
       <Navigation />
       <HeroSection />
       <FeaturedSection />
+      <LatestPosts />
       <Footer />
     </div>
   );
