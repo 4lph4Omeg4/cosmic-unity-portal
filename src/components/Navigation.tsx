@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Menu, X, Star, Home, ShoppingBag, BookOpen, Users, Mail, User, LogOut, LogIn } from 'lucide-react';
+import LanguageSelector from '@/components/LanguageSelector';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { t } = useLanguage();
 
   const navigation = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'Shop', href: '/shop', icon: ShoppingBag },
-    { name: 'Community', href: '/community', icon: Users },
+    { name: t('nav.home'), href: '/', icon: Home },
+    { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
+    { name: t('nav.community'), href: '/community', icon: Users },
     { name: 'Blog', href: '/blog', icon: BookOpen },
-    { name: 'About', href: '/about', icon: Star },
-    { name: 'Contact', href: '/contact', icon: Mail },
+    { name: t('nav.about'), href: '/about', icon: Star },
+    { name: t('nav.contact'), href: '/contact', icon: Mail },
   ];
 
   const handleSignOut = async () => {
@@ -58,7 +61,9 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Action Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-2">
+            <LanguageSelector />
+            <div className="flex items-center gap-4">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -79,7 +84,7 @@ const Navigation = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="font-mystical">
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Uitloggen</span>
+                    <span>{t('nav.logout')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -89,9 +94,10 @@ const Navigation = () => {
                 onClick={() => navigate('/auth')}
               >
                 <LogIn className="w-4 h-4 mr-2" />
-                Inloggen
+                {t('nav.login')}
               </Button>
             )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -147,7 +153,7 @@ const Navigation = () => {
                     onClick={handleSignOut}
                   >
                     <LogOut className="w-4 h-4 mr-2" />
-                    Uitloggen
+                    {t('nav.logout')}
                   </Button>
                 </div>
               ) : (
@@ -157,7 +163,7 @@ const Navigation = () => {
                   onClick={() => navigate('/auth')}
                 >
                   <LogIn className="w-4 h-4 mr-2" />
-                  Inloggen
+                  {t('nav.login')}
                 </Button>
               )}
             </div>
