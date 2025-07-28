@@ -49,23 +49,43 @@ const FeaturedSection = () => {
   useEffect(() => {
     const loadDigitalProducts = async () => {
       try {
+        console.log('=== FETCHING COLLECTIONS ===');
         const collections: ShopifyCollection[] = await fetchCollections();
-        console.log('Available collections:', collections.map(c => ({ title: c.title, handle: c.handle })));
+        console.log('Total collections found:', collections.length);
+        console.log('All collections:', collections.map(c => ({
+          title: c.title,
+          handle: c.handle,
+          productCount: c.products?.edges?.length || 0
+        })));
 
         // Try multiple possible handles for Digital Products
         const digitalCollection = collections.find(
           collection =>
             collection.handle === 'digital-products' ||
             collection.handle === 'digitale' ||
-            collection.title === 'Digital Products'
+            collection.title === 'Digital Products' ||
+            collection.title.toLowerCase().includes('digital')
         );
-        
+
+        console.log('Digital collection found:', digitalCollection);
+
         if (digitalCollection?.products?.edges) {
           const products = digitalCollection.products.edges.map(edge => edge.node);
+          console.log('Products in digital collection:', products);
           setDigitalProducts(products.slice(0, 4)); // Toon maximaal 4 producten
+        } else {
+          console.log('No digital collection found or no products in collection');
+          // For debugging, let's try to get products from any collection
+          const anyCollectionWithProducts = collections.find(c => c.products?.edges?.length > 0);
+          if (anyCollectionWithProducts) {
+            console.log('Using products from:', anyCollectionWithProducts.title);
+            const products = anyCollectionWithProducts.products.edges.map(edge => edge.node);
+            setDigitalProducts(products.slice(0, 4));
+          }
         }
       } catch (error) {
         console.error('Error loading digital products:', error);
+        console.error('Full error details:', error);
       } finally {
         setLoading(false);
       }
