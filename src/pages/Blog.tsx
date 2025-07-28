@@ -32,7 +32,7 @@ const Blog = () => {
     const loadArticles = async () => {
       try {
         const fetchedArticles = await fetchBlogArticles();
-        setArticles(fetchedArticles);
+        setArticles(fetchedArticles.slice(0, 3));
       } catch (error) {
         console.error('Error loading articles:', error);
       } finally {
