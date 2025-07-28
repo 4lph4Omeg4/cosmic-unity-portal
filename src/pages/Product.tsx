@@ -264,35 +264,69 @@ const Product = () => {
               {/* Variants */}
               {product.variants.edges.length > 1 && (
                 <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-                  <CardContent className="p-4">
-                    <h3 className="font-cosmic font-semibold mb-3">Varianten</h3>
-                    <div className="space-y-2">
-                      {product.variants.edges.map((variant) => (
-                        <button
-                          key={variant.node.id}
-                           onClick={() => {
-                             setSelectedVariant(variant.node);
-                             // Zoek en stel de juiste afbeelding in voor deze variant
-                             const imageIndex = findImageForVariant(variant.node);
-                             setSelectedImageIndex(imageIndex);
-                           }}
-                          className={`w-full text-left p-3 rounded-lg border transition-all ${
-                            selectedVariant?.id === variant.node.id
-                              ? 'border-cosmic bg-cosmic/10'
-                              : 'border-border/50 hover:border-cosmic/50'
-                          }`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-mystical">{variant.node.title}</span>
-                            <span className="font-bold text-mystical-gradient">
-                              {formatPrice(variant.node.price.amount, variant.node.price.currencyCode)}
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <Label className="font-cosmic text-base font-semibold">
+                        Selecteer variant
+                      </Label>
+                      <Select
+                        value={selectedVariant?.id || ""}
+                        onValueChange={(variantId) => {
+                          const variant = product.variants.edges.find(v => v.node.id === variantId)?.node;
+                          if (variant) {
+                            setSelectedVariant(variant);
+                            // Zoek en stel de juiste afbeelding in voor deze variant
+                            const imageIndex = findImageForVariant(variant);
+                            setSelectedImageIndex(imageIndex);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="cosmic-hover border-cosmic/30 bg-card/50 backdrop-blur-sm hover:border-cosmic/60 focus:border-cosmic focus:ring-cosmic/20">
+                          <SelectValue placeholder="Kies een variant..." />
+                        </SelectTrigger>
+                        <SelectContent className="bg-card/95 backdrop-blur-sm border-cosmic/30">
+                          {product.variants.edges.map((variant) => (
+                            <SelectItem
+                              key={variant.node.id}
+                              value={variant.node.id}
+                              disabled={!variant.node.availableForSale}
+                              className="cosmic-hover focus:bg-cosmic/10 focus:text-cosmic"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <span className="font-mystical">
+                                  {variant.node.title}
+                                </span>
+                                <span className="ml-4 text-cosmic font-semibold">
+                                  {formatPrice(variant.node.price.amount, variant.node.price.currencyCode)}
+                                </span>
+                                {!variant.node.availableForSale && (
+                                  <span className="ml-2 text-xs text-muted-foreground">
+                                    (Uitverkocht)
+                                  </span>
+                                )}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {selectedVariant && (
+                        <div className="mt-4 p-3 rounded-lg bg-cosmic/5 border border-cosmic/20">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mystical text-sm text-muted-foreground">
+                              Geselecteerd:
                             </span>
+                            <div className="text-right">
+                              <p className="font-cosmic font-semibold text-cosmic">
+                                {selectedVariant.title}
+                              </p>
+                              <p className="text-lg font-bold text-cosmic-gradient">
+                                {formatPrice(selectedVariant.price.amount, selectedVariant.price.currencyCode)}
+                              </p>
+                            </div>
                           </div>
-                          {!variant.node.availableForSale && (
-                            <span className="text-sm text-muted-foreground">Uitverkocht</span>
-                          )}
-                        </button>
-                      ))}
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
