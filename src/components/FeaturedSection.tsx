@@ -213,14 +213,16 @@ const FeaturedSection = () => {
                     </div>
                   </CardContent>
                   
-                  <CardFooter>
-                    <Button 
-                      variant="energy" 
-                      size="sm" 
-                      className="w-full"
+                  <CardFooter className="p-6 pt-0">
+                    <Button
+                      variant="cosmic"
+                      size="lg"
+                      className="w-full group shadow-cosmic"
                       onClick={() => window.open(`/product/${product.handle}`, '_blank')}
                     >
-                      Bekijk Product
+                      <Book className="w-4 h-4 mr-2" />
+                      Ontdek Wijsheid
+                      <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                     </Button>
                   </CardFooter>
                 </Card>
