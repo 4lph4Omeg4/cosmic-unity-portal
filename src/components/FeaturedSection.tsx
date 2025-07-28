@@ -49,17 +49,43 @@ const FeaturedSection = () => {
   useEffect(() => {
     const loadDigitalProducts = async () => {
       try {
+        console.log('=== FETCHING COLLECTIONS ===');
         const collections: ShopifyCollection[] = await fetchCollections();
+        console.log('Total collections found:', collections.length);
+        console.log('All collections:', collections.map(c => ({
+          title: c.title,
+          handle: c.handle,
+          productCount: c.products?.edges?.length || 0
+        })));
+
+        // Try multiple possible handles for Digital Products
         const digitalCollection = collections.find(
-          collection => collection.handle === 'digitale'
+          collection =>
+            collection.handle === 'digital-products' ||
+            collection.handle === 'digitale' ||
+            collection.title === 'Digital Products' ||
+            collection.title.toLowerCase().includes('digital')
         );
-        
+
+        console.log('Digital collection found:', digitalCollection);
+
         if (digitalCollection?.products?.edges) {
           const products = digitalCollection.products.edges.map(edge => edge.node);
+          console.log('Products in digital collection:', products);
           setDigitalProducts(products.slice(0, 4)); // Toon maximaal 4 producten
+        } else {
+          console.log('No digital collection found or no products in collection');
+          // For debugging, let's try to get products from any collection
+          const anyCollectionWithProducts = collections.find(c => c.products?.edges?.length > 0);
+          if (anyCollectionWithProducts) {
+            console.log('Using products from:', anyCollectionWithProducts.title);
+            const products = anyCollectionWithProducts.products.edges.map(edge => edge.node);
+            setDigitalProducts(products.slice(0, 4));
+          }
         }
       } catch (error) {
         console.error('Error loading digital products:', error);
+        console.error('Full error details:', error);
       } finally {
         setLoading(false);
       }
@@ -98,7 +124,7 @@ const FeaturedSection = () => {
           
           <h2 className="font-cosmic text-3xl md:text-5xl font-bold mb-6">
             <span className="text-mystical-gradient">Sacred</span>{' '}
-            <span className="text-cosmic-gradient">Scripture</span>
+            <span className="text-cosmic-gradient">Scriptures</span>
           </h2>
           
           <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -130,51 +156,55 @@ const FeaturedSection = () => {
               const productPrice = product.variants?.edges?.[0]?.node?.price;
               
               return (
-                <Card key={product.id} className="cosmic-hover group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
-                  <CardHeader className="relative">
-                    <div className="flex justify-between items-start mb-4">
-                      <Badge variant="secondary" className="bg-energy-gradient text-white">
-                        Digital
-                      </Badge>
-                      <div className="w-8 h-8 bg-cosmic/20 rounded-full flex items-center justify-center">
+                <Card key={product.id} className="cosmic-hover group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm h-full flex flex-col">
+                  <CardHeader className="relative p-0">
+                    <div className="aspect-square bg-gradient-to-br from-cosmic/20 to-secondary/20 rounded-t-lg overflow-hidden relative">
+                      <img
+                        src={productImage}
+                        alt={product.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <Badge variant="secondary" className="bg-energy-gradient text-white shadow-lg">
+                          Digital
+                        </Badge>
+                      </div>
+                      <div className="absolute top-3 right-3 w-8 h-8 bg-cosmic/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Download className="w-4 h-4 text-cosmic" />
                       </div>
                     </div>
-                    
-                    <div className="aspect-square bg-gradient-to-br from-cosmic/20 to-secondary/20 rounded-lg mb-4 overflow-hidden">
-                      <img 
-                        src={productImage} 
-                        alt={product.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
                   </CardHeader>
                   
-                  <CardContent>
-                    <CardTitle className="font-mystical text-lg mb-2 group-hover:text-cosmic transition-colors">
+                  <CardContent className="flex-1 p-6">
+                    <CardTitle className="font-mystical text-lg mb-3 group-hover:text-cosmic transition-colors line-clamp-2">
                       {product.title}
                     </CardTitle>
                     <CardDescription className="font-mystical text-sm text-muted-foreground mb-4 line-clamp-3">
                       {product.description}
                     </CardDescription>
-                    <div className="flex justify-between items-center">
-                      <span className="font-cosmic text-lg text-cosmic-gradient">
-                        {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Prijs op aanvraag'}
-                      </span>
-                      <Badge variant="outline" className="text-xs">
-                        Digital
-                      </Badge>
+                    <div className="mt-auto space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="font-cosmic text-2xl font-bold text-cosmic-gradient">
+                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Prijs op aanvraag'}
+                        </span>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Download className="w-3 h-3" />
+                          <span>Instant Download</span>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                   
-                  <CardFooter>
-                    <Button 
-                      variant="energy" 
-                      size="sm" 
-                      className="w-full"
+                  <CardFooter className="p-6 pt-0">
+                    <Button
+                      variant="cosmic"
+                      size="lg"
+                      className="w-full group shadow-cosmic"
                       onClick={() => window.open(`/product/${product.handle}`, '_blank')}
                     >
-                      Bekijk Product
+                      <Book className="w-4 h-4 mr-2" />
+                      Ontdek Wijsheid
+                      <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                     </Button>
                   </CardFooter>
                 </Card>

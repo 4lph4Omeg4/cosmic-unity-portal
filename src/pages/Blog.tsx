@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight } from 'lucide-react';
-import { fetchBlogArticles } from '@/integrations/shopify/client';
+import { fetchBlogArticles, fetchAllBlogs, testConnection } from '@/integrations/shopify/client';
 
 interface BlogArticle {
   id: string;
@@ -31,10 +31,30 @@ const Blog = () => {
   useEffect(() => {
     const loadArticles = async () => {
       try {
-        const fetchedArticles = await fetchBlogArticles();
-        setArticles(fetchedArticles);
+        console.log('=== FETCHING BLOG ARTICLES ===');
+
+        // Test connection first
+        console.log('Testing Shopify connection...');
+        const connectionOk = await testConnection();
+        console.log('Connection test result:', connectionOk);
+
+        if (!connectionOk) {
+          console.error('Shopify API connection failed - cannot fetch blog articles');
+          return;
+        }
+
+        // Use the correct blog handle from Shopify
+        console.log('Fetching articles from ego-to-eden blog...');
+        const fetchedArticles = await fetchBlogArticles('ego-to-eden');
+        console.log('Blog fetch result:', {
+          articlesFound: fetchedArticles.length,
+          articles: fetchedArticles
+        });
+
+        setArticles(fetchedArticles.slice(0, 3));
       } catch (error) {
         console.error('Error loading articles:', error);
+        console.error('Full error:', error);
       } finally {
         setLoading(false);
       }
