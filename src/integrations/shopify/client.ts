@@ -247,10 +247,14 @@ export const fetchProductByHandle = async (handle: string) => {
 
 export const fetchBlogArticles = async (blogHandle: string = 'news') => {
   try {
+    console.log(`Fetching blog articles for handle: ${blogHandle}`);
     const response = await client.request(GET_BLOG_ARTICLES, {
       variables: { handle: blogHandle, first: 20 }
     });
-    return response.data?.blog?.articles?.edges?.map((edge: any) => edge.node) || [];
+    console.log('Blog response:', response);
+    const articles = response.data?.blog?.articles?.edges?.map((edge: any) => edge.node) || [];
+    console.log(`Found ${articles.length} articles`);
+    return articles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
     return [];
