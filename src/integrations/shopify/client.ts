@@ -184,6 +184,40 @@ export const GET_BLOG_ARTICLES = `
   }
 `;
 
+export const GET_ALL_BLOGS = `
+  query getAllBlogs($first: Int!) {
+    blogs(first: $first) {
+      edges {
+        node {
+          id
+          title
+          handle
+          articles(first: 3) {
+            edges {
+              node {
+                id
+                title
+                content
+                excerpt
+                handle
+                publishedAt
+                author {
+                  displayName
+                }
+                image {
+                  url
+                  altText
+                }
+                tags
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const CREATE_CHECKOUT = `
   mutation checkoutCreate($input: CheckoutCreateInput!) {
     checkoutCreate(input: $input) {
