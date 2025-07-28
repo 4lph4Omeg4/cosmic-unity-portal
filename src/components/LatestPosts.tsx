@@ -46,7 +46,7 @@ const LatestPosts = () => {
           content,
           created_at,
           user_id,
-          profiles!posts_user_id_fkey (
+          profiles (
             display_name,
             avatar_url
           )
