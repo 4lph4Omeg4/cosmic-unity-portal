@@ -53,10 +53,12 @@ const HeroSection = () => {
             Join the Mission
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
-          <Button variant="energy" size="lg" className="group">
-            <Zap className="mr-2 h-5 w-5" />
-            Explore the Shop
-          </Button>
+          <Link to="/products/cosmic-vision-device">
+            <Button variant="energy" size="lg" className="group">
+              <Zap className="mr-2 h-5 w-5" />
+              Cosmic Vision Device
+            </Button>
+          </Link>
         </div>
 
         {/* Sacred Statistics */}
