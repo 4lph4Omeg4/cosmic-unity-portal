@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { Star, ShoppingCart, ArrowLeft, ExternalLink } from 'lucide-react';
 import { fetchProductByHandle, createCheckout } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
