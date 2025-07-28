@@ -64,6 +64,7 @@ const Navigation = () => {
           {/* Desktop Action Buttons */}
           <div className="hidden lg:flex items-center gap-2">
             <LanguageSelector />
+            <Cart />
             <div className="flex items-center gap-4">
             {user ? (
               <DropdownMenu>
