@@ -43,7 +43,11 @@ const LatestPosts = () => {
           title,
           content,
           created_at,
-          profiles(id, user_id, display_name, avatar_url)
+          user_id,
+          profiles!posts_user_id_fkey (
+            display_name,
+            avatar_url
+          )
         `)
         .order('created_at', { ascending: false })
         .limit(6);

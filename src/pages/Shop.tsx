@@ -193,53 +193,6 @@ const Shop = () => {
             </p>
           </div>
 
-          {/* Collections Grid */}
-          {collections.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {collections.map((collection) => (
-                <Card key={collection.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-4">
-                      <Badge variant="cosmic">Collection</Badge>
-                      <span className="text-sm text-muted-foreground">
-                        {collection.products.edges.length} products
-                      </span>
-                    </div>
-                    
-                    <div className="aspect-square bg-gradient-to-br from-cosmic/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                      {collection.image ? (
-                        <img
-                          src={collection.image.url}
-                          alt={collection.image.altText || collection.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <Star className="w-12 h-12 text-cosmic/60" />
-                      )}
-                    </div>
-                    
-                    <CardTitle className="font-cosmic text-xl font-bold text-cosmic-gradient mb-2">
-                      {collection.title}
-                    </CardTitle>
-                    
-                    <CardDescription className="font-mystical text-muted-foreground mb-6">
-                      {collection.description}
-                    </CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <Button 
-                      variant="mystical" 
-                      className="w-full"
-                      onClick={() => handleCollectionFilter(collection.handle)}
-                    >
-                      Bekijk Collectie ({collection.products.edges.length})
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : null}
 
           {/* Filter Bar */}
           {collections.length > 0 && (

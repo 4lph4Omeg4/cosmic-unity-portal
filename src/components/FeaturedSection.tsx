@@ -75,12 +75,12 @@ const FeaturedSection = () => {
           
           <h2 className="font-cosmic text-3xl md:text-5xl font-bold mb-6">
             <span className="text-mystical-gradient">Sacred</span>{' '}
-            <span className="text-cosmic-gradient">Offerings</span>
+            <span className="text-cosmic-gradient">Scripture</span>
           </h2>
           
           <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover our curated collection of consciousness-expanding merchandise, 
-            digital wisdom, and sacred teachings for the awakened soul.
+            Discover our collection of digital spiritual content, sacred texts, 
+            and consciousness-expanding wisdom for the awakened soul.
           </p>
         </div>
 
