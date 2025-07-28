@@ -170,7 +170,30 @@ const LatestPosts = () => {
           </div>
         </div>
 
-        {posts.length === 0 ? (
+        {error ? (
+          <div className="text-center">
+            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic max-w-md mx-auto">
+              <CardContent className="py-12">
+                <div className="w-16 h-16 bg-destructive rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MessageCircle className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="font-cosmic text-xl font-bold text-destructive mb-4">
+                  Error loading posts
+                </h3>
+                <p className="font-mystical text-muted-foreground mb-6">
+                  {error}
+                </p>
+                <Button onClick={() => {
+                  setError(null);
+                  setLoading(true);
+                  loadLatestPosts();
+                }} variant="mystical">
+                  Try Again
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : posts.length === 0 ? (
           <div className="text-center">
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic max-w-md mx-auto">
               <CardContent className="py-12">
