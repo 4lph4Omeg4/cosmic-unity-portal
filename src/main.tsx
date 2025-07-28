@@ -2,33 +2,38 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-// Suppress ResizeObserver loop errors which are benign but noisy
-const originalError = console.error;
-console.error = (...args) => {
-  if (
-    args.length > 0 &&
-    typeof args[0] === 'string' &&
-    args[0].includes('ResizeObserver loop')
-  ) {
-    return; // Suppress ResizeObserver errors
-  }
-  originalError(...args);
-};
-
-// Handle unhandled errors including ResizeObserver
+// Suppress ResizeObserver errors globally
 window.addEventListener('error', (e) => {
-  if (e.message.includes('ResizeObserver loop')) {
+  if (e.message === 'ResizeObserver loop completed with undelivered notifications.') {
+    e.stopImmediatePropagation();
     e.preventDefault();
-    e.stopPropagation();
     return false;
   }
 });
 
-// Handle unhandled promise rejections
-window.addEventListener('unhandledrejection', (e) => {
-  if (e.reason && e.reason.toString().includes('ResizeObserver loop')) {
-    e.preventDefault();
-  }
-});
+// Debounce ResizeObserver to prevent loops
+const debounce = (func: Function, wait: number) => {
+  let timeout: NodeJS.Timeout;
+  return function executedFunction(...args: any[]) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+// Override ResizeObserver to add debouncing
+if (typeof window !== 'undefined' && window.ResizeObserver) {
+  const OriginalResizeObserver = window.ResizeObserver;
+
+  window.ResizeObserver = class extends OriginalResizeObserver {
+    constructor(callback: ResizeObserverCallback) {
+      const debouncedCallback = debounce(callback, 16); // 60fps
+      super(debouncedCallback);
+    }
+  };
+}
 
 createRoot(document.getElementById("root")!).render(<App />);
