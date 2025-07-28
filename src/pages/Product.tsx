@@ -62,6 +62,23 @@ const Product = () => {
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  // Functie om de juiste afbeelding te vinden op basis van variant
+  const findImageForVariant = (variant: any) => {
+    if (!product?.images?.edges?.length || !variant) return 0;
+    
+    // Zoek naar afbeeldingen die de variant titel/kleur bevatten in de alt tekst
+    const variantTitle = variant.title.toLowerCase();
+    const imageIndex = product.images.edges.findIndex(image => {
+      const altText = image.node.altText?.toLowerCase() || '';
+      const url = image.node.url.toLowerCase();
+      
+      // Zoek naar matches in alt tekst of URL
+      return altText.includes(variantTitle) || url.includes(variantTitle);
+    });
+    
+    return imageIndex >= 0 ? imageIndex : 0;
+  };
+
   useEffect(() => {
     const loadProduct = async () => {
       if (!handle) return;
@@ -70,7 +87,11 @@ const Product = () => {
         const fetchedProduct = await fetchProductByHandle(handle);
         setProduct(fetchedProduct);
         if (fetchedProduct?.variants?.edges?.length > 0) {
-          setSelectedVariant(fetchedProduct.variants.edges[0].node);
+          const firstVariant = fetchedProduct.variants.edges[0].node;
+          setSelectedVariant(firstVariant);
+          // Stel de juiste afbeelding in voor de eerste variant
+          const imageIndex = findImageForVariant(firstVariant);
+          setSelectedImageIndex(imageIndex);
         }
       } catch (error) {
         console.error('Error loading product:', error);
@@ -247,7 +268,12 @@ const Product = () => {
                       {product.variants.edges.map((variant) => (
                         <button
                           key={variant.node.id}
-                          onClick={() => setSelectedVariant(variant.node)}
+                           onClick={() => {
+                             setSelectedVariant(variant.node);
+                             // Zoek en stel de juiste afbeelding in voor deze variant
+                             const imageIndex = findImageForVariant(variant.node);
+                             setSelectedImageIndex(imageIndex);
+                           }}
                           className={`w-full text-left p-3 rounded-lg border transition-all ${
                             selectedVariant?.id === variant.node.id
                               ? 'border-cosmic bg-cosmic/10'
