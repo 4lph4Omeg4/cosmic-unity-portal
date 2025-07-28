@@ -98,7 +98,7 @@ const FeaturedSection = () => {
           
           <h2 className="font-cosmic text-3xl md:text-5xl font-bold mb-6">
             <span className="text-mystical-gradient">Sacred</span>{' '}
-            <span className="text-cosmic-gradient">Scripture</span>
+            <span className="text-cosmic-gradient">Scriptures</span>
           </h2>
           
           <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
