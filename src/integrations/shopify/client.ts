@@ -72,7 +72,7 @@ export const GET_PRODUCTS = `
               currencyCode
             }
           }
-          variants(first: 1) {
+          variants(first: 50) {
             edges {
               node {
                 id
@@ -82,10 +82,14 @@ export const GET_PRODUCTS = `
                   currencyCode
                 }
                 availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
               }
             }
           }
-          images(first: 3) {
+          images(first: 10) {
             edges {
               node {
                 url
