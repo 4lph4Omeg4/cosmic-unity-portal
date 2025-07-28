@@ -50,8 +50,14 @@ const FeaturedSection = () => {
     const loadDigitalProducts = async () => {
       try {
         const collections: ShopifyCollection[] = await fetchCollections();
+        console.log('Available collections:', collections.map(c => ({ title: c.title, handle: c.handle })));
+
+        // Try multiple possible handles for Digital Products
         const digitalCollection = collections.find(
-          collection => collection.handle === 'digitale'
+          collection =>
+            collection.handle === 'digital-products' ||
+            collection.handle === 'digitale' ||
+            collection.title === 'Digital Products'
         );
         
         if (digitalCollection?.products?.edges) {
