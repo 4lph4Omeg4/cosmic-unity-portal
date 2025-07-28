@@ -292,7 +292,7 @@ export const fetchAllBlogs = async () => {
   }
 };
 
-export const fetchBlogArticles = async (blogHandle: string = 'news') => {
+export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden') => {
   try {
     console.log(`Fetching blog articles for handle: ${blogHandle}`);
     const response = await client.request(GET_BLOG_ARTICLES, {
