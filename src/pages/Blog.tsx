@@ -33,6 +33,13 @@ const Blog = () => {
       try {
         console.log('Starting blog article load...');
 
+        // Test connection first
+        const connectionOk = await testConnection();
+        if (!connectionOk) {
+          console.error('Shopify API connection failed');
+          return;
+        }
+
         // Use the correct blog handle from Shopify
         const fetchedArticles = await fetchBlogArticles('ego-to-eden');
         console.log('Fetched articles:', fetchedArticles);
