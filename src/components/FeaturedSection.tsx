@@ -174,23 +174,22 @@ const FeaturedSection = () => {
               const productPrice = product.variants?.edges?.[0]?.node?.price;
               
               return (
-                <Card key={product.id} className="cosmic-hover group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
-                  <CardHeader className="relative">
-                    <div className="flex justify-between items-start mb-4">
-                      <Badge variant="secondary" className="bg-energy-gradient text-white">
-                        Digital
-                      </Badge>
-                      <div className="w-8 h-8 bg-cosmic/20 rounded-full flex items-center justify-center">
+                <Card key={product.id} className="cosmic-hover group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm h-full flex flex-col">
+                  <CardHeader className="relative p-0">
+                    <div className="aspect-square bg-gradient-to-br from-cosmic/20 to-secondary/20 rounded-t-lg overflow-hidden relative">
+                      <img
+                        src={productImage}
+                        alt={product.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <Badge variant="secondary" className="bg-energy-gradient text-white shadow-lg">
+                          Digital
+                        </Badge>
+                      </div>
+                      <div className="absolute top-3 right-3 w-8 h-8 bg-cosmic/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Download className="w-4 h-4 text-cosmic" />
                       </div>
-                    </div>
-                    
-                    <div className="aspect-square bg-gradient-to-br from-cosmic/20 to-secondary/20 rounded-lg mb-4 overflow-hidden">
-                      <img 
-                        src={productImage} 
-                        alt={product.title}
-                        className="w-full h-full object-cover"
-                      />
                     </div>
                   </CardHeader>
                   
