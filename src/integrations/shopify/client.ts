@@ -295,15 +295,33 @@ export const fetchAllBlogs = async () => {
 export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden') => {
   try {
     console.log(`Fetching blog articles for handle: ${blogHandle}`);
+
+    // Add timeout and retry logic
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const response = await client.request(GET_BLOG_ARTICLES, {
       variables: { handle: blogHandle, first: 20 }
     });
+
+    clearTimeout(timeoutId);
     console.log('Blog response:', response);
-    const articles = response.data?.blog?.articles?.edges?.map((edge: any) => edge.node) || [];
+
+    if (!response.data?.blog) {
+      console.warn(`Blog with handle "${blogHandle}" not found`);
+      return [];
+    }
+
+    const articles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
     console.log(`Found ${articles.length} articles`);
     return articles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      blogHandle
+    });
     return [];
   }
 };
