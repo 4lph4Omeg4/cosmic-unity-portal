@@ -31,19 +31,9 @@ const Blog = () => {
   useEffect(() => {
     const loadArticles = async () => {
       try {
-        // Try different blog handles
-        let fetchedArticles = await fetchBlogArticles('news');
-        console.log('Articles from "news" blog:', fetchedArticles);
-
-        if (fetchedArticles.length === 0) {
-          fetchedArticles = await fetchBlogArticles('blog');
-          console.log('Articles from "blog" blog:', fetchedArticles);
-        }
-
-        if (fetchedArticles.length === 0) {
-          fetchedArticles = await fetchBlogArticles();
-          console.log('Articles from default blog:', fetchedArticles);
-        }
+        // Use the correct blog handle from Shopify
+        let fetchedArticles = await fetchBlogArticles('ego-to-eden');
+        console.log('Articles from "ego-to-eden" blog:', fetchedArticles);
 
         // If still no articles, try to get from any available blog
         if (fetchedArticles.length === 0) {
