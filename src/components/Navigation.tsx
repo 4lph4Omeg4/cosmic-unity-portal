@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Menu, X, Star, Home, ShoppingBag, BookOpen, Users, Mail, User, LogOut, LogIn } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
+import Cart from '@/components/Cart';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +64,7 @@ const Navigation = () => {
           {/* Desktop Action Buttons */}
           <div className="hidden lg:flex items-center gap-2">
             <LanguageSelector />
+            <Cart />
             <div className="flex items-center gap-4">
             {user ? (
               <DropdownMenu>

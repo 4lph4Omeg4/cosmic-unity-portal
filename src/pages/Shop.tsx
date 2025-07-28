@@ -66,6 +66,10 @@ interface ShopifyProduct {
           currencyCode: string;
         };
         availableForSale: boolean;
+        selectedOptions: Array<{
+          name: string;
+          value: string;
+        }>;
       };
     }>;
   };

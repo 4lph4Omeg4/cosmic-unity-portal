@@ -72,7 +72,7 @@ export const GET_PRODUCTS = `
               currencyCode
             }
           }
-          variants(first: 1) {
+          variants(first: 50) {
             edges {
               node {
                 id
@@ -82,10 +82,14 @@ export const GET_PRODUCTS = `
                   currencyCode
                 }
                 availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
               }
             }
           }
-          images(first: 3) {
+          images(first: 10) {
             edges {
               node {
                 url
@@ -118,7 +122,7 @@ export const GET_PRODUCT_BY_HANDLE = `
           currencyCode
         }
       }
-      variants(first: 10) {
+      variants(first: 100) {
         edges {
           node {
             id
@@ -132,10 +136,14 @@ export const GET_PRODUCT_BY_HANDLE = `
               name
               value
             }
+            image {
+              url
+              altText
+            }
           }
         }
       }
-      images(first: 5) {
+      images(first: 20) {
         edges {
           node {
             url
