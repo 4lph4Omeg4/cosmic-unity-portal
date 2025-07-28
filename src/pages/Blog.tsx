@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight } from 'lucide-react';
-import { fetchBlogArticles } from '@/integrations/shopify/client';
+import { fetchBlogArticles, fetchAllBlogs } from '@/integrations/shopify/client';
 
 interface BlogArticle {
   id: string;
