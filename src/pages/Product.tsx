@@ -67,17 +67,46 @@ const Product = () => {
   // Functie om de juiste afbeelding te vinden op basis van variant
   const findImageForVariant = (variant: any) => {
     if (!product?.images?.edges?.length || !variant) return 0;
-    
-    // Zoek naar afbeeldingen die de variant titel/kleur bevatten in de alt tekst
+
+    // First check if variant has its own image
+    if (variant.image?.url) {
+      const variantImageIndex = product.images.edges.findIndex(image =>
+        image.node.url === variant.image.url
+      );
+      if (variantImageIndex >= 0) return variantImageIndex;
+    }
+
+    // Extract color from variant options
+    const colorOption = variant.selectedOptions?.find((option: any) =>
+      option.name.toLowerCase().includes('color') ||
+      option.name.toLowerCase().includes('colour') ||
+      option.name.toLowerCase().includes('kleur')
+    );
+
+    if (colorOption) {
+      const color = colorOption.value.toLowerCase();
+      const imageIndex = product.images.edges.findIndex(image => {
+        const altText = image.node.altText?.toLowerCase() || '';
+        const url = image.node.url.toLowerCase();
+
+        // Check for color matches in alt text or URL
+        return altText.includes(color) || url.includes(color) ||
+               altText.includes(variant.title.toLowerCase()) ||
+               url.includes(variant.title.toLowerCase());
+      });
+
+      if (imageIndex >= 0) return imageIndex;
+    }
+
+    // Fallback: search by full variant title
     const variantTitle = variant.title.toLowerCase();
     const imageIndex = product.images.edges.findIndex(image => {
       const altText = image.node.altText?.toLowerCase() || '';
       const url = image.node.url.toLowerCase();
-      
-      // Zoek naar matches in alt tekst of URL
+
       return altText.includes(variantTitle) || url.includes(variantTitle);
     });
-    
+
     return imageIndex >= 0 ? imageIndex : 0;
   };
 
