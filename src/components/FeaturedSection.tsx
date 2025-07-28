@@ -193,25 +193,22 @@ const FeaturedSection = () => {
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="flex-1">
-                    <CardTitle className="font-mystical text-lg mb-2 group-hover:text-cosmic transition-colors line-clamp-2">
+                  <CardContent className="flex-1 p-6">
+                    <CardTitle className="font-mystical text-lg mb-3 group-hover:text-cosmic transition-colors line-clamp-2">
                       {product.title}
                     </CardTitle>
-                    <CardDescription className="font-mystical text-sm text-muted-foreground mb-4 line-clamp-4">
+                    <CardDescription className="font-mystical text-sm text-muted-foreground mb-4 line-clamp-3">
                       {product.description}
                     </CardDescription>
-                    <div className="mt-auto">
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="font-cosmic text-xl font-bold text-cosmic-gradient">
-                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Prijs op aanvraag'}
+                    <div className="mt-auto space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="font-cosmic text-2xl font-bold text-cosmic-gradient">
+                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Free'}
                         </span>
-                        <Badge variant="energy" className="text-xs">
-                          Digital
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Download className="w-3 h-3" />
-                        <span>Instant Download</span>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Download className="w-3 h-3" />
+                          <span>Instant Download</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
