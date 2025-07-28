@@ -44,7 +44,48 @@ const Blog = () => {
         const fetchedArticles = await fetchBlogArticles('ego-to-eden');
         console.log('Fetched articles:', fetchedArticles);
 
-        setArticles(fetchedArticles.slice(0, 3));
+        // If no articles found, use fallback data
+        if (fetchedArticles.length === 0) {
+          console.log('Using fallback blog data');
+          const fallbackArticles = [
+            {
+              id: 'fallback-1',
+              title: 'Awakening to Your Divine Purpose',
+              content: 'Discover the sacred path that leads to cosmic consciousness and universal truth.',
+              excerpt: 'Discover the sacred path that leads to cosmic consciousness and universal truth.',
+              handle: 'awakening-divine-purpose',
+              publishedAt: new Date().toISOString(),
+              author: { displayName: 'SH4M4NI4K Oracle' },
+              image: { url: '/placeholder.svg', altText: 'Cosmic awakening' },
+              tags: ['Awakening', 'Consciousness', 'Sacred']
+            },
+            {
+              id: 'fallback-2',
+              title: 'Sacred Geometry and the Matrix',
+              content: 'Understanding the mathematical patterns that govern our reality and how to transcend them.',
+              excerpt: 'Understanding the mathematical patterns that govern our reality and how to transcend them.',
+              handle: 'sacred-geometry-matrix',
+              publishedAt: new Date(Date.now() - 86400000).toISOString(),
+              author: { displayName: 'Cosmic Guide' },
+              image: { url: '/placeholder.svg', altText: 'Sacred geometry' },
+              tags: ['Geometry', 'Matrix', 'Reality']
+            },
+            {
+              id: 'fallback-3',
+              title: 'The Galactic Federation of Light',
+              content: 'Messages from higher dimensional beings guiding humanity through the ascension process.',
+              excerpt: 'Messages from higher dimensional beings guiding humanity through the ascension process.',
+              handle: 'galactic-federation-light',
+              publishedAt: new Date(Date.now() - 172800000).toISOString(),
+              author: { displayName: 'Light Being' },
+              image: { url: '/placeholder.svg', altText: 'Galactic federation' },
+              tags: ['Galactic', 'Light', 'Ascension']
+            }
+          ];
+          setArticles(fallbackArticles);
+        } else {
+          setArticles(fetchedArticles.slice(0, 3));
+        }
       } catch (error) {
         console.error('Error loading articles:', error);
         console.error('Full error:', error);
