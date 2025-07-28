@@ -8,6 +8,28 @@ const client = createStorefrontApiClient({
 
 export { client as shopifyClient };
 
+// Test function to verify API connection
+export const testConnection = async () => {
+  try {
+    const testQuery = `
+      query {
+        shop {
+          name
+          description
+        }
+      }
+    `;
+
+    console.log('Testing Shopify API connection...');
+    const response = await client.request(testQuery);
+    console.log('Connection test successful:', response);
+    return true;
+  } catch (error) {
+    console.error('Connection test failed:', error);
+    return false;
+  }
+};
+
 // GraphQL queries
 export const GET_COLLECTIONS = `
   query getCollections($first: Int!) {
