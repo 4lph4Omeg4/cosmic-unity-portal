@@ -115,12 +115,31 @@ const Shop = () => {
       setFilteredProducts(products);
     } else {
       const collection = collections.find(c => c.handle === collectionHandle);
-      if (collection) {
-        const collectionProductIds = collection.products.edges.map(edge => edge.node.id);
-        const filtered = products.filter(product => 
-          collectionProductIds.includes(product.id)
-        );
-        setFilteredProducts(filtered);
+      if (collection && collection.products.edges.length > 0) {
+        // Gebruik de producten die direct in de collectie zitten
+        const collectionProducts = collection.products.edges.map(edge => ({
+          id: edge.node.id,
+          title: edge.node.title,
+          description: '', // Shopify collections bevatten beperkte productinfo
+          handle: edge.node.handle,
+          vendor: '',
+          tags: [],
+          priceRange: edge.node.priceRange,
+          variants: {
+            edges: [{
+              node: {
+                id: edge.node.id + '_variant',
+                title: 'Default',
+                price: edge.node.priceRange.minVariantPrice,
+                availableForSale: true
+              }
+            }]
+          },
+          images: edge.node.images
+        }));
+        setFilteredProducts(collectionProducts);
+      } else {
+        setFilteredProducts([]);
       }
     }
   };
