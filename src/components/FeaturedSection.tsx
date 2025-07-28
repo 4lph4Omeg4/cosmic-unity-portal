@@ -63,6 +63,44 @@ const FeaturedSection = () => {
         if (digitalCollection?.products?.edges) {
           const products = digitalCollection.products.edges.map(edge => edge.node);
           setDigitalProducts(products.slice(0, 4)); // Toon maximaal 4 producten
+        } else {
+          // Use fallback products when collection not found
+          console.log('Using fallback digital products');
+          const fallbackProducts = [
+            {
+              id: 'fallback-1',
+              title: 'Sacred Awakening Guide',
+              description: 'A comprehensive digital guide to spiritual awakening and cosmic consciousness. Unlock the secrets of the universe and discover your divine purpose through ancient wisdom.',
+              images: { edges: [{ node: { url: '/placeholder.svg', altText: 'Sacred Awakening Guide' } }] },
+              variants: { edges: [{ node: { id: 'var-1', price: { amount: '29.99', currencyCode: 'EUR' } } }] },
+              handle: 'sacred-awakening-guide'
+            },
+            {
+              id: 'fallback-2',
+              title: 'Cosmic Meditation Collection',
+              description: 'Guided meditations for connecting with higher dimensional beings and the galactic federation of light. Transform your consciousness and raise your vibration.',
+              images: { edges: [{ node: { url: '/placeholder.svg', altText: 'Cosmic Meditation Collection' } }] },
+              variants: { edges: [{ node: { id: 'var-2', price: { amount: '49.99', currencyCode: 'EUR' } } }] },
+              handle: 'cosmic-meditation-collection'
+            },
+            {
+              id: 'fallback-3',
+              title: 'Sacred Geometry Blueprint',
+              description: 'Digital blueprints and sacred geometry patterns for manifestation and reality creation. Harness the power of universal mathematics.',
+              images: { edges: [{ node: { url: '/placeholder.svg', altText: 'Sacred Geometry Blueprint' } }] },
+              variants: { edges: [{ node: { id: 'var-3', price: { amount: '39.99', currencyCode: 'EUR' } } }] },
+              handle: 'sacred-geometry-blueprint'
+            },
+            {
+              id: 'fallback-4',
+              title: 'Akashic Records Training',
+              description: 'Learn to access the cosmic library of all knowledge. This digital course teaches you to read the Akashic Records and unlock universal wisdom.',
+              images: { edges: [{ node: { url: '/placeholder.svg', altText: 'Akashic Records Training' } }] },
+              variants: { edges: [{ node: { id: 'var-4', price: { amount: '79.99', currencyCode: 'EUR' } } }] },
+              handle: 'akashic-records-training'
+            }
+          ];
+          setDigitalProducts(fallbackProducts);
         }
       } catch (error) {
         console.error('Error loading digital products:', error);
