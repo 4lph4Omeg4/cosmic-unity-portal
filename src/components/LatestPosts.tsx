@@ -38,24 +38,42 @@ const LatestPosts = () => {
   const loadLatestPosts = async () => {
     try {
       setError(null);
-      const { data, error } = await supabase
+
+      // First get posts
+      const { data: postsData, error: postsError } = await supabase
         .from('posts')
-        .select(`
-          id,
-          title,
-          content,
-          created_at,
-          user_id,
-          profiles (
-            display_name,
-            avatar_url
-          )
-        `)
+        .select('id, title, content, created_at, user_id')
         .order('created_at', { ascending: false })
         .limit(6);
 
-      if (error) throw error;
-      setPosts(data as any || []);
+      if (postsError) throw postsError;
+
+      if (!postsData || postsData.length === 0) {
+        setPosts([]);
+        return;
+      }
+
+      // Get user IDs from posts
+      const userIds = postsData.map(post => post.user_id);
+
+      // Get corresponding profiles
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .in('user_id', userIds);
+
+      if (profilesError) throw profilesError;
+
+      // Combine posts with profiles
+      const postsWithProfiles = postsData.map(post => ({
+        ...post,
+        profiles: profilesData?.find(profile => profile.user_id === post.user_id) || {
+          display_name: 'Unknown User',
+          avatar_url: null
+        }
+      }));
+
+      setPosts(postsWithProfiles as any);
     } catch (error) {
       console.error('Error loading latest posts:', error);
       setError(error instanceof Error ? error.message : 'Failed to load posts');
