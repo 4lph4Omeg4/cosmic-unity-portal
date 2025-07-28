@@ -1,8 +1,8 @@
 import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 
 const client = createStorefrontApiClient({
-  storeDomain: 'rfih5t-ij.myshopify.com',
-  apiVersion: '2025-01',
+  storeDomain: 'https://rfih5t-ij.myshopify.com',
+  apiVersion: '2024-10',
   publicAccessToken: 'ed47eb085cb7daa4e53db03042cfa29d',
 });
 
