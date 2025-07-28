@@ -31,28 +31,16 @@ const Blog = () => {
   useEffect(() => {
     const loadArticles = async () => {
       try {
+        console.log('Starting blog article load...');
+
         // Use the correct blog handle from Shopify
-        let fetchedArticles = await fetchBlogArticles('ego-to-eden');
-        console.log('Articles from "ego-to-eden" blog:', fetchedArticles);
-
-        // If still no articles, try to get from any available blog
-        if (fetchedArticles.length === 0) {
-          const allBlogs = await fetchAllBlogs();
-          console.log('All available blogs:', allBlogs);
-
-          // Get articles from the first blog that has articles
-          for (const blog of allBlogs) {
-            if (blog.articles?.edges?.length > 0) {
-              fetchedArticles = blog.articles.edges.map((edge: any) => edge.node);
-              console.log(`Found articles in blog "${blog.title}":`, fetchedArticles);
-              break;
-            }
-          }
-        }
+        const fetchedArticles = await fetchBlogArticles('ego-to-eden');
+        console.log('Fetched articles:', fetchedArticles);
 
         setArticles(fetchedArticles.slice(0, 3));
       } catch (error) {
         console.error('Error loading articles:', error);
+        console.error('Full error:', error);
       } finally {
         setLoading(false);
       }
