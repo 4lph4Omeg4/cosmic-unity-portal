@@ -20,12 +20,20 @@ export const testConnection = async () => {
       }
     `;
 
-    console.log('Testing Shopify API connection...');
+    console.log('Testing Shopify API connection with domain:', 'rfih5t-ij.myshopify.com');
+    console.log('Using API version:', '2024-10');
     const response = await client.request(testQuery);
     console.log('Connection test successful:', response);
+    console.log('Shop name:', response.data?.shop?.name);
     return true;
   } catch (error) {
     console.error('Connection test failed:', error);
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
     return false;
   }
 };
