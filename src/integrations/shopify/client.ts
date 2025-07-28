@@ -122,7 +122,7 @@ export const GET_PRODUCT_BY_HANDLE = `
           currencyCode
         }
       }
-      variants(first: 10) {
+      variants(first: 100) {
         edges {
           node {
             id
@@ -136,10 +136,14 @@ export const GET_PRODUCT_BY_HANDLE = `
               name
               value
             }
+            image {
+              url
+              altText
+            }
           }
         }
       }
-      images(first: 5) {
+      images(first: 20) {
         edges {
           node {
             url
