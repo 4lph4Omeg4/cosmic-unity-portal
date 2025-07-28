@@ -28,6 +28,7 @@ const LatestPosts = () => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadLatestPosts();
@@ -36,6 +37,7 @@ const LatestPosts = () => {
 
   const loadLatestPosts = async () => {
     try {
+      setError(null);
       const { data, error } = await supabase
         .from('posts')
         .select(`
@@ -56,6 +58,7 @@ const LatestPosts = () => {
       setPosts(data as any || []);
     } catch (error) {
       console.error('Error loading latest posts:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load posts');
     } finally {
       setLoading(false);
     }
