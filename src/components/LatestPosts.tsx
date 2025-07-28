@@ -76,7 +76,17 @@ const LatestPosts = () => {
       setPosts(postsWithProfiles as any);
     } catch (error) {
       console.error('Error loading latest posts:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load posts');
+      let errorMessage = 'Failed to load posts';
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null) {
+        errorMessage = JSON.stringify(error);
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
