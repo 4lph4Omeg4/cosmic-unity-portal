@@ -245,12 +245,27 @@ export const CREATE_CHECKOUT = `
 // Helper functions
 export const fetchCollections = async () => {
   try {
+    console.log('Fetching collections...');
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     const response = await client.request(GET_COLLECTIONS, {
       variables: { first: 20 }
     });
-    return response.data?.collections?.edges?.map((edge: any) => edge.node) || [];
+
+    clearTimeout(timeoutId);
+    console.log('Collections response:', response);
+
+    const collections = response.data?.collections?.edges?.map((edge: any) => edge.node) || [];
+    console.log(`Found ${collections.length} collections`);
+    return collections;
   } catch (error) {
     console.error('Error fetching collections:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack
+    });
     return [];
   }
 };
