@@ -165,7 +165,7 @@ const FeaturedSection = () => {
                     <div className="mt-auto space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="font-cosmic text-2xl font-bold text-cosmic-gradient">
-                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Free'}
+                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Prijs op aanvraag'}
                         </span>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Download className="w-3 h-3" />
