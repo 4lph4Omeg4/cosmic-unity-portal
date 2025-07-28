@@ -279,6 +279,19 @@ export const fetchProductByHandle = async (handle: string) => {
   }
 };
 
+export const fetchAllBlogs = async () => {
+  try {
+    const response = await client.request(GET_ALL_BLOGS, {
+      variables: { first: 10 }
+    });
+    console.log('All blogs response:', response);
+    return response.data?.blogs?.edges?.map((edge: any) => edge.node) || [];
+  } catch (error) {
+    console.error('Error fetching all blogs:', error);
+    return [];
+  }
+};
+
 export const fetchBlogArticles = async (blogHandle: string = 'news') => {
   try {
     console.log(`Fetching blog articles for handle: ${blogHandle}`);
