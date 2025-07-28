@@ -45,6 +45,21 @@ const Blog = () => {
           console.log('Articles from default blog:', fetchedArticles);
         }
 
+        // If still no articles, try to get from any available blog
+        if (fetchedArticles.length === 0) {
+          const allBlogs = await fetchAllBlogs();
+          console.log('All available blogs:', allBlogs);
+
+          // Get articles from the first blog that has articles
+          for (const blog of allBlogs) {
+            if (blog.articles?.edges?.length > 0) {
+              fetchedArticles = blog.articles.edges.map((edge: any) => edge.node);
+              console.log(`Found articles in blog "${blog.title}":`, fetchedArticles);
+              break;
+            }
+          }
+        }
+
         setArticles(fetchedArticles.slice(0, 3));
       } catch (error) {
         console.error('Error loading articles:', error);
