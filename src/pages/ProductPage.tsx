@@ -9,6 +9,44 @@ import StorageImage from '@/components/StorageImage';
 import ProductVariantSelector, { ProductVariant } from '@/components/ProductVariantSelector';
 import MultiVariantSelector, { MultiVariant } from '@/components/MultiVariantSelector';
 import { useCart } from '@/hooks/useCart';
+import { fetchProductByHandle } from '@/integrations/shopify/client';
+
+interface ShopifyVariant {
+  id: string;
+  title: string;
+  price: {
+    amount: string;
+    currencyCode: string;
+  };
+  availableForSale: boolean;
+  selectedOptions: Array<{
+    name: string;
+    value: string;
+  }>;
+}
+
+interface ShopifyProduct {
+  id: string;
+  title: string;
+  description: string;
+  handle: string;
+  vendor: string;
+  productType: string;
+  tags: string[];
+  variants: {
+    edges: Array<{
+      node: ShopifyVariant;
+    }>;
+  };
+  images: {
+    edges: Array<{
+      node: {
+        url: string;
+        altText: string;
+      };
+    }>;
+  };
+}
 
 interface Product {
   id: string;
@@ -17,144 +55,86 @@ interface Product {
   vendor: string;
   productType: string;
   tags: string[];
-  variants: ProductVariant[];
+  variants: (ProductVariant & { selectedOptions?: Array<{ name: string; value: string; }> })[];
   images: string[];
   rating?: number;
   reviewCount?: number;
 }
 
-// Mock product data - in real app this would come from Shopify/Supabase
-const mockProduct: Product = {
-  id: "cosmic-vision-device",
-  title: "Cosmic Vision Device",
-  description: `Ontdek nieuwe dimensies met ons revolutionaire Cosmic Vision Device. Dit geavanceerde apparaat combineert cutting-edge technologie met galactisch design voor een ongeëvenaarde ervaring.
-
-Perfecte harmonie tussen vorm en functie, ontworpen voor visionairs die het verschil willen maken. Elke variant biedt unieke eigenschappen die aansluiten bij jouw persoonlijke stijl en voorkeuren.`,
-  vendor: "Cosmic Industries",
-  productType: "Technology",
-  tags: ["cosmic", "vision", "technology", "premium"],
-  variants: [
-    {
-      id: "cosmic-black",
-      title: "Cosmic Black",
-      price: 29900, // in cents
-      available: true
-    },
-    {
-      id: "stellar-white",
-      title: "Stellar White", 
-      price: 29900,
-      available: true
-    },
-    {
-      id: "nebula-gold",
-      title: "Nebula Gold",
-      price: 34900,
-      available: true
-    },
-    {
-      id: "galaxy-blue",
-      title: "Galaxy Blue",
-      price: 29900,
-      available: false
-    }
-  ],
-  images: ["/placeholder.svg"],
-  rating: 4.8,
-  reviewCount: 247
-};
-
-// Mock clothing product with size and color options
-const mockClothingProduct: Product = {
-  id: "cosmic-t-shirt",
-  title: "Cosmic Awakening T-Shirt",
-  description: `Erwecke dein Bewusstsein mit unserem galaktischen T-Shirt. Hergestellt aus nachhaltigen Materialien und verziert mit heiliger Geometrie, die deine spirituelle Reise unterstützt.
-
-Perfekt für Meditation, Yoga oder um deine kosmische Natur in den Alltag zu integrieren.`,
-  vendor: "Sacred Wear",
-  productType: "Clothing",
-  tags: ["clothing", "consciousness", "sacred", "sustainable"],
-  variants: [
-    // Small sizes in different colors
-    {
-      id: "cosmic-tshirt-s-black",
-      title: "Small Black",
-      price: 3900,
-      available: true
-    },
-    {
-      id: "cosmic-tshirt-s-white",
-      title: "Small White",
-      price: 3900,
-      available: true
-    },
-    {
-      id: "cosmic-tshirt-s-purple",
-      title: "Small Purple",
-      price: 3900,
-      available: false
-    },
-    // Medium sizes
-    {
-      id: "cosmic-tshirt-m-black",
-      title: "Medium Black",
-      price: 3900,
-      available: true
-    },
-    {
-      id: "cosmic-tshirt-m-white",
-      title: "Medium White",
-      price: 3900,
-      available: true
-    },
-    {
-      id: "cosmic-tshirt-m-purple",
-      title: "Medium Purple",
-      price: 3900,
-      available: true
-    },
-    // Large sizes
-    {
-      id: "cosmic-tshirt-l-black",
-      title: "Large Black",
-      price: 4200,
-      available: true
-    },
-    {
-      id: "cosmic-tshirt-l-white",
-      title: "Large White",
-      price: 4200,
-      available: false
-    },
-    {
-      id: "cosmic-tshirt-l-purple",
-      title: "Large Purple",
-      price: 4200,
-      available: true
-    },
-  ],
-  images: ["/placeholder.svg"],
-  rating: 4.6,
-  reviewCount: 128
-};
-
 const ProductPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
-  // Choose product based on productId or default to tech product
-  const [product] = useState<Product>(
-    productId === 'cosmic-t-shirt' ? mockClothingProduct : mockProduct
-  );
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { addItem, getTotalItems } = useCart();
 
   useEffect(() => {
-    if (product.variants.length > 0) {
-      const firstAvailable = product.variants.find(v => v.available);
-      setSelectedVariant(firstAvailable || product.variants[0]);
-    }
-  }, [product]);
+    const loadProduct = async () => {
+      if (!productId) return;
+      
+      try {
+        setLoading(true);
+        const shopifyProduct = await fetchProductByHandle(productId);
+        
+        if (shopifyProduct) {
+          // Convert Shopify product to our format
+          const convertedProduct: Product = {
+            id: shopifyProduct.id,
+            title: shopifyProduct.title,
+            description: shopifyProduct.description,
+            vendor: shopifyProduct.vendor,
+            productType: shopifyProduct.productType,
+            tags: shopifyProduct.tags,
+            variants: shopifyProduct.variants.edges.map(edge => ({
+              id: edge.node.id,
+              title: edge.node.title,
+              price: parseFloat(edge.node.price.amount) * 100, // Convert to cents
+              available: edge.node.availableForSale,
+              selectedOptions: edge.node.selectedOptions // Include the actual selectedOptions
+            })),
+            images: shopifyProduct.images.edges.map(edge => edge.node.url)
+          };
+          
+          setProduct(convertedProduct);
+          
+          // Set first available variant as default
+          if (convertedProduct.variants.length > 0) {
+            const firstAvailable = convertedProduct.variants.find(v => v.available);
+            setSelectedVariant(firstAvailable || convertedProduct.variants[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading product:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [productId]);
+
+  const isClothingProduct = (productType: string, tags: string[]) => {
+    const clothingTypes = ['clothing', 'apparel', 'shirt', 'hoodie', 'jacket', 'pants', 'dress'];
+    const clothingTags = ['clothing', 'apparel', 'shirt', 'hoodie', 'jacket', 'pants', 'dress', 'wear'];
+    
+    return clothingTypes.some(type => 
+      productType.toLowerCase().includes(type.toLowerCase())
+    ) || clothingTags.some(tag => 
+      tags.some(productTag => productTag.toLowerCase().includes(tag.toLowerCase()))
+    );
+  };
+
+  const getMultiVariants = (shopifyProduct: ShopifyProduct): MultiVariant[] => {
+    return shopifyProduct.variants.edges.map(edge => ({
+      id: edge.node.id,
+      title: edge.node.title,
+      price: parseFloat(edge.node.price.amount) * 100,
+      available: edge.node.availableForSale,
+      selectedOptions: edge.node.selectedOptions
+    }));
+  };
 
   const handleAddToCart = () => {
     if (!selectedVariant) return;
@@ -180,6 +160,33 @@ const ProductPage: React.FC = () => {
   };
 
   const shopifyDomain = "cosmic-industries.myshopify.com"; // Replace with actual domain
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <div className="animate-cosmic-pulse">Loading product...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">Product not found</h1>
+            <Link to="/shop" className="text-cosmic hover:underline">
+              Return to shop
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -289,55 +296,34 @@ const ProductPage: React.FC = () => {
             <Separator className="bg-cosmic/20" />
 
             {/* Variant Selector */}
-            {product.productType === 'Clothing' ? (
-              <MultiVariantSelector
-                variants={product.variants.map(v => ({
-                  id: v.id,
-                  title: v.title,
-                  price: v.price,
-                  available: v.available,
-                  selectedOptions: [
-                    { 
-                      name: 'Size', 
-                      value: v.title.includes('Small') ? 'Small' : 
-                             v.title.includes('Medium') ? 'Medium' : 
-                             v.title.includes('Large') ? 'Large' : 'Unknown'
-                    },
-                    { 
-                      name: 'Color', 
-                      value: v.title.includes('Black') ? 'Black' : 
-                             v.title.includes('White') ? 'White' : 
-                             v.title.includes('Purple') ? 'Purple' : 'Unknown'
+            {isClothingProduct(product.productType, product.tags) ? (
+              <div>
+                <h3 className="font-cosmic text-lg font-bold mb-4 text-cosmic-gradient">
+                  Selecteer opties
+                </h3>
+                <MultiVariantSelector
+                  variants={product.variants.map(variant => ({
+                    id: variant.id,
+                    title: variant.title,
+                    price: variant.price,
+                    available: variant.available,
+                    selectedOptions: variant.selectedOptions || []
+                  }))}
+                  selectedVariant={selectedVariant ? {
+                    id: selectedVariant.id,
+                    title: selectedVariant.title,
+                    price: selectedVariant.price,
+                    available: selectedVariant.available,
+                    selectedOptions: (selectedVariant as any).selectedOptions || []
+                  } : null}
+                  onVariantChange={(multiVariant) => {
+                    const matchingVariant = product.variants.find(v => v.id === multiVariant.id);
+                    if (matchingVariant) {
+                      setSelectedVariant(matchingVariant);
                     }
-                  ]
-                }))}
-                selectedVariant={selectedVariant ? {
-                  id: selectedVariant.id,
-                  title: selectedVariant.title,
-                  price: selectedVariant.price,
-                  available: selectedVariant.available,
-                  selectedOptions: [
-                    { 
-                      name: 'Size', 
-                      value: selectedVariant.title.includes('Small') ? 'Small' : 
-                             selectedVariant.title.includes('Medium') ? 'Medium' : 
-                             selectedVariant.title.includes('Large') ? 'Large' : 'Unknown'
-                    },
-                    { 
-                      name: 'Color', 
-                      value: selectedVariant.title.includes('Black') ? 'Black' : 
-                             selectedVariant.title.includes('White') ? 'White' : 
-                             selectedVariant.title.includes('Purple') ? 'Purple' : 'Unknown'
-                    }
-                  ]
-                } : null}
-                onVariantChange={(multiVariant) => {
-                  const matchingVariant = product.variants.find(v => v.id === multiVariant.id);
-                  if (matchingVariant) {
-                    setSelectedVariant(matchingVariant);
-                  }
-                }}
-              />
+                  }}
+                />
+              </div>
             ) : (
               <ProductVariantSelector
                 variants={product.variants}

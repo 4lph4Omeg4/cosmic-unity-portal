@@ -91,6 +91,7 @@ export const GET_PRODUCTS = `
           description
           handle
           vendor
+          productType
           tags
           priceRange {
             minVariantPrice {
@@ -141,6 +142,7 @@ export const GET_PRODUCT_BY_HANDLE = `
       description
       handle
       vendor
+      productType
       tags
       priceRange {
         minVariantPrice {
