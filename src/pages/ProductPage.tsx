@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, ShoppingCart, Check, Star, Heart } from 'lucide-react';
 import StorageImage from '@/components/StorageImage';
 import ProductVariantSelector, { ProductVariant } from '@/components/ProductVariantSelector';
+import MultiVariantSelector, { MultiVariant } from '@/components/MultiVariantSelector';
 import { useCart } from '@/hooks/useCart';
 
 interface Product {
@@ -63,9 +64,86 @@ Perfecte harmonie tussen vorm en functie, ontworpen voor visionairs die het vers
   reviewCount: 247
 };
 
+// Mock clothing product with size and color options
+const mockClothingProduct: Product = {
+  id: "cosmic-t-shirt",
+  title: "Cosmic Awakening T-Shirt",
+  description: `Erwecke dein Bewusstsein mit unserem galaktischen T-Shirt. Hergestellt aus nachhaltigen Materialien und verziert mit heiliger Geometrie, die deine spirituelle Reise unterstützt.
+
+Perfekt für Meditation, Yoga oder um deine kosmische Natur in den Alltag zu integrieren.`,
+  vendor: "Sacred Wear",
+  productType: "Clothing",
+  tags: ["clothing", "consciousness", "sacred", "sustainable"],
+  variants: [
+    // Small sizes in different colors
+    {
+      id: "cosmic-tshirt-s-black",
+      title: "Small Black",
+      price: 3900,
+      available: true
+    },
+    {
+      id: "cosmic-tshirt-s-white",
+      title: "Small White",
+      price: 3900,
+      available: true
+    },
+    {
+      id: "cosmic-tshirt-s-purple",
+      title: "Small Purple",
+      price: 3900,
+      available: false
+    },
+    // Medium sizes
+    {
+      id: "cosmic-tshirt-m-black",
+      title: "Medium Black",
+      price: 3900,
+      available: true
+    },
+    {
+      id: "cosmic-tshirt-m-white",
+      title: "Medium White",
+      price: 3900,
+      available: true
+    },
+    {
+      id: "cosmic-tshirt-m-purple",
+      title: "Medium Purple",
+      price: 3900,
+      available: true
+    },
+    // Large sizes
+    {
+      id: "cosmic-tshirt-l-black",
+      title: "Large Black",
+      price: 4200,
+      available: true
+    },
+    {
+      id: "cosmic-tshirt-l-white",
+      title: "Large White",
+      price: 4200,
+      available: false
+    },
+    {
+      id: "cosmic-tshirt-l-purple",
+      title: "Large Purple",
+      price: 4200,
+      available: true
+    },
+  ],
+  images: ["/placeholder.svg"],
+  rating: 4.6,
+  reviewCount: 128
+};
+
 const ProductPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
-  const [product] = useState<Product>(mockProduct);
+  // Choose product based on productId or default to tech product
+  const [product] = useState<Product>(
+    productId === 'cosmic-t-shirt' ? mockClothingProduct : mockProduct
+  );
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
@@ -211,12 +289,63 @@ const ProductPage: React.FC = () => {
             <Separator className="bg-cosmic/20" />
 
             {/* Variant Selector */}
-            <ProductVariantSelector
-              variants={product.variants}
-              selectedVariant={selectedVariant}
-              onVariantChange={setSelectedVariant}
-              label="Kies je variant"
-            />
+            {product.productType === 'Clothing' ? (
+              <MultiVariantSelector
+                variants={product.variants.map(v => ({
+                  id: v.id,
+                  title: v.title,
+                  price: v.price,
+                  available: v.available,
+                  selectedOptions: [
+                    { 
+                      name: 'Size', 
+                      value: v.title.includes('Small') ? 'Small' : 
+                             v.title.includes('Medium') ? 'Medium' : 
+                             v.title.includes('Large') ? 'Large' : 'Unknown'
+                    },
+                    { 
+                      name: 'Color', 
+                      value: v.title.includes('Black') ? 'Black' : 
+                             v.title.includes('White') ? 'White' : 
+                             v.title.includes('Purple') ? 'Purple' : 'Unknown'
+                    }
+                  ]
+                }))}
+                selectedVariant={selectedVariant ? {
+                  id: selectedVariant.id,
+                  title: selectedVariant.title,
+                  price: selectedVariant.price,
+                  available: selectedVariant.available,
+                  selectedOptions: [
+                    { 
+                      name: 'Size', 
+                      value: selectedVariant.title.includes('Small') ? 'Small' : 
+                             selectedVariant.title.includes('Medium') ? 'Medium' : 
+                             selectedVariant.title.includes('Large') ? 'Large' : 'Unknown'
+                    },
+                    { 
+                      name: 'Color', 
+                      value: selectedVariant.title.includes('Black') ? 'Black' : 
+                             selectedVariant.title.includes('White') ? 'White' : 
+                             selectedVariant.title.includes('Purple') ? 'Purple' : 'Unknown'
+                    }
+                  ]
+                } : null}
+                onVariantChange={(multiVariant) => {
+                  const matchingVariant = product.variants.find(v => v.id === multiVariant.id);
+                  if (matchingVariant) {
+                    setSelectedVariant(matchingVariant);
+                  }
+                }}
+              />
+            ) : (
+              <ProductVariantSelector
+                variants={product.variants}
+                selectedVariant={selectedVariant}
+                onVariantChange={setSelectedVariant}
+                label="Kies je variant"
+              />
+            )}
 
             <Separator className="bg-cosmic/20" />
 

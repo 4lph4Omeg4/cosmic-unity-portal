@@ -135,7 +135,8 @@ const Shop = () => {
                 id: edge.node.id + '_variant',
                 title: 'Default',
                 price: edge.node.priceRange.minVariantPrice,
-                availableForSale: true
+                availableForSale: true,
+                selectedOptions: []
               }
             }]
           },
