@@ -318,18 +318,80 @@ const Shop = () => {
             </div>
           )}
 
-          {/* Empty State */}
+          {/* Demo Products for Testing */}
           {collections.length === 0 && filteredProducts.length === 0 && !loading && (
-            <div className="text-center py-16">
-              <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-cosmic animate-cosmic-pulse">
-                <Star className="w-8 h-8 text-white" />
+            <div className="space-y-12">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-cosmic animate-cosmic-pulse">
+                  <Star className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
+                  Demo Products
+                </h3>
+                <p className="font-mystical text-muted-foreground max-w-md mx-auto mb-8">
+                  Explore our demo products to see the different variant selectors in action.
+                </p>
               </div>
-              <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-                Geen producten gevonden
-              </h3>
-              <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.
-              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                {/* Tech Product */}
+                <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+                  <div className="aspect-square overflow-hidden rounded-t-lg bg-gradient-to-br from-cosmic/20 to-secondary/20 flex items-center justify-center">
+                    <Star className="w-12 h-12 text-cosmic/60" />
+                  </div>
+                  <CardHeader>
+                    <Badge variant="cosmic" className="text-xs w-fit">Technology</Badge>
+                    <CardTitle className="font-cosmic text-lg font-bold text-cosmic-gradient">
+                      Cosmic Vision Device
+                    </CardTitle>
+                    <div className="text-lg font-bold text-mystical-gradient">
+                      €299.00
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Single variant selector with color options
+                    </p>
+                    <Button 
+                      variant="mystical" 
+                      className="w-full"
+                      onClick={() => navigate('/product/cosmic-vision-device')}
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Product
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Clothing Product */}
+                <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+                  <div className="aspect-square overflow-hidden rounded-t-lg bg-gradient-to-br from-mystical/20 to-cosmic/20 flex items-center justify-center">
+                    <Star className="w-12 h-12 text-mystical/60" />
+                  </div>
+                  <CardHeader>
+                    <Badge variant="mystical" className="text-xs w-fit">Clothing</Badge>
+                    <CardTitle className="font-cosmic text-lg font-bold text-mystical-gradient">
+                      Cosmic Awakening T-Shirt
+                    </CardTitle>
+                    <div className="text-lg font-bold text-cosmic-gradient">
+                      €39.00
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Multi-variant selector with size and color options
+                    </p>
+                    <Button 
+                      variant="cosmic" 
+                      className="w-full"
+                      onClick={() => navigate('/product/cosmic-t-shirt')}
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Product
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
         </div>
