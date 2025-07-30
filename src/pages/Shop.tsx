@@ -24,11 +24,30 @@ interface ShopifyCollection {
         id: string;
         title: string;
         handle: string;
+        productType?: string;
+        tags?: string[];
         priceRange: {
           minVariantPrice: {
             amount: string;
             currencyCode: string;
           };
+        };
+        variants?: {
+          edges: Array<{
+            node: {
+              id: string;
+              title: string;
+              price: {
+                amount: string;
+                currencyCode: string;
+              };
+              availableForSale: boolean;
+              selectedOptions: Array<{
+                name: string;
+                value: string;
+              }>;
+            };
+          }>;
         };
         images: {
           edges: Array<{
@@ -120,16 +139,17 @@ const Shop = () => {
     } else {
       const collection = collections.find(c => c.handle === collectionHandle);
       if (collection && collection.products.edges.length > 0) {
-        // Gebruik de producten die direct in de collectie zitten
+        // Gebruik de producten die direct in de collectie zitten met alle data
         const collectionProducts = collection.products.edges.map(edge => ({
           id: edge.node.id,
           title: edge.node.title,
           description: '', // Shopify collections bevatten beperkte productinfo
           handle: edge.node.handle,
           vendor: '',
-          tags: [],
+          productType: edge.node.productType || '',
+          tags: edge.node.tags || [],
           priceRange: edge.node.priceRange,
-          variants: {
+          variants: edge.node.variants || {
             edges: [{
               node: {
                 id: edge.node.id + '_variant',

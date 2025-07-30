@@ -52,19 +52,38 @@ export const GET_COLLECTIONS = `
             url
             altText
           }
-          products(first: 10) {
+          products(first: 50) {
             edges {
               node {
                 id
                 title
                 handle
+                productType
+                tags
                 priceRange {
                   minVariantPrice {
                     amount
                     currencyCode
                   }
                 }
-                images(first: 1) {
+                variants(first: 20) {
+                  edges {
+                    node {
+                      id
+                      title
+                      price {
+                        amount
+                        currencyCode
+                      }
+                      availableForSale
+                      selectedOptions {
+                        name
+                        value
+                      }
+                    }
+                  }
+                }
+                images(first: 5) {
                   edges {
                     node {
                       url
