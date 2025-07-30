@@ -15,7 +15,8 @@ interface BlogArticle {
   handle: string;
   publishedAt: string;
   author: {
-    displayName: string;
+    firstName: string;
+    lastName: string;
   };
   image?: {
     url: string;
@@ -141,7 +142,7 @@ const EgoToEden = () => {
                     <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        <span>{article.author.displayName}</span>
+                        <span>{`${article.author.firstName} ${article.author.lastName}`.trim()}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />

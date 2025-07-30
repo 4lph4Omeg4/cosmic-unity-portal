@@ -221,7 +221,8 @@ export const GET_BLOG_ARTICLES = `
             handle
             publishedAt
             author {
-              displayName
+              firstName
+              lastName
             }
             image {
               url
@@ -253,7 +254,8 @@ export const GET_ALL_BLOGS = `
                 handle
                 publishedAt
                 author {
-                  displayName
+                  firstName
+                  lastName
                 }
                 image {
                   url
