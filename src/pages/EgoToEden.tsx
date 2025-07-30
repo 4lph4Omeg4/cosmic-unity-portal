@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,6 +27,7 @@ interface BlogArticle {
 }
 
 const EgoToEden = () => {
+  const navigate = useNavigate();
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -150,7 +152,11 @@ const EgoToEden = () => {
                       </div>
                     </div>
                     
-                    <Button variant="mystical" className="w-full group">
+                    <Button 
+                      variant="mystical" 
+                      className="w-full group"
+                      onClick={() => navigate(`/blog/ego-to-eden/${article.handle}`)}
+                    >
                       Lees Volledig Artikel
                       <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Button>
