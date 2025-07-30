@@ -43,9 +43,19 @@ const Blog = () => {
           return;
         }
 
-        // Use the correct blog handle from Shopify
-        console.log('Fetching articles from ego-to-eden blog...');
-        const fetchedArticles = await fetchBlogArticles('ego-to-eden');
+        // Eerst alle blogs ophalen om de juiste handle te vinden
+        console.log('Fetching all blogs to find available handles...');
+        const allBlogs = await fetchAllBlogs();
+        console.log('All blogs found:', {
+          blogsFound: allBlogs.length,
+          blogs: allBlogs.map(blog => ({ id: blog.id, title: blog.title, handle: blog.handle }))
+        });
+
+        // Probeer eerst met een van de gevonden blogs, of fallback naar 'ego-to-eden'
+        const blogHandle = allBlogs.length > 0 ? allBlogs[0].handle : 'ego-to-eden';
+        console.log(`Using blog handle: ${blogHandle}`);
+        
+        const fetchedArticles = await fetchBlogArticles(blogHandle);
         console.log('Blog fetch result:', {
           articlesFound: fetchedArticles.length,
           articles: fetchedArticles
