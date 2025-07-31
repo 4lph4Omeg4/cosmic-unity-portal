@@ -10,7 +10,7 @@ import { fetchBlogArticles } from '@/integrations/shopify/client';
 interface BlogArticle {
   id: string;
   title: string;
-  content: string;
+  contentHtml: string;
   excerpt: string;
   handle: string;
   publishedAt: string;
@@ -172,7 +172,7 @@ const BlogArticle = () => {
           {/* Article Content */}
           <div 
             className="prose prose-lg max-w-none prose-headings:text-cosmic-gradient prose-p:text-foreground prose-a:text-primary prose-strong:text-foreground prose-em:text-foreground prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground prose-img:rounded-lg prose-img:shadow-lg"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: article.contentHtml }}
           />
 
           {/* Bottom navigation */}
