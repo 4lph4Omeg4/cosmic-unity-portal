@@ -11,6 +11,7 @@ import Shop from "./pages/Shop";
 import Collection from "./pages/Collection";
 import Product from "./pages/Product";
 import ProductPage from "./pages/ProductPage";
+import CartPage from "./pages/CartPage";
 import Community from "./pages/Community";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/shop/collection/:collection" element={<Collection />} />
               <Route path="/product/:handle" element={<Product />} />
               <Route path="/products/:productId" element={<ProductPage />} />
+              <Route path="/cart" element={<CartPage />} />
               <Route path="/community" element={<Community />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
