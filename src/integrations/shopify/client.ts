@@ -3,7 +3,7 @@ import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 const client = createStorefrontApiClient({
   storeDomain: 'rfih5t-ij.myshopify.com',
   apiVersion: '2024-10',
-  publicAccessToken: 'ed47eb085cb7daa4e53db03042cfa29d',
+  publicAccessToken: 'ed47eb085cb7daa4e53db03042cfa29d'
 });
 
 export { client as shopifyClient };
@@ -40,7 +40,7 @@ export const testConnection = async () => {
 
 // GraphQL queries
 export const GET_COLLECTIONS = `
-  query getCollections($first: Int!) {
+  query getCollections($first: Int!, $language: LanguageCode) @inContext(language: $language) {
     collections(first: $first) {
       edges {
         node {
@@ -203,7 +203,7 @@ export const GET_PRODUCT_BY_HANDLE = `
 `;
 
 export const GET_BLOG_ARTICLES = `
-  query getBlogArticles($handle: String!, $first: Int!) {
+  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode) @inContext(language: $language) {
     blog(handle: $handle) {
       id
       title
@@ -240,7 +240,6 @@ export const GET_ALL_BLOGS = `
           id
           title
           handle
-          url
         }
       }
     }
@@ -272,15 +271,19 @@ export const CREATE_CHECKOUT = `
 `;
 
 // Helper functions
-export const fetchCollections = async () => {
+export const fetchCollections = async (language: string = 'en') => {
   try {
+    // Map language codes
+    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
+    console.log(`Fetching collections for language: ${languageCode}`);
+    
     console.log('Fetching collections...');
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await client.request(GET_COLLECTIONS, {
-      variables: { first: 20 }
+      variables: { first: 20, language: languageCode }
     });
 
     clearTimeout(timeoutId);
@@ -334,8 +337,7 @@ export const fetchAllBlogs = async () => {
     console.log('Blog details:', blogs.map(blog => ({ 
       id: blog.id, 
       title: blog.title, 
-      handle: blog.handle,
-      url: blog.url 
+      handle: blog.handle
     })));
     return blogs;
   } catch (error) {
@@ -361,8 +363,12 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
+    // Map language code voor Shopify
+    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
+    console.log(`Using language code: ${languageCode} for handle: ${targetHandle}`);
+
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: targetHandle, first: 50 } // Verhoog naar 50 om meer artikelen op te halen
+      variables: { handle: targetHandle, first: 50, language: languageCode }
     });
 
     clearTimeout(timeoutId);
@@ -373,7 +379,7 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
       // Fallback naar from-ego-to-eden als de taal-specifieke niet bestaat
       if (targetHandle !== 'from-ego-to-eden') {
         const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
-          variables: { handle: 'from-ego-to-eden', first: 50 }
+          variables: { handle: 'from-ego-to-eden', first: 50, language: languageCode }
         });
         if (fallbackResponse.data?.blog) {
           console.log(`Fallback successful to from-ego-to-eden`);

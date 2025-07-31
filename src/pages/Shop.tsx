@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Star, Filter, Grid, List, ShoppingCart, ExternalLink, Eye } from 'lucide-react';
 import { fetchCollections, fetchProducts, createCheckout } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ShopifyCollection {
   id: string;
@@ -106,6 +107,7 @@ const Shop = () => {
   const navigate = useNavigate();
   const { collection: urlCollection } = useParams();
   const { toast } = useToast();
+  const { language } = useLanguage();
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
@@ -116,7 +118,7 @@ const Shop = () => {
     const loadData = async () => {
       try {
         const [fetchedCollections, fetchedProducts] = await Promise.all([
-          fetchCollections(),
+          fetchCollections(language),
           fetchProducts()
         ]);
         setCollections(fetchedCollections);
@@ -139,7 +141,7 @@ const Shop = () => {
     };
 
     loadData();
-  }, [urlCollection]);
+  }, [urlCollection, language]); // Herlaad bij taal wijziging
 
   const handleCollectionFilter = (collectionHandle: string | null, collectionsData?: ShopifyCollection[]) => {
     const collectionsToUse = collectionsData || collections;
