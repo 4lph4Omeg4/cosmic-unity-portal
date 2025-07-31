@@ -100,8 +100,15 @@ const Community = () => {
 
       // Combine posts with their profile data, likes, and comments
       const postsWithData = postsData.map(post => {
-        const profile = profilesData?.find(profile => profile.user_id === post.user_id) || {
-          display_name: 'Unknown User',
+        const profile = profilesData?.find(profile => profile.user_id === post.user_id);
+        
+        if (!profile) {
+          console.warn(`No profile found for user_id: ${post.user_id}`);
+        }
+
+        const profileData = profile || {
+          user_id: post.user_id,
+          display_name: 'Loading...',
           avatar_url: null
         };
 
@@ -110,16 +117,23 @@ const Community = () => {
 
         return {
           ...post,
-          profiles: profile,
+          profiles: profileData,
           likes: postLikes,
           comments: postComments.map(comment => {
-            const commentProfile = profilesData?.find(profile => profile.user_id === comment.user_id) || {
-              display_name: 'Unknown User',
+            const commentProfile = profilesData?.find(profile => profile.user_id === comment.user_id);
+            
+            if (!commentProfile) {
+              console.warn(`No profile found for comment user_id: ${comment.user_id}`);
+            }
+
+            const commentProfileData = commentProfile || {
+              user_id: comment.user_id,
+              display_name: 'Loading...',
               avatar_url: null
             };
             return {
               ...comment,
-              profiles: commentProfile
+              profiles: commentProfileData
             };
           })
         };
