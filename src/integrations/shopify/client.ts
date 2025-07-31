@@ -378,21 +378,35 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
     console.log(`Found ${allArticles.length} total articles in "${response.data.blog.title}"`);
     
-    // Filter artikelen op basis van tags om taal-specifieke content te tonen
+    // Check wat voor tags de artikelen daadwerkelijk hebben
+    console.log('Article tags debug:', allArticles.map(a => ({ title: a.title, tags: a.tags })));
+    
+    // Filter artikelen op basis van taal-specifieke tags
     let filteredArticles = allArticles;
     
     if (language !== 'nl') {
-      // Voor niet-Nederlandse talen, probeer te filteren op tags
+      // Zoek naar artikelen met expliciete taal tags
       const languageFilteredArticles = allArticles.filter((article: any) => {
         const tags = article.tags || [];
+        console.log(`Checking article "${article.title}" tags:`, tags);
+        
+        // Zoek naar exacte taal matches
         const hasLanguageTag = tags.some((tag: string) => {
-          const tagLower = tag.toLowerCase();
-          return (
-            (language === 'en' && (tagLower.includes('en') || tagLower.includes('english'))) ||
-            (language === 'de' && (tagLower.includes('de') || tagLower.includes('deutsch') || tagLower.includes('german')))
+          const tagLower = tag.toLowerCase().trim();
+          const matches = (
+            (language === 'en' && (tagLower === 'en' || tagLower === 'english' || tagLower === 'eng')) ||
+            (language === 'de' && (tagLower === 'de' || tagLower === 'deutsch' || tagLower === 'german' || tagLower === 'ger'))
           );
+          if (matches) console.log(`Found language match: ${tag} for language ${language}`);
+          return matches;
         });
         return hasLanguageTag;
+      });
+      
+      console.log(`Language filtering result for ${language}:`, {
+        totalArticles: allArticles.length,
+        filteredArticles: languageFilteredArticles.length,
+        filteredTitles: languageFilteredArticles.map(a => a.title)
       });
       
       if (languageFilteredArticles.length > 0) {
@@ -400,6 +414,8 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
         filteredArticles = languageFilteredArticles;
       } else {
         console.log(`No articles found with ${language.toUpperCase()} language tags, showing all articles`);
+        // Voor nu tonen we alle artikelen als er geen taal-specifieke zijn
+        filteredArticles = allArticles;
       }
     }
     
