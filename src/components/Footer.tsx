@@ -16,7 +16,7 @@ const Footer = () => {
       { name: 'Community Portal', href: '/community' },
       { name: 'Downloads', href: '/community/downloads' },
       { name: 'Blog', href: '/blog' },
-      { name: 'From Ego to Eden', href: '/blog/ego-to-eden' },
+      { name: 'From Ego to Eden', href: '/blog' },
     ],
     info: [
       { name: 'About Us', href: '/about' },
