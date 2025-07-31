@@ -74,20 +74,7 @@ const Community = () => {
 
       console.log('Found posts:', postsData.length);
 
-      // Get unique user IDs from posts
-      const userIds = [...new Set(postsData.map(post => post.user_id))];
-
-      // Get corresponding profiles
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('user_id, display_name, avatar_url')
-        .in('user_id', userIds);
-
-      console.log('Profiles query result:', { profilesData, profilesError });
-
-      if (profilesError) throw profilesError;
-
-      // Get likes and comments for each post
+      // Get likes and comments for each post first
       const postIds = postsData.map(post => post.id);
       
       const [likesResult, commentsResult] = await Promise.all([
@@ -97,6 +84,22 @@ const Community = () => {
 
       if (likesResult.error) throw likesResult.error;
       if (commentsResult.error) throw commentsResult.error;
+
+      // Get unique user IDs from posts AND comments
+      const postUserIds = postsData.map(post => post.user_id);
+      const commentUserIds = commentsResult.data?.map(comment => comment.user_id) || [];
+      const userIds = [...new Set([...postUserIds, ...commentUserIds])];
+
+      console.log('All user IDs (posts + comments):', userIds);
+
+      // Get corresponding profiles for all users (posts + comments)
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .in('user_id', userIds);
+
+      console.log('Profiles query result:', { profilesData, profilesError });
+      if (profilesError) throw profilesError;
 
       // Combine posts with their profile data, likes, and comments
       const postsWithData = postsData.map(post => {
