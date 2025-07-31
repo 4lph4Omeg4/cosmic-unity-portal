@@ -233,7 +233,7 @@ export const GET_BLOG_ARTICLES = `
 `;
 
 export const GET_ALL_BLOGS = `
-  query getAllBlogs($first: Int!) {
+  query getAllBlogs($first: Int!, $language: LanguageCode!) @inContext(language: $language) {
     blogs(first: $first) {
       edges {
         node {
@@ -328,10 +328,16 @@ export const fetchProductByHandle = async (handle: string) => {
 
 export const fetchAllBlogs = async (language: string = 'en') => {
   try {
-    console.log(`Fetching all blogs (language parameter: ${language}, but using standard query)`);
+    console.log(`Fetching all blogs for language: ${language}`);
+    
+    // Convert language codes to Shopify LanguageCode format
+    const shopifyLanguage = language.toUpperCase() as 'NL' | 'EN' | 'DE';
     
     const response = await client.request(GET_ALL_BLOGS, {
-      variables: { first: 50 }
+      variables: { 
+        first: 50,
+        language: shopifyLanguage
+      }
     });
     console.log('All blogs response:', response);
     const blogs = response.data?.blogs?.edges?.map((edge: any) => edge.node) || [];
