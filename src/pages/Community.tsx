@@ -53,18 +53,26 @@ const Community = () => {
 
   const loadPosts = async () => {
     try {
+      console.log('=== LOADING COMMUNITY POSTS ===');
+      console.log('Current user:', user?.id);
+      
       // First get posts
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
         .select('id, title, content, created_at, user_id')
         .order('created_at', { ascending: false });
 
+      console.log('Posts query result:', { postsData, postsError });
+
       if (postsError) throw postsError;
 
       if (!postsData || postsData.length === 0) {
+        console.log('No posts found');
         setPosts([]);
         return;
       }
+
+      console.log('Found posts:', postsData.length);
 
       // Get unique user IDs from posts
       const userIds = [...new Set(postsData.map(post => post.user_id))];
@@ -74,6 +82,8 @@ const Community = () => {
         .from('profiles')
         .select('user_id, display_name, avatar_url')
         .in('user_id', userIds);
+
+      console.log('Profiles query result:', { profilesData, profilesError });
 
       if (profilesError) throw profilesError;
 
@@ -115,6 +125,7 @@ const Community = () => {
         };
       });
 
+      console.log('Final posts with data:', postsWithData);
       setPosts(postsWithData as any);
     } catch (error) {
       console.error('Error loading posts:', error);
@@ -124,6 +135,7 @@ const Community = () => {
         variant: "destructive",
       });
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -151,6 +163,9 @@ const Community = () => {
     if (!user || !newPost.title.trim() || !newPost.content.trim()) return;
 
     try {
+      console.log('Creating post:', newPost);
+      console.log('User ID:', user?.id);
+      
       const { error } = await supabase
         .from('posts')
         .insert({
@@ -158,6 +173,8 @@ const Community = () => {
           content: newPost.content,
           user_id: user.id
         });
+
+      console.log('Create post result:', { error });
 
       if (error) throw error;
 
