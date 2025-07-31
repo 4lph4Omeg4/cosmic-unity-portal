@@ -203,7 +203,7 @@ export const GET_PRODUCT_BY_HANDLE = `
 `;
 
 export const GET_BLOG_ARTICLES = `
-  query getBlogArticles($handle: String!, $first: Int!) {
+  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode!) @inContext(language: $language) {
     blog(handle: $handle) {
       id
       title
@@ -353,6 +353,10 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     console.log(`=== FETCHING BLOG ARTICLES ===`);
     console.log(`Requested blog handle: ${blogHandle}, language: ${language}`);
     
+    // Convert language codes to Shopify LanguageCode format
+    const shopifyLanguage = language.toUpperCase() as 'NL' | 'EN' | 'DE';
+    console.log(`Using Shopify language: ${shopifyLanguage}`);
+    
     // Uit de logs blijkt dat er maar 1 blog bestaat: "ego-to-eden" (From Ego to Eden)
     // Alle talen gebruiken dezelfde blog handle
     const actualHandle = 'ego-to-eden';
@@ -363,7 +367,11 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: actualHandle, first: 50 }
+      variables: { 
+        handle: actualHandle, 
+        first: 50,
+        language: shopifyLanguage
+      }
     });
 
     clearTimeout(timeoutId);
@@ -376,11 +384,7 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
 
     console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${actualHandle})`);
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
-    console.log(`Found ${allArticles.length} total articles in "${response.data.blog.title}"`);
-    
-    // Geen taalfiltering - toon alle artikelen
-    // De artikelen hebben geen expliciete taal-tags, dus we tonen ze allemaal
-    console.log(`Showing all ${allArticles.length} articles for language: ${language}`);
+    console.log(`Found ${allArticles.length} total articles in "${response.data.blog.title}" for language: ${shopifyLanguage}`);
     
     return allArticles;
   } catch (error) {
