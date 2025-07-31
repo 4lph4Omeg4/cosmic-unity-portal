@@ -216,7 +216,7 @@ export const GET_BLOG_ARTICLES = `
           node {
             id
             title
-            content
+            contentHtml
             excerpt
             handle
             publishedAt
