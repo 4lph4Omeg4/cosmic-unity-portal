@@ -408,7 +408,12 @@ const Community = () => {
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-mystical font-semibold">{post.profiles.display_name}</h3>
+                          <button
+                            onClick={() => navigate(`/user/${post.profiles.user_id}`)}
+                            className="font-mystical font-semibold hover:text-cosmic transition-colors cursor-pointer"
+                          >
+                            {post.profiles.display_name}
+                          </button>
                           <Badge variant="cosmic" className="text-xs">Chosen One</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">{formatDate(post.created_at)}</p>
@@ -463,9 +468,12 @@ const Community = () => {
                             </Avatar>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="font-mystical text-sm font-semibold">
+                                <button
+                                  onClick={() => navigate(`/user/${comment.profiles.user_id}`)}
+                                  className="font-mystical text-sm font-semibold hover:text-cosmic transition-colors cursor-pointer"
+                                >
                                   {comment.profiles.display_name}
-                                </span>
+                                </button>
                                 <span className="text-xs text-muted-foreground">
                                   {formatDate(comment.created_at)}
                                 </span>

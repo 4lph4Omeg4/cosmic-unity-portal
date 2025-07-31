@@ -15,6 +15,7 @@ import CartPage from "./pages/CartPage";
 import Community from "./pages/Community";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import Blog from "./pages/Blog";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/community" element={<Community />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/user/:userId" element={<UserProfile />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/ego-to-eden" element={<EgoToEden />} />
               <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
