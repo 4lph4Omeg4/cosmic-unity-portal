@@ -107,7 +107,7 @@ const Shop = () => {
   const navigate = useNavigate();
   const { collection: urlCollection } = useParams();
   const { toast } = useToast();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
@@ -203,8 +203,8 @@ const Shop = () => {
       if (checkout?.webUrl) {
         window.open(checkout.webUrl, '_blank');
         toast({
-          title: "Toegevoegd aan winkelwagen",
-          description: "Je wordt doorgestuurd naar de checkout.",
+          title: t('shop.addedToCart'),
+          description: t('shop.redirecting'),
         });
       } else {
         throw new Error('No checkout URL received');
@@ -212,8 +212,8 @@ const Shop = () => {
     } catch (error) {
       console.error('Error adding to cart:', error);
       toast({
-        title: "Fout bij toevoegen",
-        description: "Product kon niet worden toegevoegd aan de winkelwagen.",
+        title: t('shop.errorAdding'),
+        description: t('shop.errorMessage'),
         variant: "destructive",
       });
     }
@@ -233,7 +233,7 @@ const Shop = () => {
         <main className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="animate-cosmic-pulse">Loading cosmic merchandise...</div>
+              <div className="animate-cosmic-pulse">{t('shop.loading')}</div>
             </div>
           </div>
         </main>
@@ -257,13 +257,12 @@ const Shop = () => {
             </div>
             
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-cosmic-gradient">Sacred</span>{' '}
-              <span className="text-mystical-gradient">Shop</span>
+              <span className="text-cosmic-gradient">{t('shop.title.sacred')}</span>{' '}
+              <span className="text-mystical-gradient">{t('shop.title.shop')}</span>
             </h1>
             
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover consciousness-expanding merchandise designed to awaken your divine purpose 
-              and connect you with the galactic federation of light.
+              {t('shop.subtitle')}
             </p>
           </div>
 
@@ -276,7 +275,7 @@ const Shop = () => {
                   variant={selectedCollection === null ? "mystical" : "outline"}
                   onClick={() => handleCollectionFilter(null)}
                 >
-                  Alle Producten
+                  {t('shop.filter.all')}
                 </Button>
                 {collections.map((collection) => (
                   <Button
@@ -349,7 +348,7 @@ const Shop = () => {
                           onClick={() => navigate(`/product/${product.handle}`)}
                         >
                           <Eye className="w-4 h-4 mr-2" />
-                          Bekijk
+                          {t('shop.viewProduct')}
                         </Button>
                         {product.variants.edges.length > 0 && product.variants.edges[0].node.availableForSale && (
                           <Button 
@@ -375,7 +374,7 @@ const Shop = () => {
                 <Star className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-                Geen producten gevonden
+                {t('shop.noProducts')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
                 De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.

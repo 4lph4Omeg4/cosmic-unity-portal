@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MessageCircle, Plus, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface Profile {
   id: string;
@@ -26,6 +27,7 @@ interface Post {
 
 const LatestPosts = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -127,11 +129,11 @@ const LatestPosts = () => {
               <Users className="w-6 h-6 text-white" />
             </div>
             <h2 className="font-cosmic text-3xl md:text-4xl font-bold mb-4">
-              <span className="text-cosmic-gradient">Laatste</span>{' '}
-              <span className="text-mystical-gradient">Posts</span>
+              <span className="text-cosmic-gradient">{t('posts.title.latest')}</span>{' '}
+              <span className="text-mystical-gradient">{t('posts.title.posts')}</span>
             </h2>
             <p className="font-mystical text-lg text-muted-foreground">
-              Ontdek de nieuwste inzichten van onze community
+              {t('posts.subtitle')}
             </p>
           </div>
           
@@ -172,26 +174,26 @@ const LatestPosts = () => {
           </div>
           
           <h2 className="font-cosmic text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-cosmic-gradient">Laatste</span>{' '}
-            <span className="text-mystical-gradient">Posts</span>
+            <span className="text-cosmic-gradient">{t('posts.title.latest')}</span>{' '}
+            <span className="text-mystical-gradient">{t('posts.title.posts')}</span>
           </h2>
           
           <p className="font-mystical text-lg text-muted-foreground mb-8">
-            Ontdek de nieuwste inzichten van onze community
+            {t('posts.subtitle')}
           </p>
 
           <div className="flex justify-center gap-4">
             <Link to="/community">
               <Button variant="mystical" size="lg">
                 <MessageCircle className="w-5 h-5 mr-2" />
-                Bekijk Community
+                {t('posts.viewCommunity')}
               </Button>
             </Link>
             {user && (
               <Link to="/community">
                 <Button variant="outline" size="lg">
                   <Plus className="w-5 h-5 mr-2" />
-                  Nieuwe Post
+                  {t('posts.newPost')}
                 </Button>
               </Link>
             )}
@@ -229,22 +231,22 @@ const LatestPosts = () => {
                   <MessageCircle className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-4">
-                  Nog geen posts
+                  {t('posts.noPosts')}
                 </h3>
                 <p className="font-mystical text-muted-foreground mb-6">
-                  Wees de eerste om een post te plaatsen!
+                  {t('posts.firstPost')}
                 </p>
                 {user ? (
                   <Link to="/community">
                     <Button variant="mystical">
                       <Plus className="w-4 h-4 mr-2" />
-                      Eerste Post Maken
+                      {t('posts.createFirst')}
                     </Button>
                   </Link>
                 ) : (
                   <Link to="/auth">
                     <Button variant="mystical">
-                      Inloggen om te Posten
+                      {t('posts.loginToPost')}
                     </Button>
                   </Link>
                 )}
@@ -288,7 +290,7 @@ const LatestPosts = () => {
                   
                   <Link to={`/community#post-${post.id}`}>
                     <Button variant="ghost" size="sm" className="text-cosmic hover:text-mystical p-0 h-auto font-mystical">
-                      Lees meer →
+                      {t('posts.readMore')}
                     </Button>
                   </Link>
                 </CardContent>
@@ -301,7 +303,7 @@ const LatestPosts = () => {
           <div className="text-center mt-12">
             <Link to="/community">
               <Button variant="outline" size="lg">
-                Bekijk Alle Posts
+                {t('posts.viewAll')}
               </Button>
             </Link>
           </div>

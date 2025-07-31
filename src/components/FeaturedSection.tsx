@@ -47,7 +47,7 @@ const FeaturedSection = () => {
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [digitalProducts, setDigitalProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const loadDigitalProducts = async () => {
@@ -126,13 +126,12 @@ const FeaturedSection = () => {
           </div>
           
           <h2 className="font-cosmic text-3xl md:text-5xl font-bold mb-6">
-            <span className="text-mystical-gradient">Sacred</span>{' '}
-            <span className="text-cosmic-gradient">Scriptures</span>
+            <span className="text-mystical-gradient">{t('featured.title.sacred')}</span>{' '}
+            <span className="text-cosmic-gradient">{t('featured.title.geometry')}</span>
           </h2>
           
           <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover our collection of digital spiritual content, sacred texts, 
-            and consciousness-expanding wisdom for the awakened soul.
+            {t('featured.subtitle')}
           </p>
         </div>
 
@@ -206,7 +205,7 @@ const FeaturedSection = () => {
                       onClick={() => window.open(`/product/${product.handle}`, '_blank')}
                     >
                       <Book className="w-4 h-4 mr-2" />
-                      Ontdek Wijsheid
+                      {t('featured.explore')}
                       <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                     </Button>
                   </CardFooter>
@@ -219,7 +218,7 @@ const FeaturedSection = () => {
         {/* Call to Action */}
         <div className="text-center mt-16">
           <Button variant="divine" size="lg" className="group">
-            Explore All Offerings
+            {t('featured.explore')}
             <Star className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
           </Button>
         </div>

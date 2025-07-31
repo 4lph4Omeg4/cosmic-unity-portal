@@ -12,6 +12,7 @@ import { Star, Heart, MessageCircle, Plus, Send, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface Profile {
   id: string;
@@ -33,6 +34,7 @@ interface Post {
 const Community = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -212,7 +214,7 @@ const Community = () => {
         <main className="py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="animate-cosmic-pulse">Loading cosmic community...</div>
+              <div className="animate-cosmic-pulse">{t('common.loadingCommunity')}</div>
             </div>
           </div>
         </main>
@@ -236,12 +238,12 @@ const Community = () => {
             </div>
             
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-cosmic-gradient">Cosmic</span>{' '}
-              <span className="text-mystical-gradient">Community</span>
+              <span className="text-cosmic-gradient">{t('community.title.cosmic')}</span>{' '}
+              <span className="text-mystical-gradient">{t('community.title.community')}</span>
             </h1>
             
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Connect met medebewuste zielen op hun spirituele reis naar verlichting
+              {t('community.subtitle')}
             </p>
 
             {!showNewPost && (
@@ -251,7 +253,7 @@ const Community = () => {
                 size="lg"
               >
                 <Plus className="w-5 h-5 mr-2" />
-                Nieuwe Post
+                {t('community.newPost')}
               </Button>
             )}
           </div>
@@ -261,20 +263,20 @@ const Community = () => {
             <Card className="cosmic-hover bg-card/90 backdrop-blur-sm border-border/50 shadow-cosmic mb-8">
               <CardHeader>
                 <CardTitle className="font-cosmic text-cosmic-gradient">
-                  Deel je kosmische inzicht
+                  {t('community.shareInsight')}
                 </CardTitle>
                 <CardDescription className="font-mystical">
-                  Inspireer anderen met je spirituele ervaring
+                  {t('community.inspire')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Input
-                  placeholder="Titel van je bericht..."
+                  placeholder={t('community.postTitle')}
                   value={newPost.title}
                   onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
                 />
                 <Textarea
-                  placeholder="Wat wil je delen met de community?"
+                  placeholder={t('community.postContent')}
                   value={newPost.content}
                   onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                   rows={4}
@@ -282,7 +284,7 @@ const Community = () => {
                 <div className="flex gap-2">
                   <Button onClick={createPost} variant="mystical">
                     <Send className="w-4 h-4 mr-2" />
-                    Publiceren
+                    {t('community.publish')}
                   </Button>
                   <Button 
                     onClick={() => {
@@ -291,7 +293,7 @@ const Community = () => {
                     }}
                     variant="outline"
                   >
-                    Annuleren
+                    {t('community.cancel')}
                   </Button>
                 </div>
               </CardContent>
@@ -395,7 +397,7 @@ const Community = () => {
                     {/* Add Comment */}
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Deel je gedachten..."
+                        placeholder={t('community.addComment')}
                         value={newComment[post.id] || ''}
                         onChange={(e) => setNewComment({ ...newComment, [post.id]: e.target.value })}
                         onKeyPress={(e) => e.key === 'Enter' && addComment(post.id)}

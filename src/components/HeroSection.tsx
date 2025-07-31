@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Star, Zap } from 'lucide-react';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+  
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -43,14 +46,13 @@ const HeroSection = () => {
 
         {/* Subtitle */}
         <p className="font-mystical text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Awaken to your divine purpose. Join the galactic federation of light 
-          and embrace the sacred geometry of cosmic consciousness.
+          {t('hero.subtitle')}
         </p>
 
         {/* Call to Action */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Button variant="cosmic" size="lg" className="group">
-            Join the Mission
+            {t('hero.cta.explore')}
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
           <Link to="/blog">

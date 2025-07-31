@@ -149,10 +149,40 @@ const translations = {
     'footer.followUs': 'Volg Ons',
     'footer.copyright': 'Alle rechten voorbehouden.',
     
+    // Shop
+    'shop.title.sacred': 'Sacred',
+    'shop.title.shop': 'Shop',
+    'shop.subtitle': 'Ontdek bewustzijnsverruimende merchandise ontworpen om je goddelijke doel te doen ontwaken en je te verbinden met de galactische federatie van licht.',
+    'shop.loading': 'Kosmische merchandise laden...',
+    'shop.filter.all': 'Alle Collecties',
+    'shop.addToCart': 'Toevoegen aan Winkelwagen',
+    'shop.viewProduct': 'Bekijk Product',
+    'shop.noProducts': 'Geen producten gevonden',
+    'shop.addedToCart': 'Toegevoegd aan winkelwagen',
+    'shop.redirecting': 'Je wordt doorgestuurd naar de checkout.',
+    'shop.errorAdding': 'Fout bij toevoegen',
+    'shop.errorMessage': 'Product kon niet worden toegevoegd aan de winkelwagen.',
+
+    // Error messages and other community text
+    'community.noPosts': 'Geen berichten gevonden',
+    'community.firstPostMessage': 'Wees de eerste om je kosmische inzicht te delen!',
+    'community.createFirstPost': 'Eerste Post Maken',
+    'community.postCreated': 'Post aangemaakt',
+    'community.postShared': 'Je bericht is gedeeld met de community.',
+    'community.errorCreating': 'Fout bij aanmaken',
+    'community.errorPostMessage': 'Post kon niet worden aangemaakt.',
+    'community.errorLoading': 'Fout bij laden',
+    'community.errorLoadingMessage': 'Posts konden niet worden geladen.',
+    'community.commentAdded': 'Reactie toegevoegd',
+    'community.commentPlaced': 'Je reactie is geplaatst.',
+    'community.errorComment': 'Fout bij reactie',
+    'community.errorCommentMessage': 'Reactie kon niet worden geplaatst.',
+
     // Common
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
-    'common.chosenOne': 'Chosen One'
+    'common.chosenOne': 'Chosen One',
+    'common.loadingCommunity': 'Kosmische community laden...'
   },
   
   en: {
@@ -293,10 +323,40 @@ const translations = {
     'footer.followUs': 'Follow Us',
     'footer.copyright': 'All rights reserved.',
     
+    // Shop
+    'shop.title.sacred': 'Sacred',
+    'shop.title.shop': 'Shop',
+    'shop.subtitle': 'Discover consciousness-expanding merchandise designed to awaken your divine purpose and connect you with the galactic federation of light.',
+    'shop.loading': 'Loading cosmic merchandise...',
+    'shop.filter.all': 'All Collections',
+    'shop.addToCart': 'Add to Cart',
+    'shop.viewProduct': 'View Product',
+    'shop.noProducts': 'No products found',
+    'shop.addedToCart': 'Added to cart',
+    'shop.redirecting': 'You are being redirected to checkout.',
+    'shop.errorAdding': 'Error adding',
+    'shop.errorMessage': 'Product could not be added to cart.',
+
+    // Error messages and other community text
+    'community.noPosts': 'No posts found',
+    'community.firstPostMessage': 'Be the first to share your cosmic insight!',
+    'community.createFirstPost': 'Create First Post',
+    'community.postCreated': 'Post created',
+    'community.postShared': 'Your post has been shared with the community.',
+    'community.errorCreating': 'Error creating',
+    'community.errorPostMessage': 'Post could not be created.',
+    'community.errorLoading': 'Error loading',
+    'community.errorLoadingMessage': 'Posts could not be loaded.',
+    'community.commentAdded': 'Comment added',
+    'community.commentPlaced': 'Your comment has been posted.',
+    'community.errorComment': 'Error commenting',
+    'community.errorCommentMessage': 'Comment could not be posted.',
+
     // Common
     'common.loading': 'Loading...',
     'common.cosmic': 'Cosmic',
-    'common.chosenOne': 'Chosen One'
+    'common.chosenOne': 'Chosen One',
+    'common.loadingCommunity': 'Loading cosmic community...'
   },
   
   de: {
@@ -437,10 +497,40 @@ const translations = {
     'footer.followUs': 'Folge Uns',
     'footer.copyright': 'Alle Rechte vorbehalten.',
     
+    // Shop
+    'shop.title.sacred': 'Sacred',
+    'shop.title.shop': 'Shop',
+    'shop.subtitle': 'Entdecke bewusstseinserweiternde Merchandise, die dazu entworfen wurde, deinen göttlichen Zweck zu erwecken und dich mit der galaktischen Föderation des Lichts zu verbinden.',
+    'shop.loading': 'Kosmische Merchandise laden...',
+    'shop.filter.all': 'Alle Kollektionen',
+    'shop.addToCart': 'In den Warenkorb',
+    'shop.viewProduct': 'Produkt Ansehen',
+    'shop.noProducts': 'Keine Produkte gefunden',
+    'shop.addedToCart': 'Zum Warenkorb hinzugefügt',
+    'shop.redirecting': 'Du wirst zur Kasse weitergeleitet.',
+    'shop.errorAdding': 'Fehler beim Hinzufügen',
+    'shop.errorMessage': 'Produkt konnte nicht zum Warenkorb hinzugefügt werden.',
+
+    // Error messages and other community text
+    'community.noPosts': 'Keine Beiträge gefunden',
+    'community.firstPostMessage': 'Sei der Erste, der seine kosmische Einsicht teilt!',
+    'community.createFirstPost': 'Ersten Beitrag Erstellen',
+    'community.postCreated': 'Beitrag erstellt',
+    'community.postShared': 'Dein Beitrag wurde mit der Community geteilt.',
+    'community.errorCreating': 'Fehler beim Erstellen',
+    'community.errorPostMessage': 'Beitrag konnte nicht erstellt werden.',
+    'community.errorLoading': 'Fehler beim Laden',
+    'community.errorLoadingMessage': 'Beiträge konnten nicht geladen werden.',
+    'community.commentAdded': 'Kommentar hinzugefügt',
+    'community.commentPlaced': 'Dein Kommentar wurde gepostet.',
+    'community.errorComment': 'Fehler beim Kommentieren',
+    'community.errorCommentMessage': 'Kommentar konnte nicht gepostet werden.',
+
     // Common
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
-    'common.chosenOne': 'Chosen One'
+    'common.chosenOne': 'Chosen One',
+    'common.loadingCommunity': 'Kosmische Community laden...'
   }
 };
 
