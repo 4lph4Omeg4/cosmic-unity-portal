@@ -80,32 +80,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* The Books */}
-          <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-8 mb-12 shadow-cosmic">
-            <h2 className="font-cosmic text-2xl font-bold text-mystical-gradient mb-6 text-center">
-              {t('about.literature.title')}
-            </h2>
-            
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">
-                  {t('about.literature.realWorld.title')}
-                </h3>
-                <p className="font-mystical text-muted-foreground leading-relaxed">
-                  {t('about.literature.realWorld.text')}
-                </p>
-              </div>
-              
-              <div>
-                <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">
-                  {t('about.literature.waarheid.title')}
-                </h3>
-                <p className="font-mystical text-muted-foreground leading-relaxed">
-                  {t('about.literature.waarheid.text')}
-                </p>
-              </div>
-            </div>
-          </div>
 
           {/* Call to Action */}
           <div className="text-center">
