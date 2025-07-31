@@ -233,7 +233,7 @@ export const GET_BLOG_ARTICLES = `
 `;
 
 export const GET_ALL_BLOGS = `
-  query getAllBlogs($first: Int!) {
+  query getAllBlogs($first: Int!, $language: LanguageCode) @inContext(language: $language) {
     blogs(first: $first) {
       edges {
         node {
@@ -302,10 +302,14 @@ export const fetchCollections = async (language: string = 'en') => {
   }
 };
 
-export const fetchProducts = async (query?: string) => {
+export const fetchProducts = async (language: string = 'en') => {
   try {
+    // Map language codes
+    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
+    console.log(`Fetching products for language: ${languageCode}`);
+    
     const response = await client.request(GET_PRODUCTS, {
-      variables: { first: 50, query }
+      variables: { first: 50 }
     });
     return response.data?.products?.edges?.map((edge: any) => edge.node) || [];
   } catch (error) {
@@ -326,10 +330,14 @@ export const fetchProductByHandle = async (handle: string) => {
   }
 };
 
-export const fetchAllBlogs = async () => {
+export const fetchAllBlogs = async (language: string = 'en') => {
   try {
+    // Map language codes
+    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
+    console.log(`Fetching all blogs for language: ${languageCode}`);
+    
     const response = await client.request(GET_ALL_BLOGS, {
-      variables: { first: 50 } // Verhoog van 10 naar 50 om meer blogs te vinden
+      variables: { first: 50, language: languageCode }
     });
     console.log('All blogs response:', response);
     const blogs = response.data?.blogs?.edges?.map((edge: any) => edge.node) || [];

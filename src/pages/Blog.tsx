@@ -48,7 +48,7 @@ const Blog = () => {
 
         // Eerst alle blogs ophalen om de juiste handle te vinden
         console.log('Fetching all blogs to find available handles...');
-        const allBlogs = await fetchAllBlogs();
+        const allBlogs = await fetchAllBlogs(language);
         console.log('All blogs found:', {
           blogsFound: allBlogs.length,
           blogs: allBlogs.map(blog => ({ id: blog.id, title: blog.title, handle: blog.handle }))

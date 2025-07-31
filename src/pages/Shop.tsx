@@ -119,7 +119,7 @@ const Shop = () => {
       try {
         const [fetchedCollections, fetchedProducts] = await Promise.all([
           fetchCollections(language),
-          fetchProducts()
+          fetchProducts(language)
         ]);
         setCollections(fetchedCollections);
         setProducts(fetchedProducts);
