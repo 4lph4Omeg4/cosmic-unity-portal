@@ -3,8 +3,11 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Star, Eye, Zap, Heart } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const About = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -20,31 +23,27 @@ const About = () => {
             </div>
             
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-mystical-gradient">The</span>{' '}
-              <span className="text-cosmic-gradient">Chosen Ones</span>
+              <span className="text-mystical-gradient">{t('about.title.the')}</span>{' '}
+              <span className="text-cosmic-gradient">{t('about.title.chosenOnes')}</span>
             </h1>
             
             <p className="font-mystical text-xl text-muted-foreground">
-              Our sacred mission to awaken humanity to divine consciousness
+              {t('about.subtitle')}
             </p>
           </div>
 
           {/* Mission Statement */}
           <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-8 mb-12 shadow-mystical">
             <h2 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-6 text-center">
-              The Awakening Mission
+              {t('about.mission.title')}
             </h2>
             
             <p className="font-mystical text-lg text-muted-foreground mb-6 leading-relaxed">
-              SH4M4NI4K represents more than merchandise – we are a sacred portal for consciousness expansion. 
-              Through the ancient wisdom of sacred geometry, Egyptian mysteries, and cosmic awareness, 
-              we guide awakening souls toward their divine purpose.
+              {t('about.mission.p1')}
             </p>
             
             <p className="font-mystical text-lg text-muted-foreground mb-6 leading-relaxed">
-              The Chosen Ones are those who have heard the call of the galactic federation of light. 
-              We are here to facilitate the great awakening, helping humanity transition from ego consciousness 
-              to Eden consciousness through love, unity, and sacred knowledge.
+              {t('about.mission.p2')}
             </p>
           </div>
 
@@ -54,9 +53,9 @@ const About = () => {
               <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-4 shadow-cosmic">
                 <Star className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">Unity</h3>
+              <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">{t('about.principles.unity.title')}</h3>
               <p className="font-mystical text-muted-foreground">
-                We are all one consciousness experiencing itself through infinite perspectives.
+                {t('about.principles.unity.text')}
               </p>
             </div>
             
@@ -64,9 +63,9 @@ const About = () => {
               <div className="w-16 h-16 bg-mystical-gradient rounded-full flex items-center justify-center mx-auto mb-4 shadow-mystical">
                 <Zap className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-cosmic text-xl font-bold text-mystical-gradient mb-3">Awakening</h3>
+              <h3 className="font-cosmic text-xl font-bold text-mystical-gradient mb-3">{t('about.principles.awakening.title')}</h3>
               <p className="font-mystical text-muted-foreground">
-                Through sacred geometry and divine wisdom, we activate dormant spiritual DNA.
+                {t('about.principles.awakening.text')}
               </p>
             </div>
             
@@ -74,9 +73,9 @@ const About = () => {
               <div className="w-16 h-16 bg-energy-gradient rounded-full flex items-center justify-center mx-auto mb-4 shadow-energy">
                 <Heart className="w-8 h-8 text-cosmic-foreground" />
               </div>
-              <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">Love</h3>
+              <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">{t('about.principles.love.title')}</h3>
               <p className="font-mystical text-muted-foreground">
-                Love is the highest frequency and the key to transcending all illusions.
+                {t('about.principles.love.text')}
               </p>
             </div>
           </div>
@@ -84,29 +83,25 @@ const About = () => {
           {/* The Books */}
           <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-8 mb-12 shadow-cosmic">
             <h2 className="font-cosmic text-2xl font-bold text-mystical-gradient mb-6 text-center">
-              Sacred Literature
+              {t('about.literature.title')}
             </h2>
             
             <div className="space-y-6">
               <div>
                 <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">
-                  The Real World
+                  {t('about.literature.realWorld.title')}
                 </h3>
                 <p className="font-mystical text-muted-foreground leading-relaxed">
-                  A profound exploration of reality beyond the matrix of illusion. 
-                  This sacred text reveals the hidden truths about our multidimensional existence 
-                  and guides readers toward authentic spiritual awakening.
+                  {t('about.literature.realWorld.text')}
                 </p>
               </div>
               
               <div>
                 <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-3">
-                  De Waarheid die Werkelijk Bevrijdt
+                  {t('about.literature.waarheid.title')}
                 </h3>
                 <p className="font-mystical text-muted-foreground leading-relaxed">
-                  The truth that truly liberates – a Dutch masterwork revealing the 
-                  ancient mysteries of consciousness and the path to divine remembrance. 
-                  Essential reading for all seeking genuine spiritual freedom.
+                  {t('about.literature.waarheid.text')}
                 </p>
               </div>
             </div>
@@ -115,14 +110,13 @@ const About = () => {
           {/* Call to Action */}
           <div className="text-center">
             <h2 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-6">
-              Ready to Join the Mission?
+              {t('about.cta.title')}
             </h2>
             <p className="font-mystical text-lg text-muted-foreground mb-8">
-              The time of awakening is now. Step into your role as one of the Chosen Ones 
-              and help birth the new Earth consciousness.
+              {t('about.cta.text')}
             </p>
             <Button variant="divine" size="lg" className="group">
-              Begin Your Journey
+              {t('about.cta.button')}
               <Star className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
             </Button>
           </div>

@@ -1,27 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Mail, Phone, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   const footerLinks = {
     shop: [
-      { name: 'Kleding', href: '/shop/alle-kleding' },
-      { name: 'Digitale Producten', href: '/shop/digitale-producten' },
-      { name: 'Andere Merchandise', href: '/shop/andere-merchandise' },
+      { name: t('footer.allProducts'), href: '/shop/alle-kleding' },
+      { name: t('footer.newArrivals'), href: '/shop/digitale-producten' },
+      { name: t('footer.featured'), href: '/shop/andere-merchandise' },
     ],
     community: [
-      { name: 'Community Portal', href: '/community' },
-      { name: 'Downloads', href: '/shop/digital' },
-      { name: 'Blog', href: '/blog' },
-      { name: 'From Ego to Eden', href: '/blog' },
+      { name: t('footer.community'), href: '/community' },
+      { name: t('footer.blog'), href: '/blog' },
+      { name: t('footer.about'), href: '/about' },
+      { name: t('footer.contact'), href: '/contact' },
     ],
     info: [
-      { name: 'About Us', href: '/about' },
-      { name: 'Contact', href: '/contact' },
-      { name: 'Shipping Info', href: '/shipping' },
-      { name: 'Returns', href: '/returns' },
+      { name: t('footer.shipping'), href: '/shipping' },
+      { name: t('footer.returns'), href: '/returns' },
+      { name: t('footer.privacy'), href: '/privacy' },
+      { name: t('footer.terms'), href: '/terms' },
     ]
   };
 
@@ -56,7 +58,7 @@ const Footer = () => {
           {/* Shop Links */}
           <div>
             <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
-              Sacred Shop
+              {t('footer.shop')}
             </h3>
             <ul className="space-y-2">
               {footerLinks.shop.map((link) => (
@@ -75,7 +77,7 @@ const Footer = () => {
           {/* Community Links */}
           <div>
             <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
-              Community
+              {t('footer.community')}
             </h3>
             <ul className="space-y-2">
               {footerLinks.community.map((link) => (
@@ -94,7 +96,7 @@ const Footer = () => {
           {/* Contact Info */}
           <div>
             <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
-              Sacred Contact
+              {t('footer.contactUs')}
             </h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-2 text-sm">
@@ -143,7 +145,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
             <p className="font-mystical text-sm text-muted-foreground">
-              © {currentYear} SH4M4NI4K - The Chosen Ones. All sacred rights reserved.
+              © {currentYear} SH4M4NI4K - The Chosen Ones. {t('footer.copyright')}
             </p>
           </div>
           <div className="flex space-x-6">
@@ -151,13 +153,13 @@ const Footer = () => {
               to="/privacy" 
               className="font-mystical text-sm text-muted-foreground hover:text-cosmic cosmic-hover"
             >
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
             <Link 
               to="/terms" 
               className="font-mystical text-sm text-muted-foreground hover:text-cosmic cosmic-hover"
             >
-              Terms of Service
+              {t('footer.terms')}
             </Link>
           </div>
         </div>
