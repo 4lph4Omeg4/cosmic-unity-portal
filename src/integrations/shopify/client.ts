@@ -52,7 +52,7 @@ export const GET_COLLECTIONS = `
             url
             altText
           }
-          products(first: 50) {
+          products(first: 250) {
             edges {
               node {
                 id
@@ -66,7 +66,7 @@ export const GET_COLLECTIONS = `
                     currencyCode
                   }
                 }
-                variants(first: 20) {
+                variants(first: 1) {
                   edges {
                     node {
                       id
@@ -76,14 +76,10 @@ export const GET_COLLECTIONS = `
                         currencyCode
                       }
                       availableForSale
-                      selectedOptions {
-                        name
-                        value
-                      }
                     }
                   }
                 }
-                images(first: 5) {
+                images(first: 1) {
                   edges {
                     node {
                       url
