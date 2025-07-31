@@ -40,7 +40,7 @@ export const testConnection = async () => {
 
 // GraphQL queries
 export const GET_COLLECTIONS = `
-  query getCollections($first: Int!, $language: LanguageCode) @inContext(language: $language) {
+  query getCollections($first: Int!) {
     collections(first: $first) {
       edges {
         node {
@@ -203,7 +203,7 @@ export const GET_PRODUCT_BY_HANDLE = `
 `;
 
 export const GET_BLOG_ARTICLES = `
-  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode) @inContext(language: $language) {
+  query getBlogArticles($handle: String!, $first: Int!) {
     blog(handle: $handle) {
       id
       title
@@ -233,7 +233,7 @@ export const GET_BLOG_ARTICLES = `
 `;
 
 export const GET_ALL_BLOGS = `
-  query getAllBlogs($first: Int!, $language: LanguageCode) @inContext(language: $language) {
+  query getAllBlogs($first: Int!) {
     blogs(first: $first) {
       edges {
         node {
@@ -273,9 +273,7 @@ export const CREATE_CHECKOUT = `
 // Helper functions
 export const fetchCollections = async (language: string = 'en') => {
   try {
-    // Map language codes
-    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
-    console.log(`Fetching collections for language: ${languageCode}`);
+    console.log(`Fetching collections (language parameter: ${language}, but using standard query)`);
     
     console.log('Fetching collections...');
 
@@ -283,7 +281,7 @@ export const fetchCollections = async (language: string = 'en') => {
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await client.request(GET_COLLECTIONS, {
-      variables: { first: 20, language: languageCode }
+      variables: { first: 20 }
     });
 
     clearTimeout(timeoutId);
@@ -304,9 +302,7 @@ export const fetchCollections = async (language: string = 'en') => {
 
 export const fetchProducts = async (language: string = 'en') => {
   try {
-    // Map language codes
-    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
-    console.log(`Fetching products for language: ${languageCode}`);
+    console.log(`Fetching products (language parameter: ${language}, but using standard query)`);
     
     const response = await client.request(GET_PRODUCTS, {
       variables: { first: 50 }
@@ -332,12 +328,10 @@ export const fetchProductByHandle = async (handle: string) => {
 
 export const fetchAllBlogs = async (language: string = 'en') => {
   try {
-    // Map language codes
-    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
-    console.log(`Fetching all blogs for language: ${languageCode}`);
+    console.log(`Fetching all blogs (language parameter: ${language}, but using standard query)`);
     
     const response = await client.request(GET_ALL_BLOGS, {
-      variables: { first: 50, language: languageCode }
+      variables: { first: 50 }
     });
     console.log('All blogs response:', response);
     const blogs = response.data?.blogs?.edges?.map((edge: any) => edge.node) || [];
@@ -356,59 +350,60 @@ export const fetchAllBlogs = async (language: string = 'en') => {
 
 export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
   try {
-    // Test verschillende blog handles die beschikbaar zijn in deze store
-    // Gebaseerd op de URL structuur: ego-nach-eden (DE), from-ego-to-eden (EN), ego-to-eden (NL)
-    const blogHandleMap = {
-      'de': 'ego-nach-eden',        // Duits blog handle
-      'en': 'from-ego-to-eden',     // Engels blog handle  
-      'nl': 'ego-to-eden'           // Nederlands blog handle
-    };
+    console.log(`=== FETCHING BLOG ARTICLES ===`);
+    console.log(`Requested blog handle: ${blogHandle}, language: ${language}`);
     
-    const targetHandle = blogHandleMap[language] || 'from-ego-to-eden';
-    console.log(`=== TESTING BLOG HANDLE: ${targetHandle} for language: ${language} ===`);
+    // Uit de logs blijkt dat er maar 1 blog bestaat: "ego-to-eden" (From Ego to Eden)
+    // Alle talen gebruiken dezelfde blog handle
+    const actualHandle = 'ego-to-eden';
+    console.log(`Using actual blog handle: ${actualHandle} (only blog that exists)`);
 
     // Add timeout and retry logic
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-    // Map language code voor Shopify
-    const languageCode = language === 'nl' ? 'NL' : language === 'de' ? 'DE' : 'EN';
-    console.log(`Using language code: ${languageCode} for handle: ${targetHandle}`);
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: targetHandle, first: 50, language: languageCode }
+      variables: { handle: actualHandle, first: 50 }
     });
 
     clearTimeout(timeoutId);
     console.log('Blog response:', response);
 
     if (!response.data?.blog) {
-      console.warn(`Blog with handle "${targetHandle}" not found, trying fallback to from-ego-to-eden`);
-      // Fallback naar from-ego-to-eden als de taal-specifieke niet bestaat
-      if (targetHandle !== 'from-ego-to-eden') {
-        const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
-          variables: { handle: 'from-ego-to-eden', first: 50, language: languageCode }
-        });
-        if (fallbackResponse.data?.blog) {
-          console.log(`Fallback successful to from-ego-to-eden`);
-          const articles = fallbackResponse.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
-          console.log(`Found ${articles.length} articles in fallback blog`);
-          return articles;
-        }
-      }
+      console.warn(`Blog with handle "${actualHandle}" not found`);
       return [];
     }
 
-    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${targetHandle})`);
+    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${actualHandle})`);
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
-    console.log(`Found ${allArticles.length} total articles in ${response.data.blog.title}`);
+    console.log(`Found ${allArticles.length} total articles in "${response.data.blog.title}"`);
     
-    // Log alle artikelen met hun tags voor debugging
-    allArticles.forEach((article: any, index: number) => {
-      console.log(`Article ${index + 1}: "${article.title}" - Handle: ${article.handle} - Tags: [${article.tags?.join(', ') || 'No tags'}]`);
-    });
+    // Filter artikelen op basis van tags om taal-specifieke content te tonen
+    let filteredArticles = allArticles;
     
-    return allArticles;
+    if (language !== 'nl') {
+      // Voor niet-Nederlandse talen, probeer te filteren op tags
+      const languageFilteredArticles = allArticles.filter((article: any) => {
+        const tags = article.tags || [];
+        const hasLanguageTag = tags.some((tag: string) => {
+          const tagLower = tag.toLowerCase();
+          return (
+            (language === 'en' && (tagLower.includes('en') || tagLower.includes('english'))) ||
+            (language === 'de' && (tagLower.includes('de') || tagLower.includes('deutsch') || tagLower.includes('german')))
+          );
+        });
+        return hasLanguageTag;
+      });
+      
+      if (languageFilteredArticles.length > 0) {
+        console.log(`Found ${languageFilteredArticles.length} articles with ${language.toUpperCase()} language tags`);
+        filteredArticles = languageFilteredArticles;
+      } else {
+        console.log(`No articles found with ${language.toUpperCase()} language tags, showing all articles`);
+      }
+    }
+    
+    return filteredArticles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
     console.error('Error details:', {

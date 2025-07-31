@@ -36,14 +36,9 @@ const EgoToEden = () => {
   useEffect(() => {
     const loadArticles = async () => {
       try {
-        // Map language to correct blog handles
-        const blogHandleMap = {
-          'de': 'ego-nach-eden',        // Duits
-          'en': 'from-ego-to-eden',     // Engels
-          'nl': 'ego-to-eden'           // Nederlands
-        };
-        const blogHandle = blogHandleMap[language] || 'from-ego-to-eden';
-        console.log(`=== EGO TO EDEN: Using blog handle: ${blogHandle} for language: ${language} ===`);
+        // Gebruik de enige blog die bestaat: ego-to-eden
+        const blogHandle = 'ego-to-eden';
+        console.log(`=== EGO TO EDEN: Using the only existing blog handle: ${blogHandle} for language: ${language} ===`);
         
         const fetchedArticles = await fetchBlogArticles(blogHandle, language);
         console.log('Ego to Eden articles:', {
@@ -166,13 +161,7 @@ const EgoToEden = () => {
                       variant="mystical" 
                       className="w-full group"
                       onClick={() => {
-                        const blogHandleMap = {
-                          'de': 'ego-nach-eden',
-                          'en': 'from-ego-to-eden',
-                          'nl': 'ego-to-eden'
-                        };
-                        const blogHandle = blogHandleMap[language] || 'from-ego-to-eden';
-                        navigate(`/blog/${blogHandle}/${article.handle}`);
+                        navigate(`/blog/ego-to-eden/${article.handle}`);
                       }}
                     >
                       {language === 'en' ? 'Read Full Article' : language === 'de' ? 'Vollständigen Artikel lesen' : 'Lees Volledig Artikel'}

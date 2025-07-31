@@ -54,14 +54,9 @@ const Blog = () => {
           blogs: allBlogs.map(blog => ({ id: blog.id, title: blog.title, handle: blog.handle }))
         });
 
-        // Map language to correct blog handles based on URL structure
-        const blogHandleMap = {
-          'de': 'ego-nach-eden',        // Duits: sh4m4ni4k.de/blogs/ego-nach-eden
-          'en': 'from-ego-to-eden',     // Engels: sh4m4ni4k.com/blogs/from-ego-to-eden  
-          'nl': 'ego-to-eden'           // Nederlands: sh4m4ni4k.nl/blogs/ego-to-eden
-        };
-        const blogHandle = blogHandleMap[language] || 'from-ego-to-eden';
-        console.log(`=== BLOG PAGE: Using blog handle: ${blogHandle} for language: ${language} ===`);
+        // Gebruik de enige blog die bestaat: ego-to-eden
+        const blogHandle = 'ego-to-eden';
+        console.log(`=== BLOG PAGE: Using the only existing blog handle: ${blogHandle} for language: ${language} ===`);
         
         const fetchedArticles = await fetchBlogArticles(blogHandle, language);
         console.log('Blog fetch result:', {
@@ -177,13 +172,7 @@ const Blog = () => {
                       variant="mystical" 
                       className="w-full group"
                       onClick={() => {
-                        const blogHandleMap = {
-                          'de': 'ego-nach-eden',
-                          'en': 'from-ego-to-eden', 
-                          'nl': 'ego-to-eden'
-                        };
-                        const blogHandle = blogHandleMap[language] || 'from-ego-to-eden';
-                        window.location.href = `/blog/${blogHandle}/${article.handle}`;
+                        window.location.href = `/blog/ego-to-eden/${article.handle}`;
                       }}
                     >
                       {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
