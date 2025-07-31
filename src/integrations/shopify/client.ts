@@ -40,7 +40,7 @@ export const testConnection = async () => {
 
 // GraphQL queries
 export const GET_COLLECTIONS = `
-  query getCollections($first: Int!) {
+  query getCollections($first: Int!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
     collections(first: $first) {
       edges {
         node {
@@ -97,7 +97,7 @@ export const GET_COLLECTIONS = `
 `;
 
 export const GET_PRODUCTS = `
-  query getProducts($first: Int!, $query: String) {
+  query getProducts($first: Int!, $query: String, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
     products(first: $first, query: $query) {
       edges {
         node {
@@ -150,7 +150,7 @@ export const GET_PRODUCTS = `
 `;
 
 export const GET_PRODUCT_BY_HANDLE = `
-  query getProduct($handle: String!) {
+  query getProduct($handle: String!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
     product(handle: $handle) {
       id
       title
@@ -273,15 +273,33 @@ export const CREATE_CHECKOUT = `
 // Helper functions
 export const fetchCollections = async (language: string = 'en') => {
   try {
-    console.log(`Fetching collections (language parameter: ${language}, but using standard query)`);
+    console.log(`Fetching collections for language: ${language}`);
     
-    console.log('Fetching collections...');
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' }; // Global English domain
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'EN', country: 'US' };
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await client.request(GET_COLLECTIONS, {
-      variables: { first: 20 }
+      variables: { 
+        first: 20,
+        language: shopifyLanguage,
+        country: shopifyCountry
+      }
     });
 
     clearTimeout(timeoutId);
@@ -302,10 +320,30 @@ export const fetchCollections = async (language: string = 'en') => {
 
 export const fetchProducts = async (language: string = 'en') => {
   try {
-    console.log(`Fetching products (language parameter: ${language}, but using standard query)`);
+    console.log(`Fetching products for language: ${language}`);
+    
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' }; // Global English domain
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'EN', country: 'US' };
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
     
     const response = await client.request(GET_PRODUCTS, {
-      variables: { first: 50 }
+      variables: { 
+        first: 50,
+        language: shopifyLanguage,
+        country: shopifyCountry
+      }
     });
     return response.data?.products?.edges?.map((edge: any) => edge.node) || [];
   } catch (error) {
@@ -314,10 +352,30 @@ export const fetchProducts = async (language: string = 'en') => {
   }
 };
 
-export const fetchProductByHandle = async (handle: string) => {
+export const fetchProductByHandle = async (handle: string, language: string = 'en') => {
   try {
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' }; // Global English domain
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'EN', country: 'US' };
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
+    
     const response = await client.request(GET_PRODUCT_BY_HANDLE, {
-      variables: { handle }
+      variables: { 
+        handle,
+        language: shopifyLanguage,
+        country: shopifyCountry
+      }
     });
     return response.data?.product || null;
   } catch (error) {
