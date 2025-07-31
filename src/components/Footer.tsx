@@ -7,9 +7,9 @@ const Footer = () => {
 
   const footerLinks = {
     shop: [
-      { name: 'Kleding', href: '/shop/the-merkaba' },
-      { name: 'Digitale Producten', href: '/shop/digital' },
-      { name: 'Andere Merchandise', href: '/shop' },
+      { name: 'Kleding', href: '/shop/alle-kleding' },
+      { name: 'Digitale Producten', href: '/shop/digitale-producten' },
+      { name: 'Andere Merchandise', href: '/shop/andere-merchandise' },
     ],
     community: [
       { name: 'Community Portal', href: '/community' },
