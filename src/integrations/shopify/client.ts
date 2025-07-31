@@ -346,10 +346,18 @@ export const fetchProductByHandle = async (handle: string) => {
 export const fetchAllBlogs = async () => {
   try {
     const response = await client.request(GET_ALL_BLOGS, {
-      variables: { first: 10 }
+      variables: { first: 50 } // Verhoog van 10 naar 50 om meer blogs te vinden
     });
     console.log('All blogs response:', response);
-    return response.data?.blogs?.edges?.map((edge: any) => edge.node) || [];
+    const blogs = response.data?.blogs?.edges?.map((edge: any) => edge.node) || [];
+    console.log('Total blogs found:', blogs.length);
+    console.log('Blog details:', blogs.map(blog => ({ 
+      id: blog.id, 
+      title: blog.title, 
+      handle: blog.handle,
+      url: blog.url 
+    })));
+    return blogs;
   } catch (error) {
     console.error('Error fetching all blogs:', error);
     return [];
@@ -358,62 +366,50 @@ export const fetchAllBlogs = async () => {
 
 export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
   try {
-    // Based on the logs, only "from-ego-to-eden" blog exists
-    // All languages use the same blog handle but different articles
-    const blogHandle = 'from-ego-to-eden';
-    console.log(`Using unified blog handle: ${blogHandle} for language: ${language}`);
+    // Test verschillende blog handles op basis van taal
+    const blogHandleMap = {
+      'nl': 'ego-to-eden',
+      'en': 'from-ego-to-eden', 
+      'de': 'ego-nach-eden'
+    };
+    
+    const targetHandle = blogHandleMap[language] || 'from-ego-to-eden';
+    console.log(`=== TESTING BLOG HANDLE: ${targetHandle} for language: ${language} ===`);
 
     // Add timeout and retry logic
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: blogHandle, first: 20 }
+      variables: { handle: targetHandle, first: 20 }
     });
 
     clearTimeout(timeoutId);
     console.log('Blog response:', response);
 
     if (!response.data?.blog) {
-      console.warn(`Blog with handle "${blogHandle}" not found`);
+      console.warn(`Blog with handle "${targetHandle}" not found, trying fallback to from-ego-to-eden`);
+      // Fallback naar from-ego-to-eden als de taal-specifieke niet bestaat
+      if (targetHandle !== 'from-ego-to-eden') {
+        const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
+          variables: { handle: 'from-ego-to-eden', first: 20 }
+        });
+        if (fallbackResponse.data?.blog) {
+          console.log(`Fallback successful to from-ego-to-eden`);
+          const articles = fallbackResponse.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
+          console.log(`Found ${articles.length} articles in fallback blog`);
+          return articles;
+        }
+      }
       return [];
     }
 
-    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${blogHandle})`);
+    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${targetHandle})`);
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
+    console.log(`Found ${allArticles.length} total articles in ${response.data.blog.title}`);
     
-    // Filter articles by language tags or content
-    const filteredArticles = allArticles.filter((article: any) => {
-      // Check if article has language tags
-      if (article.tags && article.tags.length > 0) {
-        const languageTags = article.tags.filter((tag: string) => 
-          tag.toLowerCase().includes('nl') || 
-          tag.toLowerCase().includes('dutch') || 
-          tag.toLowerCase().includes('nederlands') ||
-          tag.toLowerCase().includes('en') || 
-          tag.toLowerCase().includes('english') ||
-          tag.toLowerCase().includes('de') || 
-          tag.toLowerCase().includes('german') ||
-          tag.toLowerCase().includes('deutsch')
-        );
-        
-        if (languageTags.length > 0) {
-          console.log(`Article "${article.title}" has language tags:`, languageTags);
-          // Check if any tag matches current language
-          return languageTags.some(tag => 
-            (language === 'nl' && (tag.toLowerCase().includes('nl') || tag.toLowerCase().includes('dutch') || tag.toLowerCase().includes('nederlands'))) ||
-            (language === 'en' && (tag.toLowerCase().includes('en') || tag.toLowerCase().includes('english'))) ||
-            (language === 'de' && (tag.toLowerCase().includes('de') || tag.toLowerCase().includes('german') || tag.toLowerCase().includes('deutsch')))
-          );
-        }
-      }
-      
-      // If no language tags, include all articles for now
-      return true;
-    });
-    
-    console.log(`Found ${allArticles.length} total articles, ${filteredArticles.length} for language ${language}`);
-    return filteredArticles;
+    // Toon alle artikelen zonder filtering voor debugging
+    return allArticles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
     console.error('Error details:', {
