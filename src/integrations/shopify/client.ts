@@ -360,9 +360,9 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
   try {
     // Map language to appropriate blog handle
     const languageHandleMap = {
-      'nl': blogHandle,
-      'en': blogHandle.includes('-en') ? blogHandle : `${blogHandle}-en`,
-      'de': blogHandle.includes('-de') ? blogHandle : `${blogHandle}-de`
+      'nl': 'ego-to-eden',
+      'en': 'from-ego-to-eden',
+      'de': 'ego-nach-eden'
     };
     
     const finalHandle = languageHandleMap[language] || blogHandle;

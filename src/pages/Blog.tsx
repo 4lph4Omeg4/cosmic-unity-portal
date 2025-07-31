@@ -54,8 +54,13 @@ const Blog = () => {
           blogs: allBlogs.map(blog => ({ id: blog.id, title: blog.title, handle: blog.handle }))
         });
 
-        // Probeer eerst met een van de gevonden blogs, of fallback naar 'ego-to-eden'
-        const blogHandle = allBlogs.length > 0 ? allBlogs[0].handle : 'ego-to-eden';
+        // Use the correct blog handle based on language
+        const blogHandleMap = {
+          'nl': 'ego-to-eden',
+          'en': 'from-ego-to-eden',
+          'de': 'ego-nach-eden'
+        };
+        const blogHandle = blogHandleMap[language] || 'ego-to-eden';
         console.log(`Using blog handle: ${blogHandle} for language: ${language}`);
         
         const fetchedArticles = await fetchBlogArticles(blogHandle, language);
@@ -172,7 +177,12 @@ const Blog = () => {
                       variant="mystical" 
                       className="w-full group"
                       onClick={() => {
-                        const blogHandle = language === 'en' ? 'ego-to-eden-en' : language === 'de' ? 'ego-to-eden-de' : 'ego-to-eden';
+                        const blogHandleMap = {
+                          'nl': 'ego-to-eden',
+                          'en': 'from-ego-to-eden', 
+                          'de': 'ego-nach-eden'
+                        };
+                        const blogHandle = blogHandleMap[language] || 'ego-to-eden';
                         window.location.href = `/blog/${blogHandle}/${article.handle}`;
                       }}
                     >

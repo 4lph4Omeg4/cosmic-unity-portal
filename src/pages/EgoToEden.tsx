@@ -159,7 +159,12 @@ const EgoToEden = () => {
                       variant="mystical" 
                       className="w-full group"
                       onClick={() => {
-                        const blogHandle = language === 'en' ? 'ego-to-eden-en' : language === 'de' ? 'ego-to-eden-de' : 'ego-to-eden';
+                        const blogHandleMap = {
+                          'nl': 'ego-to-eden',
+                          'en': 'from-ego-to-eden',
+                          'de': 'ego-nach-eden'
+                        };
+                        const blogHandle = blogHandleMap[language] || 'ego-to-eden';
                         navigate(`/blog/${blogHandle}/${article.handle}`);
                       }}
                     >
