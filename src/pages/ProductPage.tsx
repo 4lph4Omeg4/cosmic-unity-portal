@@ -10,6 +10,7 @@ import ProductVariantSelector, { ProductVariant } from '@/components/ProductVari
 import MultiVariantSelector, { MultiVariant } from '@/components/MultiVariantSelector';
 import { useCart } from '@/hooks/useCart';
 import { fetchProductByHandle } from '@/integrations/shopify/client';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ShopifyVariant {
   id: string;
@@ -69,6 +70,7 @@ const ProductPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const { addItem, getTotalItems } = useCart();
+  const { language } = useLanguage();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -76,7 +78,7 @@ const ProductPage: React.FC = () => {
       
       try {
         setLoading(true);
-        const shopifyProduct = await fetchProductByHandle(productId);
+        const shopifyProduct = await fetchProductByHandle(productId, language);
         
         if (shopifyProduct) {
           // Convert Shopify product to our format
@@ -113,7 +115,7 @@ const ProductPage: React.FC = () => {
     };
 
     loadProduct();
-  }, [productId]);
+  }, [productId, language]);
 
   const isClothingProduct = (productType: string, tags: string[]) => {
     const clothingTypes = ['clothing', 'apparel', 'shirt', 'hoodie', 'jacket', 'pants', 'dress'];

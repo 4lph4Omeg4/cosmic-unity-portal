@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Star, Download, Book } from 'lucide-react';
 import { fetchCollections } from '@/integrations/shopify/client';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ShopifyProduct {
   id: string;
@@ -43,14 +44,16 @@ interface ShopifyCollection {
 }
 
 const FeaturedSection = () => {
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [digitalProducts, setDigitalProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const loadDigitalProducts = async () => {
       try {
         console.log('=== FETCHING COLLECTIONS ===');
-        const collections: ShopifyCollection[] = await fetchCollections();
+        const collections: ShopifyCollection[] = await fetchCollections(language);
         console.log('Total collections found:', collections.length);
         console.log('All collections:', collections.map(c => ({
           title: c.title,
@@ -92,7 +95,7 @@ const FeaturedSection = () => {
     };
 
     loadDigitalProducts();
-  }, []);
+  }, [language]);
 
   const formatPrice = (amount: string, currencyCode: string) => {
     return new Intl.NumberFormat('nl-NL', {

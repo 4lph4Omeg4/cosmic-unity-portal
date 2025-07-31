@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Star, ShoppingCart, ArrowLeft, ExternalLink } from 'lucide-react';
 import { fetchProductByHandle, createCheckout } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ShopifyProduct {
   id: string;
