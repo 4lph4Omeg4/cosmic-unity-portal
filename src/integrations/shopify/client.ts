@@ -378,48 +378,11 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
     console.log(`Found ${allArticles.length} total articles in "${response.data.blog.title}"`);
     
-    // Check wat voor tags de artikelen daadwerkelijk hebben
-    console.log('Article tags debug:', allArticles.map(a => ({ title: a.title, tags: a.tags })));
+    // Geen taalfiltering - toon alle artikelen
+    // De artikelen hebben geen expliciete taal-tags, dus we tonen ze allemaal
+    console.log(`Showing all ${allArticles.length} articles for language: ${language}`);
     
-    // Filter artikelen op basis van taal-specifieke tags
-    let filteredArticles = allArticles;
-    
-    if (language !== 'nl') {
-      // Zoek naar artikelen met expliciete taal tags
-      const languageFilteredArticles = allArticles.filter((article: any) => {
-        const tags = article.tags || [];
-        console.log(`Checking article "${article.title}" tags:`, tags);
-        
-        // Zoek naar exacte taal matches
-        const hasLanguageTag = tags.some((tag: string) => {
-          const tagLower = tag.toLowerCase().trim();
-          const matches = (
-            (language === 'en' && (tagLower === 'en' || tagLower === 'english' || tagLower === 'eng')) ||
-            (language === 'de' && (tagLower === 'de' || tagLower === 'deutsch' || tagLower === 'german' || tagLower === 'ger'))
-          );
-          if (matches) console.log(`Found language match: ${tag} for language ${language}`);
-          return matches;
-        });
-        return hasLanguageTag;
-      });
-      
-      console.log(`Language filtering result for ${language}:`, {
-        totalArticles: allArticles.length,
-        filteredArticles: languageFilteredArticles.length,
-        filteredTitles: languageFilteredArticles.map(a => a.title)
-      });
-      
-      if (languageFilteredArticles.length > 0) {
-        console.log(`Found ${languageFilteredArticles.length} articles with ${language.toUpperCase()} language tags`);
-        filteredArticles = languageFilteredArticles;
-      } else {
-        console.log(`No articles found with ${language.toUpperCase()} language tags, showing all articles`);
-        // Voor nu tonen we alle artikelen als er geen taal-specifieke zijn
-        filteredArticles = allArticles;
-      }
-    }
-    
-    return filteredArticles;
+    return allArticles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
     console.error('Error details:', {
