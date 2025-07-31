@@ -346,11 +346,12 @@ export const fetchAllBlogs = async () => {
 
 export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
   try {
-    // Test verschillende blog handles op basis van taal
+    // Test verschillende blog handles die beschikbaar zijn in deze store
+    // Gebaseerd op de URL structuur: ego-nach-eden (DE), from-ego-to-eden (EN), ego-to-eden (NL)
     const blogHandleMap = {
-      'nl': 'ego-to-eden',
-      'en': 'from-ego-to-eden', 
-      'de': 'ego-nach-eden'
+      'de': 'ego-nach-eden',        // Duits blog handle
+      'en': 'from-ego-to-eden',     // Engels blog handle  
+      'nl': 'ego-to-eden'           // Nederlands blog handle
     };
     
     const targetHandle = blogHandleMap[language] || 'from-ego-to-eden';
