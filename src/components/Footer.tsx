@@ -7,10 +7,9 @@ const Footer = () => {
 
   const footerLinks = {
     shop: [
-      { name: 'Egypt & The 7 Seals', href: '/shop/egypt-7-seals' },
-      { name: 'Fun Shirts', href: '/shop/fun-shirts' },
-      { name: 'Digital Products', href: '/shop/digital' },
-      { name: 'The Chosen Ones', href: '/shop/chosen-ones' },
+      { name: 'Kleding', href: '/shop/the-merkaba' },
+      { name: 'Digitale Producten', href: '/shop/digital' },
+      { name: 'Andere Merchandise', href: '/shop' },
     ],
     community: [
       { name: 'Community Portal', href: '/community' },
