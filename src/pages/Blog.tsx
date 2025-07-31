@@ -122,11 +122,11 @@ const Blog = () => {
               {articles.map((article) => (
                 <Card key={article.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
                   {article.image && (
-                    <div className="aspect-video overflow-hidden rounded-t-lg">
+                    <div className="overflow-hidden rounded-t-lg">
                       <img
                         src={article.image.url}
                         alt={article.image.altText || article.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     </div>
                   )}
