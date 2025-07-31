@@ -170,12 +170,10 @@ const BlogArticle = () => {
           </div>
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none">
-            <div 
-              className="font-mystical text-foreground leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: article.content }}
-            />
-          </div>
+          <div 
+            className="prose prose-lg max-w-none prose-headings:text-cosmic-gradient prose-p:text-foreground prose-a:text-primary prose-strong:text-foreground prose-em:text-foreground prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground"
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
 
           {/* Bottom navigation */}
           <div className="mt-12 pt-8 border-t border-border">
