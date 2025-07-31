@@ -172,6 +172,10 @@ const translations = {
     'community.commentPlaced': 'Je reactie is geplaatst.',
     'community.errorComment': 'Fout bij reactie',
     'community.errorCommentMessage': 'Reactie kon niet worden geplaatst.',
+    'community.postDeleted': 'Post verwijderd',
+    'community.postDeletedMessage': 'Je post is succesvol verwijderd.',
+    'community.errorDeleting': 'Fout bij verwijderen',
+    'community.errorDeleteMessage': 'Er ging iets mis bij het verwijderen van je post. Probeer het opnieuw.',
 
     // Common
     'common.loading': 'Laden...',
@@ -341,6 +345,10 @@ const translations = {
     'community.commentPlaced': 'Your comment has been posted.',
     'community.errorComment': 'Error commenting',
     'community.errorCommentMessage': 'Comment could not be posted.',
+    'community.postDeleted': 'Post deleted',
+    'community.postDeletedMessage': 'Your post has been successfully deleted.',
+    'community.errorDeleting': 'Error deleting',
+    'community.errorDeleteMessage': 'Something went wrong while deleting your post. Please try again.',
 
     // Common
     'common.loading': 'Loading...',
@@ -510,6 +518,10 @@ const translations = {
     'community.commentPlaced': 'Dein Kommentar wurde gepostet.',
     'community.errorComment': 'Fehler beim Kommentieren',
     'community.errorCommentMessage': 'Kommentar konnte nicht gepostet werden.',
+    'community.postDeleted': 'Beitrag gelöscht',
+    'community.postDeletedMessage': 'Ihr Beitrag wurde erfolgreich gelöscht.',
+    'community.errorDeleting': 'Fehler beim Löschen',
+    'community.errorDeleteMessage': 'Beim Löschen Ihres Beitrags ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
 
     // Common
     'common.loading': 'Laden...',

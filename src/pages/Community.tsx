@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Star, Heart, MessageCircle, Plus, Send, Users } from 'lucide-react';
+import { Star, Heart, MessageCircle, Plus, Send, Users, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -246,6 +246,32 @@ const Community = () => {
     }
   };
 
+  const deletePost = async (postId: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', postId)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: t('community.postDeleted'),
+        description: t('community.postDeletedMessage'),
+      });
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast({
+        title: t('community.errorDeleting'),
+        description: t('community.errorDeleteMessage'),
+        variant: "destructive",
+      });
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('nl-NL', {
       year: 'numeric',
@@ -387,6 +413,16 @@ const Community = () => {
                         </div>
                         <p className="text-sm text-muted-foreground">{formatDate(post.created_at)}</p>
                       </div>
+                      {post.profiles.user_id === user?.id && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deletePost(post.id)}
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   </CardHeader>
                   <CardContent>
