@@ -36,9 +36,16 @@ const EgoToEden = () => {
   useEffect(() => {
     const loadArticles = async () => {
       try {
-        console.log('=== FETCHING EGO TO EDEN BLOG ARTICLES ===');
+        // Use the correct blog handle based on language  
+        const blogHandleMap = {
+          'nl': 'ego-to-eden',
+          'en': 'from-ego-to-eden',
+          'de': 'ego-nach-eden'
+        };
+        const blogHandle = blogHandleMap[language] || 'ego-to-eden';
+        console.log(`=== EGO TO EDEN: Using blog handle: ${blogHandle} for language: ${language} ===`);
         
-        const fetchedArticles = await fetchBlogArticles('ego-to-eden', language);
+        const fetchedArticles = await fetchBlogArticles(blogHandle, language);
         console.log('Ego to Eden articles:', {
           articlesFound: fetchedArticles.length,
           articles: fetchedArticles

@@ -52,7 +52,7 @@ export const GET_COLLECTIONS = `
             url
             altText
           }
-          products(first: 250) {
+          products(first: 100) {
             edges {
               node {
                 id
@@ -381,18 +381,23 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
 
     if (!response.data?.blog) {
       console.warn(`Blog with handle "${finalHandle}" not found, trying fallback`);
-      // Try fallback to original handle if language-specific doesn't exist
-      if (finalHandle !== blogHandle) {
+      // Try fallback to Dutch version if language-specific doesn't exist
+      if (finalHandle !== 'ego-to-eden') {
+        console.log(`Trying fallback to ego-to-eden for language ${language}`);
         const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
-          variables: { handle: blogHandle, first: 20 }
+          variables: { handle: 'ego-to-eden', first: 20 }
         });
-        return fallbackResponse.data?.blog?.articles?.edges?.map(edge => edge.node) || [];
+        if (fallbackResponse.data?.blog) {
+          console.log(`Fallback successful, found blog: ${fallbackResponse.data.blog.title}`);
+          return fallbackResponse.data.blog.articles.edges.map(edge => edge.node);
+        }
       }
       return [];
     }
 
+    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${finalHandle})`);
     const articles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
-    console.log(`Found ${articles.length} articles`);
+    console.log(`Found ${articles.length} articles in blog "${response.data.blog.title}"`);
     return articles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);

@@ -61,12 +61,12 @@ const Blog = () => {
           'de': 'ego-nach-eden'
         };
         const blogHandle = blogHandleMap[language] || 'ego-to-eden';
-        console.log(`Using blog handle: ${blogHandle} for language: ${language}`);
+        console.log(`=== BLOG PAGE: Using blog handle: ${blogHandle} for language: ${language} ===`);
         
         const fetchedArticles = await fetchBlogArticles(blogHandle, language);
         console.log('Blog fetch result:', {
           articlesFound: fetchedArticles.length,
-          articles: fetchedArticles
+          articles: fetchedArticles.map(a => ({ title: a.title, handle: a.handle }))
         });
 
         setArticles(fetchedArticles.slice(0, 3));
