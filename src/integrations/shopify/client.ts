@@ -358,47 +358,62 @@ export const fetchAllBlogs = async () => {
 
 export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
   try {
-    // Map language to appropriate blog handle
-    const languageHandleMap = {
-      'nl': 'ego-to-eden',
-      'en': 'from-ego-to-eden',
-      'de': 'ego-nach-eden'
-    };
-    
-    const finalHandle = languageHandleMap[language] || blogHandle;
-    console.log(`Fetching blog articles for handle: ${finalHandle} (language: ${language})`);
+    // Based on the logs, only "from-ego-to-eden" blog exists
+    // All languages use the same blog handle but different articles
+    const blogHandle = 'from-ego-to-eden';
+    console.log(`Using unified blog handle: ${blogHandle} for language: ${language}`);
 
     // Add timeout and retry logic
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: finalHandle, first: 20 }
+      variables: { handle: blogHandle, first: 20 }
     });
 
     clearTimeout(timeoutId);
     console.log('Blog response:', response);
 
     if (!response.data?.blog) {
-      console.warn(`Blog with handle "${finalHandle}" not found, trying fallback`);
-      // Try fallback to Dutch version if language-specific doesn't exist
-      if (finalHandle !== 'ego-to-eden') {
-        console.log(`Trying fallback to ego-to-eden for language ${language}`);
-        const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
-          variables: { handle: 'ego-to-eden', first: 20 }
-        });
-        if (fallbackResponse.data?.blog) {
-          console.log(`Fallback successful, found blog: ${fallbackResponse.data.blog.title}`);
-          return fallbackResponse.data.blog.articles.edges.map(edge => edge.node);
-        }
-      }
+      console.warn(`Blog with handle "${blogHandle}" not found`);
       return [];
     }
 
-    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${finalHandle})`);
-    const articles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
-    console.log(`Found ${articles.length} articles in blog "${response.data.blog.title}"`);
-    return articles;
+    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${blogHandle})`);
+    const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
+    
+    // Filter articles by language tags or content
+    const filteredArticles = allArticles.filter((article: any) => {
+      // Check if article has language tags
+      if (article.tags && article.tags.length > 0) {
+        const languageTags = article.tags.filter((tag: string) => 
+          tag.toLowerCase().includes('nl') || 
+          tag.toLowerCase().includes('dutch') || 
+          tag.toLowerCase().includes('nederlands') ||
+          tag.toLowerCase().includes('en') || 
+          tag.toLowerCase().includes('english') ||
+          tag.toLowerCase().includes('de') || 
+          tag.toLowerCase().includes('german') ||
+          tag.toLowerCase().includes('deutsch')
+        );
+        
+        if (languageTags.length > 0) {
+          console.log(`Article "${article.title}" has language tags:`, languageTags);
+          // Check if any tag matches current language
+          return languageTags.some(tag => 
+            (language === 'nl' && (tag.toLowerCase().includes('nl') || tag.toLowerCase().includes('dutch') || tag.toLowerCase().includes('nederlands'))) ||
+            (language === 'en' && (tag.toLowerCase().includes('en') || tag.toLowerCase().includes('english'))) ||
+            (language === 'de' && (tag.toLowerCase().includes('de') || tag.toLowerCase().includes('german') || tag.toLowerCase().includes('deutsch')))
+          );
+        }
+      }
+      
+      // If no language tags, include all articles for now
+      return true;
+    });
+    
+    console.log(`Found ${allArticles.length} total articles, ${filteredArticles.length} for language ${language}`);
+    return filteredArticles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
     console.error('Error details:', {
