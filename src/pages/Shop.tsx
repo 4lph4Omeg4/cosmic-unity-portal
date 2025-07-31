@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -104,6 +104,7 @@ interface ShopifyProduct {
 
 const Shop = () => {
   const navigate = useNavigate();
+  const { collection: urlCollection } = useParams();
   const { toast } = useToast();
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -121,6 +122,15 @@ const Shop = () => {
         setCollections(fetchedCollections);
         setProducts(fetchedProducts);
         setFilteredProducts(fetchedProducts);
+        
+        // Als er een URL collectie is, filter direct
+        if (urlCollection) {
+          const matchingCollection = fetchedCollections.find(c => c.handle === urlCollection);
+          if (matchingCollection) {
+            setSelectedCollection(urlCollection);
+            handleCollectionFilter(urlCollection, fetchedCollections);
+          }
+        }
       } catch (error) {
         console.error('Error loading shop data:', error);
       } finally {
@@ -129,15 +139,16 @@ const Shop = () => {
     };
 
     loadData();
-  }, []);
+  }, [urlCollection]);
 
-  const handleCollectionFilter = (collectionHandle: string | null) => {
+  const handleCollectionFilter = (collectionHandle: string | null, collectionsData?: ShopifyCollection[]) => {
+    const collectionsToUse = collectionsData || collections;
     setSelectedCollection(collectionHandle);
     
     if (!collectionHandle) {
       setFilteredProducts(products);
     } else {
-      const collection = collections.find(c => c.handle === collectionHandle);
+      const collection = collectionsToUse.find(c => c.handle === collectionHandle);
       if (collection && collection.products.edges.length > 0) {
         // Gebruik de producten die direct in de collectie zitten met alle data
         const collectionProducts = collection.products.edges.map(edge => ({
@@ -171,13 +182,30 @@ const Shop = () => {
 
   const handleAddToCart = async (variantId: string) => {
     try {
+      console.log('Adding to cart with variant ID:', variantId);
+      
+      // Controleer of variantId geldig is
+      if (!variantId || variantId.includes('_variant')) {
+        console.error('Invalid variant ID:', variantId);
+        toast({
+          title: "Fout bij toevoegen",
+          description: "Dit product kan momenteel niet worden toegevoegd aan de winkelwagen.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       const checkout = await createCheckout([{ variantId, quantity: 1 }]);
+      console.log('Checkout result:', checkout);
+      
       if (checkout?.webUrl) {
         window.open(checkout.webUrl, '_blank');
         toast({
           title: "Toegevoegd aan winkelwagen",
           description: "Je wordt doorgestuurd naar de checkout.",
         });
+      } else {
+        throw new Error('No checkout URL received');
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
