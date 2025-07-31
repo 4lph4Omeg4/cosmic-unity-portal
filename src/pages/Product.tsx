@@ -60,6 +60,7 @@ const Product = () => {
   const { handle } = useParams<{ handle: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { language } = useLanguage();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
@@ -116,7 +117,7 @@ const Product = () => {
       if (!handle) return;
       
       try {
-        const fetchedProduct = await fetchProductByHandle(handle);
+        const fetchedProduct = await fetchProductByHandle(handle, language);
         setProduct(fetchedProduct);
         if (fetchedProduct?.variants?.edges?.length > 0) {
           const firstVariant = fetchedProduct.variants.edges[0].node;
@@ -138,7 +139,7 @@ const Product = () => {
     };
 
     loadProduct();
-  }, [handle, toast]);
+  }, [handle, toast, language]);
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
