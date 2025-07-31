@@ -53,42 +53,74 @@ const Community = () => {
 
   const loadPosts = async () => {
     try {
-      // First get posts with profiles
+      // First get posts
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
-        .select(`
-          *,
-          profiles(id, user_id, display_name, avatar_url)
-        `)
+        .select('id, title, content, created_at, user_id')
         .order('created_at', { ascending: false });
 
       if (postsError) throw postsError;
 
-      // Then get likes and comments for each post
-      const postsWithDetails = await Promise.all(
-        (postsData || []).map(async (post) => {
-          const [{ data: likes }, { data: comments }] = await Promise.all([
-            supabase.from('likes').select('id').eq('post_id', post.id),
-            supabase.from('comments').select(`
-              id, content, created_at,
-              profiles(id, user_id, display_name, avatar_url)
-            `).eq('post_id', post.id)
-          ]);
+      if (!postsData || postsData.length === 0) {
+        setPosts([]);
+        return;
+      }
 
-          return {
-            ...post,
-            likes: likes || [],
-            comments: comments || []
-          };
-        })
-      );
+      // Get unique user IDs from posts
+      const userIds = [...new Set(postsData.map(post => post.user_id))];
 
-      setPosts(postsWithDetails as any);
+      // Get corresponding profiles
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .in('user_id', userIds);
+
+      if (profilesError) throw profilesError;
+
+      // Get likes and comments for each post
+      const postIds = postsData.map(post => post.id);
+      
+      const [likesResult, commentsResult] = await Promise.all([
+        supabase.from('likes').select('post_id, user_id').in('post_id', postIds),
+        supabase.from('comments').select('id, post_id, user_id, content, created_at').in('post_id', postIds).order('created_at', { ascending: true })
+      ]);
+
+      if (likesResult.error) throw likesResult.error;
+      if (commentsResult.error) throw commentsResult.error;
+
+      // Combine posts with their profile data, likes, and comments
+      const postsWithData = postsData.map(post => {
+        const profile = profilesData?.find(profile => profile.user_id === post.user_id) || {
+          display_name: 'Unknown User',
+          avatar_url: null
+        };
+
+        const postLikes = likesResult.data?.filter(like => like.post_id === post.id) || [];
+        const postComments = commentsResult.data?.filter(comment => comment.post_id === post.id) || [];
+
+        return {
+          ...post,
+          profiles: profile,
+          likes: postLikes,
+          comments: postComments.map(comment => {
+            const commentProfile = profilesData?.find(profile => profile.user_id === comment.user_id) || {
+              display_name: 'Unknown User',
+              avatar_url: null
+            };
+            return {
+              ...comment,
+              profiles: commentProfile
+            };
+          })
+        };
+      });
+
+      setPosts(postsWithData as any);
     } catch (error) {
       console.error('Error loading posts:', error);
       toast({
-        title: "Fout bij laden",
-        description: "Posts konden niet worden geladen.",
+        title: t('community.errorLoading'),
+        description: t('community.errorLoadingMessage'),
         variant: "destructive",
       });
     } finally {
@@ -132,14 +164,14 @@ const Community = () => {
       setNewPost({ title: '', content: '' });
       setShowNewPost(false);
       toast({
-        title: "Post aangemaakt",
-        description: "Je bericht is gedeeld met de community.",
+        title: t('community.postCreated'),
+        description: t('community.postShared'),
       });
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
-        title: "Fout bij aanmaken",
-        description: "Post kon niet worden aangemaakt.",
+        title: t('community.errorCreating'),
+        description: t('community.errorPostMessage'),
         variant: "destructive",
       });
     }
@@ -184,14 +216,14 @@ const Community = () => {
 
       setNewComment({ ...newComment, [postId]: '' });
       toast({
-        title: "Reactie toegevoegd",
-        description: "Je reactie is geplaatst.",
+        title: t('community.commentAdded'),
+        description: t('community.commentPlaced'),
       });
     } catch (error) {
       console.error('Error adding comment:', error);
       toast({
-        title: "Fout bij reactie",
-        description: "Reactie kon niet worden geplaatst.",
+        title: t('community.errorComment'),
+        description: t('community.errorCommentMessage'),
         variant: "destructive",
       });
     }
@@ -309,14 +341,14 @@ const Community = () => {
                     <Star className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-4">
-                    Geen berichten gevonden
+                    {t('community.noPosts')}
                   </h3>
                   <p className="font-mystical text-muted-foreground mb-6">
-                    Wees de eerste om je kosmische inzicht te delen!
+                    {t('community.firstPostMessage')}
                   </p>
                   <Button onClick={() => setShowNewPost(true)} variant="mystical">
                     <Plus className="w-4 h-4 mr-2" />
-                    Eerste Post Maken
+                    {t('community.createFirstPost')}
                   </Button>
                 </CardContent>
               </Card>
