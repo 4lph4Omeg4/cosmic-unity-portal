@@ -216,6 +216,7 @@ export const GET_BLOG_ARTICLES = `
             excerpt
             handle
             publishedAt
+            tags
             author {
               firstName
               lastName
@@ -224,7 +225,6 @@ export const GET_BLOG_ARTICLES = `
               url
               altText
             }
-            tags
           }
         }
       }
@@ -240,27 +240,7 @@ export const GET_ALL_BLOGS = `
           id
           title
           handle
-          articles(first: 3) {
-            edges {
-              node {
-                id
-                title
-                content
-                excerpt
-                handle
-                publishedAt
-                author {
-                  firstName
-                  lastName
-                }
-                image {
-                  url
-                  altText
-                }
-                tags
-              }
-            }
-          }
+          url
         }
       }
     }
@@ -381,7 +361,7 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: targetHandle, first: 20 }
+      variables: { handle: targetHandle, first: 50 } // Verhoog naar 50 om meer artikelen op te halen
     });
 
     clearTimeout(timeoutId);
@@ -392,7 +372,7 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
       // Fallback naar from-ego-to-eden als de taal-specifieke niet bestaat
       if (targetHandle !== 'from-ego-to-eden') {
         const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
-          variables: { handle: 'from-ego-to-eden', first: 20 }
+          variables: { handle: 'from-ego-to-eden', first: 50 }
         });
         if (fallbackResponse.data?.blog) {
           console.log(`Fallback successful to from-ego-to-eden`);
@@ -408,7 +388,11 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
     console.log(`Found ${allArticles.length} total articles in ${response.data.blog.title}`);
     
-    // Toon alle artikelen zonder filtering voor debugging
+    // Log alle artikelen met hun tags voor debugging
+    allArticles.forEach((article: any, index: number) => {
+      console.log(`Article ${index + 1}: "${article.title}" - Handle: ${article.handle} - Tags: [${article.tags?.join(', ') || 'No tags'}]`);
+    });
+    
     return allArticles;
   } catch (error) {
     console.error('Error fetching blog articles:', error);
