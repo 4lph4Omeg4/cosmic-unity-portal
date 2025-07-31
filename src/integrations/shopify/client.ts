@@ -203,8 +203,8 @@ export const GET_PRODUCT_BY_HANDLE = `
 `;
 
 export const GET_BLOG_ARTICLES = `
-  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode!) {
-    blog(handle: $handle) @inContext(language: $language) {
+  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode!) @inContext(language: $language) {
+    blog(handle: $handle) {
       id
       title
       articles(first: $first) {
