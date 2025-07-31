@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,6 +15,7 @@ const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { profile } = useProfile();
   const { t } = useLanguage();
 
   const navigation = [
@@ -71,17 +73,22 @@ const Navigation = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarImage src={profile?.avatar_url} />
                       <AvatarFallback className="bg-cosmic-gradient text-white">
-                        {user.email?.charAt(0).toUpperCase() || '?'}
+                        {profile?.display_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || '?'}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuItem asChild className="font-mystical">
+                    <Link to="/profile" className="flex items-center">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>{t('nav.profile')}</span>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className="font-mystical">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>{user.email}</span>
+                    <span className="text-xs text-muted-foreground">{user.email}</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="font-mystical">
@@ -140,15 +147,22 @@ const Navigation = () => {
             <div className="pt-4 border-t border-border/20">
               {user ? (
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 px-3 py-2">
+                  <Link 
+                    to="/profile" 
+                    className="flex items-center gap-3 px-3 py-2 cosmic-hover rounded-md"
+                    onClick={() => setIsOpen(false)}
+                  >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarImage src={profile?.avatar_url} />
                       <AvatarFallback className="bg-cosmic-gradient text-white text-sm">
-                        {user.email?.charAt(0).toUpperCase() || '?'}
+                        {profile?.display_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || '?'}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="font-mystical text-sm">{user.email}</span>
-                  </div>
+                    <div className="flex flex-col">
+                      <span className="font-mystical text-sm">{profile?.display_name || 'Profiel'}</span>
+                      <span className="text-xs text-muted-foreground">{user.email}</span>
+                    </div>
+                  </Link>
                   <Button 
                     variant="outline" 
                     className="w-full mx-3"
