@@ -203,7 +203,7 @@ export const GET_PRODUCT_BY_HANDLE = `
 `;
 
 export const GET_BLOG_ARTICLES = `
-  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode!) @inContext(language: $language) {
+  query getBlogArticles($handle: String!, $first: Int!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
     blog(handle: $handle) {
       id
       title
@@ -233,8 +233,8 @@ export const GET_BLOG_ARTICLES = `
 `;
 
 export const GET_ALL_BLOGS = `
-  query getAllBlogs($first: Int!, $language: LanguageCode!) {
-    blogs(first: $first) @inContext(language: $language) {
+  query getAllBlogs($first: Int!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
+    blogs(first: $first) {
       edges {
         node {
           id
@@ -330,13 +330,27 @@ export const fetchAllBlogs = async (language: string = 'en') => {
   try {
     console.log(`Fetching all blogs for language: ${language}`);
     
-    // Convert language codes to Shopify LanguageCode format
-    const shopifyLanguage = language.toUpperCase() as 'NL' | 'EN' | 'DE';
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' }; // Global English domain
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'EN', country: 'US' };
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
     
     const response = await client.request(GET_ALL_BLOGS, {
       variables: { 
         first: 50,
-        language: shopifyLanguage
+        language: shopifyLanguage,
+        country: shopifyCountry
       }
     });
     console.log('All blogs response:', response);
@@ -359,9 +373,22 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     console.log(`=== FETCHING BLOG ARTICLES ===`);
     console.log(`Requested blog handle: ${blogHandle}, language: ${language}`);
     
-    // Convert language codes to Shopify LanguageCode format
-    const shopifyLanguage = language.toUpperCase() as 'NL' | 'EN' | 'DE';
-    console.log(`Using Shopify language: ${shopifyLanguage}`);
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' }; // Global English domain
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'EN', country: 'US' };
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
+    console.log(`Using Shopify language: ${shopifyLanguage}, country: ${shopifyCountry}`);
     
     // Uit de logs blijkt dat er maar 1 blog bestaat: "ego-to-eden" (From Ego to Eden)
     // Alle talen gebruiken dezelfde blog handle
@@ -376,7 +403,8 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
       variables: { 
         handle: actualHandle, 
         first: 50,
-        language: shopifyLanguage
+        language: shopifyLanguage,
+        country: shopifyCountry
       }
     });
 
