@@ -7,10 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { Star, ShoppingCart, ArrowLeft, ExternalLink } from 'lucide-react';
-import { fetchProductByHandle, createCheckout } from '@/integrations/shopify/client';
+import { Star, ShoppingCart, ArrowLeft, ExternalLink, Minus, Plus, CheckCircle } from 'lucide-react';
+import { fetchProductByHandle } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useCart } from '@/hooks/useCart';
 
 interface ShopifyProduct {
   id: string;
@@ -61,10 +62,14 @@ const Product = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { language } = useLanguage();
+  const { addItem, getTotalItems } = useCart();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [mockupImages, setMockupImages] = useState<string[]>([]);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   // Functie om de juiste afbeelding te vinden op basis van variant
   const findImageForVariant = (variant: any) => {
@@ -141,23 +146,56 @@ const Product = () => {
     loadProduct();
   }, [handle, toast, language]);
 
-  const handleAddToCart = async () => {
-    if (!selectedVariant) return;
-    
-    try {
-      const checkout = await createCheckout([{ variantId: selectedVariant.id, quantity: 1 }]);
-      if (checkout?.webUrl) {
-        window.open(checkout.webUrl, '_blank');
-        toast({
-          title: "Toegevoegd aan winkelwagen",
-          description: "Je wordt doorgestuurd naar de checkout.",
-        });
+  useEffect(() => {
+    // Generate mockup image URLs based on selected variant
+    if (product && selectedVariant) {
+      const variantColor = getVariantColor(selectedVariant);
+      if (variantColor) {
+        const mockups = [
+          `/mockups/${product.handle}-${variantColor.toLowerCase()}-1.jpg`,
+          `/mockups/${product.handle}-${variantColor.toLowerCase()}-2.jpg`
+        ];
+        setMockupImages(mockups);
       }
+    }
+  }, [product, selectedVariant]);
+
+  const getVariantColor = (variant: any): string | null => {
+    // Look for color in selectedOptions
+    const colorOption = variant.selectedOptions?.find((option: any) =>
+      option.name.toLowerCase().includes('color') || 
+      option.name.toLowerCase().includes('kleur') ||
+      option.name.toLowerCase().includes('colour')
+    );
+    return colorOption?.value || null;
+  };
+
+  const handleAddToCart = () => {
+    if (!product || !selectedVariant) return;
+
+    try {
+      addItem({
+        variantId: selectedVariant.id,
+        productId: product.id,
+        title: product.title,
+        variantTitle: selectedVariant.title,
+        price: parseFloat(selectedVariant.price.amount) * 100, // Convert to cents
+        quantity: quantity,
+        image: product.images.edges[0]?.node.url
+      });
+
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 2000);
+
+      toast({
+        title: "Toegevoegd aan winkelwagen",
+        description: `${quantity}x ${product.title} - ${selectedVariant.title}`,
+      });
     } catch (error) {
       console.error('Error adding to cart:', error);
       toast({
         title: "Fout bij toevoegen",
-        description: "Het product kon niet worden toegevoegd aan de winkelwagen.",
+        description: "Product kon niet worden toegevoegd aan de winkelwagen.",
         variant: "destructive",
       });
     }
@@ -226,41 +264,62 @@ const Product = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Product Images */}
             <div className="space-y-4">
-              <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-cosmic/20 to-secondary/20">
-                {product.images.edges.length > 0 ? (
-                  <img
-                    src={product.images.edges[selectedImageIndex].node.url}
-                    alt={product.images.edges[selectedImageIndex].node.altText || product.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Star className="w-24 h-24 text-cosmic/60" />
-                  </div>
-                )}
+              <div className="aspect-square overflow-hidden rounded-lg bg-card/80 backdrop-blur-sm border border-border/50">
+                {(() => {
+                  const displayImages = mockupImages.length > 0 ? mockupImages : 
+                    product.images.edges.map(edge => edge.node.url);
+                  
+                  return displayImages.length > 0 ? (
+                    <img
+                      src={displayImages[selectedImageIndex] || '/placeholder.svg'}
+                      alt={product.title}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      onError={(e) => {
+                        // Fallback to original Shopify images if mockups don't exist
+                        if (product.images.edges[selectedImageIndex]) {
+                          (e.target as HTMLImageElement).src = product.images.edges[selectedImageIndex].node.url;
+                        }
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Star className="w-24 h-24 text-cosmic/60" />
+                    </div>
+                  );
+                })()}
               </div>
               
-              {product.images.edges.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {product.images.edges.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={`aspect-square overflow-hidden rounded-lg border-2 transition-all ${
-                        selectedImageIndex === index 
-                          ? 'border-cosmic' 
-                          : 'border-border/50 hover:border-cosmic/50'
-                      }`}
-                    >
-                      <img
-                        src={image.node.url}
-                        alt={image.node.altText || product.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+              {(() => {
+                const displayImages = mockupImages.length > 0 ? mockupImages : 
+                  product.images.edges.map(edge => edge.node.url);
+                
+                return displayImages.length > 1 && (
+                  <div className="grid grid-cols-4 gap-2">
+                    {displayImages.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`aspect-square overflow-hidden rounded-lg border-2 transition-all ${
+                          selectedImageIndex === index 
+                            ? 'border-cosmic shadow-cosmic' 
+                            : 'border-border/50 hover:border-cosmic/50'
+                        }`}
+                      >
+                        <img
+                          src={image}
+                          alt={`${product.title} - ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            if (product.images.edges[index]) {
+                              (e.target as HTMLImageElement).src = product.images.edges[index].node.url;
+                            }
+                          }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Product Info */}
@@ -363,30 +422,69 @@ const Product = () => {
                 </Card>
               )}
 
-              {/* Add to Cart */}
-              <div className="flex gap-3">
-                {selectedVariant?.availableForSale ? (
-                  <Button 
-                    onClick={handleAddToCart}
-                    variant="mystical" 
-                    size="lg"
-                    className="flex-1"
+              {/* Quantity Selection */}
+              <div className="flex items-center space-x-4">
+                <Label className="font-mystical text-sm font-medium">Aantal:</Label>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    disabled={quantity <= 1}
                   >
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    Voeg toe aan winkelwagen
+                    <Minus className="w-4 h-4" />
                   </Button>
-                ) : (
-                  <Button disabled size="lg" className="flex-1">
-                    Uitverkocht
+                  <span className="font-mystical text-lg font-semibold w-12 text-center">
+                    {quantity}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setQuantity(quantity + 1)}
+                    disabled={quantity >= 10}
+                  >
+                    <Plus className="w-4 h-4" />
                   </Button>
+                </div>
+              </div>
+
+              {/* Add to Cart */}
+              <div className="space-y-4">
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={!selectedVariant?.availableForSale || addedToCart}
+                  className="w-full text-lg py-6 cosmic-hover"
+                  variant={addedToCart ? "default" : "mystical"}
+                >
+                  {addedToCart ? (
+                    <>
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      Toegevoegd!
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-5 h-5 mr-2" />
+                      Toevoegen aan winkelwagen
+                    </>
+                  )}
+                </Button>
+
+                {getTotalItems() > 0 && (
+                  <div className="text-center">
+                    <Button variant="outline" onClick={() => navigate('/cart')}>
+                      Bekijk winkelwagen ({getTotalItems()} items)
+                    </Button>
+                  </div>
                 )}
                 
                 <Button
                   variant="outline"
                   size="lg"
+                  className="w-full"
                   onClick={() => window.open(`https://rfih5t-ij.myshopify.com/products/${product.handle}`, '_blank')}
                 >
-                  <ExternalLink className="w-5 h-5" />
+                  <ExternalLink className="w-5 h-5 mr-2" />
+                  Bekijk op Shopify
                 </Button>
               </div>
 

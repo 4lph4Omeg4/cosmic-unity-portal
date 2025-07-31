@@ -12,7 +12,7 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ 
-  shopifyDomain = "cosmic-industries.myshopify.com" 
+  shopifyDomain = "rfih5t-ij.myshopify.com" 
 }) => {
   const { 
     items, 

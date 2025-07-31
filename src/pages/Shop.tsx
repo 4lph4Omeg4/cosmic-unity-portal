@@ -281,7 +281,7 @@ const Shop = () => {
                   <Button
                     key={collection.id}
                     variant={selectedCollection === collection.handle ? "mystical" : "outline"}
-                    onClick={() => handleCollectionFilter(collection.handle)}
+                    onClick={() => navigate(`/shop/collection/${collection.handle}`)}
                   >
                     {collection.title}
                   </Button>
