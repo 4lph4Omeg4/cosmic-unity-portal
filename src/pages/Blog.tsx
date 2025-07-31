@@ -161,7 +161,11 @@ const Blog = () => {
                       </div>
                     </div>
                     
-                    <Button variant="mystical" className="w-full group">
+                    <Button 
+                      variant="mystical" 
+                      className="w-full group"
+                      onClick={() => window.location.href = `/blog/ego-to-eden/${article.handle}`}
+                    >
                       Lees Meer
                       <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Button>
