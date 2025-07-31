@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Upload, User, Save } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -23,11 +24,12 @@ interface Profile {
 
 const Profile = () => {
   const { user } = useAuth();
+  const { profile, refreshProfile } = useProfile();
   const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [localProfile, setLocalProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -37,30 +39,12 @@ const Profile = () => {
       navigate('/auth');
       return;
     }
-    loadProfile();
-  }, [user, navigate]);
-
-  const loadProfile = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user?.id)
-        .single();
-
-      if (error) throw error;
-      setProfile(data);
-    } catch (error) {
-      console.error('Error loading profile:', error);
-      toast({
-        title: "Fout bij laden",
-        description: "Profiel kon niet worden geladen.",
-        variant: "destructive",
-      });
-    } finally {
+    
+    if (profile) {
+      setLocalProfile(profile);
       setLoading(false);
     }
-  };
+  }, [user, profile, navigate]);
 
   const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -93,7 +77,10 @@ const Profile = () => {
 
       if (updateError) throw updateError;
 
-      setProfile(prev => prev ? { ...prev, avatar_url: data.publicUrl } : null);
+      // Refresh the profile data to update the navigation
+      refreshProfile();
+      
+      setLocalProfile(prev => prev ? { ...prev, avatar_url: data.publicUrl } : null);
       
       toast({
         title: "Avatar geüpload",
@@ -118,12 +105,15 @@ const Profile = () => {
       const { error } = await supabase
         .from('profiles')
         .update({
-          display_name: profile?.display_name,
-          bio: profile?.bio
+          display_name: localProfile?.display_name,
+          bio: localProfile?.bio
         })
         .eq('user_id', user?.id);
 
       if (error) throw error;
+
+      // Refresh the profile data to update the navigation
+      refreshProfile();
 
       toast({
         title: "Profiel bijgewerkt",
@@ -195,9 +185,9 @@ const Profile = () => {
               {/* Avatar Section */}
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="w-32 h-32 border-4 border-cosmic/20 shadow-cosmic">
-                  <AvatarImage src={profile?.avatar_url} />
+                  <AvatarImage src={localProfile?.avatar_url} />
                   <AvatarFallback className="bg-cosmic-gradient text-white text-2xl">
-                    {profile?.display_name?.charAt(0).toUpperCase() || '?'}
+                    {localProfile?.display_name?.charAt(0).toUpperCase() || '?'}
                   </AvatarFallback>
                 </Avatar>
                 
@@ -229,8 +219,8 @@ const Profile = () => {
                   </Label>
                   <Input
                     id="displayName"
-                    value={profile?.display_name || ''}
-                    onChange={(e) => setProfile(prev => 
+                    value={localProfile?.display_name || ''}
+                    onChange={(e) => setLocalProfile(prev => 
                       prev ? { ...prev, display_name: e.target.value } : null
                     )}
                     className="font-mystical"
@@ -244,8 +234,8 @@ const Profile = () => {
                   </Label>
                   <textarea
                     id="bio"
-                    value={profile?.bio || ''}
-                    onChange={(e) => setProfile(prev => 
+                    value={localProfile?.bio || ''}
+                    onChange={(e) => setLocalProfile(prev => 
                       prev ? { ...prev, bio: e.target.value } : null
                     )}
                     className="w-full min-h-[100px] px-3 py-2 text-sm border border-input bg-background rounded-md font-mystical"

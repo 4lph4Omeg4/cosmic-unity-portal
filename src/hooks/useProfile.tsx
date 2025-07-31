@@ -23,6 +23,27 @@ export const useProfile = () => {
     }
 
     loadProfile();
+    
+    // Set up real-time subscription for profile changes
+    const channel = supabase
+      .channel('profile-changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'profiles',
+          filter: `user_id=eq.${user.id}`
+        }, 
+        () => {
+          console.log('Profile updated, reloading...');
+          loadProfile();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   const loadProfile = async () => {
@@ -34,6 +55,7 @@ export const useProfile = () => {
         .single();
 
       if (error) throw error;
+      console.log('Profile loaded:', data);
       setProfile(data);
     } catch (error) {
       console.error('Error loading profile:', error);
