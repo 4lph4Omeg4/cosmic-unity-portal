@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react';
 import { fetchBlogArticles } from '@/integrations/shopify/client';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface BlogArticle {
   id: string;
@@ -28,6 +29,7 @@ interface BlogArticle {
 
 const EgoToEden = () => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +38,7 @@ const EgoToEden = () => {
       try {
         console.log('=== FETCHING EGO TO EDEN BLOG ARTICLES ===');
         
-        const fetchedArticles = await fetchBlogArticles('ego-to-eden');
+        const fetchedArticles = await fetchBlogArticles('ego-to-eden', language);
         console.log('Ego to Eden articles:', {
           articlesFound: fetchedArticles.length,
           articles: fetchedArticles
@@ -51,10 +53,11 @@ const EgoToEden = () => {
     };
 
     loadArticles();
-  }, []);
+  }, [language]);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('nl-NL', {
+    const locale = language === 'en' ? 'en-US' : language === 'de' ? 'de-DE' : 'nl-NL';
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -155,9 +158,12 @@ const EgoToEden = () => {
                     <Button 
                       variant="mystical" 
                       className="w-full group"
-                      onClick={() => navigate(`/blog/ego-to-eden/${article.handle}`)}
+                      onClick={() => {
+                        const blogHandle = language === 'en' ? 'ego-to-eden-en' : language === 'de' ? 'ego-to-eden-de' : 'ego-to-eden';
+                        navigate(`/blog/${blogHandle}/${article.handle}`);
+                      }}
                     >
-                      Lees Volledig Artikel
+                      {language === 'en' ? 'Read Full Article' : language === 'de' ? 'Vollständigen Artikel lesen' : 'Lees Volledig Artikel'}
                       <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </CardContent>

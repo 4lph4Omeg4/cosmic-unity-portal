@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import { fetchBlogArticles, fetchAllBlogs, testConnection } from '@/integrations/shopify/client';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface BlogArticle {
   id: string;
@@ -26,6 +27,7 @@ interface BlogArticle {
 }
 
 const Blog = () => {
+  const { language, t } = useLanguage();
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,9 +56,9 @@ const Blog = () => {
 
         // Probeer eerst met een van de gevonden blogs, of fallback naar 'ego-to-eden'
         const blogHandle = allBlogs.length > 0 ? allBlogs[0].handle : 'ego-to-eden';
-        console.log(`Using blog handle: ${blogHandle}`);
+        console.log(`Using blog handle: ${blogHandle} for language: ${language}`);
         
-        const fetchedArticles = await fetchBlogArticles(blogHandle);
+        const fetchedArticles = await fetchBlogArticles(blogHandle, language);
         console.log('Blog fetch result:', {
           articlesFound: fetchedArticles.length,
           articles: fetchedArticles
@@ -72,10 +74,11 @@ const Blog = () => {
     };
 
     loadArticles();
-  }, []);
+  }, [language]);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('nl-NL', {
+    const locale = language === 'en' ? 'en-US' : language === 'de' ? 'de-DE' : 'nl-NL';
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -89,7 +92,7 @@ const Blog = () => {
         <main className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="animate-cosmic-pulse">Loading sacred wisdom...</div>
+              <div className="animate-cosmic-pulse">{t('common.loading')}</div>
             </div>
           </div>
         </main>
@@ -111,8 +114,12 @@ const Blog = () => {
               <span className="text-mystical-gradient">Wisdom</span>
             </h1>
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-              Doorbreek de illusie en ontdek de waarheid achter de matrix. 
-              Berichten uit hogere dimensies voor de ontwakende zielen.
+              {language === 'en' 
+                ? 'Break through the illusion and discover the truth behind the matrix. Messages from higher dimensions for awakening souls.'
+                : language === 'de' 
+                ? 'Durchbreche die Illusion und entdecke die Wahrheit hinter der Matrix. Botschaften aus höheren Dimensionen für erwachende Seelen.'
+                : 'Doorbreek de illusie en ontdek de waarheid achter de matrix. Berichten uit hogere dimensies voor de ontwakende zielen.'
+              }
             </p>
           </div>
 
@@ -164,9 +171,12 @@ const Blog = () => {
                     <Button 
                       variant="mystical" 
                       className="w-full group"
-                      onClick={() => window.location.href = `/blog/ego-to-eden/${article.handle}`}
+                      onClick={() => {
+                        const blogHandle = language === 'en' ? 'ego-to-eden-en' : language === 'de' ? 'ego-to-eden-de' : 'ego-to-eden';
+                        window.location.href = `/blog/${blogHandle}/${article.handle}`;
+                      }}
                     >
-                      Lees Meer
+                      {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
                       <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </CardContent>
@@ -179,10 +189,15 @@ const Blog = () => {
                 <Calendar className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-                Geen artikelen gevonden
+                {language === 'en' ? 'No articles found' : language === 'de' ? 'Keine Artikel gefunden' : 'Geen artikelen gevonden'}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                De kosmische berichten zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten.
+                {language === 'en' 
+                  ? 'The cosmic messages are still on their way. Come back soon for new insights.'
+                  : language === 'de' 
+                  ? 'Die kosmischen Botschaften sind noch unterwegs. Kehre bald zurück für neue Einsichten.'
+                  : 'De kosmische berichten zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten.'
+                }
               </p>
             </div>
           )}

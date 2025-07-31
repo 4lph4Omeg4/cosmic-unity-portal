@@ -356,23 +356,38 @@ export const fetchAllBlogs = async () => {
   }
 };
 
-export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden') => {
+export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
   try {
-    console.log(`Fetching blog articles for handle: ${blogHandle}`);
+    // Map language to appropriate blog handle
+    const languageHandleMap = {
+      'nl': blogHandle,
+      'en': blogHandle.includes('-en') ? blogHandle : `${blogHandle}-en`,
+      'de': blogHandle.includes('-de') ? blogHandle : `${blogHandle}-de`
+    };
+    
+    const finalHandle = languageHandleMap[language] || blogHandle;
+    console.log(`Fetching blog articles for handle: ${finalHandle} (language: ${language})`);
 
     // Add timeout and retry logic
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
     const response = await client.request(GET_BLOG_ARTICLES, {
-      variables: { handle: blogHandle, first: 20 }
+      variables: { handle: finalHandle, first: 20 }
     });
 
     clearTimeout(timeoutId);
     console.log('Blog response:', response);
 
     if (!response.data?.blog) {
-      console.warn(`Blog with handle "${blogHandle}" not found`);
+      console.warn(`Blog with handle "${finalHandle}" not found, trying fallback`);
+      // Try fallback to original handle if language-specific doesn't exist
+      if (finalHandle !== blogHandle) {
+        const fallbackResponse = await client.request(GET_BLOG_ARTICLES, {
+          variables: { handle: blogHandle, first: 20 }
+        });
+        return fallbackResponse.data?.blog?.articles?.edges?.map(edge => edge.node) || [];
+      }
       return [];
     }
 
@@ -384,7 +399,8 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden') => {
     console.error('Error details:', {
       message: error.message,
       stack: error.stack,
-      blogHandle
+      blogHandle,
+      language
     });
     return [];
   }
