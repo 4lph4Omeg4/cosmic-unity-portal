@@ -74,73 +74,41 @@ const Community = () => {
 
       console.log('Found posts:', postsData.length);
 
-      // Get likes and comments for each post first
-      const postIds = postsData.map(post => post.id);
-      
-      const [likesResult, commentsResult] = await Promise.all([
-        supabase.from('likes').select('post_id, user_id').in('post_id', postIds),
-        supabase.from('comments').select('id, post_id, user_id, content, created_at').in('post_id', postIds).order('created_at', { ascending: true })
-      ]);
+      // Get posts with their related data using joins
+      const { data: postsWithData, error: postsWithDataError } = await supabase
+        .from('posts')
+        .select(`
+          id,
+          title,
+          content,
+          created_at,
+          user_id,
+          profiles!posts_user_id_fkey (
+            user_id,
+            display_name,
+            avatar_url
+          ),
+          likes (
+            id,
+            user_id
+          ),
+          comments (
+            id,
+            content,
+            created_at,
+            user_id,
+            profiles!comments_user_id_fkey (
+              user_id,
+              display_name,
+              avatar_url
+            )
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-      if (likesResult.error) throw likesResult.error;
-      if (commentsResult.error) throw commentsResult.error;
+      console.log('Posts with data result:', { postsWithData, postsWithDataError });
 
-      // Get unique user IDs from posts AND comments
-      const postUserIds = postsData.map(post => post.user_id);
-      const commentUserIds = commentsResult.data?.map(comment => comment.user_id) || [];
-      const userIds = [...new Set([...postUserIds, ...commentUserIds])];
-
-      console.log('All user IDs (posts + comments):', userIds);
-
-      // Get corresponding profiles for all users (posts + comments)
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('user_id, display_name, avatar_url')
-        .in('user_id', userIds);
-
-      console.log('Profiles query result:', { profilesData, profilesError });
-      if (profilesError) throw profilesError;
-
-      // Combine posts with their profile data, likes, and comments
-      const postsWithData = postsData.map(post => {
-        const profile = profilesData?.find(profile => profile.user_id === post.user_id);
-        
-        if (!profile) {
-          console.warn(`No profile found for user_id: ${post.user_id}`);
-        }
-
-        const profileData = profile || {
-          user_id: post.user_id,
-          display_name: 'Loading...',
-          avatar_url: null
-        };
-
-        const postLikes = likesResult.data?.filter(like => like.post_id === post.id) || [];
-        const postComments = commentsResult.data?.filter(comment => comment.post_id === post.id) || [];
-
-        return {
-          ...post,
-          profiles: profileData,
-          likes: postLikes,
-          comments: postComments.map(comment => {
-            const commentProfile = profilesData?.find(profile => profile.user_id === comment.user_id);
-            
-            if (!commentProfile) {
-              console.warn(`No profile found for comment user_id: ${comment.user_id}`);
-            }
-
-            const commentProfileData = commentProfile || {
-              user_id: comment.user_id,
-              display_name: 'Loading...',
-              avatar_url: null
-            };
-            return {
-              ...comment,
-              profiles: commentProfileData
-            };
-          })
-        };
-      });
+      if (postsWithDataError) throw postsWithDataError;
 
       console.log('Final posts with data:', postsWithData);
       setPosts(postsWithData as any);
