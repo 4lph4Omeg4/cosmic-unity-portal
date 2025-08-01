@@ -54,12 +54,6 @@ const Footer = () => {
       { name: t('footer.blog'), href: '/blog' },
       { name: t('footer.about'), href: '/about' },
       { name: t('footer.contact'), href: '/contact' },
-    ],
-    info: [
-      { name: t('footer.shipping'), href: policyUrls.shipping },
-      { name: t('footer.returns'), href: policyUrls.refund },
-      { name: t('footer.privacy'), href: policyUrls.privacy },
-      { name: t('footer.terms'), href: policyUrls.terms },
     ]
   };
 
@@ -71,16 +65,16 @@ const Footer = () => {
           {/* Top Row: Brand and Contact */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Brand Section */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-2">
+            <div className="space-y-6 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start space-x-2">
                 <div className="w-8 h-8 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
                 <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
               </div>
-              <p className="font-mystical text-muted-foreground">
+              <p className="font-mystical text-muted-foreground text-center md:text-left">
                 Awakening consciousness through sacred geometry and divine merchandise. 
                 Join the galactic federation of light.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 justify-center md:justify-start">
                 <a href="https://www.instagram.com/sh4m4n1ak?igsh=MW55aDZ1cTM4anplOQ==" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-cosmic cosmic-hover">
                   <Instagram className="w-5 h-5" />
                 </a>
@@ -137,8 +131,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Bottom Row: Shop, Community, Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Bottom Row: Shop and Community */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Shop Links */}
             <div>
               <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
@@ -176,25 +170,6 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
-
-            {/* Legal & Policy Links */}
-            <div>
-              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
-                {t('footer.info') || 'Informatie'}
-              </h3>
-              <ul className="space-y-2">
-                {footerLinks.info.map((link) => (
-                  <li key={link.name}>
-                    <Link 
-                      to={link.href} 
-                      className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
 
@@ -217,16 +192,28 @@ const Footer = () => {
               © {currentYear} SH4M4NI4K - The Chosen Ones. {t('footer.copyright')}
             </p>
           </div>
-          <div className="flex space-x-6">
+          <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-sm">
+            <Link 
+              to={policyUrls.shipping} 
+              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+            >
+              {t('footer.shipping')}
+            </Link>
+            <Link 
+              to={policyUrls.refund} 
+              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+            >
+              {t('footer.returns')}
+            </Link>
             <Link 
               to={policyUrls.privacy} 
-              className="font-mystical text-sm text-muted-foreground hover:text-cosmic cosmic-hover"
+              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
             >
               {t('footer.privacy')}
             </Link>
             <Link 
               to={policyUrls.terms} 
-              className="font-mystical text-sm text-muted-foreground hover:text-cosmic cosmic-hover"
+              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
             >
               {t('footer.terms')}
             </Link>
