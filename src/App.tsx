@@ -20,6 +20,7 @@ import Blog from "./pages/Blog";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import EgoToEden from "./pages/EgoToEden";
+import Unity from "./pages/Unity";
 import BlogArticle from "./pages/BlogArticle";
 import NotFound from "./pages/NotFound";
 
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/user/:userId" element={<UserProfile />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/ego-to-eden" element={<EgoToEden />} />
+              <Route path="/unity" element={<Unity />} />
               <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
