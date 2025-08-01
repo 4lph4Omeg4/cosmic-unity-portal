@@ -246,6 +246,37 @@ export const GET_ALL_BLOGS = `
   }
 `;
 
+export const GET_SHOP_POLICIES = `
+  query getShopPolicies($language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
+    shop {
+      privacyPolicy {
+        title
+        body
+        handle
+        url
+      }
+      refundPolicy {
+        title
+        body
+        handle
+        url
+      }
+      shippingPolicy {
+        title
+        body
+        handle
+        url
+      }
+      termsOfService {
+        title
+        body
+        handle
+        url
+      }
+    }
+  }
+`;
+
 export const CREATE_CHECKOUT = `
   mutation checkoutCreate($input: CheckoutCreateInput!) {
     checkoutCreate(input: $input) {
@@ -488,6 +519,41 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
       language
     });
     return [];
+  }
+};
+
+export const fetchShopPolicies = async (language: string = 'nl') => {
+  try {
+    console.log(`Fetching shop policies for language: ${language}`);
+    
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' };
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'NL', country: 'NL' }; // Default to Dutch
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
+    
+    const response = await client.request(GET_SHOP_POLICIES, {
+      variables: { 
+        language: shopifyLanguage,
+        country: shopifyCountry
+      }
+    });
+    
+    console.log('Shop policies response:', response);
+    return response.data?.shop || {};
+  } catch (error) {
+    console.error('Error fetching shop policies:', error);
+    return {};
   }
 };
 

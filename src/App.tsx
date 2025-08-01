@@ -22,6 +22,10 @@ import Contact from "./pages/Contact";
 import EgoToEden from "./pages/EgoToEden";
 import Unity from "./pages/Unity";
 import BlogArticle from "./pages/BlogArticle";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +56,18 @@ const App = () => (
               <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/privacybeleid" element={<PrivacyPolicy />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/datenschutz" element={<PrivacyPolicy />} />
+              <Route path="/retourbeleid" element={<RefundPolicy />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/rückgaberecht" element={<RefundPolicy />} />
+              <Route path="/verzendbeleid" element={<ShippingPolicy />} />
+              <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              <Route path="/versandrichtlinien" element={<ShippingPolicy />} />
+              <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
