@@ -103,7 +103,7 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div>
-              <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
+              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
                 {t('footer.contactUs')}
               </h3>
               <div className="space-y-3">
