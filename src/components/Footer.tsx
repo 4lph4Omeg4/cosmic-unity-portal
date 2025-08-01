@@ -63,9 +63,9 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="space-y-12 mb-12">
           {/* Top Row: Brand and Contact */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Brand Section */}
-            <div className="space-y-6 text-center md:text-left">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Brand Section - Takes 2 columns */}
+            <div className="lg:col-span-2 space-y-6 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start space-x-2">
                 <div className="w-8 h-8 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
                 <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
@@ -132,7 +132,8 @@ const Footer = () => {
           </div>
 
           {/* Bottom Row: Shop and Community */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div></div> {/* Empty space for alignment */}
             {/* Shop Links */}
             <div>
               <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
