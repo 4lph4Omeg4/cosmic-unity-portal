@@ -325,13 +325,6 @@ const Product = () => {
             {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {product.tags.slice(0, 3).map((tag, index) => (
-                    <Badge key={index} variant="cosmic">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
                 
                 <h1 className="font-cosmic text-3xl lg:text-4xl font-bold text-cosmic-gradient mb-4">
                   {product.title}

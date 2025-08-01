@@ -128,13 +128,6 @@ const EgoToEden = () => {
                   )}
                   
                   <CardHeader>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {article.tags.slice(0, 3).map((tag, index) => (
-                        <Badge key={index} variant="cosmic" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
                     
                     <CardTitle className="font-cosmic text-cosmic-gradient line-clamp-2">
                       {article.title}

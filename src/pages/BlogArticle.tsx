@@ -151,13 +151,6 @@ const BlogArticle = () => {
               </div>
             )}
 
-            <div className="flex flex-wrap gap-2 mb-4">
-              {article.tags.map((tag, index) => (
-                <Badge key={index} variant="cosmic">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
 
             <h1 className="font-cosmic text-3xl md:text-5xl font-bold mb-6 text-cosmic-gradient">
               {article.title}
