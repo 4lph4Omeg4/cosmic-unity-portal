@@ -205,7 +205,7 @@ const FeaturedSection = () => {
                       onClick={() => window.open(`/product/${product.handle}`, '_blank')}
                     >
                       <Book className="w-4 h-4 mr-2" />
-                      {t('featured.explore')}
+                      Bekijk
                       <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                     </Button>
                   </CardFooter>
@@ -215,13 +215,6 @@ const FeaturedSection = () => {
           </div>
         )}
 
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <Button variant="divine" size="lg" className="group">
-            {t('featured.explore')}
-            <Star className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-          </Button>
-        </div>
       </div>
     </section>
   );
