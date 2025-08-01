@@ -110,17 +110,84 @@ const Blog = () => {
           {/* Page Header */}
           <div className="text-center mb-16">
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-cosmic-gradient">Sacred</span>{' '}
-              <span className="text-mystical-gradient">Wisdom</span>
+              <span className="text-cosmic-gradient">Blogs</span>
             </h1>
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
               {language === 'en' 
-                ? 'Break through the illusion and discover the truth behind the matrix. Messages from higher dimensions for awakening souls.'
+                ? 'Explore our cosmic blogs filled with divine wisdom and sacred knowledge.'
                 : language === 'de' 
-                ? 'Durchbreche die Illusion und entdecke die Wahrheit hinter der Matrix. Botschaften aus höheren Dimensionen für erwachende Seelen.'
-                : 'Doorbreek de illusie en ontdek de waarheid achter de matrix. Berichten uit hogere dimensies voor de ontwakende zielen.'
+                ? 'Entdecke unsere kosmischen Blogs voller göttlicher Weisheit und heiligen Wissens.'
+                : 'Ontdek onze kosmische blogs vol goddelijke wijsheid en heilige kennis.'
               }
             </p>
+          </div>
+
+          {/* Blog Categories */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+              <CardHeader>
+                <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
+                  From Ego to Eden
+                </CardTitle>
+                <CardDescription className="font-mystical">
+                  {language === 'en' 
+                    ? 'Journey from ego consciousness to divine awakening. Discover the path to spiritual transformation.'
+                    : language === 'de' 
+                    ? 'Reise vom Ego-Bewusstsein zum göttlichen Erwachen. Entdecke den Pfad zur spirituellen Transformation.'
+                    : 'Reis van ego-bewustzijn naar goddelijk ontwaken. Ontdek het pad naar spirituele transformatie.'
+                  }
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  variant="mystical" 
+                  className="w-full group"
+                  onClick={() => {
+                    window.location.href = `/ego-to-eden`;
+                  }}
+                >
+                  {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+              <CardHeader>
+                <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
+                  Unity
+                </CardTitle>
+                <CardDescription className="font-mystical">
+                  {language === 'en' 
+                    ? 'Explore the interconnectedness of all things. Messages about cosmic unity and oneness.'
+                    : language === 'de' 
+                    ? 'Erkunde die Verbundenheit aller Dinge. Botschaften über kosmische Einheit und Einssein.'
+                    : 'Ontdek de verbondenheid van alle dingen. Berichten over kosmische eenheid en verbondenheid.'
+                  }
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  variant="cosmic" 
+                  className="w-full group"
+                  onClick={() => {
+                    window.location.href = `/unity`;
+                  }}
+                >
+                  {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Latest Articles Section */}
+          <div className="text-center mb-12">
+            <h2 className="font-cosmic text-3xl font-bold mb-4">
+              <span className="text-mystical-gradient">
+                {language === 'en' ? 'Latest Articles' : language === 'de' ? 'Neueste Artikel' : 'Nieuwste Artikelen'}
+              </span>
+            </h2>
           </div>
 
           {/* Articles Grid */}
