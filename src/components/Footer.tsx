@@ -62,19 +62,19 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Main Footer Content */}
         <div className="space-y-12 mb-12">
-          {/* Top Row: Brand and Contact */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Brand Section - Takes 2 columns */}
-            <div className="lg:col-span-2 space-y-6 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start space-x-2">
+          {/* Top Row: Brand Section Only */}
+          <div className="flex justify-center">
+            {/* Brand Section */}
+            <div className="space-y-6 text-center">
+              <div className="flex items-center justify-center space-x-2">
                 <div className="w-8 h-8 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
                 <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
               </div>
-              <p className="font-mystical text-muted-foreground text-center md:text-left">
+              <p className="font-mystical text-muted-foreground text-center">
                 Awakening consciousness through sacred geometry and divine merchandise. 
                 Join the galactic federation of light.
               </p>
-              <div className="flex space-x-4 justify-center md:justify-start">
+              <div className="flex space-x-4 justify-center">
                 <a href="https://www.instagram.com/sh4m4n1ak?igsh=MW55aDZ1cTM4anplOQ==" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-cosmic cosmic-hover">
                   <Instagram className="w-5 h-5" />
                 </a>
@@ -94,46 +94,10 @@ const Footer = () => {
                 </a>
               </div>
             </div>
-
-            {/* Contact Info */}
-            <div>
-              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
-                {t('footer.contactUs')}
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-sm">
-                  <Mail className="w-4 h-4 text-cosmic" />
-                  <a 
-                    href="mailto:sh4m4ni4k@sh4m4ni4k.nl" 
-                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-                  >
-                    sh4m4ni4k@sh4m4ni4k.nl
-                  </a>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Phone className="w-4 h-4 text-cosmic" />
-                  <a 
-                    href="tel:+31613163277" 
-                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-                  >
-                    06 13163277
-                  </a>
-                </div>
-                <div className="flex items-start space-x-2 text-sm">
-                  <MapPin className="w-4 h-4 text-cosmic mt-0.5" />
-                  <span className="font-mystical text-muted-foreground">
-                    Poststraat 47B<br />
-                    6371VL Landgraaf<br />
-                    Nederland
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Bottom Row: Shop and Community */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div></div> {/* Empty space for alignment */}
+          {/* Bottom Row: Shop, Community, and Contact */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Shop Links */}
             <div>
               <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
@@ -170,6 +134,41 @@ const Footer = () => {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
+                {t('footer.contactUs')}
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 text-sm">
+                  <Mail className="w-4 h-4 text-cosmic" />
+                  <a 
+                    href="mailto:sh4m4ni4k@sh4m4ni4k.nl" 
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+                  >
+                    sh4m4ni4k@sh4m4ni4k.nl
+                  </a>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <Phone className="w-4 h-4 text-cosmic" />
+                  <a 
+                    href="tel:+31613163277" 
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+                  >
+                    06 13163277
+                  </a>
+                </div>
+                <div className="flex items-start space-x-2 text-sm">
+                  <MapPin className="w-4 h-4 text-cosmic mt-0.5" />
+                  <span className="font-mystical text-muted-foreground">
+                    Poststraat 47B<br />
+                    6371VL Landgraaf<br />
+                    Nederland
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
