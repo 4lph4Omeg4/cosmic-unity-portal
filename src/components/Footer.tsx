@@ -5,7 +5,43 @@ import { useLanguage } from '@/hooks/useLanguage';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  // Generate language-specific policy URLs
+  const getPolicyUrls = () => {
+    switch (language) {
+      case 'nl':
+        return {
+          privacy: '/privacybeleid',
+          terms: '/algemene-voorwaarden',
+          shipping: '/verzendbeleid',
+          refund: '/retourbeleid'
+        };
+      case 'en':
+        return {
+          privacy: '/privacy-policy',
+          terms: '/terms-of-service',
+          shipping: '/shipping-policy',
+          refund: '/refund-policy'
+        };
+      case 'de':
+        return {
+          privacy: '/datenschutz',
+          terms: '/nutzungsbedingungen',
+          shipping: '/versandrichtlinien',
+          refund: '/rückgaberecht'
+        };
+      default:
+        return {
+          privacy: '/privacybeleid',
+          terms: '/algemene-voorwaarden',
+          shipping: '/verzendbeleid',
+          refund: '/retourbeleid'
+        };
+    }
+  };
+
+  const policyUrls = getPolicyUrls();
 
   const footerLinks = {
     shop: [
@@ -20,10 +56,10 @@ const Footer = () => {
       { name: t('footer.contact'), href: '/contact' },
     ],
     info: [
-      { name: t('footer.shipping'), href: '/shipping' },
-      { name: t('footer.returns'), href: '/returns' },
-      { name: t('footer.privacy'), href: '/privacy' },
-      { name: t('footer.terms'), href: '/terms' },
+      { name: t('footer.shipping'), href: policyUrls.shipping },
+      { name: t('footer.returns'), href: policyUrls.refund },
+      { name: t('footer.privacy'), href: policyUrls.privacy },
+      { name: t('footer.terms'), href: policyUrls.terms },
     ]
   };
 
@@ -101,6 +137,25 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Legal & Info Links */}
+          <div>
+            <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
+              {t('footer.info') || 'Info'}
+            </h3>
+            <ul className="space-y-2">
+              {footerLinks.info.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    to={link.href} 
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Contact Info */}
           <div>
             <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
@@ -158,13 +213,13 @@ const Footer = () => {
           </div>
           <div className="flex space-x-6">
             <Link 
-              to="/privacy" 
+              to={policyUrls.privacy} 
               className="font-mystical text-sm text-muted-foreground hover:text-cosmic cosmic-hover"
             >
               {t('footer.privacy')}
             </Link>
             <Link 
-              to="/terms" 
+              to={policyUrls.terms} 
               className="font-mystical text-sm text-muted-foreground hover:text-cosmic cosmic-hover"
             >
               {t('footer.terms')}
