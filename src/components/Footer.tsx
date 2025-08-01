@@ -101,9 +101,43 @@ const Footer = () => {
               </div>
             </div>
 
+            {/* Contact Info */}
+            <div>
+              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
+                {t('footer.contactUs')}
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 text-sm">
+                  <Mail className="w-4 h-4 text-cosmic" />
+                  <a 
+                    href="mailto:sh4m4ni4k@sh4m4ni4k.nl" 
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+                  >
+                    sh4m4ni4k@sh4m4ni4k.nl
+                  </a>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <Phone className="w-4 h-4 text-cosmic" />
+                  <a 
+                    href="tel:+31613163277" 
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+                  >
+                    06 13163277
+                  </a>
+                </div>
+                <div className="flex items-start space-x-2 text-sm">
+                  <MapPin className="w-4 h-4 text-cosmic mt-0.5" />
+                  <span className="font-mystical text-muted-foreground">
+                    Poststraat 47B<br />
+                    6371VL Landgraaf<br />
+                    Nederland
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Bottom Row: Shop, Community, Contact + Info */}
+          {/* Bottom Row: Shop, Community, Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Shop Links */}
             <div>
@@ -143,61 +177,23 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Contact & Legal Info Combined */}
-            <div className="space-y-8">
-              {/* Contact Info */}
-              <div>
-                <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
-                  {t('footer.contactUs')}
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Mail className="w-4 h-4 text-cosmic" />
-                    <a 
-                      href="mailto:sh4m4ni4k@sh4m4ni4k.nl" 
-                      className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
+            {/* Legal & Policy Links */}
+            <div>
+              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
+                {t('footer.info') || 'Informatie'}
+              </h3>
+              <ul className="space-y-2">
+                {footerLinks.info.map((link) => (
+                  <li key={link.name}>
+                    <Link 
+                      to={link.href} 
+                      className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
                     >
-                      sh4m4ni4k@sh4m4ni4k.nl
-                    </a>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Phone className="w-4 h-4 text-cosmic" />
-                    <a 
-                      href="tel:+31613163277" 
-                      className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-                    >
-                      06 13163277
-                    </a>
-                  </div>
-                  <div className="flex items-start space-x-2 text-sm">
-                    <MapPin className="w-4 h-4 text-cosmic mt-0.5" />
-                    <span className="font-mystical text-muted-foreground">
-                      Poststraat 47B<br />
-                      6371VL Landgraaf<br />
-                      Nederland
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Legal & Info Links */}
-              <div>
-                <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
-                  {t('footer.info') || 'Info'}
-                </h3>
-                <ul className="space-y-2">
-                  {footerLinks.info.map((link) => (
-                    <li key={link.name}>
-                      <Link 
-                        to={link.href} 
-                        className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
