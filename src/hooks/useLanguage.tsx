@@ -32,7 +32,7 @@ const translations = {
     
     // Featured Section
     'featured.title.sacred': 'Sacred',
-    'featured.title.geometry': 'Geometry',
+    'featured.title.geometry': 'Scripture',
     'featured.subtitle': 'Ontdek de eeuwenoude wijsheid verborgen in kosmische patronen',
     'featured.explore': 'Verken Collectie',
     
@@ -205,7 +205,7 @@ const translations = {
     
     // Featured Section
     'featured.title.sacred': 'Sacred',
-    'featured.title.geometry': 'Geometry',
+    'featured.title.geometry': 'Scripture',
     'featured.subtitle': 'Discover ancient wisdom hidden in cosmic patterns',
     'featured.explore': 'Explore Collection',
     
@@ -378,7 +378,7 @@ const translations = {
     
     // Featured Section
     'featured.title.sacred': 'Sacred',
-    'featured.title.geometry': 'Geometry',
+    'featured.title.geometry': 'Scripture',
     'featured.subtitle': 'Entdecke uralte Weisheit verborgen in kosmischen Mustern',
     'featured.explore': 'Kollektion Erkunden',
     
