@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Star, Heart, MessageCircle, Plus, Send, Users, Trash2 } from 'lucide-react';
+import { Star, Heart, MessageCircle, Plus, Send, Users, Trash2, Image as ImageIcon, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +25,7 @@ interface Post {
   id: string;
   title: string;
   content: string;
+  image_url?: string;
   created_at: string;
   profiles: Profile;
   likes: { id: string }[];
@@ -41,6 +42,9 @@ const Community = () => {
   const [newPost, setNewPost] = useState({ title: '', content: '' });
   const [showNewPost, setShowNewPost] = useState(false);
   const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -59,7 +63,7 @@ const Community = () => {
       // First get posts
       const { data: postsData, error: postsError } = await supabase
         .from('posts')
-        .select('id, title, content, created_at, user_id')
+        .select('id, title, content, image_url, created_at, user_id')
         .order('created_at', { ascending: false });
 
       console.log('Posts query result:', { postsData, postsError });
@@ -176,18 +180,81 @@ const Community = () => {
     };
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "Image too large",
+          description: "Please select an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
+
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('post-images')
+        .upload(fileName, file);
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('post-images')
+        .getPublicUrl(fileName);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+
   const createPost = async () => {
     if (!user || !newPost.title.trim() || !newPost.content.trim()) return;
 
+    setUploading(true);
     try {
       console.log('Creating post:', newPost);
       console.log('User ID:', user?.id);
       
+      let imageUrl = null;
+      if (selectedImage) {
+        imageUrl = await uploadImage(selectedImage);
+        if (!imageUrl) {
+          toast({
+            title: "Upload failed",
+            description: "Failed to upload image. Try again.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       const { error } = await supabase
         .from('posts')
         .insert({
           title: newPost.title,
           content: newPost.content,
+          image_url: imageUrl,
           user_id: user.id
         });
 
@@ -196,6 +263,8 @@ const Community = () => {
       if (error) throw error;
 
       setNewPost({ title: '', content: '' });
+      setSelectedImage(null);
+      setImagePreview(null);
       setShowNewPost(false);
       toast({
         title: t('community.postCreated'),
@@ -208,6 +277,8 @@ const Community = () => {
         description: t('community.errorPostMessage'),
         variant: "destructive",
       });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -373,15 +444,59 @@ const Community = () => {
                   onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                   rows={4}
                 />
+                
+                {/* Image Upload */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        className="hidden"
+                      />
+                      <Button type="button" variant="outline" size="sm">
+                        <ImageIcon className="w-4 h-4 mr-2" />
+                        Add Image
+                      </Button>
+                    </label>
+                  </div>
+                  
+                  {imagePreview && (
+                    <div className="relative">
+                      <img 
+                        src={imagePreview} 
+                        alt="Preview" 
+                        className="max-w-full h-48 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 bg-background/80 hover:bg-background"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                
                 <div className="flex gap-2">
-                  <Button onClick={createPost} variant="mystical">
+                  <Button 
+                    onClick={createPost} 
+                    variant="mystical"
+                    disabled={uploading}
+                  >
                     <Send className="w-4 h-4 mr-2" />
-                    {t('community.publish')}
+                    {uploading ? 'Publishing...' : t('community.publish')}
                   </Button>
                   <Button 
                     onClick={() => {
                       setShowNewPost(false);
                       setNewPost({ title: '', content: '' });
+                      setSelectedImage(null);
+                      setImagePreview(null);
                     }}
                     variant="outline"
                   >
@@ -454,6 +569,17 @@ const Community = () => {
                     <p className="font-mystical text-muted-foreground mb-6 whitespace-pre-wrap">
                       {post.content}
                     </p>
+                    
+                    {/* Post Image */}
+                    {post.image_url && (
+                      <div className="mb-6">
+                        <img 
+                          src={post.image_url} 
+                          alt="Post image" 
+                          className="w-full max-h-96 object-cover rounded-lg shadow-cosmic"
+                        />
+                      </div>
+                    )}
                     
                     {/* Post Actions */}
                     <div className="flex items-center gap-4 mb-6">
