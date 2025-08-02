@@ -71,7 +71,7 @@ const Footer = () => {
                 <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
               </div>
               <p className="font-mystical text-muted-foreground text-center">
-                Awakening consciousness through sacred geometry and divine merchandise. 
+                Awakening consciousness through sacred scripture and divine merchandise. 
                 Join the galactic federation of light.
               </p>
               <div className="flex space-x-4 justify-center">
