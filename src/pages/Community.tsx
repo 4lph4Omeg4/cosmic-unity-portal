@@ -448,17 +448,15 @@ const Community = () => {
                 {/* Image Upload */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <label className="cursor-pointer">
+                    <label className="cursor-pointer inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageSelect}
                         className="hidden"
                       />
-                      <Button type="button" variant="outline" size="sm">
-                        <ImageIcon className="w-4 h-4 mr-2" />
-                        Add Image
-                      </Button>
+                      <ImageIcon className="w-4 h-4 mr-2" />
+                      Add Image
                     </label>
                   </div>
                   
