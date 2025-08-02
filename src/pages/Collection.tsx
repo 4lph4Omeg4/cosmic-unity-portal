@@ -213,9 +213,10 @@ const Collection = () => {
             </h1>
             
             {collection.description && (
-              <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-                {collection.description}
-              </p>
+              <div 
+                className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto"
+                dangerouslySetInnerHTML={{ __html: collection.description }}
+              />
             )}
           </div>
 
