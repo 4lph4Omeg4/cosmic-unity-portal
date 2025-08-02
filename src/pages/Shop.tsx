@@ -320,14 +320,6 @@ const Shop = () => {
                     </div>
                     
                     <CardHeader>
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {product.tags.slice(0, 2).map((tag, index) => (
-                          <Badge key={index} variant="cosmic" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      
                       <CardTitle className="font-cosmic text-lg font-bold text-cosmic-gradient line-clamp-2">
                         {product.title}
                       </CardTitle>

@@ -389,17 +389,6 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Tags */}
-            <div>
-              <h4 className="font-mystical font-semibold mb-3">Tags:</h4>
-              <div className="flex flex-wrap gap-2">
-                {product.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="cosmic-hover">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
