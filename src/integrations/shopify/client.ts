@@ -52,7 +52,7 @@ export const GET_COLLECTIONS = `
             url
             altText
           }
-          products(first: 50) {
+          products(first: 20) {
             edges {
               node {
                 id
@@ -86,6 +86,59 @@ export const GET_COLLECTIONS = `
                       altText
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_COLLECTION_BY_HANDLE = `
+  query getCollectionByHandle($handle: String!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
+    collection(handle: $handle) {
+      id
+      title
+      description
+      handle
+      image {
+        url
+        altText
+      }
+      products(first: 50) {
+        edges {
+          node {
+            id
+            title
+            handle
+            productType
+            tags
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  availableForSale
+                }
+              }
+            }
+            images(first: 1) {
+              edges {
+                node {
+                  url
+                  altText
                 }
               }
             }
@@ -572,6 +625,51 @@ export const createCheckout = async (lineItems: Array<{ variantId: string; quant
     return response.data?.checkoutCreate?.checkout || null;
   } catch (error) {
     console.error('Error creating checkout:', error);
+    return null;
+  }
+};
+
+export const fetchCollectionByHandle = async (handle: string, language: string = 'en') => {
+  try {
+    console.log(`Fetching collection by handle: ${handle} for language: ${language}`);
+    
+    // Convert language codes to Shopify LanguageCode format and map countries
+    const getMarketInfo = (language: string) => {
+      switch (language.toLowerCase()) {
+        case 'nl':
+          return { language: 'NL', country: 'NL' };
+        case 'en':
+          return { language: 'EN', country: 'US' }; // Global English domain
+        case 'de':
+          return { language: 'DE', country: 'DE' };
+        default:
+          return { language: 'EN', country: 'US' };
+      }
+    };
+    
+    const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    const response = await client.request(GET_COLLECTION_BY_HANDLE, {
+      variables: { 
+        handle,
+        language: shopifyLanguage,
+        country: shopifyCountry
+      }
+    });
+
+    clearTimeout(timeoutId);
+    console.log('Collection by handle response:', response);
+
+    return response.data?.collection || null;
+  } catch (error) {
+    console.error('Error fetching collection by handle:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack
+    });
     return null;
   }
 };

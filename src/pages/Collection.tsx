@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star, ArrowLeft, ShoppingCart, Eye } from 'lucide-react';
-import { fetchCollections } from '@/integrations/shopify/client';
+import { fetchCollectionByHandle } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useCart } from '@/hooks/useCart';
@@ -77,11 +77,12 @@ const Collection = () => {
       if (!collectionHandle) return;
       
       try {
-        const collections = await fetchCollections(language);
-        const foundCollection = collections.find(c => c.handle === collectionHandle);
+        console.log(`Fetching collection for handle: ${collectionHandle}`);
         
-        if (foundCollection) {
-          setCollection(foundCollection);
+        const collectionData = await fetchCollectionByHandle(collectionHandle, language);
+
+        if (collectionData) {
+          setCollection(collectionData);
         } else {
           toast({
             title: "Collectie niet gevonden",
