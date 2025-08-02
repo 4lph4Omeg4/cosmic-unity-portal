@@ -51,10 +51,12 @@ const HeroSection = () => {
 
         {/* Call to Action */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Button variant="cosmic" size="lg" className="group">
-            {t('hero.cta.explore')}
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <Link to="/digitempel">
+            <Button variant="cosmic" size="lg" className="group">
+              {t('hero.cta.explore')}
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
           <Link to="/blog">
             <Button variant="energy" size="lg" className="group">
               <Zap className="mr-2 h-5 w-5" />
