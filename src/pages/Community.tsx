@@ -574,7 +574,7 @@ const Community = () => {
                         <img 
                           src={post.image_url} 
                           alt="Post image" 
-                          className="w-full max-h-96 object-cover rounded-lg shadow-cosmic"
+                          className="w-full h-auto object-contain max-h-96 rounded-lg shadow-cosmic"
                         />
                       </div>
                     )}
