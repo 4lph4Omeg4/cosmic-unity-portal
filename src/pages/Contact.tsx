@@ -27,7 +27,6 @@ const Contact = () => {
             </div>
             
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-cosmic-gradient">{t('contact.title.sacred')}</span>{' '}
               <span className="text-mystical-gradient">{t('contact.title.contact')}</span>
             </h1>
             
