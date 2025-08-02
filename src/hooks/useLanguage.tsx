@@ -27,7 +27,7 @@ const translations = {
     'hero.title.unity': 'Unity',
     'hero.title.portal': 'Portal',
     'hero.subtitle': 'Ontdek de kosmische verbinding tussen bewustzijn, spiritualiteit en universele wijsheid',
-    'hero.cta.explore': 'Verken de Portal',
+    'hero.cta.explore': 'Betreed DigiTemple',
     'hero.cta.community': 'Word Lid van Gemeenschap',
     
     // Featured Section
