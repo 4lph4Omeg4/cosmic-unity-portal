@@ -2,7 +2,7 @@ import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 
 const client = createStorefrontApiClient({
   storeDomain: 'rfih5t-ij.myshopify.com',
-  apiVersion: '2024-10',
+  apiVersion: '2025-01',
   publicAccessToken: 'ed47eb085cb7daa4e53db03042cfa29d'
 });
 
@@ -52,7 +52,7 @@ export const GET_COLLECTIONS = `
             url
             altText
           }
-          products(first: 100) {
+          products(first: 50) {
             edges {
               node {
                 id
