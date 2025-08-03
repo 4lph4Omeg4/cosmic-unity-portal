@@ -373,15 +373,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             </div>
           </div>
 
-          {/* Debug info - remove in production */}
-          <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded space-y-1">
-            <div>Email: {email || 'empty'} ({typeof email})</div>
-            <div>Consent: {consent.toString()} ({typeof consent})</div>
-            <div>CreateAccount: {createAccount.toString()} ({typeof createAccount})</div>
-            <div>Password: {password || 'empty'} ({typeof password})</div>
-            <div>Button disabled: {(isSubmitting || !email || !consent || (createAccount && !password)).toString()}</div>
-            <div>Disabled reasons: submitting={isSubmitting}, no-email={!email}, no-consent={!consent}, account-no-pass={createAccount && !password}</div>
-          </div>
+
 
           <Button
             type="submit"
