@@ -21,11 +21,14 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [createAccount, setCreateAccount] = useState(true);
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const { user, signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
