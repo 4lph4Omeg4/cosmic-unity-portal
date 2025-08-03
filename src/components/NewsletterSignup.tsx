@@ -352,7 +352,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
           <Button
             type="submit"
-            disabled={isSubmitting || !email || !consent}
+            disabled={isSubmitting || !email || !consent || (createAccount && !password)}
             className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:hover:shadow-none"
             size={compact ? "default" : "lg"}
           >
