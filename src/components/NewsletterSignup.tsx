@@ -151,6 +151,63 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
     return compact ? "p-4 space-y-3" : "p-6 space-y-4";
   };
 
+  // Show welcome back message for logged in users
+  if (user) {
+    return (
+      <Card className={getCardClassName()}>
+        <CardContent className={getContentClassName()}>
+          <div className="text-center space-y-4 animate-in fade-in-50 zoom-in-95 duration-500">
+            <div className="relative mx-auto">
+              {profile?.avatar_url ? (
+                <div className="relative">
+                  <img
+                    src={profile.avatar_url}
+                    alt={profile.display_name || user.email || 'User'}
+                    className="w-16 h-16 mx-auto rounded-full border-2 border-cosmic shadow-lg"
+                  />
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-cosmic rounded-full flex items-center justify-center">
+                    <Sparkles className="w-3 h-3 text-white" />
+                  </div>
+                </div>
+              ) : (
+                <div className="relative">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-cosmic-gradient flex items-center justify-center text-white font-cosmic text-xl shadow-lg">
+                    {profile?.display_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || '✨'}
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                    <Stars className="w-3 h-3 text-white" />
+                  </div>
+                </div>
+              )}
+              <Sparkles className="w-6 h-6 absolute top-0 left-1/2 transform -translate-x-12 text-cosmic/60 animate-pulse" />
+              <Stars className="w-4 h-4 absolute bottom-2 right-1/2 transform translate-x-12 text-primary/40 animate-ping" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient">
+                {t('newsletter.welcome.title')}
+              </h3>
+              <p className="font-mystical text-muted-foreground">
+                {profile?.display_name && (
+                  <span className="block font-semibold text-foreground mb-1">
+                    {profile.display_name}
+                  </span>
+                )}
+                {t('newsletter.welcome.message')}
+              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-cosmic/10 rounded-full">
+                <Stars className="w-4 h-4 text-cosmic" />
+                <span className="font-mystical text-xs text-cosmic font-medium">
+                  {t('newsletter.welcome.status')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   if (isSuccess) {
     return (
       <Card className={getCardClassName()}>
