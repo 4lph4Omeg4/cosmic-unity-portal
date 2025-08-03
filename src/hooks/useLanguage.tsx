@@ -211,6 +211,21 @@ const translations = {
     'nav.profile': 'Profile',
     'nav.logout': 'Logout',
     'nav.cart': 'Cart',
+
+    // Newsletter
+    'newsletter.title': 'Join the Inner Circle',
+    'newsletter.subtitle': 'Receive exclusive content and cosmic wisdom',
+    'newsletter.email.label': 'Email',
+    'newsletter.email.placeholder': 'your@email.com',
+    'newsletter.name.label': 'Name (optional)',
+    'newsletter.name.placeholder': 'Your cosmic name',
+    'newsletter.consent': 'I agree to receive the newsletter and understand I can unsubscribe at any time.',
+    'newsletter.button': 'Enter the Circle',
+    'newsletter.button.loading': 'Connecting to the cosmos...',
+    'newsletter.success.title': 'Welcome to the Inner Circle! 🌀',
+    'newsletter.success.description': 'You have successfully subscribed to our newsletter.',
+    'newsletter.error.incomplete': 'Please fill in your email and accept the privacy policy.',
+    'newsletter.error.general': 'Something went wrong. Please try again.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
