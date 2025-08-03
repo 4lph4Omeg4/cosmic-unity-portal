@@ -99,11 +99,13 @@ const Footer = () => {
                 </a>
               </div>
             </div>
-          </div>
 
-          {/* Newsletter Section */}
-          <div className="max-w-md mx-auto">
-            <NewsletterSignup variant="footer" compact />
+            {/* Newsletter Section */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-md">
+                <NewsletterSignup variant="footer" compact />
+              </div>
+            </div>
           </div>
 
           {/* Bottom Row: Shop, Community, and Contact */}
