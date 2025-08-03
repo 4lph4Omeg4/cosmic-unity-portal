@@ -231,6 +231,48 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               </div>
             )}
 
+            {/* Account Creation Option */}
+            {!compact && !user && (
+              <div className="space-y-3 pt-2 border-t border-border/30">
+                <div className="flex items-start space-x-2">
+                  <Checkbox
+                    id="create-account"
+                    checked={createAccount}
+                    onCheckedChange={(checked) => setCreateAccount(checked as boolean)}
+                    className="mt-0.5"
+                  />
+                  <Label
+                    htmlFor="create-account"
+                    className="font-mystical text-sm text-foreground leading-relaxed cursor-pointer"
+                  >
+                    Ook een portal account aanmaken om in te loggen
+                    <span className="block text-xs text-muted-foreground mt-1">
+                      Krijg toegang tot exclusieve content en je persoonlijke dashboard
+                    </span>
+                  </Label>
+                </div>
+
+                {createAccount && (
+                  <div className="space-y-2 ml-6">
+                    <Label htmlFor="newsletter-password" className="font-mystical text-sm">
+                      Wachtwoord *
+                    </Label>
+                    <Input
+                      id="newsletter-password"
+                      type="password"
+                      placeholder="Je veilige wachtwoord"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="cosmic-input transition-all duration-300 focus:border-cosmic focus:ring-cosmic/20"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Minimaal 6 karakters voor je portal toegang
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="flex items-start space-x-2 pt-2">
               <Checkbox
                 id="newsletter-consent"
