@@ -264,6 +264,12 @@ const translations = {
     'newsletter.trust.unsubscribe': 'Unsubscribe Anytime',
     'newsletter.compact.title': 'Join the Movement 🌀',
     'newsletter.success.message': 'You are now part of the movement. Check your inbox for a special welcome message.',
+    'newsletter.account.create': 'Also create a portal account to log in',
+    'newsletter.account.benefits': 'Get access to exclusive content and your personal dashboard',
+    'newsletter.password.label': 'Password',
+    'newsletter.password.placeholder': 'Your secure password',
+    'newsletter.password.hint': 'Minimum 6 characters for your portal access',
+    'newsletter.error.password': 'Enter a password to create your portal account.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
