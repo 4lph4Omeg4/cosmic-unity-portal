@@ -47,7 +47,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         name: name || undefined,
         consent,
         source: variant as 'footer' | 'homepage' | 'popup',
-        language: 'nl', // You could get this from useLanguage hook
+        language,
       });
 
       if (!result.success) {
