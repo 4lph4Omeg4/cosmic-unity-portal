@@ -30,6 +30,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   const { toast } = useToast();
   const { t, language } = useLanguage();
   const { user, signUp } = useAuth();
+  const { profile } = useProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
