@@ -336,12 +336,15 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               <Checkbox
                 id="newsletter-consent"
                 checked={consent}
-                onCheckedChange={(checked) => setConsent(checked as boolean)}
+                onCheckedChange={(checked) => {
+                  console.log('Consent changed:', checked);
+                  setConsent(checked === true);
+                }}
                 className="mt-0.5"
                 required
               />
-              <Label 
-                htmlFor="newsletter-consent" 
+              <Label
+                htmlFor="newsletter-consent"
                 className="font-mystical text-xs text-muted-foreground leading-relaxed cursor-pointer"
               >
                 {t('newsletter.consent')}{' '}
