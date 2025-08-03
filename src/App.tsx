@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import NewsletterPopup from "@/components/NewsletterPopup";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
@@ -39,6 +40,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <NewsletterPopup delay={20000} exitIntent={true} />
             <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />

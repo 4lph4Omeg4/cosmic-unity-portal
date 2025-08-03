@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -62,19 +63,23 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Main Footer Content */}
         <div className="space-y-12 mb-12">
-          {/* Top Row: Brand Section Only */}
-          <div className="flex justify-center">
+          {/* Top Row: Brand and Newsletter Side by Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Brand Section */}
-            <div className="space-y-6 text-center">
-              <div className="flex items-center justify-center space-x-2">
+            <div className="space-y-6 text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start space-x-2">
                 <div className="w-8 h-8 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
                 <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
               </div>
-              <p className="font-mystical text-muted-foreground text-center">
-                Awakening consciousness through sacred scripture and divine merchandise. 
-                Join the galactic federation of light.
-              </p>
-              <div className="flex space-x-4 justify-center">
+              <div className="space-y-2">
+                <p className="font-mystical text-muted-foreground">
+                  Awakening consciousness through sacred scripture and divine merchandise.
+                </p>
+                <p className="font-mystical text-muted-foreground">
+                  Join the galactic federation of light.
+                </p>
+              </div>
+              <div className="flex space-x-4 justify-center lg:justify-start">
                 <a href="https://www.instagram.com/sh4m4n1ak?igsh=MW55aDZ1cTM4anplOQ==" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-cosmic cosmic-hover">
                   <Instagram className="w-5 h-5" />
                 </a>
@@ -92,6 +97,13 @@ const Footer = () => {
                     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
                   </svg>
                 </a>
+              </div>
+            </div>
+
+            {/* Newsletter Section */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-md">
+                <NewsletterSignup variant="footer" compact />
               </div>
             </div>
           </div>
