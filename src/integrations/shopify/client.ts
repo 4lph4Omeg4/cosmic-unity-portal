@@ -532,10 +532,8 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     const { language: shopifyLanguage, country: shopifyCountry } = getMarketInfo(language);
     console.log(`Using Shopify language: ${shopifyLanguage}, country: ${shopifyCountry}`);
     
-    // Uit de logs blijkt dat er maar 1 blog bestaat: "ego-to-eden" (From Ego to Eden)
-    // Alle talen gebruiken dezelfde blog handle
-    const actualHandle = 'ego-to-eden';
-    console.log(`Using actual blog handle: ${actualHandle} (only blog that exists)`);
+    // Use the provided blog handle instead of forcing 'ego-to-eden'
+    console.log(`Using blog handle: ${blogHandle} as requested`);
 
     // Add timeout and retry logic
     const controller = new AbortController();
@@ -543,7 +541,7 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
 
     const response = await client.request(GET_BLOG_ARTICLES, {
       variables: { 
-        handle: actualHandle, 
+        handle: blogHandle, 
         first: 50,
         language: shopifyLanguage,
         country: shopifyCountry
@@ -554,11 +552,11 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
     console.log('Blog response:', response);
 
     if (!response.data?.blog) {
-      console.warn(`Blog with handle "${actualHandle}" not found`);
+      console.warn(`Blog with handle "${blogHandle}" not found`);
       return [];
     }
 
-    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${actualHandle})`);
+    console.log(`Successfully loaded blog: ${response.data.blog.title} (handle: ${blogHandle})`);
     const allArticles = response.data.blog.articles?.edges?.map((edge: any) => edge.node) || [];
     console.log(`Found ${allArticles.length} total articles in "${response.data.blog.title}" for language: ${shopifyLanguage}`);
     
