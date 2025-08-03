@@ -256,6 +256,8 @@ const translations = {
     'newsletter.trust.privacy': 'Sacred Privacy',
     'newsletter.trust.spam': 'No Spam, Ever',
     'newsletter.trust.unsubscribe': 'Unsubscribe Anytime',
+    'newsletter.compact.title': 'Join the Movement 🌀',
+    'newsletter.success.message': 'You are now part of the movement. Check your inbox for a special welcome message.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
