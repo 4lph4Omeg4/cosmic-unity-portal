@@ -53,6 +53,12 @@ const translations = {
     'newsletter.trust.unsubscribe': 'Altijd Uitschrijven',
     'newsletter.compact.title': 'Sluit je aan bij de Beweging 🌀',
     'newsletter.success.message': 'Je bent nu onderdeel van de beweging. Check je inbox voor een speciale welkomstboodschap.',
+    'newsletter.account.create': 'Ook een portal account aanmaken om in te loggen',
+    'newsletter.account.benefits': 'Krijg toegang tot exclusieve content en je persoonlijke dashboard',
+    'newsletter.password.label': 'Wachtwoord',
+    'newsletter.password.placeholder': 'Je veilige wachtwoord',
+    'newsletter.password.hint': 'Minimaal 6 karakters voor je portal toegang',
+    'newsletter.error.password': 'Voer een wachtwoord in om je portal account aan te maken.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
