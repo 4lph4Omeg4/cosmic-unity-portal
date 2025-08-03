@@ -475,6 +475,12 @@ const translations = {
     'newsletter.trust.unsubscribe': 'Jederzeit Abmelden',
     'newsletter.compact.title': 'Schließe dich der Bewegung an 🌀',
     'newsletter.success.message': 'Du bist jetzt Teil der Bewegung. Überprüfe dein Postfach für eine spezielle Willkommensnachricht.',
+    'newsletter.account.create': 'Auch ein Portal-Konto erstellen um sich anzumelden',
+    'newsletter.account.benefits': 'Erhalte Zugang zu exklusiven Inhalten und deinem persönlichen Dashboard',
+    'newsletter.password.label': 'Passwort',
+    'newsletter.password.placeholder': 'Dein sicheres Passwort',
+    'newsletter.password.hint': 'Mindestens 6 Zeichen für deinen Portal-Zugang',
+    'newsletter.error.password': 'Gib ein Passwort ein, um dein Portal-Konto zu erstellen.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
