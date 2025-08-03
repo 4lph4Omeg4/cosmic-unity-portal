@@ -59,6 +59,9 @@ const translations = {
     'newsletter.password.placeholder': 'Je veilige wachtwoord',
     'newsletter.password.hint': 'Minimaal 6 karakters voor je portal toegang',
     'newsletter.error.password': 'Voer een wachtwoord in om je portal account aan te maken.',
+    'newsletter.welcome.title': 'Welkom Terug!',
+    'newsletter.welcome.message': 'Je bent al onderdeel van de Inner Circle. Dank je voor je steun aan de beweging.',
+    'newsletter.welcome.status': 'Actief lid van de galactische federatie',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
