@@ -218,12 +218,12 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             {!compact && (
               <div className="space-y-2">
                 <Label htmlFor="newsletter-name" className="font-mystical text-sm">
-                  Naam (optioneel)
+                  {t('newsletter.name.label')}
                 </Label>
                 <Input
                   id="newsletter-name"
                   type="text"
-                  placeholder="Je kosmische naam"
+                  placeholder={t('newsletter.name.placeholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="cosmic-input transition-all duration-300 focus:border-cosmic focus:ring-cosmic/20"
