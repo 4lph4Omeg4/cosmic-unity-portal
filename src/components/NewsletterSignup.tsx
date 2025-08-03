@@ -32,7 +32,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !consent) {
       toast({
         title: t('newsletter.error.incomplete'),
@@ -42,10 +42,19 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       return;
     }
 
+    if (createAccount && !password) {
+      toast({
+        title: "Wachtwoord vereist",
+        description: "Voer een wachtwoord in om je portal account aan te maken.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Real API call to newsletter service
     try {
+      // First, subscribe to newsletter
       const result = await subscribeToNewsletter({
         email,
         name: name || undefined,
@@ -56,6 +65,30 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
       if (!result.success) {
         throw new Error(result.error || 'Failed to subscribe');
+      }
+
+      // If user wants to create account and isn't already logged in
+      if (createAccount && !user && password) {
+        const { error: authError } = await signUp(email, password, name || undefined);
+
+        if (authError) {
+          // Newsletter subscription succeeded but account creation failed
+          toast({
+            title: "Nieuwsbrief aanmelding geslaagd",
+            description: `Je bent aangemeld voor de nieuwsbrief, maar account aanmaken mislukte: ${authError.message}`,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Welkom in de Inner Circle! 🌀",
+            description: "Je nieuwsbrief aanmelding en portal account zijn aangemaakt! Check je email voor bevestiging.",
+          });
+        }
+      } else {
+        toast({
+          title: t('newsletter.success.title'),
+          description: t('newsletter.success.description'),
+        });
       }
 
       setIsSuccess(true);
