@@ -155,7 +155,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             )}
             {compact && (
               <h4 className="font-cosmic text-lg font-bold text-cosmic-gradient">
-                Join the Movement 🌀
+                {t('newsletter.compact.title')}
               </h4>
             )}
           </div>
