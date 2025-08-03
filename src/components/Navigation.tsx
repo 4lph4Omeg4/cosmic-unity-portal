@@ -109,8 +109,9 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="lg:hidden">
+          {/* Mobile actions */}
+          <div className="lg:hidden flex items-center gap-2">
+            <Cart />
             <Button
               variant="ghost"
               size="icon"
