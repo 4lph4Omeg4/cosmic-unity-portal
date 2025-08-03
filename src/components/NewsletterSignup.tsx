@@ -245,9 +245,9 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
                     htmlFor="create-account"
                     className="font-mystical text-sm text-foreground leading-relaxed cursor-pointer"
                   >
-                    Ook een portal account aanmaken om in te loggen
+                    {t('newsletter.account.create')}
                     <span className="block text-xs text-muted-foreground mt-1">
-                      Krijg toegang tot exclusieve content en je persoonlijke dashboard
+                      {t('newsletter.account.benefits')}
                     </span>
                   </Label>
                 </div>
