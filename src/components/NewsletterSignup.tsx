@@ -204,8 +204,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
                 htmlFor="newsletter-consent" 
                 className="font-mystical text-xs text-muted-foreground leading-relaxed cursor-pointer"
               >
-                Ik ga akkoord met het ontvangen van de nieuwsbrief en begrijp dat ik me op elk moment kan uitschrijven. 
-                Mijn gegevens worden gebruikt conform het{' '}
+                {t('newsletter.consent')}{' '}
                 <span className="text-cosmic hover:underline">privacybeleid</span>.
               </Label>
             </div>
