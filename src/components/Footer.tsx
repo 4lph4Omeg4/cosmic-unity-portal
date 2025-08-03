@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
