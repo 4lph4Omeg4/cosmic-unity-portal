@@ -255,18 +255,18 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
                 {createAccount && (
                   <div className="space-y-2 ml-6">
                     <Label htmlFor="newsletter-password" className="font-mystical text-sm">
-                      Wachtwoord *
+                      {t('newsletter.password.label')} *
                     </Label>
                     <Input
                       id="newsletter-password"
                       type="password"
-                      placeholder="Je veilige wachtwoord"
+                      placeholder={t('newsletter.password.placeholder')}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="cosmic-input transition-all duration-300 focus:border-cosmic focus:ring-cosmic/20"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Minimaal 6 karakters voor je portal toegang
+                      {t('newsletter.password.hint')}
                     </p>
                   </div>
                 )}
