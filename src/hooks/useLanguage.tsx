@@ -22,6 +22,21 @@ const translations = {
     'nav.profile': 'Profiel',
     'nav.logout': 'Uitloggen',
     'nav.cart': 'Winkelwagen',
+
+    // Newsletter
+    'newsletter.title': 'Sluit je aan bij de Inner Circle',
+    'newsletter.subtitle': 'Ontvang exclusieve content en kosmische wijsheid',
+    'newsletter.email.label': 'E-mail',
+    'newsletter.email.placeholder': 'jouw@email.com',
+    'newsletter.name.label': 'Naam (optioneel)',
+    'newsletter.name.placeholder': 'Je kosmische naam',
+    'newsletter.consent': 'Ik ga akkoord met het ontvangen van de nieuwsbrief en begrijp dat ik me op elk moment kan uitschrijven.',
+    'newsletter.button': 'Treed toe tot de Cirkel',
+    'newsletter.button.loading': 'Verbinding maken met de kosmos...',
+    'newsletter.success.title': 'Welkom in de Inner Circle! 🌀',
+    'newsletter.success.description': 'Je hebt je succesvol aangemeld voor onze nieuwsbrief.',
+    'newsletter.error.incomplete': 'Vul je e-mail in en accepteer het privacybeleid.',
+    'newsletter.error.general': 'Er is iets misgegaan. Probeer het opnieuw.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
