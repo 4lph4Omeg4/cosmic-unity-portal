@@ -122,10 +122,10 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             </div>
             <div className="space-y-2">
               <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient">
-                Welkom in de Inner Circle! 🌀
+                {t('newsletter.success.title')}
               </h3>
               <p className="font-mystical text-muted-foreground">
-                Je bent nu onderdeel van de beweging. Check je inbox voor een speciale welkomstboodschap.
+                {t('newsletter.success.message')}
               </p>
             </div>
           </div>
