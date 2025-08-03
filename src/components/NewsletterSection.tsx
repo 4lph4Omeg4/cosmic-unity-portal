@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star, Sparkles, Stars } from 'lucide-react';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const NewsletterSection = () => {
   return (
