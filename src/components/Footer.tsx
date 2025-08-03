@@ -97,6 +97,11 @@ const Footer = () => {
             </div>
           </div>
 
+          {/* Newsletter Section */}
+          <div className="max-w-md mx-auto">
+            <NewsletterSignup variant="footer" compact />
+          </div>
+
           {/* Bottom Row: Shop, Community, and Contact */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Shop Links */}
