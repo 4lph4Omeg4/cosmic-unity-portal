@@ -273,6 +273,9 @@ const translations = {
     'newsletter.password.placeholder': 'Your secure password',
     'newsletter.password.hint': 'Minimum 6 characters for your portal access',
     'newsletter.error.password': 'Enter a password to create your portal account.',
+    'newsletter.welcome.title': 'Welcome Back!',
+    'newsletter.welcome.message': 'You are already part of the Inner Circle. Thank you for supporting the movement.',
+    'newsletter.welcome.status': 'Active member of the galactic federation',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
