@@ -40,6 +40,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <NewsletterPopup delay={20000} exitIntent={true} />
             <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
