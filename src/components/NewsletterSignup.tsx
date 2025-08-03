@@ -202,7 +202,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
           <div className="space-y-3">
             <div className="space-y-2">
               <Label htmlFor="newsletter-email" className="font-mystical text-sm">
-                E-mail *
+                {t('newsletter.email.label')} *
               </Label>
               <Input
                 id="newsletter-email"
