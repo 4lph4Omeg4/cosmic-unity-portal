@@ -461,6 +461,8 @@ const translations = {
     'newsletter.trust.privacy': 'Heilige Privatsphäre',
     'newsletter.trust.spam': 'Kein Spam, Niemals',
     'newsletter.trust.unsubscribe': 'Jederzeit Abmelden',
+    'newsletter.compact.title': 'Schließe dich der Bewegung an 🌀',
+    'newsletter.success.message': 'Du bist jetzt Teil der Bewegung. Überprüfe dein Postfach für eine spezielle Willkommensnachricht.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
