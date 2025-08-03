@@ -400,6 +400,21 @@ const translations = {
     'nav.profile': 'Profil',
     'nav.logout': 'Abmelden',
     'nav.cart': 'Warenkorb',
+
+    // Newsletter
+    'newsletter.title': 'Tritt dem Inneren Kreis bei',
+    'newsletter.subtitle': 'Erhalte exklusive Inhalte und kosmische Weisheit',
+    'newsletter.email.label': 'E-Mail',
+    'newsletter.email.placeholder': 'deine@email.de',
+    'newsletter.name.label': 'Name (optional)',
+    'newsletter.name.placeholder': 'Dein kosmischer Name',
+    'newsletter.consent': 'Ich stimme dem Erhalt des Newsletters zu und verstehe, dass ich mich jederzeit abmelden kann.',
+    'newsletter.button': 'Tritt dem Kreis bei',
+    'newsletter.button.loading': 'Verbindung zum Kosmos...',
+    'newsletter.success.title': 'Willkommen im Inneren Kreis! 🌀',
+    'newsletter.success.description': 'Du hast dich erfolgreich für unseren Newsletter angemeldet.',
+    'newsletter.error.incomplete': 'Bitte gib deine E-Mail ein und akzeptiere die Datenschutzrichtlinie.',
+    'newsletter.error.general': 'Etwas ist schief gelaufen. Bitte versuche es erneut.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
