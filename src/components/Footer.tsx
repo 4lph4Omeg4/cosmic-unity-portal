@@ -63,8 +63,8 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Main Footer Content */}
         <div className="space-y-12 mb-12">
-          {/* Top Row: Brand Section Only */}
-          <div className="flex justify-center">
+          {/* Top Row: Brand and Newsletter Side by Side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Brand Section */}
             <div className="space-y-6 text-center">
               <div className="flex items-center justify-center space-x-2">
