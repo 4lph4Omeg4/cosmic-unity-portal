@@ -373,7 +373,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         </form>
       </CardContent>
 
-      <style jsx>{`
+      <style>
+        {`
         .confetti-container {
           position: fixed;
           top: 0;
@@ -402,7 +403,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         @keyframes confetti-fall {
           0% {
             top: -10px;
-            left: random(100) * 1%;
+            left: 50%;
             transform: rotateZ(0deg);
           }
           100% {
@@ -419,7 +420,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         .animate-spin-slow {
           animation: spin-slow 3s linear infinite;
         }
-      `}</style>
+        `}
+      </style>
     </Card>
   );
 };
