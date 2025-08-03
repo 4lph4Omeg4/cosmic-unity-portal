@@ -297,7 +297,10 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
                   <Checkbox
                     id="create-account"
                     checked={createAccount}
-                    onCheckedChange={(checked) => setCreateAccount(checked as boolean)}
+                    onCheckedChange={(checked) => {
+                      console.log('Create account changed:', checked);
+                      setCreateAccount(checked === true);
+                    }}
                     className="mt-0.5"
                   />
                   <Label
