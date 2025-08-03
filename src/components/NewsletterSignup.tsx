@@ -69,8 +69,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       }, 3000);
 
       toast({
-        title: "Welkom in de Inner Circle! 🌀",
-        description: "Je hebt je succesvol aangemeld voor onze nieuwsbrief.",
+        title: t('newsletter.success.title'),
+        description: t('newsletter.success.description'),
       });
 
       // Reset form after 3 seconds
