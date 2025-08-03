@@ -339,30 +339,13 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             )}
 
             <div className="flex items-start space-x-2 pt-2">
-              {/* Try Radix checkbox first, fallback to native if needed */}
-              <div className="relative">
-                <Checkbox
-                  id="newsletter-consent"
-                  checked={consent}
-                  onCheckedChange={(checked) => {
-                    console.log('Consent changed:', checked, typeof checked);
-                    setConsent(Boolean(checked));
-                  }}
-                  className="mt-0.5"
-                  required
-                />
-                {/* Native checkbox as backup - hidden but clickable */}
-                <input
-                  type="checkbox"
-                  id="newsletter-consent-native"
-                  checked={consent}
-                  onChange={(e) => {
-                    console.log('Native consent changed:', e.target.checked);
-                    setConsent(e.target.checked);
-                  }}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                />
-              </div>
+              <Checkbox
+                id="newsletter-consent"
+                checked={consent}
+                onCheckedChange={(checked) => setConsent(Boolean(checked))}
+                className="mt-0.5"
+                required
+              />
               <Label
                 htmlFor="newsletter-consent"
                 className="font-mystical text-xs text-muted-foreground leading-relaxed cursor-pointer"
