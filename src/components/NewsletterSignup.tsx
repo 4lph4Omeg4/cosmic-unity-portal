@@ -8,6 +8,7 @@ import { Mail, Stars, Sparkles, CheckCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
 import { subscribeToNewsletter } from '@/services/newsletterService';
 
 interface NewsletterSignupProps {
