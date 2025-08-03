@@ -39,11 +39,21 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
     }
 
     setIsSubmitting(true);
-    
-    // Simulate API call
+
+    // Real API call to newsletter service
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      const result = await subscribeToNewsletter({
+        email,
+        name: name || undefined,
+        consent,
+        source: variant as 'footer' | 'homepage' | 'popup',
+        language: 'nl', // You could get this from useLanguage hook
+      });
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to subscribe');
+      }
+
       setIsSuccess(true);
       
       // Create confetti effect
