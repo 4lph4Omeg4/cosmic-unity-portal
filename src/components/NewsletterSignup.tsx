@@ -340,8 +340,9 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
                 id="newsletter-consent"
                 checked={consent}
                 onCheckedChange={(checked) => {
-                  console.log('Consent changed:', checked);
-                  setConsent(checked === true);
+                  console.log('Consent changed:', checked, typeof checked);
+                  // Radix UI returns boolean or string "indeterminate"
+                  setConsent(Boolean(checked));
                 }}
                 className="mt-0.5"
                 required
