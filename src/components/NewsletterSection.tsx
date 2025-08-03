@@ -40,25 +40,25 @@ const NewsletterSection = () => {
           {/* Features List */}
           <div className="lg:col-span-1 space-y-6">
             <h3 className="font-cosmic text-2xl font-bold text-mystical-gradient mb-6">
-              Sacred Benefits
+              {t('newsletter.benefits.title')}
             </h3>
-            
+
             <div className="space-y-4">
               {[
                 {
                   icon: Star,
-                  title: "Exclusive Wisdom",
-                  description: "Monthly channeled messages and cosmic insights not shared anywhere else"
+                  title: t('newsletter.benefits.wisdom.title'),
+                  description: t('newsletter.benefits.wisdom.desc')
                 },
                 {
                   icon: Sparkles,
-                  title: "Early Access",
-                  description: "Be the first to access new products, collections, and sacred geometry designs"
+                  title: t('newsletter.benefits.access.title'),
+                  description: t('newsletter.benefits.access.desc')
                 },
                 {
                   icon: Stars,
-                  title: "Divine Guidance",
-                  description: "Personalized spiritual practices and meditation techniques for your awakening"
+                  title: t('newsletter.benefits.guidance.title'),
+                  description: t('newsletter.benefits.guidance.desc')
                 }
               ].map((benefit, index) => (
                 <div key={index} className="flex items-start gap-3 group">
