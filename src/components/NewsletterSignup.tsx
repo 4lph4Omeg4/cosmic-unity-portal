@@ -115,6 +115,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         setIsSuccess(false);
         setEmail('');
         setName('');
+        setPassword('');
+        setCreateAccount(true);
         setConsent(false);
       }, 3000);
 
