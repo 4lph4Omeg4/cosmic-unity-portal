@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Mail, Stars, Sparkles, CheckCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
+import { subscribeToNewsletter } from '@/services/newsletterService';
 
 interface NewsletterSignupProps {
   variant?: 'footer' | 'section' | 'popup';
