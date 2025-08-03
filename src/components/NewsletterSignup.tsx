@@ -44,8 +44,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
     if (createAccount && !password) {
       toast({
-        title: "Wachtwoord vereist",
-        description: "Voer een wachtwoord in om je portal account aan te maken.",
+        title: t('newsletter.error.password'),
+        description: t('newsletter.error.password'),
         variant: "destructive",
       });
       return;
