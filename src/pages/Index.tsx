@@ -13,6 +13,7 @@ const Index = () => {
       <HeroSection />
       <FeaturedSection />
       <LatestPosts />
+      <NewsletterSection />
       <Footer />
     </div>
   );
