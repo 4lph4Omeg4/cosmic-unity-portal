@@ -87,20 +87,20 @@ const NewsletterSection = () => {
         {/* Trust Indicators */}
         <div className="mt-16 text-center">
           <p className="font-mystical text-sm text-muted-foreground mb-4">
-            Join over 10,000+ awakening souls worldwide
+            {t('newsletter.trust.members')}
           </p>
           <div className="flex items-center justify-center gap-8 opacity-60">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-cosmic" />
-              <span className="font-mystical text-xs">Sacred Privacy</span>
+              <span className="font-mystical text-xs">{t('newsletter.trust.privacy')}</span>
             </div>
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cosmic" />
-              <span className="font-mystical text-xs">No Spam, Ever</span>
+              <span className="font-mystical text-xs">{t('newsletter.trust.spam')}</span>
             </div>
             <div className="flex items-center gap-2">
               <Stars className="w-4 h-4 text-cosmic" />
-              <span className="font-mystical text-xs">Unsubscribe Anytime</span>
+              <span className="font-mystical text-xs">{t('newsletter.trust.unsubscribe')}</span>
             </div>
           </div>
         </div>
