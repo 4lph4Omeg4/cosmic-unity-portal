@@ -21,6 +21,7 @@ const translations = {
     'nav.login': 'Inloggen',
     'nav.profile': 'Profiel',
     'nav.logout': 'Uitloggen',
+    'nav.cart': 'Winkelwagen',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
@@ -194,6 +195,7 @@ const translations = {
     'nav.login': 'Login',
     'nav.profile': 'Profile',
     'nav.logout': 'Logout',
+    'nav.cart': 'Cart',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
@@ -367,6 +369,7 @@ const translations = {
     'nav.login': 'Anmelden',
     'nav.profile': 'Profil',
     'nav.logout': 'Abmelden',
+    'nav.cart': 'Warenkorb',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
