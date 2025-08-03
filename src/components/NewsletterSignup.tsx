@@ -332,17 +332,17 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               </div>
             )}
 
-            <div className="flex items-start space-x-2 pt-2">
+            <div className="flex items-start space-x-2 pt-2 relative z-10">
               <Checkbox
                 id="newsletter-consent"
                 checked={consent}
                 onCheckedChange={(checked) => setConsent(Boolean(checked))}
-                className="mt-0.5"
+                className="mt-0.5 pointer-events-auto"
                 required
               />
               <Label
                 htmlFor="newsletter-consent"
-                className="font-mystical text-xs text-muted-foreground leading-relaxed cursor-pointer"
+                className="font-mystical text-xs text-muted-foreground leading-relaxed cursor-pointer pointer-events-auto"
               >
                 {t('newsletter.consent')}{' '}
                 <span className="text-cosmic hover:underline">privacybeleid</span>.
@@ -355,7 +355,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
           <Button
             type="submit"
             disabled={isSubmitting || !email || !consent || (createAccount && !password)}
-            className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:hover:shadow-none"
+            className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:hover:shadow-none pointer-events-auto relative z-10"
             size={compact ? "default" : "lg"}
           >
             {isSubmitting ? (
