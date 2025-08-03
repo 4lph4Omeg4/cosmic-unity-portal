@@ -24,6 +24,7 @@ interface BlogArticle {
     altText: string;
   };
   tags: string[];
+  blogHandle?: string; // Add blog handle to determine correct linking
 }
 
 const Blog = () => {
@@ -46,25 +47,36 @@ const Blog = () => {
           return;
         }
 
-        // Eerst alle blogs ophalen om de juiste handle te vinden
-        console.log('Fetching all blogs to find available handles...');
-        const allBlogs = await fetchAllBlogs(language);
-        console.log('All blogs found:', {
-          blogsFound: allBlogs.length,
-          blogs: allBlogs.map(blog => ({ id: blog.id, title: blog.title, handle: blog.handle }))
-        });
-
-        // Gebruik de enige blog die bestaat: ego-to-eden
-        const blogHandle = 'ego-to-eden';
-        console.log(`=== BLOG PAGE: Using the only existing blog handle: ${blogHandle} for language: ${language} ===`);
+        // Fetch articles from both blogs
+        console.log('Fetching articles from both blogs...');
         
-        const fetchedArticles = await fetchBlogArticles(blogHandle, language);
-        console.log('Blog fetch result:', {
-          articlesFound: fetchedArticles.length,
-          articles: fetchedArticles.map(a => ({ title: a.title, handle: a.handle }))
-        });
-
-        setArticles(fetchedArticles.slice(0, 3));
+        const blogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
+        let allArticles: BlogArticle[] = [];
+        
+        for (const blogHandle of blogHandles) {
+          try {
+            console.log(`=== BLOG PAGE: Fetching from blog handle: ${blogHandle} for language: ${language} ===`);
+            const fetchedArticles = await fetchBlogArticles(blogHandle, language);
+            console.log(`Blog ${blogHandle} fetch result:`, {
+              articlesFound: fetchedArticles.length,
+              articles: fetchedArticles.map(a => ({ title: a.title, handle: a.handle }))
+            });
+            
+            // Add blog handle info to articles for correct linking
+            const articlesWithBlogHandle = fetchedArticles.map(article => ({
+              ...article,
+              blogHandle
+            }));
+            
+            allArticles = [...allArticles, ...articlesWithBlogHandle];
+          } catch (error) {
+            console.error(`Error fetching from blog ${blogHandle}:`, error);
+          }
+        }
+        
+        // Sort by publication date (newest first) and take top 6
+        allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+        setArticles(allArticles.slice(0, 6));
       } catch (error) {
         console.error('Error loading articles:', error);
         console.error('Full error:', error);
@@ -232,7 +244,8 @@ const Blog = () => {
                       variant="mystical" 
                       className="w-full group"
                       onClick={() => {
-                        window.location.href = `/blog/ego-to-eden/${article.handle}`;
+                        const blogPath = article.blogHandle || 'ego-to-eden';
+                        window.location.href = `/blog/${blogPath}/${article.handle}`;
                       }}
                     >
                       {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
