@@ -487,6 +487,9 @@ const translations = {
     'newsletter.password.placeholder': 'Dein sicheres Passwort',
     'newsletter.password.hint': 'Mindestens 6 Zeichen für deinen Portal-Zugang',
     'newsletter.error.password': 'Gib ein Passwort ein, um dein Portal-Konto zu erstellen.',
+    'newsletter.welcome.title': 'Willkommen zurück!',
+    'newsletter.welcome.message': 'Du bist bereits Teil des Inneren Kreises. Danke für deine Unterstützung der Bewegung.',
+    'newsletter.welcome.status': 'Aktives Mitglied der galaktischen Föderation',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
