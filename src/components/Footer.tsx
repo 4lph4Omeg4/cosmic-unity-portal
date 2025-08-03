@@ -66,16 +66,20 @@ const Footer = () => {
           {/* Top Row: Brand and Newsletter Side by Side */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Brand Section */}
-            <div className="space-y-6 text-center">
-              <div className="flex items-center justify-center space-x-2">
+            <div className="space-y-6 text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start space-x-2">
                 <div className="w-8 h-8 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
                 <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
               </div>
-              <p className="font-mystical text-muted-foreground text-center">
-                Awakening consciousness through sacred scripture and divine merchandise. 
-                Join the galactic federation of light.
-              </p>
-              <div className="flex space-x-4 justify-center">
+              <div className="space-y-2">
+                <p className="font-mystical text-muted-foreground">
+                  Awakening consciousness through sacred scripture and divine merchandise.
+                </p>
+                <p className="font-mystical text-muted-foreground">
+                  Join the galactic federation of light.
+                </p>
+              </div>
+              <div className="flex space-x-4 justify-center lg:justify-start">
                 <a href="https://www.instagram.com/sh4m4n1ak?igsh=MW55aDZ1cTM4anplOQ==" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-cosmic cosmic-hover">
                   <Instagram className="w-5 h-5" />
                 </a>
