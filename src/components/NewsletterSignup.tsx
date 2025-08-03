@@ -31,8 +31,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
     
     if (!email || !consent) {
       toast({
-        title: "Incomplete form",
-        description: "Please fill in your email and accept the privacy policy.",
+        title: t('newsletter.error.incomplete'),
+        description: t('newsletter.error.incomplete'),
         variant: "destructive",
       });
       return;
