@@ -35,10 +35,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log('Form submit attempt:', { email, consent, createAccount, password });
-
     if (!email || !consent) {
-      console.log('Form validation failed:', { email: !!email, consent });
       toast({
         title: t('newsletter.error.incomplete'),
         description: t('newsletter.error.incomplete'),
