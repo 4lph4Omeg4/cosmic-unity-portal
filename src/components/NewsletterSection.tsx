@@ -22,17 +22,15 @@ const NewsletterSection = () => {
           </div>
           
           <h2 className="font-cosmic text-4xl md:text-5xl font-bold text-cosmic-gradient">
-            Enter the Inner Circle
+            {t('newsletter.section.title')}
           </h2>
-          
+
           <div className="max-w-3xl mx-auto space-y-4">
             <p className="font-mystical text-xl text-muted-foreground leading-relaxed">
-              Transcend the ordinary and join thousands of awakening souls on a journey 
-              toward cosmic consciousness and divine wisdom.
+              {t('newsletter.section.subtitle')}
             </p>
             <p className="font-mystical text-lg text-muted-foreground/80">
-              Receive exclusive access to sacred knowledge, early product drops, and transmissions 
-              from the galactic federation. This isn't just a newsletter—it's your gateway to enlightenment.
+              {t('newsletter.section.description')}
             </p>
           </div>
         </div>
