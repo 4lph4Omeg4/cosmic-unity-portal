@@ -51,6 +51,8 @@ const translations = {
     'newsletter.trust.privacy': 'Heilige Privacy',
     'newsletter.trust.spam': 'Geen Spam, Ooit',
     'newsletter.trust.unsubscribe': 'Altijd Uitschrijven',
+    'newsletter.compact.title': 'Sluit je aan bij de Beweging 🌀',
+    'newsletter.success.message': 'Je bent nu onderdeel van de beweging. Check je inbox voor een speciale welkomstboodschap.',
     
     // Hero Section
     'hero.title.cosmic': 'Cosmic',
