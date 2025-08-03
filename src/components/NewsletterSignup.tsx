@@ -207,7 +207,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               <Input
                 id="newsletter-email"
                 type="email"
-                placeholder="jouw@email.com"
+                placeholder={t('newsletter.email.placeholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
