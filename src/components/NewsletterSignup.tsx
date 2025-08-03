@@ -356,6 +356,13 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             </div>
           </div>
 
+          {/* Debug info - remove in production */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded">
+              Email: {email || 'empty'} | Consent: {consent.toString()} | CreateAccount: {createAccount.toString()} | Password: {password || 'empty'}
+            </div>
+          )}
+
           <Button
             type="submit"
             disabled={isSubmitting || !email || !consent || (createAccount && !password)}
