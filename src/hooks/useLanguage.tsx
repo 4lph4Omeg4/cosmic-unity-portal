@@ -218,6 +218,36 @@ const translations = {
     'community.errorDeleting': 'Fout bij verwijderen',
     'community.errorDeleteMessage': 'Er ging iets mis bij het verwijderen van je post. Probeer het opnieuw.',
 
+    // Unity Page
+    'unity.title': 'Eenheid',
+    'unity.subtitle': 'Gezien door het Enkele Oog',
+    'unity.description': 'Ontdek de verbondenheid van alle dingen. Berichten over kosmische eenheid, universele liefde en het zien door het oog van waarheid.',
+    'unity.readArticle': 'Lees Volledig Artikel',
+    'unity.noArticlesTitle': 'Geen artikelen gevonden',
+    'unity.noArticlesDescription': 'De berichten over eenheid en verbondenheid zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten door het enkele oog van waarheid.',
+
+    // Ego to Eden Page
+    'egoToEden.title': 'Van Ego naar Eden',
+    'egoToEden.description': 'Een spirituele reis van ontwaking. Transformeer jouw innerlijke wereld en ontdek de weg terug naar je oorspronkelijke paradijs.',
+    'egoToEden.readArticle': 'Lees Volledig Artikel',
+    'egoToEden.noArticlesTitle': 'Geen artikelen gevonden',
+    'egoToEden.noArticlesDescription': 'De spirituele berichten uit "From Ego to Eden" zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten op je reis naar ontwaking.',
+
+    // Collection Page
+    'collection.notFoundTitle': 'Collectie niet gevonden',
+    'collection.notFoundDescription': 'De gevraagde collectie bestaat niet.',
+    'collection.loadErrorTitle': 'Fout bij laden',
+    'collection.loadErrorDescription': 'Collectie kon niet worden geladen.',
+    'collection.addedToCart': 'Toegevoegd aan winkelwagen',
+    'collection.addErrorTitle': 'Fout bij toevoegen',
+    'collection.addErrorDescription': 'Product kon niet worden toegevoegd aan de winkelwagen.',
+    'collection.loading': 'Collectie laden...',
+    'collection.backToShop': 'Terug naar winkel',
+    'collection.view': 'Bekijk',
+    'collection.noProductsTitle': 'Geen producten beschikbaar',
+    'collection.noProductsDescription': 'Deze collectie bevat momenteel geen producten. Keer binnenkort terug voor nieuwe items.',
+    'collection.viewOtherCollections': 'Bekijk andere collecties',
+
     // Common
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
@@ -432,6 +462,36 @@ const translations = {
     'community.errorDeleting': 'Error deleting',
     'community.errorDeleteMessage': 'Something went wrong while deleting your post. Please try again.',
 
+    // Unity Page
+    'unity.title': 'Unity',
+    'unity.subtitle': 'Seen Through the Single Eye',
+    'unity.description': 'Discover the interconnectedness of all things. Messages about cosmic unity, universal love and seeing through the eye of truth.',
+    'unity.readArticle': 'Read Full Article',
+    'unity.noArticlesTitle': 'No Articles Found',
+    'unity.noArticlesDescription': 'The messages about unity and connection are still on their way. Return soon for new insights through the single eye of truth.',
+
+    // Ego to Eden Page
+    'egoToEden.title': 'From Ego to Eden',
+    'egoToEden.description': 'A spiritual journey of awakening. Transform your inner world and discover the way back to your original paradise.',
+    'egoToEden.readArticle': 'Read Full Article',
+    'egoToEden.noArticlesTitle': 'No Articles Found',
+    'egoToEden.noArticlesDescription': 'The spiritual messages from "From Ego to Eden" are still on their way. Return soon for new insights on your journey to awakening.',
+
+    // Collection Page
+    'collection.notFoundTitle': 'Collection Not Found',
+    'collection.notFoundDescription': 'The requested collection does not exist.',
+    'collection.loadErrorTitle': 'Loading Error',
+    'collection.loadErrorDescription': 'Collection could not be loaded.',
+    'collection.addedToCart': 'Added to Cart',
+    'collection.addErrorTitle': 'Error Adding',
+    'collection.addErrorDescription': 'Product could not be added to cart.',
+    'collection.loading': 'Loading collection...',
+    'collection.backToShop': 'Back to Shop',
+    'collection.view': 'View',
+    'collection.noProductsTitle': 'No Products Available',
+    'collection.noProductsDescription': 'This collection currently contains no products. Return soon for new items.',
+    'collection.viewOtherCollections': 'View Other Collections',
+
     // Common
     'common.loading': 'Loading...',
     'common.cosmic': 'Cosmic',
@@ -645,6 +705,36 @@ const translations = {
     'community.postDeletedMessage': 'Ihr Beitrag wurde erfolgreich gelöscht.',
     'community.errorDeleting': 'Fehler beim Löschen',
     'community.errorDeleteMessage': 'Beim Löschen Ihres Beitrags ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+
+    // Unity Page
+    'unity.title': 'Einheit',
+    'unity.subtitle': 'Durch das Eine Auge gesehen',
+    'unity.description': 'Entdecke die Verbundenheit aller Dinge. Botschaften über kosmische Einheit, universelle Liebe und das Sehen durch das Auge der Wahrheit.',
+    'unity.readArticle': 'Vollständigen Artikel lesen',
+    'unity.noArticlesTitle': 'Keine Artikel gefunden',
+    'unity.noArticlesDescription': 'Die Botschaften über Einheit und Verbundenheit sind noch unterwegs. Kehre bald zurück für neue Erkenntnisse durch das eine Auge der Wahrheit.',
+
+    // Ego to Eden Page
+    'egoToEden.title': 'Vom Ego zu Eden',
+    'egoToEden.description': 'Eine spirituelle Reise des Erwachens. Verwandle deine innere Welt und entdecke den Weg zurück zu deinem ursprünglichen Paradies.',
+    'egoToEden.readArticle': 'Vollständigen Artikel lesen',
+    'egoToEden.noArticlesTitle': 'Keine Artikel gefunden',
+    'egoToEden.noArticlesDescription': 'Die spirituellen Botschaften aus "From Ego to Eden" sind noch unterwegs. Kehre bald zurück für neue Erkenntnisse auf deiner Reise zum Erwachen.',
+
+    // Collection Page
+    'collection.notFoundTitle': 'Kollektion nicht gefunden',
+    'collection.notFoundDescription': 'Die angeforderte Kollektion existiert nicht.',
+    'collection.loadErrorTitle': 'Ladenfehler',
+    'collection.loadErrorDescription': 'Kollektion konnte nicht geladen werden.',
+    'collection.addedToCart': 'Zum Warenkorb hinzugefügt',
+    'collection.addErrorTitle': 'Fehler beim Hinzufügen',
+    'collection.addErrorDescription': 'Produkt konnte nicht zum Warenkorb hinzugefügt werden.',
+    'collection.loading': 'Kollektion laden...',
+    'collection.backToShop': 'Zurück zum Shop',
+    'collection.view': 'Ansehen',
+    'collection.noProductsTitle': 'Keine Produkte verfügbar',
+    'collection.noProductsDescription': 'Diese Kollektion enthält derzeit keine Produkte. Kehre bald zurück für neue Artikel.',
+    'collection.viewOtherCollections': 'Andere Kollektionen ansehen',
 
     // Common
     'common.loading': 'Laden...',

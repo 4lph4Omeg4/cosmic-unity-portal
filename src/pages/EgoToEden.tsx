@@ -29,7 +29,7 @@ interface BlogArticle {
 
 const EgoToEden = () => {
   const navigate = useNavigate();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -102,13 +102,11 @@ const EgoToEden = () => {
             </div>
             
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-cosmic-gradient">From Ego</span>{' '}
-              <span className="text-mystical-gradient">to Eden</span>
+              <span className="text-cosmic-gradient">{t('egoToEden.title')}</span>
             </h1>
             
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-              Een spirituele reis van ontwaking. Transformeer jouw innerlijke wereld en 
-              ontdek de weg terug naar je oorspronkelijke paradijs.
+              {t('egoToEden.description')}
             </p>
           </div>
 
@@ -157,7 +155,7 @@ const EgoToEden = () => {
                         navigate(`/blog/ego-to-eden/${article.handle}`);
                       }}
                     >
-                      {language === 'en' ? 'Read Full Article' : language === 'de' ? 'Vollständigen Artikel lesen' : 'Lees Volledig Artikel'}
+                      {t('egoToEden.readArticle')}
                       <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </CardContent>
@@ -170,11 +168,10 @@ const EgoToEden = () => {
                 <BookOpen className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-                Geen artikelen gevonden
+                {t('egoToEden.noArticlesTitle')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                De spirituele berichten uit "From Ego to Eden" zijn nog onderweg. 
-                Keer binnenkort terug voor nieuwe inzichten op je reis naar ontwaking.
+                {t('egoToEden.noArticlesDescription')}
               </p>
             </div>
           )}

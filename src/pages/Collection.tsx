@@ -84,17 +84,17 @@ const Collection = () => {
         if (collectionData) {
           setCollection(collectionData);
         } else {
-          toast({
-            title: "Collectie niet gevonden",
-            description: "De gevraagde collectie bestaat niet.",
-            variant: "destructive",
-          });
+        toast({
+          title: t('collection.notFoundTitle'),
+          description: t('collection.notFoundDescription'),
+          variant: "destructive",
+        });
         }
       } catch (error) {
         console.error('Error loading collection:', error);
         toast({
-          title: "Fout bij laden",
-          description: "Collectie kon niet worden geladen.",
+          title: t('collection.loadErrorTitle'),
+          description: t('collection.loadErrorDescription'),
           variant: "destructive",
         });
       } finally {
@@ -123,14 +123,14 @@ const Collection = () => {
       });
 
       toast({
-        title: "Toegevoegd aan winkelwagen",
+        title: t('collection.addedToCart'),
         description: `${product.title} - ${firstVariant.title}`,
       });
     } catch (error) {
       console.error('Error adding to cart:', error);
       toast({
-        title: "Fout bij toevoegen",
-        description: "Product kon niet worden toegevoegd aan de winkelwagen.",
+        title: t('collection.addErrorTitle'),
+        description: t('collection.addErrorDescription'),
         variant: "destructive",
       });
     }
@@ -150,7 +150,7 @@ const Collection = () => {
         <main className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="animate-cosmic-pulse">Collectie laden...</div>
+              <div className="animate-cosmic-pulse">{t('collection.loading')}</div>
             </div>
           </div>
         </main>
@@ -167,11 +167,11 @@ const Collection = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="font-cosmic text-3xl font-bold text-cosmic-gradient mb-6">
-                Collectie niet gevonden
+                {t('collection.notFoundTitle')}
               </h1>
               <Button onClick={() => navigate('/shop')} variant="mystical">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Terug naar winkel
+                {t('collection.backToShop')}
               </Button>
             </div>
           </div>
@@ -194,7 +194,7 @@ const Collection = () => {
             className="mb-8 cosmic-hover"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Terug naar winkel
+            {t('collection.backToShop')}
           </Button>
 
           {/* Collection Header */}
@@ -261,7 +261,7 @@ const Collection = () => {
                         onClick={() => navigate(`/product/${product.handle}`)}
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        Bekijk
+                        {t('collection.view')}
                       </Button>
                       {product.variants?.edges.length && product.variants.edges[0].node.availableForSale && (
                         <Button 
@@ -284,13 +284,13 @@ const Collection = () => {
                 <Star className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-                Geen producten beschikbaar
+                {t('collection.noProductsTitle')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto mb-6">
-                Deze collectie bevat momenteel geen producten. Keer binnenkort terug voor nieuwe items.
+                {t('collection.noProductsDescription')}
               </p>
               <Button onClick={() => navigate('/shop')} variant="mystical">
-                Bekijk andere collecties
+                {t('collection.viewOtherCollections')}
               </Button>
             </div>
           )}
