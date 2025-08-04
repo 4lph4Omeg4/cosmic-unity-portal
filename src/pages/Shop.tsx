@@ -190,8 +190,8 @@ const Shop = () => {
       if (!variantId || variantId.includes('_variant')) {
         console.error('Invalid variant ID:', variantId);
         toast({
-          title: "Fout bij toevoegen",
-          description: "Dit product kan momenteel niet worden toegevoegd aan de winkelwagen.",
+          title: t('shop.errorAdding'),
+          description: t('shop.errorAddingProduct'),
           variant: "destructive",
         });
         return;
@@ -296,8 +296,8 @@ const Shop = () => {
               <h2 className="font-cosmic text-3xl font-bold text-center mb-12">
                 <span className="text-mystical-gradient">
                   {selectedCollection 
-                    ? collections.find(c => c.handle === selectedCollection)?.title || 'Producten'
-                    : 'Alle Producten'
+                    ? collections.find(c => c.handle === selectedCollection)?.title || t('shop.products')
+                    : t('shop.allProducts')
                   }
                 </span>
               </h2>
@@ -369,7 +369,7 @@ const Shop = () => {
                 {t('shop.noProducts')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.
+                {t('shop.noProductsDescription')}
               </p>
             </div>
           )}
