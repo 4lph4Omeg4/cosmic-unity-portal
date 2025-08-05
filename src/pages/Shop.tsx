@@ -369,7 +369,12 @@ const Shop = () => {
                 {t('shop.noProducts')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.
+                {language === 'en'
+                  ? 'The cosmic merchandise is on its way. Return soon for new items.'
+                  : language === 'de'
+                  ? 'Die kosmische Ware ist unterwegs. Kehren Sie bald für neue Artikel zurück.'
+                  : 'De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.'
+                }
               </p>
             </div>
           )}
