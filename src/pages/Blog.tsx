@@ -185,8 +185,7 @@ const Blog = () => {
                   variant="cosmic"
                   className="w-full group"
                   onClick={() => {
-                    const blogHandle = language === 'en' ? 'unity-seen-through-the-single-eye' : language === 'de' ? 'einheit-gesehen-durch-das-einzelne-auge' : 'eenheid-gezien-door-het-enkele-oog';
-                    window.location.href = `/${blogHandle}`;
+                    window.location.href = `/eenheid-gezien-door-het-enkele-oog`;
                   }}
                 >
                   {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
