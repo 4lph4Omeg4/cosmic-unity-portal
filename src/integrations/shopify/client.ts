@@ -57,6 +57,7 @@ export const GET_COLLECTIONS = `
               node {
                 id
                 title
+                description
                 handle
                 productType
                 tags
@@ -66,7 +67,7 @@ export const GET_COLLECTIONS = `
                     currencyCode
                   }
                 }
-                variants(first: 1) {
+                variants(first: 10) {
                   edges {
                     node {
                       id
@@ -76,6 +77,10 @@ export const GET_COLLECTIONS = `
                         currencyCode
                       }
                       availableForSale
+                      selectedOptions {
+                        name
+                        value
+                      }
                     }
                   }
                 }
@@ -86,6 +91,14 @@ export const GET_COLLECTIONS = `
                       altText
                     }
                   }
+                }
+                metafields(identifiers: [
+                  {namespace: "translation", key: "title"}
+                  {namespace: "translation", key: "description"}
+                ]) {
+                  key
+                  value
+                  namespace
                 }
               }
             }

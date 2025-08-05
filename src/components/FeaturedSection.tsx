@@ -22,10 +22,12 @@ interface ShopifyProduct {
     edges: Array<{
       node: {
         id: string;
+        title: string;
         price: {
           amount: string;
           currencyCode: string;
         };
+        availableForSale: boolean;
       };
     }>;
   };
@@ -97,6 +99,26 @@ const FeaturedSection = () => {
     loadDigitalProducts();
   }, [language]);
 
+  // Helper function to get language-specific variant
+  const getLanguageVariant = (product: ShopifyProduct, language: string) => {
+    const languageMap = {
+      'nl': ['NLD', 'Nederlands', 'Dutch'],
+      'en': ['ENG', 'Engels', 'English'], 
+      'de': ['DEU', 'Deutsch', 'German']
+    };
+    
+    const languageKeys = languageMap[language as keyof typeof languageMap] || languageMap['en'];
+    
+    // Find variant that matches the current language
+    const matchingVariant = product.variants?.edges?.find(edge => 
+      languageKeys.some(key => 
+        edge.node.title.toUpperCase().includes(key.toUpperCase())
+      )
+    );
+    
+    return matchingVariant?.node || product.variants?.edges?.[0]?.node;
+  };
+
   const formatPrice = (amount: string, currencyCode: string) => {
     return new Intl.NumberFormat('nl-NL', {
       style: 'currency',
@@ -155,7 +177,8 @@ const FeaturedSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {digitalProducts.map((product) => {
               const productImage = product.images?.edges?.[0]?.node?.url || '/placeholder.svg';
-              const productPrice = product.variants?.edges?.[0]?.node?.price;
+              const languageVariant = getLanguageVariant(product, language);
+              const productPrice = languageVariant?.price;
               
               return (
                 <Card key={product.id} className="cosmic-hover group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm h-full flex flex-col">
