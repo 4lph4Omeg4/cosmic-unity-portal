@@ -124,6 +124,7 @@ const Navigation = () => {
 
           {/* Mobile actions */}
           <div className="lg:hidden flex items-center gap-2">
+            <LanguageSelector />
             <Cart />
             <Button
               variant="ghost"
