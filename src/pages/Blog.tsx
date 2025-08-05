@@ -47,10 +47,23 @@ const Blog = () => {
           return;
         }
 
-        // Fetch articles from both blogs
-        console.log('Fetching articles from both blogs...');
-        
-        const blogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
+        // Fetch articles from blogs based on language
+        console.log('Fetching articles from blogs...');
+
+        // Define blog handles based on language
+        const getBlogHandles = (language: string) => {
+          switch (language) {
+            case 'en':
+              return ['ego-to-eden', 'unity-seen-through-the-single-eye', 'cosmic-unity'];
+            case 'de':
+              return ['ego-zu-eden', 'einheit-gesehen-durch-das-einzelne-auge', 'kosmische-einheit'];
+            case 'nl':
+            default:
+              return ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
+          }
+        };
+
+        const blogHandles = getBlogHandles(language);
         let allArticles: BlogArticle[] = [];
         
         for (const blogHandle of blogHandles) {
