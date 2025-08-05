@@ -295,9 +295,9 @@ const Shop = () => {
             <div>
               <h2 className="font-cosmic text-3xl font-bold text-center mb-12">
                 <span className="text-mystical-gradient">
-                  {selectedCollection 
-                    ? collections.find(c => c.handle === selectedCollection)?.title || 'Producten'
-                    : 'Alle Producten'
+                  {selectedCollection
+                    ? collections.find(c => c.handle === selectedCollection)?.title || (language === 'en' ? 'Products' : language === 'de' ? 'Produkte' : 'Producten')
+                    : (language === 'en' ? 'All Products' : language === 'de' ? 'Alle Produkte' : 'Alle Producten')
                   }
                 </span>
               </h2>
