@@ -164,11 +164,12 @@ const Blog = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="mystical" 
+                <Button
+                  variant="mystical"
                   className="w-full group"
                   onClick={() => {
-                    window.location.href = `/ego-to-eden`;
+                    const blogHandle = language === 'en' ? 'ego-to-eden' : language === 'de' ? 'ego-zu-eden' : 'ego-to-eden';
+                    window.location.href = `/${blogHandle}`;
                   }}
                 >
                   {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
