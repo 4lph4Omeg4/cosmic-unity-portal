@@ -587,7 +587,7 @@ export const fetchShopPolicies = async (language: string = 'nl') => {
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'NL', country: 'NL' }; // Default to Dutch
+          return { language: 'EN', country: 'US' }; // Default to English
       }
     };
     
