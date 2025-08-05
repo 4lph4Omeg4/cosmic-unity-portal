@@ -190,8 +190,8 @@ const Shop = () => {
       if (!variantId || variantId.includes('_variant')) {
         console.error('Invalid variant ID:', variantId);
         toast({
-          title: "Fout bij toevoegen",
-          description: "Dit product kan momenteel niet worden toegevoegd aan de winkelwagen.",
+          title: t('shop.errorAdding'),
+          description: t('shop.errorMessage'),
           variant: "destructive",
         });
         return;
