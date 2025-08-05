@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Star, Download, Book } from 'lucide-react';
 import { fetchCollections } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getLocalizedProductContent } from '@/utils/contentLocalization';
 
 interface ShopifyProduct {
   id: string;
@@ -180,15 +181,22 @@ const FeaturedSection = () => {
               const languageVariant = getLanguageVariant(product, language);
               const productPrice = languageVariant?.price;
               
+              // Get localized content
+              const localizedContent = getLocalizedProductContent(
+                product.handle, 
+                language, 
+                { title: product.title, description: product.description }
+              );
+              
               return (
                 <Card key={product.id} className="cosmic-hover group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm h-full flex flex-col">
                   <CardHeader className="relative p-0">
                     <div className="aspect-square bg-gradient-to-br from-cosmic/20 to-secondary/20 rounded-t-lg overflow-hidden relative">
-                      <img
-                        src={productImage}
-                        alt={product.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                       <img
+                         src={productImage}
+                         alt={localizedContent.title}
+                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                       />
                       <div className="absolute top-3 left-3">
                         <Badge variant="secondary" className="bg-energy-gradient text-white shadow-lg">
                           {t('products.digital')}
@@ -201,12 +209,12 @@ const FeaturedSection = () => {
                   </CardHeader>
                   
                   <CardContent className="flex-1 p-6">
-                    <CardTitle className="font-mystical text-lg mb-3 group-hover:text-cosmic transition-colors line-clamp-2">
-                      {product.title}
-                    </CardTitle>
-                    <CardDescription className="font-mystical text-sm text-muted-foreground mb-4 line-clamp-3">
-                      {product.description}
-                    </CardDescription>
+                     <CardTitle className="font-mystical text-lg mb-3 group-hover:text-cosmic transition-colors line-clamp-2">
+                       {localizedContent.title}
+                     </CardTitle>
+                     <CardDescription className="font-mystical text-sm text-muted-foreground mb-4 line-clamp-3">
+                       {localizedContent.description}
+                     </CardDescription>
                     <div className="mt-auto space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="font-cosmic text-2xl font-bold text-cosmic-gradient">

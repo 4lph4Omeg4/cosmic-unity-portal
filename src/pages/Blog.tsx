@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import { fetchBlogArticles, fetchAllBlogs, testConnection } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getLocalizedBlogContent } from '@/utils/contentLocalization';
 
 interface BlogArticle {
   id: string;

@@ -9,6 +9,7 @@ import { Star, Filter, Grid, List, ShoppingCart, ExternalLink, Eye } from 'lucid
 import { fetchCollections, fetchProducts, createCheckout } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getLocalizedProductContent, getLocalizedCollectionContent } from '@/utils/contentLocalization';
 
 interface ShopifyCollection {
   id: string;
@@ -303,13 +304,21 @@ const Shop = () => {
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product) => {
+                  // Get localized content
+                  const localizedContent = getLocalizedProductContent(
+                    product.handle, 
+                    language, 
+                    { title: product.title, description: product.description }
+                  );
+                  
+                  return (
                   <Card key={product.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
                     <div className="aspect-square overflow-hidden rounded-t-lg">
                       {product.images.edges.length > 0 ? (
                         <img
                           src={product.images.edges[0].node.url}
-                          alt={product.images.edges[0].node.altText || product.title}
+                          alt={product.images.edges[0].node.altText || localizedContent.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (
@@ -321,7 +330,7 @@ const Shop = () => {
                     
                     <CardHeader>
                       <CardTitle className="font-cosmic text-lg font-bold text-cosmic-gradient line-clamp-2">
-                        {product.title}
+                        {localizedContent.title}
                       </CardTitle>
                       
                       <div className="text-lg font-bold text-mystical-gradient">
@@ -354,7 +363,8 @@ const Shop = () => {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
