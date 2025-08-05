@@ -67,7 +67,7 @@ const Cart: React.FC<CartProps> = ({
             <div className="text-center py-12">
               <ShoppingCart className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
               <p className="font-mystical text-muted-foreground">
-                Je winkelwagen is leeg
+                {language === 'en' ? 'Your cart is empty' : language === 'de' ? 'Ihr Warenkorb ist leer' : 'Je winkelwagen is leeg'}
               </p>
             </div>
           ) : (
