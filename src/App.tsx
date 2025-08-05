@@ -56,6 +56,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/ego-to-eden" element={<EgoToEden />} />
               <Route path="/unity" element={<Unity />} />
+              <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
               <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
