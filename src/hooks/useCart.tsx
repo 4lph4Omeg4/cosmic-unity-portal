@@ -85,7 +85,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getCheckoutUrl = (shopifyDomain: string) => {
-    const cartItems = items.map(item => `${item.variantId}:${item.quantity}`).join(',');
+    // Convert Shopify GID variant IDs to the numeric format needed for cart URLs
+    const cartItems = items.map(item => {
+      // Extract numeric ID from Shopify GID format if present
+      const variantId = item.variantId.includes('gid://')
+        ? item.variantId.split('/').pop()
+        : item.variantId;
+      return `${variantId}:${item.quantity}`;
+    }).join(',');
     return `https://${shopifyDomain}/cart/${cartItems}`;
   };
 
