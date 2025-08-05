@@ -243,6 +243,12 @@ const translations = {
     'friends.chosenOne': 'Uitverkorene',
     'friends.showMore': 'Meer tonen',
     'friends.showLess': 'Minder tonen',
+    
+    // Products
+    'products.digital': 'Digitaal',
+    'products.priceOnRequest': 'Prijs op aanvraag',
+    'products.instantDownload': 'Direct Download',
+    'products.view': 'Bekijk',
 
     // Unity Page
     'unity.title': 'Eenheid',
@@ -513,6 +519,12 @@ const translations = {
     'friends.chosenOne': 'Chosen One',
     'friends.showMore': 'Show more',
     'friends.showLess': 'Show less',
+    
+    // Products
+    'products.digital': 'Digital',
+    'products.priceOnRequest': 'Price on request',
+    'products.instantDownload': 'Instant Download',
+    'products.view': 'View',
 
     // Unity Page
     'unity.title': 'Unity',
@@ -783,6 +795,12 @@ const translations = {
     'friends.chosenOne': 'Auserwählter',
     'friends.showMore': 'Mehr anzeigen',
     'friends.showLess': 'Weniger anzeigen',
+    
+    // Products
+    'products.digital': 'Digital',
+    'products.priceOnRequest': 'Preis auf Anfrage',
+    'products.instantDownload': 'Sofortiger Download',
+    'products.view': 'Ansehen',
 
     // Unity Page
     'unity.title': 'Einheit',

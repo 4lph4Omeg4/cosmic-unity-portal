@@ -168,7 +168,7 @@ const FeaturedSection = () => {
                       />
                       <div className="absolute top-3 left-3">
                         <Badge variant="secondary" className="bg-energy-gradient text-white shadow-lg">
-                          Digital
+                          {t('products.digital')}
                         </Badge>
                       </div>
                       <div className="absolute top-3 right-3 w-8 h-8 bg-cosmic/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -187,11 +187,11 @@ const FeaturedSection = () => {
                     <div className="mt-auto space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="font-cosmic text-2xl font-bold text-cosmic-gradient">
-                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : 'Prijs op aanvraag'}
+                          {productPrice ? formatPrice(productPrice.amount, productPrice.currencyCode) : t('products.priceOnRequest')}
                         </span>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Download className="w-3 h-3" />
-                          <span>Instant Download</span>
+                          <span>{t('products.instantDownload')}</span>
                         </div>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ const FeaturedSection = () => {
                       onClick={() => window.open(`/product/${product.handle}`, '_blank')}
                     >
                       <Book className="w-4 h-4 mr-2" />
-                      Bekijk
+                      {t('products.view')}
                       <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                     </Button>
                   </CardFooter>

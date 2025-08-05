@@ -103,9 +103,6 @@ const FriendsList = () => {
                     <p className="font-mystical text-sm font-medium truncate w-full">
                       {friend.display_name || t('friends.noName')}
                     </p>
-                    <Badge variant="cosmic" className="text-xs mt-1">
-                      {t('friends.chosenOne')}
-                    </Badge>
                   </div>
                 </div>
               ))}
