@@ -47,38 +47,17 @@ const Blog = () => {
           return;
         }
 
-        // Fetch articles from blogs based on language
+        // Fetch articles from existing blog handles with language context
         console.log('Fetching articles from blogs...');
 
-        // Define blog handles based on language
-        const getBlogHandles = (language: string) => {
-          switch (language) {
-            case 'en':
-              return ['ego-to-eden', 'unity-seen-through-the-single-eye', 'cosmic-unity'];
-            case 'de':
-              return ['ego-zu-eden', 'einheit-gesehen-durch-das-einzelne-auge', 'kosmische-einheit'];
-            case 'nl':
-            default:
-              return ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
-          }
-        };
-
-        const blogHandles = getBlogHandles(language);
+        // Use existing Dutch blog handles but pass language for content translation
+        const blogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
         let allArticles: BlogArticle[] = [];
-        
+
         for (const blogHandle of blogHandles) {
           try {
             console.log(`=== BLOG PAGE: Fetching from blog handle: ${blogHandle} for language: ${language} ===`);
-            let fetchedArticles = await fetchBlogArticles(blogHandle, language);
-
-            // If no articles found and not using Dutch, try fallback to Dutch blogs
-            if (fetchedArticles.length === 0 && language !== 'nl') {
-              console.log(`No articles found for ${blogHandle} in ${language}, trying Dutch fallback...`);
-              const dutchBlogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
-              const fallbackHandle = dutchBlogHandles.find(handle => handle.includes(blogHandle.split('-')[0])) || dutchBlogHandles[0];
-              console.log(`Trying fallback blog handle: ${fallbackHandle}`);
-              fetchedArticles = await fetchBlogArticles(fallbackHandle, 'nl');
-            }
+            const fetchedArticles = await fetchBlogArticles(blogHandle, language);
 
             console.log(`Blog ${blogHandle} fetch result:`, {
               articlesFound: fetchedArticles.length,
