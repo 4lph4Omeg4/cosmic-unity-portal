@@ -41,9 +41,17 @@ const BlogArticle = () => {
         console.log('Article handle:', articleHandle);
         
         const articles = await fetchBlogArticles(blogHandle || 'ego-to-eden', language);
+        console.log('All articles from blog:', articles.map(a => ({ handle: a.handle, title: a.title })));
         const foundArticle = articles.find((a: BlogArticle) => a.handle === articleHandle);
-        
+
+        console.log('Looking for article handle:', articleHandle);
         console.log('Found article:', foundArticle);
+
+        if (!foundArticle) {
+          console.warn(`Article with handle "${articleHandle}" not found in blog "${blogHandle}"`);
+          console.log('Available article handles:', articles.map(a => a.handle));
+        }
+
         setArticle(foundArticle || null);
       } catch (error) {
         console.error('Error loading article:', error);
