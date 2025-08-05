@@ -157,8 +157,7 @@ const Blog = () => {
                   variant="mystical"
                   className="w-full group"
                   onClick={() => {
-                    const blogHandle = language === 'en' ? 'ego-to-eden' : language === 'de' ? 'ego-zu-eden' : 'ego-to-eden';
-                    window.location.href = `/${blogHandle}`;
+                    window.location.href = `/ego-to-eden`;
                   }}
                 >
                   {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
