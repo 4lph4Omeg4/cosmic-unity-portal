@@ -193,11 +193,12 @@ const Blog = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="cosmic" 
+                <Button
+                  variant="cosmic"
                   className="w-full group"
                   onClick={() => {
-                    window.location.href = `/unity`;
+                    const blogHandle = language === 'en' ? 'unity-seen-through-the-single-eye' : language === 'de' ? 'einheit-gesehen-durch-das-einzelne-auge' : 'eenheid-gezien-door-het-enkele-oog';
+                    window.location.href = `/${blogHandle}`;
                   }}
                 >
                   {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
