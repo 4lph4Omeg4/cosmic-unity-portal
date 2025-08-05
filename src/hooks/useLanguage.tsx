@@ -234,6 +234,15 @@ const translations = {
     'community.postDeletedMessage': 'Je post is succesvol verwijderd.',
     'community.errorDeleting': 'Fout bij verwijderen',
     'community.errorDeleteMessage': 'Er ging iets mis bij het verwijderen van je post. Probeer het opnieuw.',
+    
+    // Friends
+    'friends.title': 'Vrienden van het Licht',
+    'friends.subtitle': 'Alle leden van onze kosmische gemeenschap',
+    'friends.noMembers': 'Nog geen leden in de gemeenschap',
+    'friends.noName': 'Naamloos',
+    'friends.chosenOne': 'Uitverkorene',
+    'friends.showMore': 'Meer tonen',
+    'friends.showLess': 'Minder tonen',
 
     // Unity Page
     'unity.title': 'Eenheid',
@@ -495,6 +504,15 @@ const translations = {
     'community.postDeletedMessage': 'Your post has been successfully deleted.',
     'community.errorDeleting': 'Error deleting',
     'community.errorDeleteMessage': 'Something went wrong while deleting your post. Please try again.',
+    
+    // Friends
+    'friends.title': 'Friends of Light',
+    'friends.subtitle': 'All members of our cosmic community',
+    'friends.noMembers': 'No members in the community yet',
+    'friends.noName': 'Nameless',
+    'friends.chosenOne': 'Chosen One',
+    'friends.showMore': 'Show more',
+    'friends.showLess': 'Show less',
 
     // Unity Page
     'unity.title': 'Unity',
@@ -756,6 +774,15 @@ const translations = {
     'community.postDeletedMessage': 'Ihr Beitrag wurde erfolgreich gelöscht.',
     'community.errorDeleting': 'Fehler beim Löschen',
     'community.errorDeleteMessage': 'Beim Löschen Ihres Beitrags ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+    
+    // Friends
+    'friends.title': 'Freunde des Lichts',
+    'friends.subtitle': 'Alle Mitglieder unserer kosmischen Gemeinschaft',
+    'friends.noMembers': 'Noch keine Mitglieder in der Gemeinschaft',
+    'friends.noName': 'Namenlos',
+    'friends.chosenOne': 'Auserwählter',
+    'friends.showMore': 'Mehr anzeigen',
+    'friends.showLess': 'Weniger anzeigen',
 
     // Unity Page
     'unity.title': 'Einheit',
