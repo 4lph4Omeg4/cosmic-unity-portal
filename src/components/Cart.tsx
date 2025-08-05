@@ -34,9 +34,38 @@ const Cart: React.FC<CartProps> = ({
     }).format(price / 100);
   };
 
-  const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl(shopifyDomain);
-    window.open(checkoutUrl, '_blank');
+  const handleCheckout = async () => {
+    try {
+      // If no items, don't proceed
+      if (items.length === 0) return;
+
+      // Import the Shopify client
+      const { createCheckout } = await import('@/integrations/shopify/client');
+
+      // Convert cart items to Shopify line items format
+      const lineItems = items.map(item => ({
+        variantId: item.variantId,
+        quantity: item.quantity
+      }));
+
+      // Create checkout using Shopify Storefront API
+      const checkout = await createCheckout(lineItems);
+
+      if (checkout?.webUrl) {
+        window.open(checkout.webUrl, '_blank');
+        // Optionally clear cart after successful checkout creation
+        // clearCart();
+      } else {
+        // Fallback to old method if Shopify API fails
+        const checkoutUrl = getCheckoutUrl(shopifyDomain);
+        window.open(checkoutUrl, '_blank');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      // Fallback to old method on error
+      const checkoutUrl = getCheckoutUrl(shopifyDomain);
+      window.open(checkoutUrl, '_blank');
+    }
   };
 
   return (
