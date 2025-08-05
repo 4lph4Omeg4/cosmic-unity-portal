@@ -58,7 +58,7 @@ const Cart: React.FC<CartProps> = ({
       <SheetContent className="w-full sm:max-w-lg bg-card/95 backdrop-blur-sm border-cosmic/30">
         <SheetHeader>
           <SheetTitle className="font-cosmic text-2xl text-cosmic-gradient">
-            Winkelwagen
+            {language === 'en' ? 'Shopping Cart' : language === 'de' ? 'Warenkorb' : 'Winkelwagen'}
           </SheetTitle>
         </SheetHeader>
 
