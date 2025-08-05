@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface CartProps {
   shopifyDomain?: string;
