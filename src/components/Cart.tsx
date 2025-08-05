@@ -12,18 +12,19 @@ interface CartProps {
   shopifyDomain?: string;
 }
 
-const Cart: React.FC<CartProps> = ({ 
-  shopifyDomain = "rfih5t-ij.myshopify.com" 
+const Cart: React.FC<CartProps> = ({
+  shopifyDomain = "rfih5t-ij.myshopify.com"
 }) => {
-  const { 
-    items, 
-    updateQuantity, 
-    removeItem, 
-    getTotalPrice, 
-    getTotalItems, 
-    getCheckoutUrl 
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    getTotalPrice,
+    getTotalItems,
+    getCheckoutUrl
   } = useCart();
-  
+
+  const { language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   const formatPrice = (price: number) => {
