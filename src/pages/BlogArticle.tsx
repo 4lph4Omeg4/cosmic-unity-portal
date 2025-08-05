@@ -75,8 +75,10 @@ const BlogArticle = () => {
   };
 
   const goBack = () => {
-    if (blogHandle) {
-      navigate(`/blog/${blogHandle}`);
+    if (blogHandle === 'ego-to-eden') {
+      navigate('/ego-to-eden');
+    } else if (blogHandle === 'eenheid-gezien-door-het-enkele-oog') {
+      navigate('/eenheid-gezien-door-het-enkele-oog');
     } else {
       navigate('/blog');
     }
