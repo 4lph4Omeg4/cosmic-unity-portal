@@ -69,18 +69,28 @@ const Blog = () => {
         for (const blogHandle of blogHandles) {
           try {
             console.log(`=== BLOG PAGE: Fetching from blog handle: ${blogHandle} for language: ${language} ===`);
-            const fetchedArticles = await fetchBlogArticles(blogHandle, language);
+            let fetchedArticles = await fetchBlogArticles(blogHandle, language);
+
+            // If no articles found and not using Dutch, try fallback to Dutch blogs
+            if (fetchedArticles.length === 0 && language !== 'nl') {
+              console.log(`No articles found for ${blogHandle} in ${language}, trying Dutch fallback...`);
+              const dutchBlogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
+              const fallbackHandle = dutchBlogHandles.find(handle => handle.includes(blogHandle.split('-')[0])) || dutchBlogHandles[0];
+              console.log(`Trying fallback blog handle: ${fallbackHandle}`);
+              fetchedArticles = await fetchBlogArticles(fallbackHandle, 'nl');
+            }
+
             console.log(`Blog ${blogHandle} fetch result:`, {
               articlesFound: fetchedArticles.length,
               articles: fetchedArticles.map(a => ({ title: a.title, handle: a.handle }))
             });
-            
+
             // Add blog handle info to articles for correct linking
             const articlesWithBlogHandle = fetchedArticles.map(article => ({
               ...article,
               blogHandle
             }));
-            
+
             allArticles = [...allArticles, ...articlesWithBlogHandle];
           } catch (error) {
             console.error(`Error fetching from blog ${blogHandle}:`, error);
