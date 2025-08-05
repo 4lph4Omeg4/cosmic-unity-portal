@@ -135,23 +135,30 @@ const Cart: React.FC<CartProps> = ({
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="font-mystical font-semibold">Totaal:</span>
+                  <span className="font-mystical font-semibold">
+                    {language === 'en' ? 'Total:' : language === 'de' ? 'Gesamt:' : 'Totaal:'}
+                  </span>
                   <span className="font-cosmic text-xl font-bold text-cosmic-gradient">
                     {formatPrice(getTotalPrice())}
                   </span>
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleCheckout}
                   className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical"
                   size="lg"
                 >
                   <ExternalLink className="w-4 h-4 mr-2" />
-                  Afrekenen via Shopify
+                  {language === 'en' ? 'Checkout via Shopify' : language === 'de' ? 'Zur Kasse via Shopify' : 'Afrekenen via Shopify'}
                 </Button>
-                
+
                 <p className="text-xs text-muted-foreground text-center">
-                  Je wordt doorgestuurd naar een beveiligde Shopify checkout
+                  {language === 'en'
+                    ? 'You will be redirected to a secure Shopify checkout'
+                    : language === 'de'
+                    ? 'Sie werden zu einer sicheren Shopify-Kasse weitergeleitet'
+                    : 'Je wordt doorgestuurd naar een beveiligde Shopify checkout'
+                  }
                 </p>
               </div>
             </>
