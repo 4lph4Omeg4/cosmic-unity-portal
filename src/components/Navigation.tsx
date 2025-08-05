@@ -174,9 +174,6 @@ const Navigation = () => {
 
             {/* Additional actions mobile */}
             <div className="space-y-1">
-              <div className="px-3 py-2">
-                <LanguageSelector />
-              </div>
               <Link
                 to="/cart"
                 className="flex items-center px-3 py-2 rounded-md text-base font-mystical cosmic-hover text-muted-foreground hover:text-foreground hover:bg-muted/50"
