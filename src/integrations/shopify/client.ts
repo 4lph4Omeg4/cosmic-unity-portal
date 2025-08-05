@@ -510,7 +510,7 @@ export const fetchAllBlogs = async (language: string = 'en') => {
   }
 };
 
-export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
+export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'en') => {
   try {
     console.log(`=== FETCHING BLOG ARTICLES ===`);
     console.log(`Requested blog handle: ${blogHandle}, language: ${language}`);
