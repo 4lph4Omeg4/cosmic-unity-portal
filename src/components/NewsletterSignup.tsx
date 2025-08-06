@@ -17,9 +17,10 @@ interface NewsletterSignupProps {
   onSuccess?: () => void;
 }
 
-const NewsletterSignup: React.FC<NewsletterSignupProps> = ({ 
-  variant = 'section', 
-  compact = false 
+const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
+  variant = 'section',
+  compact = false,
+  onSuccess
 }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
