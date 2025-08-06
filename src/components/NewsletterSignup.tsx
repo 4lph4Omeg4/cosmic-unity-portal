@@ -123,6 +123,11 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         }
       }, 3000);
 
+      // Call success callback if provided (for popup closing)
+      if (onSuccess) {
+        onSuccess();
+      }
+
       // Reset form after 3 seconds
       setTimeout(() => {
         setIsSuccess(false);
