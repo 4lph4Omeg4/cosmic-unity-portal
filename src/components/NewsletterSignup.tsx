@@ -14,6 +14,7 @@ import { subscribeToNewsletter } from '@/services/newsletterService';
 interface NewsletterSignupProps {
   variant?: 'footer' | 'section' | 'popup';
   compact?: boolean;
+  onSuccess?: () => void;
 }
 
 const NewsletterSignup: React.FC<NewsletterSignupProps> = ({ 
