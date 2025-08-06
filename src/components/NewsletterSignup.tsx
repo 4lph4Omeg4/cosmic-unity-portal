@@ -132,9 +132,15 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       }, 3000);
 
     } catch (error) {
+      const title = language === 'en' ? 'Error' : language === 'de' ? 'Fehler' : 'Fout';
+      const description = language === 'en'
+        ? 'Something went wrong. Please try again.'
+        : language === 'de'
+        ? 'Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.'
+        : 'Er is iets misgegaan. Probeer het opnieuw.';
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title,
+        description,
         variant: "destructive",
       });
     } finally {
