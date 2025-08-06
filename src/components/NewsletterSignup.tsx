@@ -94,23 +94,20 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       }
 
       setIsSuccess(true);
-      
+
       // Create confetti effect
       const confetti = document.createElement('div');
       confetti.className = 'confetti-container';
-      confetti.innerHTML = Array.from({ length: 50 }, (_, i) => 
+      confetti.innerHTML = Array.from({ length: 50 }, (_, i) =>
         `<div class="confetti confetti-${i % 5}" style="--delay: ${Math.random() * 2}s"></div>`
       ).join('');
       document.body.appendChild(confetti);
-      
-      setTimeout(() => {
-        document.body.removeChild(confetti);
-      }, 3000);
 
-      toast({
-        title: t('newsletter.success.title'),
-        description: t('newsletter.success.description'),
-      });
+      setTimeout(() => {
+        if (document.body.contains(confetti)) {
+          document.body.removeChild(confetti);
+        }
+      }, 3000);
 
       // Reset form after 3 seconds
       setTimeout(() => {
