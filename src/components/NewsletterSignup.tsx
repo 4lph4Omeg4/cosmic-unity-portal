@@ -75,15 +75,27 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
         if (authError) {
           // Newsletter subscription succeeded but account creation failed
+          const title = language === 'en' ? 'Newsletter subscription successful' : language === 'de' ? 'Newsletter-Anmeldung erfolgreich' : 'Nieuwsbrief aanmelding geslaagd';
+          const description = language === 'en'
+            ? `You're subscribed to the newsletter, but account creation failed: ${authError.message}`
+            : language === 'de'
+            ? `Sie sind für den Newsletter angemeldet, aber die Kontoerstellung ist fehlgeschlagen: ${authError.message}`
+            : `Je bent aangemeld voor de nieuwsbrief, maar account aanmaken mislukte: ${authError.message}`;
           toast({
-            title: "Nieuwsbrief aanmelding geslaagd",
-            description: `Je bent aangemeld voor de nieuwsbrief, maar account aanmaken mislukte: ${authError.message}`,
+            title,
+            description,
             variant: "destructive",
           });
         } else {
+          const title = language === 'en' ? 'Welcome to the Inner Circle! 🌀' : language === 'de' ? 'Willkommen im Inneren Kreis! 🌀' : 'Welkom in de Inner Circle! 🌀';
+          const description = language === 'en'
+            ? 'Your newsletter subscription and portal account have been created! Check your email for confirmation.'
+            : language === 'de'
+            ? 'Ihre Newsletter-Anmeldung und Ihr Portal-Konto wurden erstellt! Überprüfen Sie Ihre E-Mail zur Bestätigung.'
+            : 'Je nieuwsbrief aanmelding en portal account zijn aangemaakt! Check je email voor bevestiging.';
           toast({
-            title: "Welkom in de Inner Circle! 🌀",
-            description: "Je nieuwsbrief aanmelding en portal account zijn aangemaakt! Check je email voor bevestiging.",
+            title,
+            description,
           });
         }
       } else {
