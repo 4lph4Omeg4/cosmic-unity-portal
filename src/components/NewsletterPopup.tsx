@@ -95,7 +95,16 @@ const NewsletterPopup: React.FC<NewsletterPopupProps> = ({
 
         {/* Newsletter signup */}
         <div className="p-6">
-          <NewsletterSignup variant="popup" compact />
+          <NewsletterSignup
+            variant="popup"
+            compact
+            onSuccess={() => {
+              // Close popup after successful signup
+              setTimeout(() => {
+                setIsOpen(false);
+              }, 2000);
+            }}
+          />
         </div>
 
         {/* Bottom text */}
