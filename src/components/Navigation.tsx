@@ -17,7 +17,6 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
   const { t } = useLanguage();
-
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
@@ -25,13 +24,14 @@ const Navigation = () => {
     { name: 'Blog', href: '/blog', icon: BookOpen },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
-    { name: 'The Direct Path', href: 'https://g.co/gemini/share/6d4720253bb2', icon: Star, external: true },
+    // This will open the file as a URL, not as a route in your app.
+    { name: 'The Direct Path', href: '/the-direct-path/Index.html', icon: Star, external: true },
   ];
 
-  const handleSignOut = async () => {
+  async function handleSignOut() {
     await signOut();
     navigate('/');
-  };
+  }
 
   const isActive = (path: string) => location.pathname === path;
 
