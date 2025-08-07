@@ -25,7 +25,7 @@ const Navigation = () => {
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
     // This will open the file as a URL, not as a route in your app.
-    { name: 'The Direct Path', href: '/the-direct-path/Index.html', icon: Star, external: true },
+    { name: 'The Direct Path', href: '/the-direct-path/index.html', icon: Star, external: true },
   ];
 
   async function handleSignOut() {
