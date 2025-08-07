@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -156,12 +157,12 @@ const Blog = () => {
                 <Button
                   variant="mystical"
                   className="w-full group"
-                  onClick={() => {
-                    window.location.href = `/ego-to-eden`;
-                  }}
+                  asChild
                 >
-                  {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  <Link to="/ego-to-eden">
+                    {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -184,12 +185,12 @@ const Blog = () => {
                 <Button
                   variant="cosmic"
                   className="w-full group"
-                  onClick={() => {
-                    window.location.href = `/eenheid-gezien-door-het-enkele-oog`;
-                  }}
+                  asChild
                 >
-                  {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  <Link to="/eenheid-gezien-door-het-enkele-oog">
+                    {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -245,13 +246,12 @@ const Blog = () => {
                     <Button 
                       variant="mystical" 
                       className="w-full group"
-                      onClick={() => {
-                        const blogPath = article.blogHandle || 'ego-to-eden';
-                        window.location.href = `/blog/${blogPath}/${article.handle}`;
-                      }}
+                      asChild
                     >
-                      {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
-                      <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                      <Link to={`/blog/${article.blogHandle || 'ego-to-eden'}/${article.handle}`}>
+                        {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
+                        <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                      </Link>
                     </Button>
                   </CardContent>
                 </Card>
