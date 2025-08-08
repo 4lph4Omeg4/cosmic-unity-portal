@@ -89,7 +89,10 @@ const Auth = () => {
       let errorCode = error.code || 'unknown';
 
       // Handle specific error cases
-      if (error.message?.includes('rate_limit')) {
+      if (error.message?.includes('Database error saving new user') || error.code === 'unexpected_failure') {
+        errorMessage = 'Database configuratie probleem. De profiles tabel of triggers ontbreken.';
+        errorCode = 'database_setup_required';
+      } else if (error.message?.includes('rate_limit')) {
         errorMessage = 'Te veel pogingen. Probeer het over een paar minuten opnieuw.';
         errorCode = 'rate_limit';
       } else if (error.message?.includes('email_address_not_authorized')) {
