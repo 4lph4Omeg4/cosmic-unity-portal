@@ -382,7 +382,7 @@ const Messages = () => {
               <CardHeader>
                 <CardTitle className="font-cosmic text-cosmic-gradient flex items-center gap-3">
                   <MessageCircle className="w-5 h-5" />
-                  Database Setup Required
+                  {language === 'en' ? 'Database Setup Required' : language === 'de' ? 'Datenbank-Setup erforderlich' : 'Database installatie vereist'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center py-8">
@@ -390,17 +390,17 @@ const Messages = () => {
                   <MessageCircle className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-4">
-                  Messages Table Not Found
+                  {language === 'en' ? 'Messages Table Not Found' : language === 'de' ? 'Nachrichten-Tabelle nicht gefunden' : 'Berichten-tabel niet gevonden'}
                 </h3>
                 <p className="font-mystical text-muted-foreground mb-6 max-w-md mx-auto">
                   {databaseError}
                 </p>
                 <div className="space-y-4">
                   <Button onClick={() => navigate('/profile')} variant="cosmic">
-                    Go to Profile (with Database Debug)
+                    {language === 'en' ? 'Go to Profile (with Database Debug)' : language === 'de' ? 'Zu Profil gehen (mit Datenbank-Debug)' : 'Ga naar Profiel (met Database Debug)'}
                   </Button>
                   <Button onClick={() => navigate('/community')} variant="outline">
-                    Back to Community
+                    {language === 'en' ? 'Back to Community' : language === 'de' ? 'Zurück zur Community' : 'Terug naar Community'}
                   </Button>
                 </div>
               </CardContent>
