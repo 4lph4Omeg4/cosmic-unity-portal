@@ -70,12 +70,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('=== SUPABASE SIGNUP RESPONSE ===');
       console.log('Data:', data);
       console.log('Error:', error);
+      console.log('Error serialized:', error ? JSON.stringify(error, null, 2) : 'No error');
 
       if (data?.user && !error) {
         console.log('User created successfully:', data.user);
         console.log('User ID:', data.user.id);
         console.log('User email:', data.user.email);
         console.log('Email confirmed:', data.user.email_confirmed_at);
+        console.log('User confirmed:', data.user.confirmed_at);
+      }
+
+      // Add additional context to the error
+      if (error) {
+        console.error('=== DETAILED ERROR ANALYSIS ===');
+        console.error('Error type:', typeof error);
+        console.error('Error constructor:', error.constructor.name);
+        console.error('Error keys:', Object.keys(error));
+        console.error('Error message:', error.message);
+        console.error('Error code:', error.code);
+        console.error('Error status:', error.status);
+
+        // Check for common Supabase error patterns
+        if (error.message?.includes('email_address_not_authorized')) {
+          console.error('❌ EMAIL NOT AUTHORIZED: Check Supabase Auth settings - Email domain restrictions might be enabled');
+        } else if (error.message?.includes('rate_limit')) {
+          console.error('❌ RATE LIMITED: Too many signup attempts, wait before retrying');
+        } else if (!error.message && error.code) {
+          console.error('❌ UNKNOWN ERROR: Only error code available:', error.code);
+        }
       }
 
       return { error };
