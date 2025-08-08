@@ -420,22 +420,26 @@ const Messages = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Header */}
           <div className="flex items-center gap-4 mb-8">
-            <Button 
-              onClick={() => navigate('/community')} 
+            <Button
+              onClick={() => navigate('/community')}
               variant="outline"
               className="gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back
+              {language === 'en' ? 'Back' : language === 'de' ? 'Zurück' : 'Terug'}
             </Button>
-            
+
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-cosmic-gradient rounded-full flex items-center justify-center shadow-cosmic animate-cosmic-pulse">
                 <Inbox className="w-5 h-5 text-white" />
               </div>
               <h1 className="font-cosmic text-3xl font-bold">
-                <span className="text-cosmic-gradient">Cosmic</span>{' '}
-                <span className="text-mystical-gradient">Messages</span>
+                <span className="text-cosmic-gradient">
+                  {language === 'en' ? 'Cosmic' : language === 'de' ? 'Kosmische' : 'Kosmische'}
+                </span>{' '}
+                <span className="text-mystical-gradient">
+                  {language === 'en' ? 'Messages' : language === 'de' ? 'Nachrichten' : 'Berichten'}
+                </span>
               </h1>
             </div>
           </div>
