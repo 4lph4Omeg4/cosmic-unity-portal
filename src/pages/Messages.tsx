@@ -597,10 +597,15 @@ const Messages = () => {
                   <div className="text-center">
                     <MessageCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                     <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-2">
-                      Select a conversation
+                      {language === 'en' ? 'Select a conversation' : language === 'de' ? 'Gespräch auswählen' : 'Selecteer een gesprek'}
                     </h3>
                     <p className="font-mystical text-muted-foreground">
-                      Choose a conversation from the left to start messaging
+                      {language === 'en'
+                        ? 'Choose a conversation from the left to start messaging'
+                        : language === 'de'
+                        ? 'Wählen Sie ein Gespräch links aus, um zu beginnen'
+                        : 'Kies een gesprek aan de linkerkant om te beginnen met berichten versturen'
+                      }
                     </p>
                   </div>
                 </Card>
