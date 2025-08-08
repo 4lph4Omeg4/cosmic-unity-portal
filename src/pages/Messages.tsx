@@ -299,9 +299,16 @@ const Messages = () => {
       const errorMessage = error instanceof Error ? error.message :
                           typeof error === 'object' && error !== null ? JSON.stringify(error) :
                           'Unknown error occurred';
+      const title = language === 'en' ? 'Error sending message' : language === 'de' ? 'Fehler beim Senden der Nachricht' : 'Fout bij versturen van bericht';
+      const description = language === 'en'
+        ? `Could not send the message: ${errorMessage}`
+        : language === 'de'
+        ? `Nachricht konnte nicht gesendet werden: ${errorMessage}`
+        : `Kon het bericht niet versturen: ${errorMessage}`;
+
       toast({
-        title: "Error sending message",
-        description: `Could not send the message: ${errorMessage}`,
+        title,
+        description,
         variant: "destructive",
       });
     } finally {
