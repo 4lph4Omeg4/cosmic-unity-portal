@@ -259,6 +259,11 @@ const Profile = () => {
             </CardContent>
           </Card>
 
+          {/* Database Debug Section */}
+          <div className="mt-8">
+            <DatabaseDebug />
+          </div>
+
           {/* Community Members Section */}
           <div className="mt-8">
             <CommunityMembersList
