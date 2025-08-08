@@ -207,7 +207,7 @@ const FeaturedSection = () => {
                     >
                       <Link to={`/product/${product.handle}`}>
                         <Book className="w-4 h-4 mr-2" />
-                        {t('common.view')}
+                        {t('product.view')}
                         <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                       </Link>
                     </Button>
