@@ -154,9 +154,16 @@ const Messages = () => {
       const errorMessage = error instanceof Error ? error.message :
                           typeof error === 'object' && error !== null ? JSON.stringify(error) :
                           'Unknown error occurred';
+
+      // Check if it's a table doesn't exist error
+      const isTableError = errorMessage.includes('relation "public.messages" does not exist') ||
+                          errorMessage.includes('table "messages" does not exist');
+
       toast({
         title: "Error loading conversations",
-        description: `Could not load your conversations: ${errorMessage}`,
+        description: isTableError
+          ? "The messages table hasn't been created yet. Please run the SQL script from create_tables.sql in your Supabase dashboard."
+          : `Could not load your conversations: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
