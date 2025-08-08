@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import CommunityMembersList from '@/components/CommunityMembersList';
+import DatabaseDebug from '@/components/DatabaseDebug';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Upload, User, Save } from 'lucide-react';
+import { Upload, User, Save, MessageCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
@@ -256,9 +258,55 @@ const Profile = () => {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Database Debug Section */}
+          <div className="mt-8">
+            <DatabaseDebug />
+          </div>
+
+          {/* Community Members Section */}
+          <div className="mt-8">
+            <CommunityMembersList
+              title="Community Members"
+              maxMembers={10}
+              onMessageClick={(memberId) => navigate(`/messages/${memberId}`)}
+            />
+          </div>
+
+          {/* Quick Actions */}
+          <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic mt-8">
+            <CardHeader>
+              <CardTitle className="font-cosmic text-cosmic-gradient">
+                Quick Actions
+              </CardTitle>
+              <CardDescription className="font-mystical">
+                Navigate to other sections of your cosmic journey
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="flex flex-wrap gap-4">
+              <Button
+                onClick={() => navigate('/messages')}
+                variant="cosmic"
+                className="gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                View Messages
+              </Button>
+
+              <Button
+                onClick={() => navigate('/community')}
+                variant="mystical"
+                className="gap-2"
+              >
+                <User className="w-4 h-4" />
+                Community
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

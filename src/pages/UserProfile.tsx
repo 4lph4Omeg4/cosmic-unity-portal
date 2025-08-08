@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import MessageButton from '@/components/MessageButton';
+import CommunityMembersList from '@/components/CommunityMembersList';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { User, ArrowLeft, MessageCircle, Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -31,6 +34,7 @@ interface UserPost {
 
 const UserProfile = () => {
   const { userId } = useParams();
+  const { user } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -190,20 +194,45 @@ const UserProfile = () => {
                     </p>
                   )}
                   
-                  <div className="flex items-center justify-center md:justify-start gap-6 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      Member since {formatDate(profile.created_at)}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-center md:justify-start gap-6 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        Member since {formatDate(profile.created_at)}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MessageCircle className="w-4 h-4" />
+                        {posts.length} posts
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="w-4 h-4" />
-                      {posts.length} posts
-                    </div>
+
+                    {/* Message Action - only show if viewing someone else's profile */}
+                    {user && userId && user.id !== userId && (
+                      <div className="flex justify-center md:justify-start">
+                        <MessageButton
+                          userId={userId}
+                          userName={profile.display_name}
+                          userAvatar={profile.avatar_url}
+                          size="default"
+                          variant="cosmic"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Community Members */}
+          <div className="mb-8">
+            <CommunityMembersList
+              title={`Other Members`}
+              maxMembers={8}
+              showActions={user?.id !== userId}
+              onMessageClick={(memberId) => navigate(`/messages/${memberId}`)}
+            />
+          </div>
 
           {/* User's Posts */}
           <div className="space-y-6">

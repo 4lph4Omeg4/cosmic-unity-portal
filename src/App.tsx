@@ -17,6 +17,7 @@ import Community from "./pages/Community";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
+import Messages from "./pages/Messages";
 import Blog from "./pages/Blog";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -53,6 +54,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/user/:userId" element={<UserProfile />} />
+              <Route path="/messages" element={<Messages />} />
+              <Route path="/messages/:userId" element={<Messages />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/ego-to-eden" element={<EgoToEden />} />
               <Route path="/unity" element={<Unity />} />
