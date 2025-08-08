@@ -34,6 +34,7 @@ interface UserPost {
 
 const UserProfile = () => {
   const { userId } = useParams();
+  const { user } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
