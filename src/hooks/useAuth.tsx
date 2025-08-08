@@ -91,7 +91,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Error status:', error.status);
 
         // Check for common Supabase error patterns
-        if (error.message?.includes('email_address_not_authorized')) {
+        if (error.message?.includes('Database error saving new user') || error.code === 'unexpected_failure') {
+          console.error('❌ DATABASE SETUP ERROR: The profiles table or trigger is missing!');
+          console.error('🔧 SOLUTION: Run the SQL script from create_tables.sql in your Supabase dashboard');
+          console.error('📋 This creates the profiles table and automatic profile creation trigger');
+        } else if (error.message?.includes('email_address_not_authorized')) {
           console.error('❌ EMAIL NOT AUTHORIZED: Check Supabase Auth settings - Email domain restrictions might be enabled');
         } else if (error.message?.includes('rate_limit')) {
           console.error('❌ RATE LIMITED: Too many signup attempts, wait before retrying');
