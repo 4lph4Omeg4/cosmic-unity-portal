@@ -58,6 +58,7 @@ const NewsletterPopup: React.FC<NewsletterPopupProps> = ({
 
   const handleClose = () => {
     setIsOpen(false);
+    sessionStorage.setItem('newsletter-popup-shown', 'true');
   };
 
   return (
@@ -68,7 +69,8 @@ const NewsletterPopup: React.FC<NewsletterPopupProps> = ({
           variant="ghost"
           size="icon"
           onClick={handleClose}
-          className="absolute top-2 right-2 z-10 text-muted-foreground hover:text-foreground"
+          className="absolute top-2 right-2 z-20 text-muted-foreground hover:text-foreground hover:bg-background/80 rounded-full"
+          aria-label="Close newsletter popup"
         >
           <X className="w-4 h-4" />
         </Button>
