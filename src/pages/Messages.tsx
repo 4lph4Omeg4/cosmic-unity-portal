@@ -76,6 +76,7 @@ const Messages = () => {
   const loadConversations = async () => {
     try {
       setLoading(true);
+      setDatabaseError(null);
 
       // Get all messages for the current user
       const { data: messagesData, error } = await supabase
