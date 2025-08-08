@@ -72,19 +72,40 @@ const Auth = () => {
     console.log('Error:', error);
 
     if (error) {
-      console.error('Signup error details:', {
+      console.error('Signup error details:', error);
+      console.error('Error properties:', {
         message: error.message,
         status: error.status,
         statusText: error.statusText,
         code: error.code,
         details: error.details,
         hint: error.hint,
-        __isAuthError: error.__isAuthError
+        __isAuthError: error.__isAuthError,
+        fullError: JSON.stringify(error, null, 2)
       });
+
+      // Get a more descriptive error message
+      let errorMessage = error.message || 'Unknown error occurred';
+      let errorCode = error.code || 'unknown';
+
+      // Handle specific error cases
+      if (error.message?.includes('rate_limit')) {
+        errorMessage = 'Te veel pogingen. Probeer het over een paar minuten opnieuw.';
+        errorCode = 'rate_limit';
+      } else if (error.message?.includes('email_address_not_authorized')) {
+        errorMessage = 'Dit email adres is niet geautoriseerd. Controleer je Supabase instellingen.';
+        errorCode = 'not_authorized';
+      } else if (error.message?.includes('weak_password')) {
+        errorMessage = 'Wachtwoord is te zwak. Gebruik minimaal 6 karakters.';
+        errorCode = 'weak_password';
+      } else if (error.message?.includes('email_address_invalid')) {
+        errorMessage = 'Ongeldig email adres.';
+        errorCode = 'invalid_email';
+      }
 
       toast({
         title: "Registratie mislukt",
-        description: `${error.message} (Code: ${error.code || 'onbekend'})`,
+        description: `${errorMessage} (Code: ${errorCode})`,
         variant: "destructive",
       });
     } else {
