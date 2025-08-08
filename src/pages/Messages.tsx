@@ -162,14 +162,26 @@ const Messages = () => {
                           errorMessage.includes('table "messages" does not exist');
 
       if (isTableError) {
-        setDatabaseError("The messages table hasn't been created yet. Please run the SQL script from create_tables.sql in your Supabase dashboard.");
+        const dbErrorMsg = language === 'en'
+          ? "The messages table hasn't been created yet. Please run the SQL script from create_tables.sql in your Supabase dashboard."
+          : language === 'de'
+          ? "Die Nachrichten-Tabelle wurde noch nicht erstellt. Bitte führen Sie das SQL-Skript aus create_tables.sql in Ihrem Supabase-Dashboard aus."
+          : "De berichten-tabel is nog niet aangemaakt. Voer het SQL-script uit create_tables.sql uit in je Supabase dashboard.";
+        setDatabaseError(dbErrorMsg);
       }
 
-      toast({
-        title: "Error loading conversations",
-        description: isTableError
+      const toastTitle = language === 'en' ? 'Error loading conversations' : language === 'de' ? 'Fehler beim Laden der Gespräche' : 'Fout bij laden van gesprekken';
+      const toastDesc = isTableError
+        ? (language === 'en'
           ? "The messages table hasn't been created yet. Please run the SQL script from create_tables.sql in your Supabase dashboard."
-          : `Could not load your conversations: ${errorMessage}`,
+          : language === 'de'
+          ? "Die Nachrichten-Tabelle wurde noch nicht erstellt. Bitte führen Sie das SQL-Skript aus create_tables.sql in Ihrem Supabase-Dashboard aus."
+          : "De berichten-tabel is nog niet aangemaakt. Voer het SQL-script uit create_tables.sql uit in je Supabase dashboard.")
+        : `${language === 'en' ? 'Could not load your conversations' : language === 'de' ? 'Gespräche konnten nicht geladen werden' : 'Kon je gesprekken niet laden'}: ${errorMessage}`;
+
+      toast({
+        title: toastTitle,
+        description: toastDesc,
         variant: "destructive",
       });
     } finally {
