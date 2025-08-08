@@ -247,9 +247,16 @@ const Messages = () => {
       const errorMessage = error instanceof Error ? error.message :
                           typeof error === 'object' && error !== null ? JSON.stringify(error) :
                           'Unknown error occurred';
+      const title = language === 'en' ? 'Error loading messages' : language === 'de' ? 'Fehler beim Laden der Nachrichten' : 'Fout bij laden van berichten';
+      const description = language === 'en'
+        ? `Could not load the conversation: ${errorMessage}`
+        : language === 'de'
+        ? `Gespräch konnte nicht geladen werden: ${errorMessage}`
+        : `Kon het gesprek niet laden: ${errorMessage}`;
+
       toast({
-        title: "Error loading messages",
-        description: `Could not load the conversation: ${errorMessage}`,
+        title,
+        description,
         variant: "destructive",
       });
     }
