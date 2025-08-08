@@ -206,16 +206,15 @@ const UserProfile = () => {
                       </div>
                     </div>
 
-                    {/* Friend Actions - only show if viewing someone else's profile */}
+                    {/* Message Action - only show if viewing someone else's profile */}
                     {user && userId && user.id !== userId && (
                       <div className="flex justify-center md:justify-start">
-                        <FriendButton
+                        <MessageButton
                           userId={userId}
                           userName={profile.display_name}
                           userAvatar={profile.avatar_url}
                           size="default"
                           variant="cosmic"
-                          showMessageButton={true}
                         />
                       </div>
                     )}
