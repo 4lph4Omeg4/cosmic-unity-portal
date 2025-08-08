@@ -225,6 +225,15 @@ const UserProfile = () => {
             </CardContent>
           </Card>
 
+          {/* User's Friends */}
+          <div className="mb-8">
+            <FriendsList
+              userId={userId}
+              showActions={false}
+              onMessageClick={(friendId) => navigate(`/messages/${friendId}`)}
+            />
+          </div>
+
           {/* User's Posts */}
           <div className="space-y-6">
             <h2 className="font-cosmic text-2xl font-bold text-cosmic-gradient">
