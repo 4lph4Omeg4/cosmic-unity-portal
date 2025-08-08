@@ -16,7 +16,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
