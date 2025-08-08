@@ -194,15 +194,31 @@ const UserProfile = () => {
                     </p>
                   )}
                   
-                  <div className="flex items-center justify-center md:justify-start gap-6 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      Member since {formatDate(profile.created_at)}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-center md:justify-start gap-6 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        Member since {formatDate(profile.created_at)}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MessageCircle className="w-4 h-4" />
+                        {posts.length} posts
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="w-4 h-4" />
-                      {posts.length} posts
-                    </div>
+
+                    {/* Friend Actions - only show if viewing someone else's profile */}
+                    {user && userId && user.id !== userId && (
+                      <div className="flex justify-center md:justify-start">
+                        <FriendButton
+                          userId={userId}
+                          userName={profile.display_name}
+                          userAvatar={profile.avatar_url}
+                          size="default"
+                          variant="cosmic"
+                          showMessageButton={true}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
