@@ -45,7 +45,7 @@ const Messages = () => {
   const { userId } = useParams(); // Optional: specific conversation
   const { user } = useAuth();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
   
   const [conversations, setConversations] = useState<Conversation[]>([]);
