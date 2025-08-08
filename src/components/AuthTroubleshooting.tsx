@@ -17,6 +17,27 @@ const AuthTroubleshooting = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         
+        {/* Database Setup Error */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-500" />
+            <span className="font-medium">Database Error Saving New User</span>
+          </div>
+          <div className="text-sm space-y-2 pl-6">
+            <p>If you get "Database error saving new user" (most common issue):</p>
+            <div className="bg-red-50 p-3 rounded text-xs space-y-2">
+              <p><strong>Missing profiles table or trigger:</strong></p>
+              <ul className="space-y-1 list-disc list-inside">
+                <li><strong>Run the SQL script:</strong> Execute create_tables.sql in your Supabase SQL Editor</li>
+                <li><strong>Check profiles table:</strong> Make sure the profiles table exists</li>
+                <li><strong>Check trigger:</strong> Ensure automatic profile creation trigger exists</li>
+                <li><strong>Check RLS policies:</strong> Users must be able to INSERT their own profile</li>
+                <li><strong>Typical solution:</strong> Copy the SQL from create_tables.sql and run it in Supabase</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         {/* Email Confirmation */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
