@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Star, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import AuthDebug from '@/components/AuthDebug';
 
 const Auth = () => {
   const navigate = useNavigate();
