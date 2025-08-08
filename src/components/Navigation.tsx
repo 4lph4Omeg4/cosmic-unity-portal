@@ -100,6 +100,12 @@ const Navigation = () => {
                       <span>{t('nav.profile')}</span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="font-mystical">
+                    <Link to="/messages" className="flex items-center">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      <span>{language === 'en' ? 'Messages' : language === 'de' ? 'Nachrichten' : 'Berichten'}</span>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className="font-mystical">
                     <span className="text-xs text-muted-foreground">{user.email}</span>
                   </DropdownMenuItem>
