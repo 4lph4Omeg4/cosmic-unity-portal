@@ -322,6 +322,45 @@ const AuthDebug = () => {
                   </div>
                 </div>
               )}
+
+              {/* Profiles Table */}
+              {debugInfo.profilesTable && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(debugInfo.profilesTable.exists && debugInfo.profilesTable.accessible)}
+                    <span className="font-medium">Profiles Table</span>
+                  </div>
+                  <div className="text-sm space-y-1">
+                    <div className="space-y-1">
+                      <div>Exists: <Badge variant={debugInfo.profilesTable.exists ? "default" : "destructive"}>
+                        {debugInfo.profilesTable.exists ? 'Yes' : 'No'}
+                      </Badge></div>
+
+                      <div>Accessible: <Badge variant={debugInfo.profilesTable.accessible ? "default" : "destructive"}>
+                        {debugInfo.profilesTable.accessible ? 'Yes' : 'No'}
+                      </Badge></div>
+
+                      {debugInfo.profilesTable.canInsert !== undefined && (
+                        <div>Can Insert: <Badge variant={debugInfo.profilesTable.canInsert ? "default" : "destructive"}>
+                          {debugInfo.profilesTable.canInsert ? 'Yes' : 'No'}
+                        </Badge></div>
+                      )}
+
+                      {debugInfo.profilesTable.error && (
+                        <div className="text-xs text-red-600 mt-1">
+                          Error: {debugInfo.profilesTable.error}
+                        </div>
+                      )}
+
+                      {debugInfo.profilesTable.insertError && (
+                        <div className="text-xs text-red-600 mt-1">
+                          Insert Error: {debugInfo.profilesTable.insertError}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Current Session */}
