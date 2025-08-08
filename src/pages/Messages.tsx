@@ -450,10 +450,10 @@ const Messages = () => {
               <CardHeader>
                 <CardTitle className="font-cosmic text-cosmic-gradient flex items-center gap-2">
                   <MessageCircle className="w-5 h-5" />
-                  Conversations
+                  {language === 'en' ? 'Conversations' : language === 'de' ? 'Gespräche' : 'Gesprekken'}
                 </CardTitle>
                 <CardDescription className="font-mystical">
-                  Your recent conversations
+                  {language === 'en' ? 'Your recent conversations' : language === 'de' ? 'Ihre letzten Gespräche' : 'Je recente gesprekken'}
                 </CardDescription>
               </CardHeader>
               
