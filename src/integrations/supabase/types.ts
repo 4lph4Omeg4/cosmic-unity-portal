@@ -49,33 +49,6 @@ export type Database = {
           },
         ]
       }
-      friends: {
-        Row: {
-          id: string
-          user_id: string
-          friend_id: string
-          status: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          friend_id: string
-          status?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          friend_id?: string
-          status?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       messages: {
         Row: {
           id: string
