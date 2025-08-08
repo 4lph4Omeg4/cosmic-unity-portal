@@ -342,6 +342,46 @@ const Messages = () => {
     );
   }
 
+  if (databaseError) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="py-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+              <CardHeader>
+                <CardTitle className="font-cosmic text-cosmic-gradient flex items-center gap-3">
+                  <MessageCircle className="w-5 h-5" />
+                  Database Setup Required
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-center py-8">
+                <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-cosmic animate-cosmic-pulse">
+                  <MessageCircle className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-4">
+                  Messages Table Not Found
+                </h3>
+                <p className="font-mystical text-muted-foreground mb-6 max-w-md mx-auto">
+                  {databaseError}
+                </p>
+                <div className="space-y-4">
+                  <Button onClick={() => navigate('/profile')} variant="cosmic">
+                    Go to Profile (with Database Debug)
+                  </Button>
+                  <Button onClick={() => navigate('/community')} variant="outline">
+                    Back to Community
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
