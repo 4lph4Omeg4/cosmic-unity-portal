@@ -10,6 +10,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { subscribeToNewsletter } from '@/services/newsletterService';
+import { submitToShopifyForm } from '@/services/shopifyFormService';
 
 interface NewsletterSignupProps {
   variant?: 'footer' | 'section' | 'popup';
@@ -23,7 +24,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   onSuccess
 }) => {
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [createAccount, setCreateAccount] = useState(true);
   const [consent, setConsent] = useState(false);
@@ -37,7 +39,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !consent) {
+    if (!email || !firstName || !lastName || !consent) {
       toast({
         title: t('newsletter.error.incomplete'),
         description: t('newsletter.error.incomplete'),
@@ -58,10 +60,19 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
     setIsSubmitting(true);
 
     try {
-      // First, subscribe to newsletter
+      // Submit to Shopify form first
+      const fullName = `${firstName} ${lastName}`.trim();
+      await submitToShopifyForm({
+        email,
+        firstName,
+        lastName,
+        consent
+      });
+
+      // Then subscribe to newsletter
       const result = await subscribeToNewsletter({
         email,
-        name: name || undefined,
+        name: fullName || undefined,
         consent,
         source: variant as 'footer' | 'homepage' | 'popup',
         language,
@@ -73,7 +84,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
       // If user wants to create account and isn't already logged in
       if (createAccount && !user && password) {
-        const { error: authError } = await signUp(email, password, name || undefined);
+        const fullName = `${firstName} ${lastName}`.trim();
+        const { error: authError } = await signUp(email, password, fullName || undefined);
 
         if (authError) {
           // Newsletter subscription succeeded but account creation failed
@@ -132,7 +144,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       setTimeout(() => {
         setIsSuccess(false);
         setEmail('');
-        setName('');
+        setFirstName('');
+        setLastName('');
         setPassword('');
         setCreateAccount(true);
         setConsent(false);
@@ -296,21 +309,36 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               />
             </div>
 
-            {!compact && (
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="newsletter-name" className="font-mystical text-sm">
-                  {t('newsletter.name.label')}
+                <Label htmlFor="newsletter-firstname" className="font-mystical text-sm">
+                  Voornaam *
                 </Label>
                 <Input
-                  id="newsletter-name"
+                  id="newsletter-firstname"
                   type="text"
-                  placeholder={t('newsletter.name.placeholder')}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Voornaam"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
                   className="cosmic-input transition-all duration-300 focus:border-cosmic focus:ring-cosmic/20"
                 />
               </div>
-            )}
+              <div className="space-y-2">
+                <Label htmlFor="newsletter-lastname" className="font-mystical text-sm">
+                  Achternaam *
+                </Label>
+                <Input
+                  id="newsletter-lastname"
+                  type="text"
+                  placeholder="Achternaam"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  className="cosmic-input transition-all duration-300 focus:border-cosmic focus:ring-cosmic/20"
+                />
+              </div>
+            </div>
 
             {/* Account Creation Option */}
             {!compact && !user && (
@@ -376,7 +404,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
 
           <Button
             type="submit"
-            disabled={isSubmitting || !email || !consent || (createAccount && !password)}
+            disabled={isSubmitting || !email || !firstName || !lastName || !consent || (createAccount && !password)}
             className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:hover:shadow-none pointer-events-auto relative z-10"
             size={compact ? "default" : "lg"}
           >
