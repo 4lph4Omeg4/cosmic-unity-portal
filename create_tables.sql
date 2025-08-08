@@ -1,21 +1,6 @@
--- SQL script to create friends and messages tables in Supabase
+-- SQL script to create messages table in Supabase
 -- Run this in your Supabase SQL editor
-
--- Create friends table
-CREATE TABLE IF NOT EXISTS public.friends (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    friend_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'blocked')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    UNIQUE(user_id, friend_id)
-);
-
--- Create index for friends table
-CREATE INDEX IF NOT EXISTS idx_friends_user_id ON public.friends(user_id);
-CREATE INDEX IF NOT EXISTS idx_friends_friend_id ON public.friends(friend_id);
-CREATE INDEX IF NOT EXISTS idx_friends_status ON public.friends(status);
+-- Note: No friends table needed - everyone in the community can message everyone
 
 -- Create messages table
 CREATE TABLE IF NOT EXISTS public.messages (
@@ -35,27 +20,13 @@ CREATE INDEX IF NOT EXISTS idx_messages_created_at ON public.messages(created_at
 CREATE INDEX IF NOT EXISTS idx_messages_read ON public.messages(read);
 
 -- Enable Row Level Security (RLS)
-ALTER TABLE public.friends ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
-
--- Create RLS policies for friends table
-CREATE POLICY "Users can view their own friendships" ON public.friends
-    FOR SELECT USING (user_id = auth.uid() OR friend_id = auth.uid());
-
-CREATE POLICY "Users can insert their own friend requests" ON public.friends
-    FOR INSERT WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "Users can update their own friendships" ON public.friends
-    FOR UPDATE USING (user_id = auth.uid() OR friend_id = auth.uid());
-
-CREATE POLICY "Users can delete their own friendships" ON public.friends
-    FOR DELETE USING (user_id = auth.uid() OR friend_id = auth.uid());
 
 -- Create RLS policies for messages table
 CREATE POLICY "Users can view their own messages" ON public.messages
     FOR SELECT USING (sender_id = auth.uid() OR receiver_id = auth.uid());
 
-CREATE POLICY "Users can send messages" ON public.messages
+CREATE POLICY "Users can send messages to anyone" ON public.messages
     FOR INSERT WITH CHECK (sender_id = auth.uid());
 
 CREATE POLICY "Users can update messages they received" ON public.messages
@@ -70,12 +41,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create triggers for updated_at
-CREATE TRIGGER update_friends_updated_at
-    BEFORE UPDATE ON public.friends
-    FOR EACH ROW
-    EXECUTE FUNCTION public.handle_updated_at();
-
+-- Create trigger for updated_at
 CREATE TRIGGER update_messages_updated_at
     BEFORE UPDATE ON public.messages
     FOR EACH ROW
