@@ -192,11 +192,7 @@ const Shop = () => {
         console.error('Invalid variant ID:', variantId);
         toast({
           title: t('shop.errorAdding'),
-<<<<<<< HEAD
-          description: t('shop.errorAddingProduct'),
-=======
           description: t('shop.errorMessage'),
->>>>>>> origin/VSCODE
           variant: "destructive",
         });
         return;
@@ -300,15 +296,9 @@ const Shop = () => {
             <div>
               <h2 className="font-cosmic text-3xl font-bold text-center mb-12">
                 <span className="text-mystical-gradient">
-<<<<<<< HEAD
-                  {selectedCollection 
+                  {selectedCollection
                     ? collections.find(c => c.handle === selectedCollection)?.title || t('shop.products')
                     : t('shop.allProducts')
-=======
-                  {selectedCollection
-                    ? collections.find(c => c.handle === selectedCollection)?.title || (language === 'en' ? 'Products' : language === 'de' ? 'Produkte' : 'Producten')
-                    : (language === 'en' ? 'All Products' : language === 'de' ? 'Alle Produkte' : 'Alle Producten')
->>>>>>> origin/VSCODE
                   }
                 </span>
               </h2>
@@ -389,16 +379,7 @@ const Shop = () => {
                 {t('shop.noProducts')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-<<<<<<< HEAD
                 {t('shop.noProductsDescription')}
-=======
-                {language === 'en'
-                  ? 'The cosmic merchandise is on its way. Return soon for new items.'
-                  : language === 'de'
-                  ? 'Die kosmische Ware ist unterwegs. Kehren Sie bald für neue Artikel zurück.'
-                  : 'De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.'
-                }
->>>>>>> origin/VSCODE
               </p>
             </div>
           )}
