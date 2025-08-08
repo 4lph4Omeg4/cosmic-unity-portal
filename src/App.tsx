@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { CartProvider } from "@/hooks/useCart";
-import { FriendsProvider } from "@/hooks/useFriends";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import Collection from "./pages/Collection";
@@ -38,9 +37,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <AuthProvider>
-        <FriendsProvider>
-          <CartProvider>
-            <TooltipProvider>
+        <CartProvider>
+          <TooltipProvider>
             <Toaster />
             <Sonner />
             <NewsletterPopup delay={20000} exitIntent={true} />
@@ -82,9 +80,8 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-          </TooltipProvider>
-          </CartProvider>
-        </FriendsProvider>
+        </TooltipProvider>
+        </CartProvider>
       </AuthProvider>
     </LanguageProvider>
   </QueryClientProvider>
