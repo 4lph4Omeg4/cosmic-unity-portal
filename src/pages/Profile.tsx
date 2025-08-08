@@ -258,10 +258,12 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          {/* Friends Section */}
+          {/* Community Members Section */}
           <div className="mt-8">
-            <FriendsList
-              onMessageClick={(friendId) => navigate(`/messages/${friendId}`)}
+            <CommunityMembersList
+              title="Community Members"
+              maxMembers={10}
+              onMessageClick={(memberId) => navigate(`/messages/${memberId}`)}
             />
           </div>
 
