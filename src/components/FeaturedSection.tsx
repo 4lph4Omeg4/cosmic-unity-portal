@@ -236,17 +236,11 @@ const FeaturedSection = () => {
                       className="w-full group shadow-cosmic"
                       asChild
                     >
-<<<<<<< HEAD
-                      <Book className="w-4 h-4 mr-2" />
-                      {t('products.view')}
-                      <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
-=======
                       <Link to={`/product/${product.handle}`}>
                         <Book className="w-4 h-4 mr-2" />
                         {t('product.view')}
                         <Star className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
                       </Link>
->>>>>>> origin/VSCODE
                     </Button>
                   </CardFooter>
                 </Card>
