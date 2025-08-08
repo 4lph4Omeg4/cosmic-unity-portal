@@ -279,9 +279,20 @@ const AuthDebug = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button onClick={runDiagnostics} disabled={loading} variant="outline" className="w-full">
-          {loading ? 'Running Diagnostics...' : 'Run Diagnostics'}
-        </Button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <Button onClick={runDiagnostics} disabled={loading} variant="outline">
+            {loading ? 'Running Diagnostics...' : 'Run Diagnostics'}
+          </Button>
+          <Button onClick={repairDatabase} disabled={repairing} variant="destructive">
+            {repairing ? 'Repairing Database...' : '🔧 Repair Database'}
+          </Button>
+        </div>
+
+        {/* Warning for repair button */}
+        <div className="text-xs text-muted-foreground text-center">
+          The repair button tries to create the profiles table automatically.
+          If it fails, manually run database_setup_complete.sql in Supabase.
+        </div>
 
         {debugInfo && (
           <div className="space-y-4">
