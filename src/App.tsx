@@ -18,6 +18,7 @@ import Community from "./pages/Community";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
+import Messages from "./pages/Messages";
 import Blog from "./pages/Blog";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
