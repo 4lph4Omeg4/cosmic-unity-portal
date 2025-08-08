@@ -224,12 +224,13 @@ const UserProfile = () => {
             </CardContent>
           </Card>
 
-          {/* User's Friends */}
+          {/* Community Members */}
           <div className="mb-8">
-            <FriendsList
-              userId={userId}
-              showActions={false}
-              onMessageClick={(friendId) => navigate(`/messages/${friendId}`)}
+            <CommunityMembersList
+              title={`Other Members`}
+              maxMembers={8}
+              showActions={user?.id !== userId}
+              onMessageClick={(memberId) => navigate(`/messages/${memberId}`)}
             />
           </div>
 
