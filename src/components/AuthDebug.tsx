@@ -211,9 +211,59 @@ const AuthDebug = () => {
     setLoading(false);
   };
 
+  const repairDatabase = async () => {
+    setRepairing(true);
+    try {
+      console.log('=== ATTEMPTING DATABASE REPAIR ===');
+
+      // Try to create profiles table if it doesn't exist
+      const createProfilesSQL = `
+        CREATE TABLE IF NOT EXISTS public.profiles (
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+          user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
+          display_name TEXT,
+          avatar_url TEXT,
+          bio TEXT,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+        );
+
+        ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+        DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
+        DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
+        DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
+
+        CREATE POLICY "Users can view their own profile" ON public.profiles
+          FOR SELECT USING (user_id = auth.uid());
+        CREATE POLICY "Users can insert their own profile" ON public.profiles
+          FOR INSERT WITH CHECK (user_id = auth.uid());
+        CREATE POLICY "Users can update their own profile" ON public.profiles
+          FOR UPDATE USING (user_id = auth.uid());
+      `;
+
+      const { error: sqlError } = await supabase.rpc('exec_sql', { sql_query: createProfilesSQL });
+
+      if (sqlError) {
+        console.error('SQL execution failed:', sqlError);
+        alert('Automatic repair failed. Please run the complete SQL script manually in Supabase.');
+      } else {
+        console.log('✅ Database repair completed');
+        alert('Database repair completed! Try registering again.');
+        // Re-run diagnostics
+        runDiagnostics();
+      }
+    } catch (error) {
+      console.error('Repair failed:', error);
+      alert('Repair failed. Please run the database_setup_complete.sql script manually in your Supabase SQL editor.');
+    } finally {
+      setRepairing(false);
+    }
+  };
+
   const getStatusIcon = (success: boolean) => {
-    return success ? 
-      <CheckCircle className="w-4 h-4 text-green-500" /> : 
+    return success ?
+      <CheckCircle className="w-4 h-4 text-green-500" /> :
       <AlertCircle className="w-4 h-4 text-red-500" />;
   };
 
