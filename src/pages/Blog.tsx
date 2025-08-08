@@ -150,15 +150,10 @@ const Blog = () => {
                   className="w-full group"
                   asChild
                 >
-<<<<<<< HEAD
-                  {t('blog.exploreBlog')}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-=======
                   <Link to="/ego-to-eden">
-                    {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                    {t('blog.exploreBlog')}
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </Link>
->>>>>>> origin/VSCODE
                 </Button>
               </CardContent>
             </Card>
@@ -178,15 +173,10 @@ const Blog = () => {
                   className="w-full group"
                   asChild
                 >
-<<<<<<< HEAD
-                  {t('blog.exploreBlog')}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-=======
                   <Link to="/eenheid-gezien-door-het-enkele-oog">
-                    {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                    {t('blog.exploreBlog')}
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </Link>
->>>>>>> origin/VSCODE
                 </Button>
               </CardContent>
             </Card>
@@ -239,20 +229,15 @@ const Blog = () => {
                       </div>
                     </div>
                     
-                    <Button 
-                      variant="mystical" 
+                    <Button
+                      variant="mystical"
                       className="w-full group"
                       asChild
                     >
-<<<<<<< HEAD
-                      {t('blog.readMore')}
-                      <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-=======
                       <Link to={`/blog/${article.blogHandle || 'ego-to-eden'}/${article.handle}`}>
-                        {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
+                        {t('blog.readMore')}
                         <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                       </Link>
->>>>>>> origin/VSCODE
                     </Button>
                   </CardContent>
                 </Card>
