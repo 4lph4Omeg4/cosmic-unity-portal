@@ -61,9 +61,12 @@ const MessageDialog: React.FC<MessageDialogProps> = ({
       setIsOpen(false);
     } catch (error) {
       console.error('Error sending message:', error);
+      const errorMessage = error instanceof Error ? error.message :
+                          typeof error === 'object' && error !== null ? JSON.stringify(error) :
+                          'Unknown error occurred';
       toast({
         title: "Error sending message",
-        description: "Could not send the message. Please try again.",
+        description: `Could not send the message: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
