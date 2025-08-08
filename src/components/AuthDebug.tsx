@@ -190,9 +190,20 @@ const AuthDebug = () => {
                     {getStatusIcon(debugInfo.signupTest.success)}
                     <span className="font-medium">Signup Test</span>
                   </div>
-                  <div className="text-sm">
+                  <div className="text-sm space-y-1">
                     {debugInfo.signupTest.success ? (
-                      <Badge variant="default">Working</Badge>
+                      <div>
+                        <Badge variant="default">Working</Badge>
+                        {debugInfo.signupTest.userData && (
+                          <div className="mt-1 text-xs space-y-1">
+                            <div>Email Confirmed:
+                              <Badge variant={debugInfo.signupTest.userData.emailConfirmed ? "default" : "secondary"} className="ml-1">
+                                {debugInfo.signupTest.userData.emailConfirmed ? 'Yes' : 'No'}
+                              </Badge>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     ) : (
                       <Badge variant="destructive" className="text-xs">
                         {debugInfo.signupTest.error || 'Failed'}
