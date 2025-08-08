@@ -48,18 +48,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, displayName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          display_name: displayName || email.split('@')[0]
+
+    console.log('=== SUPABASE SIGNUP ATTEMPT ===');
+    console.log('Redirect URL:', redirectUrl);
+    console.log('Email:', email);
+    console.log('Password length:', password.length);
+    console.log('Display name:', displayName);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            display_name: displayName || email.split('@')[0]
+          }
         }
+      });
+
+      console.log('=== SUPABASE SIGNUP RESPONSE ===');
+      console.log('Data:', data);
+      console.log('Error:', error);
+
+      if (data?.user && !error) {
+        console.log('User created successfully:', data.user);
+        console.log('User ID:', data.user.id);
+        console.log('User email:', data.user.email);
+        console.log('Email confirmed:', data.user.email_confirmed_at);
       }
-    });
-    return { error };
+
+      return { error };
+    } catch (catchError) {
+      console.error('Caught error during signup:', catchError);
+      return { error: catchError };
+    }
   };
 
   const signOut = async () => {
