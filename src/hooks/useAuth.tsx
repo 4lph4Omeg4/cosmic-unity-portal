@@ -78,6 +78,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log('User email:', data.user.email);
         console.log('Email confirmed:', data.user.email_confirmed_at);
         console.log('User confirmed:', data.user.confirmed_at);
+
+        // Try to manually create profile if it doesn't exist (fallback for trigger failure)
+        try {
+          console.log('=== CHECKING/CREATING PROFILE ===');
+
+          // First check if profile already exists
+          const { data: existingProfile, error: profileCheckError } = await supabase
+            .from('profiles')
+            .select('user_id')
+            .eq('user_id', data.user.id)
+            .single();
+
+          if (profileCheckError && profileCheckError.code === 'PGRST116') {
+            // Profile doesn't exist, create it manually
+            console.log('Profile does not exist, creating manually...');
+
+            const { error: profileCreateError } = await supabase
+              .from('profiles')
+              .insert({
+                user_id: data.user.id,
+                display_name: displayName || data.user.email?.split('@')[0] || 'User',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              });
+
+            if (profileCreateError) {
+              console.error('Manual profile creation failed:', profileCreateError);
+            } else {
+              console.log('✅ Profile created manually');
+            }
+          } else if (!profileCheckError) {
+            console.log('✅ Profile already exists');
+          } else {
+            console.error('Profile check failed:', profileCheckError);
+          }
+        } catch (profileError) {
+          console.error('Profile creation fallback failed:', profileError);
+        }
       }
 
       // Add additional context to the error
