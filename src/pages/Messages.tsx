@@ -151,9 +151,12 @@ const Messages = () => {
       setConversations(conversationsArray);
     } catch (error) {
       console.error('Error loading conversations:', error);
+      const errorMessage = error instanceof Error ? error.message :
+                          typeof error === 'object' && error !== null ? JSON.stringify(error) :
+                          'Unknown error occurred';
       toast({
         title: "Error loading conversations",
-        description: "Could not load your conversations.",
+        description: `Could not load your conversations: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
