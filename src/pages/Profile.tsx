@@ -257,9 +257,48 @@ const Profile = () => {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Friends Section */}
+          <div className="mt-8">
+            <FriendsList
+              onMessageClick={(friendId) => navigate(`/messages/${friendId}`)}
+            />
+          </div>
+
+          {/* Quick Actions */}
+          <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic mt-8">
+            <CardHeader>
+              <CardTitle className="font-cosmic text-cosmic-gradient">
+                Quick Actions
+              </CardTitle>
+              <CardDescription className="font-mystical">
+                Navigate to other sections of your cosmic journey
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="flex flex-wrap gap-4">
+              <Button
+                onClick={() => navigate('/messages')}
+                variant="cosmic"
+                className="gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                View Messages
+              </Button>
+
+              <Button
+                onClick={() => navigate('/community')}
+                variant="mystical"
+                className="gap-2"
+              >
+                <User className="w-4 h-4" />
+                Community
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
