@@ -58,22 +58,41 @@ const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
+    console.log('=== SIGNUP ATTEMPT ===');
+    console.log('Email:', signUpData.email);
+    console.log('Password length:', signUpData.password.length);
+    console.log('Display name:', signUpData.displayName);
+
     const { error } = await signUp(signUpData.email, signUpData.password, signUpData.displayName);
-    
+
+    console.log('=== SIGNUP RESULT ===');
+    console.log('Error:', error);
+
     if (error) {
+      console.error('Signup error details:', {
+        message: error.message,
+        status: error.status,
+        statusText: error.statusText,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        __isAuthError: error.__isAuthError
+      });
+
       toast({
         title: "Registratie mislukt",
-        description: error.message,
+        description: `${error.message} (Code: ${error.code || 'onbekend'})`,
         variant: "destructive",
       });
     } else {
+      console.log('Signup successful!');
       toast({
         title: "Welkom bij The Chosen Ones!",
         description: "Controleer je email voor verificatie.",
       });
     }
-    
+
     setLoading(false);
   };
 
