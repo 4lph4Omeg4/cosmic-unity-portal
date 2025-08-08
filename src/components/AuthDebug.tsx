@@ -232,11 +232,26 @@ const AuthDebug = () => {
                             </div>
                           </div>
                         )}
+                        {debugInfo.signupTest.error && (
+                          <div className="mt-1 text-xs text-green-600">
+                            {debugInfo.signupTest.error}
+                          </div>
+                        )}
                       </div>
                     ) : (
-                      <Badge variant="destructive" className="text-xs">
-                        {debugInfo.signupTest.error || 'Failed'}
-                      </Badge>
+                      <div className="space-y-1">
+                        <Badge variant="destructive" className="text-xs">
+                          Failed
+                        </Badge>
+                        <div className="text-xs space-y-1">
+                          <div className="font-mono text-red-600">
+                            {debugInfo.signupTest.error || 'Unknown error'}
+                          </div>
+                          {debugInfo.signupTest.errorCode && (
+                            <div>Code: <Badge variant="outline" className="text-xs">{debugInfo.signupTest.errorCode}</Badge></div>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
