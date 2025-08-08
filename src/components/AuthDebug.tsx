@@ -232,6 +232,23 @@ const AuthDebug = () => {
               </div>
             )}
 
+            {/* Common Issues */}
+            {debugInfo.commonIssues && debugInfo.commonIssues.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Info className="w-4 h-4 text-yellow-500" />
+                  <span className="font-medium text-yellow-600">Common Issues Found</span>
+                </div>
+                <div className="text-sm space-y-1">
+                  {debugInfo.commonIssues.map((issue: string, index: number) => (
+                    <div key={index} className="p-2 bg-yellow-50 text-yellow-700 rounded text-xs">
+                      💡 {issue}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Errors */}
             {debugInfo.errors.length > 0 && (
               <div className="space-y-2">
