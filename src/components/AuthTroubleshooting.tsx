@@ -114,13 +114,23 @@ const AuthTroubleshooting = () => {
         </div>
 
         {/* Quick Fixes */}
-        <div className="bg-gradient-to-r from-cosmic/10 to-primary/10 p-4 rounded-lg">
-          <h4 className="font-medium mb-2">Quick Development Fixes:</h4>
+        <div className="bg-gradient-to-r from-red/10 to-orange/10 p-4 rounded-lg border border-red/20">
+          <h4 className="font-medium mb-2 text-red-700">🚨 Most Common Fix for "Database error saving new user":</h4>
+          <div className="text-sm space-y-2 mb-4">
+            <div className="bg-white p-3 rounded border-l-4 border-red-500">
+              <p className="font-bold">1. Run the database setup SQL script</p>
+              <p className="text-xs text-gray-600 mt-1">
+                Go to Supabase → SQL Editor → New Query → Paste the contents of create_tables.sql → Run
+              </p>
+            </div>
+          </div>
+
+          <h4 className="font-medium mb-2">Other Quick Development Fixes:</h4>
           <div className="text-sm space-y-1">
-            <p>1. <strong>Disable email confirmations</strong> in Supabase Auth settings</p>
-            <p>2. <strong>Use real email addresses</strong> for testing (not fake ones)</p>
-            <p>3. <strong>Check browser console</strong> for detailed error messages</p>
-            <p>4. <strong>Try incognito mode</strong> to rule out browser cache issues</p>
+            <p>2. <strong>Disable email confirmations</strong> in Supabase Auth settings</p>
+            <p>3. <strong>Use real email addresses</strong> for testing (not fake ones)</p>
+            <p>4. <strong>Check browser console</strong> for detailed error messages</p>
+            <p>5. <strong>Try incognito mode</strong> to rule out browser cache issues</p>
           </div>
         </div>
       </CardContent>
