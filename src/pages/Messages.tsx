@@ -463,7 +463,7 @@ const Messages = () => {
                     <div className="text-center py-8 px-4">
                       <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                       <p className="font-mystical text-muted-foreground">
-                        No conversations yet
+                        {language === 'en' ? 'No conversations yet' : language === 'de' ? 'Noch keine Gespräche' : 'Nog geen gesprekken'}
                       </p>
                     </div>
                   ) : (
