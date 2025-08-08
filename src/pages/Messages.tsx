@@ -219,9 +219,12 @@ const Messages = () => {
       setMessages(messagesWithProfiles);
     } catch (error) {
       console.error('Error loading messages:', error);
+      const errorMessage = error instanceof Error ? error.message :
+                          typeof error === 'object' && error !== null ? JSON.stringify(error) :
+                          'Unknown error occurred';
       toast({
         title: "Error loading messages",
-        description: "Could not load the conversation.",
+        description: `Could not load the conversation: ${errorMessage}`,
         variant: "destructive",
       });
     }
