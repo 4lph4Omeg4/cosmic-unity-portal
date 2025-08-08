@@ -49,28 +49,52 @@ const AuthDebug = () => {
         info.errors.push('Auth session check failed');
       }
 
+      // Check common Supabase settings issues
+      info.commonIssues = [];
+
       // Test basic signup functionality (dry run)
       try {
         // Just test if we can call the signup method without actually signing up
         const testEmail = 'test-' + Date.now() + '@example.com';
-        const { error: signupError } = await supabase.auth.signUp({
+        const { data: signupData, error: signupError } = await supabase.auth.signUp({
           email: testEmail,
           password: 'testpass123',
           options: {
             data: { display_name: 'Test User' }
           }
         });
-        
+
         info.signupTest = {
           attempted: true,
           error: signupError?.message || null,
-          success: !signupError
+          success: !signupError,
+          userData: signupData?.user ? {
+            id: signupData.user.id,
+            email: signupData.user.email,
+            emailConfirmed: !!signupData.user.email_confirmed_at,
+            confirmed: !!signupData.user.confirmed_at
+          } : null
         };
+
+        // Check for common issues
+        if (signupData?.user && !signupData.user.email_confirmed_at) {
+          info.commonIssues.push('Email confirmation is required - check your Supabase Auth settings');
+        }
+
+        if (signupError?.message?.includes('rate limit')) {
+          info.commonIssues.push('Rate limit exceeded - wait a few minutes before trying again');
+        }
+
+        if (signupError?.message?.includes('email_address_not_authorized')) {
+          info.commonIssues.push('Email address not authorized - check your Supabase Auth settings');
+        }
+
       } catch (e) {
         info.signupTest = {
           attempted: true,
           error: e instanceof Error ? e.message : 'Unknown error',
-          success: false
+          success: false,
+          userData: null
         };
       }
 
