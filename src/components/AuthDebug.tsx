@@ -52,22 +52,28 @@ const AuthDebug = () => {
       // Check common Supabase settings issues
       info.commonIssues = [];
 
-      // Test basic signup functionality (dry run)
+      // Test basic signup functionality with a known invalid email to avoid creating actual users
       try {
-        // Just test if we can call the signup method without actually signing up
-        const testEmail = 'test-' + Date.now() + '@example.com';
+        // Use an obviously invalid email to test auth without creating real users
+        const testEmail = 'definitely-invalid-email-for-testing@nonexistentdomain-123456789.com';
         const { data: signupData, error: signupError } = await supabase.auth.signUp({
           email: testEmail,
-          password: 'testpass123',
+          password: 'testpass123456',
           options: {
             data: { display_name: 'Test User' }
           }
         });
 
+        console.log('=== DEBUG TEST SIGNUP RESULT ===');
+        console.log('Test data:', signupData);
+        console.log('Test error:', signupError);
+        console.log('Test error serialized:', signupError ? JSON.stringify(signupError, null, 2) : 'No error');
+
         info.signupTest = {
           attempted: true,
           error: signupError?.message || null,
-          success: !signupError,
+          errorCode: signupError?.code || null,
+          success: !signupError || signupError.message?.includes('email_address_invalid'), // Invalid email is expected
           userData: signupData?.user ? {
             id: signupData.user.id,
             email: signupData.user.email,
@@ -76,26 +82,49 @@ const AuthDebug = () => {
           } : null
         };
 
-        // Check for common issues
-        if (signupData?.user && !signupData.user.email_confirmed_at) {
-          info.commonIssues.push('Email confirmation is required - check your Supabase Auth settings');
-        }
+        // Check for common issues based on error patterns
+        if (signupError) {
+          const errorMsg = signupError.message?.toLowerCase() || '';
 
-        if (signupError?.message?.includes('rate limit')) {
-          info.commonIssues.push('Rate limit exceeded - wait a few minutes before trying again');
-        }
+          if (errorMsg.includes('rate limit') || errorMsg.includes('rate_limit')) {
+            info.commonIssues.push('⚠️ Rate limit exceeded - wait a few minutes before trying again');
+          }
 
-        if (signupError?.message?.includes('email_address_not_authorized')) {
-          info.commonIssues.push('Email address not authorized - check your Supabase Auth settings');
+          if (errorMsg.includes('email_address_not_authorized') || errorMsg.includes('not_authorized')) {
+            info.commonIssues.push('🚫 Email address not authorized - check Supabase Auth → Settings → Email domains');
+          }
+
+          if (errorMsg.includes('invalid_credentials') || errorMsg.includes('authentication')) {
+            info.commonIssues.push('🔑 Authentication configuration issue - check Supabase API keys');
+          }
+
+          if (errorMsg.includes('signup_disabled') || errorMsg.includes('disabled')) {
+            info.commonIssues.push('📝 Signup is disabled - check Supabase Auth → Settings → Enable signup');
+          }
+
+          // If we get an email_address_invalid error, that's actually good - it means auth is working
+          if (errorMsg.includes('email_address_invalid')) {
+            info.signupTest.success = true;
+            info.signupTest.error = 'Working (invalid email test passed)';
+          }
+        } else if (signupData?.user) {
+          // If signup succeeded, check email confirmation requirements
+          if (!signupData.user.email_confirmed_at && !signupData.user.confirmed_at) {
+            info.commonIssues.push('📧 Email confirmation is required - users must confirm their email before logging in');
+          }
         }
 
       } catch (e) {
+        console.error('Debug signup test failed with exception:', e);
         info.signupTest = {
           attempted: true,
-          error: e instanceof Error ? e.message : 'Unknown error',
+          error: e instanceof Error ? e.message : 'Network or configuration error',
+          errorCode: 'exception',
           success: false,
           userData: null
         };
+
+        info.commonIssues.push('⚠️ Network or configuration error - check Supabase connection');
       }
 
       // Check if auth is enabled in Supabase
