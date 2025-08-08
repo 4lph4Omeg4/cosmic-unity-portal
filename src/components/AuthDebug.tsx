@@ -136,6 +136,72 @@ const AuthDebug = () => {
         info.errors.push('Auth not properly configured');
       }
 
+      // Check profiles table and setup
+      try {
+        console.log('=== CHECKING PROFILES TABLE ===');
+
+        // Test if profiles table exists and is accessible
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('user_id, display_name')
+          .limit(1);
+
+        info.profilesTable = {
+          exists: !profilesError,
+          accessible: !profilesError,
+          error: profilesError?.message || null,
+          sampleData: profilesData?.length || 0
+        };
+
+        if (profilesError) {
+          console.error('Profiles table error:', profilesError);
+          if (profilesError.message?.includes('relation "public.profiles" does not exist')) {
+            info.commonIssues.push('🗄️ Profiles table does not exist - run the SQL script from create_tables.sql');
+          } else if (profilesError.message?.includes('permission denied')) {
+            info.commonIssues.push('🔒 Profiles table permission denied - check RLS policies');
+          }
+        }
+
+        // Test profile creation trigger by checking if we can insert a test profile
+        // (This will fail gracefully if trigger doesn't exist)
+        try {
+          const testUserId = 'test-user-id-' + Date.now();
+          const { error: insertError } = await supabase
+            .from('profiles')
+            .insert({
+              user_id: testUserId,
+              display_name: 'Test User Delete Me',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
+
+          if (!insertError) {
+            // Clean up test data
+            await supabase.from('profiles').delete().eq('user_id', testUserId);
+            info.profilesTable.canInsert = true;
+          } else {
+            info.profilesTable.canInsert = false;
+            info.profilesTable.insertError = insertError.message;
+
+            if (insertError.message?.includes('permission denied') || insertError.message?.includes('RLS')) {
+              info.commonIssues.push('🔐 RLS policies prevent profile creation - check profiles table policies');
+            }
+          }
+        } catch (insertTestError) {
+          info.profilesTable.canInsert = false;
+          info.profilesTable.insertError = 'Cannot test insert';
+        }
+
+      } catch (profileCheckError) {
+        info.profilesTable = {
+          exists: false,
+          accessible: false,
+          error: 'Connection failed',
+          canInsert: false
+        };
+        info.errors.push('Cannot check profiles table: ' + (profileCheckError instanceof Error ? profileCheckError.message : 'Unknown error'));
+      }
+
     } catch (error) {
       info.errors.push(error instanceof Error ? error.message : 'Unknown error during diagnostics');
     }
