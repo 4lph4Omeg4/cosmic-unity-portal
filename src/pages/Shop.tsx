@@ -192,7 +192,7 @@ const Shop = () => {
         console.error('Invalid variant ID:', variantId);
         toast({
           title: t('shop.errorAdding'),
-          description: t('shop.errorAddingProduct'),
+          description: t('shop.errorMessage'),
           variant: "destructive",
         });
         return;
@@ -296,7 +296,7 @@ const Shop = () => {
             <div>
               <h2 className="font-cosmic text-3xl font-bold text-center mb-12">
                 <span className="text-mystical-gradient">
-                  {selectedCollection 
+                  {selectedCollection
                     ? collections.find(c => c.handle === selectedCollection)?.title || t('shop.products')
                     : t('shop.allProducts')
                   }

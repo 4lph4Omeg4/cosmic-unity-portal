@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -48,27 +49,29 @@ const Blog = () => {
           return;
         }
 
-        // Fetch articles from both blogs
-        console.log('Fetching articles from both blogs...');
-        
+        // Fetch articles from existing blog handles with language context
+        console.log('Fetching articles from blogs...');
+
+        // Use existing Dutch blog handles but pass language for content translation
         const blogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
         let allArticles: BlogArticle[] = [];
-        
+
         for (const blogHandle of blogHandles) {
           try {
             console.log(`=== BLOG PAGE: Fetching from blog handle: ${blogHandle} for language: ${language} ===`);
             const fetchedArticles = await fetchBlogArticles(blogHandle, language);
+
             console.log(`Blog ${blogHandle} fetch result:`, {
               articlesFound: fetchedArticles.length,
               articles: fetchedArticles.map(a => ({ title: a.title, handle: a.handle }))
             });
-            
+
             // Add blog handle info to articles for correct linking
             const articlesWithBlogHandle = fetchedArticles.map(article => ({
               ...article,
               blogHandle
             }));
-            
+
             allArticles = [...allArticles, ...articlesWithBlogHandle];
           } catch (error) {
             console.error(`Error fetching from blog ${blogHandle}:`, error);
@@ -142,15 +145,15 @@ const Blog = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="mystical" 
+                <Button
+                  variant="mystical"
                   className="w-full group"
-                  onClick={() => {
-                    window.location.href = `/ego-to-eden`;
-                  }}
+                  asChild
                 >
-                  {t('blog.exploreBlog')}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  <Link to="/ego-to-eden">
+                    {t('blog.exploreBlog')}
+                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -165,15 +168,15 @@ const Blog = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="cosmic" 
+                <Button
+                  variant="cosmic"
                   className="w-full group"
-                  onClick={() => {
-                    window.location.href = `/unity`;
-                  }}
+                  asChild
                 >
-                  {t('blog.exploreBlog')}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  <Link to="/eenheid-gezien-door-het-enkele-oog">
+                    {t('blog.exploreBlog')}
+                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -226,16 +229,15 @@ const Blog = () => {
                       </div>
                     </div>
                     
-                    <Button 
-                      variant="mystical" 
+                    <Button
+                      variant="mystical"
                       className="w-full group"
-                      onClick={() => {
-                        const blogPath = article.blogHandle || 'ego-to-eden';
-                        window.location.href = `/blog/${blogPath}/${article.handle}`;
-                      }}
+                      asChild
                     >
-                      {t('blog.readMore')}
-                      <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                      <Link to={`/blog/${article.blogHandle || 'ego-to-eden'}/${article.handle}`}>
+                        {t('blog.readMore')}
+                        <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                      </Link>
                     </Button>
                   </CardContent>
                 </Card>

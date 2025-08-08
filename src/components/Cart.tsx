@@ -6,23 +6,25 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface CartProps {
   shopifyDomain?: string;
 }
 
-const Cart: React.FC<CartProps> = ({ 
-  shopifyDomain = "rfih5t-ij.myshopify.com" 
+const Cart: React.FC<CartProps> = ({
+  shopifyDomain = "rfih5t-ij.myshopify.com"
 }) => {
-  const { 
-    items, 
-    updateQuantity, 
-    removeItem, 
-    getTotalPrice, 
-    getTotalItems, 
-    getCheckoutUrl 
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    getTotalPrice,
+    getTotalItems,
+    getCheckoutUrl
   } = useCart();
-  
+
+  const { language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   const formatPrice = (price: number) => {
@@ -32,9 +34,38 @@ const Cart: React.FC<CartProps> = ({
     }).format(price / 100);
   };
 
-  const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl(shopifyDomain);
-    window.open(checkoutUrl, '_blank');
+  const handleCheckout = async () => {
+    try {
+      // If no items, don't proceed
+      if (items.length === 0) return;
+
+      // Import the Shopify client
+      const { createCheckout } = await import('@/integrations/shopify/client');
+
+      // Convert cart items to Shopify line items format
+      const lineItems = items.map(item => ({
+        variantId: item.variantId,
+        quantity: item.quantity
+      }));
+
+      // Create checkout using Shopify Storefront API
+      const checkout = await createCheckout(lineItems);
+
+      if (checkout?.webUrl) {
+        window.open(checkout.webUrl, '_blank');
+        // Optionally clear cart after successful checkout creation
+        // clearCart();
+      } else {
+        // Fallback to old method if Shopify API fails
+        const checkoutUrl = getCheckoutUrl(shopifyDomain);
+        window.open(checkoutUrl, '_blank');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      // Fallback to old method on error
+      const checkoutUrl = getCheckoutUrl(shopifyDomain);
+      window.open(checkoutUrl, '_blank');
+    }
   };
 
   return (
@@ -56,7 +87,7 @@ const Cart: React.FC<CartProps> = ({
       <SheetContent className="w-full sm:max-w-lg bg-card/95 backdrop-blur-sm border-cosmic/30">
         <SheetHeader>
           <SheetTitle className="font-cosmic text-2xl text-cosmic-gradient">
-            Winkelwagen
+            {language === 'en' ? 'Shopping Cart' : language === 'de' ? 'Warenkorb' : 'Winkelwagen'}
           </SheetTitle>
         </SheetHeader>
 
@@ -65,7 +96,7 @@ const Cart: React.FC<CartProps> = ({
             <div className="text-center py-12">
               <ShoppingCart className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
               <p className="font-mystical text-muted-foreground">
-                Je winkelwagen is leeg
+                {language === 'en' ? 'Your cart is empty' : language === 'de' ? 'Ihr Warenkorb ist leer' : 'Je winkelwagen is leeg'}
               </p>
             </div>
           ) : (
@@ -133,23 +164,30 @@ const Cart: React.FC<CartProps> = ({
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="font-mystical font-semibold">Totaal:</span>
+                  <span className="font-mystical font-semibold">
+                    {language === 'en' ? 'Total:' : language === 'de' ? 'Gesamt:' : 'Totaal:'}
+                  </span>
                   <span className="font-cosmic text-xl font-bold text-cosmic-gradient">
                     {formatPrice(getTotalPrice())}
                   </span>
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleCheckout}
                   className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical"
                   size="lg"
                 >
                   <ExternalLink className="w-4 h-4 mr-2" />
-                  Afrekenen via Shopify
+                  {language === 'en' ? 'Checkout via Shopify' : language === 'de' ? 'Zur Kasse via Shopify' : 'Afrekenen via Shopify'}
                 </Button>
-                
+
                 <p className="text-xs text-muted-foreground text-center">
-                  Je wordt doorgestuurd naar een beveiligde Shopify checkout
+                  {language === 'en'
+                    ? 'You will be redirected to a secure Shopify checkout'
+                    : language === 'de'
+                    ? 'Sie werden zu einer sicheren Shopify-Kasse weitergeleitet'
+                    : 'Je wordt doorgestuurd naar een beveiligde Shopify checkout'
+                  }
                 </p>
               </div>
             </>

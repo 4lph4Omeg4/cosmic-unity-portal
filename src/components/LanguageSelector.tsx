@@ -14,7 +14,7 @@ const LanguageSelector = () => {
 
   const languages = [
     { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
   ];
 
@@ -23,9 +23,8 @@ const LanguageSelector = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
-          <Globe className="w-4 h-4" />
-          <span className="hidden sm:inline">{currentLanguage?.flag}</span>
+        <Button variant="outline" size="icon" className="cosmic-hover">
+          <span className="text-sm">{currentLanguage?.flag}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
