@@ -261,9 +261,12 @@ const Messages = () => {
       loadConversations(); // Refresh to update last message
     } catch (error) {
       console.error('Error sending message:', error);
+      const errorMessage = error instanceof Error ? error.message :
+                          typeof error === 'object' && error !== null ? JSON.stringify(error) :
+                          'Unknown error occurred';
       toast({
         title: "Error sending message",
-        description: "Could not send the message.",
+        description: `Could not send the message: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
