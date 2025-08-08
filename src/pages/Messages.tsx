@@ -361,7 +361,9 @@ const Messages = () => {
         <main className="py-20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <div className="animate-cosmic-pulse">Loading messages...</div>
+              <div className="animate-cosmic-pulse">
+                {language === 'en' ? 'Loading messages...' : language === 'de' ? 'Nachrichten laden...' : 'Berichten laden...'}
+              </div>
             </div>
           </div>
         </main>
