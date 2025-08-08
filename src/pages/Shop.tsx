@@ -9,6 +9,7 @@ import { Star, Filter, Grid, List, ShoppingCart, ExternalLink, Eye } from 'lucid
 import { fetchCollections, fetchProducts, createCheckout } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getLocalizedProductContent, getLocalizedCollectionContent } from '@/utils/contentLocalization';
 
 interface ShopifyCollection {
   id: string;
@@ -296,20 +297,28 @@ const Shop = () => {
               <h2 className="font-cosmic text-3xl font-bold text-center mb-12">
                 <span className="text-mystical-gradient">
                   {selectedCollection
-                    ? collections.find(c => c.handle === selectedCollection)?.title || (language === 'en' ? 'Products' : language === 'de' ? 'Produkte' : 'Producten')
-                    : (language === 'en' ? 'All Products' : language === 'de' ? 'Alle Produkte' : 'Alle Producten')
+                    ? collections.find(c => c.handle === selectedCollection)?.title || t('shop.products')
+                    : t('shop.allProducts')
                   }
                 </span>
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product) => {
+                  // Get localized content
+                  const localizedContent = getLocalizedProductContent(
+                    product.handle, 
+                    language, 
+                    { title: product.title, description: product.description }
+                  );
+                  
+                  return (
                   <Card key={product.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
                     <div className="aspect-square overflow-hidden rounded-t-lg">
                       {product.images.edges.length > 0 ? (
                         <img
                           src={product.images.edges[0].node.url}
-                          alt={product.images.edges[0].node.altText || product.title}
+                          alt={product.images.edges[0].node.altText || localizedContent.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (
@@ -321,7 +330,7 @@ const Shop = () => {
                     
                     <CardHeader>
                       <CardTitle className="font-cosmic text-lg font-bold text-cosmic-gradient line-clamp-2">
-                        {product.title}
+                        {localizedContent.title}
                       </CardTitle>
                       
                       <div className="text-lg font-bold text-mystical-gradient">
@@ -354,7 +363,8 @@ const Shop = () => {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -369,12 +379,7 @@ const Shop = () => {
                 {t('shop.noProducts')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                {language === 'en'
-                  ? 'The cosmic merchandise is on its way. Return soon for new items.'
-                  : language === 'de'
-                  ? 'Die kosmische Ware ist unterwegs. Kehren Sie bald für neue Artikel zurück.'
-                  : 'De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.'
-                }
+                {t('shop.noProductsDescription')}
               </p>
             </div>
           )}

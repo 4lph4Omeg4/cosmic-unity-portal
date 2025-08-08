@@ -14,7 +14,7 @@ const LanguageSelector = () => {
 
   const languages = [
     { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
   ];
 

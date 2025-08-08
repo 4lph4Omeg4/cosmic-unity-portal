@@ -58,20 +58,12 @@ const NewsletterPopup: React.FC<NewsletterPopupProps> = ({
 
   const handleClose = () => {
     setIsOpen(false);
+    sessionStorage.setItem('newsletter-popup-shown', 'true');
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-md mx-auto bg-card/95 backdrop-blur-xl border-cosmic/50 shadow-2xl p-0 overflow-hidden">
-        {/* Close button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleClose}
-          className="absolute top-2 right-2 z-10 text-muted-foreground hover:text-foreground"
-        >
-          <X className="w-4 h-4" />
-        </Button>
 
         {/* Header with cosmic effects */}
         <div className="relative bg-gradient-to-br from-cosmic/20 via-primary/10 to-accent/20 p-6 text-center">

@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/hooks/useLanguage';
+import FriendsList from '@/components/FriendsList';
 
 interface Profile {
   id: string;
@@ -504,6 +505,11 @@ const Community = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Friends List */}
+          <div className="mb-8">
+            <FriendsList />
+          </div>
 
           {/* Posts */}
           <div className="space-y-6">

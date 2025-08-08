@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import { fetchBlogArticles, fetchAllBlogs, testConnection } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getLocalizedBlogContent } from '@/utils/contentLocalization';
 
 interface BlogArticle {
   id: string;
@@ -125,15 +126,10 @@ const Blog = () => {
           {/* Page Header */}
           <div className="text-center mb-16">
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-cosmic-gradient">Blogs</span>
+              <span className="text-cosmic-gradient">{t('blog.title')}</span>
             </h1>
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-              {language === 'en' 
-                ? 'Explore our cosmic blogs filled with divine wisdom and sacred knowledge.'
-                : language === 'de' 
-                ? 'Entdecke unsere kosmischen Blogs voller göttlicher Weisheit und heiligen Wissens.'
-                : 'Ontdek onze kosmische blogs vol goddelijke wijsheid en heilige kennis.'
-              }
+              {t('blog.description')}
             </p>
           </div>
 
@@ -142,15 +138,10 @@ const Blog = () => {
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
-                  From Ego to Eden
+                  {t('blog.egoToEden.title')}
                 </CardTitle>
                 <CardDescription className="font-mystical">
-                  {language === 'en' 
-                    ? 'Journey from ego consciousness to divine awakening. Discover the path to spiritual transformation.'
-                    : language === 'de' 
-                    ? 'Reise vom Ego-Bewusstsein zum göttlichen Erwachen. Entdecke den Pfad zur spirituellen Transformation.'
-                    : 'Reis van ego-bewustzijn naar goddelijk ontwaken. Ontdek het pad naar spirituele transformatie.'
-                  }
+                  {t('blog.egoToEden.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -160,7 +151,7 @@ const Blog = () => {
                   asChild
                 >
                   <Link to="/ego-to-eden">
-                    {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                    {t('blog.exploreBlog')}
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
@@ -170,15 +161,10 @@ const Blog = () => {
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
-                  Unity
+                  {t('blog.unity.title')}
                 </CardTitle>
                 <CardDescription className="font-mystical">
-                  {language === 'en' 
-                    ? 'Explore the interconnectedness of all things. Messages about cosmic unity and oneness.'
-                    : language === 'de' 
-                    ? 'Erkunde die Verbundenheit aller Dinge. Botschaften über kosmische Einheit und Einssein.'
-                    : 'Ontdek de verbondenheid van alle dingen. Berichten over kosmische eenheid en verbondenheid.'
-                  }
+                  {t('blog.unity.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -188,7 +174,7 @@ const Blog = () => {
                   asChild
                 >
                   <Link to="/eenheid-gezien-door-het-enkele-oog">
-                    {language === 'en' ? 'Explore Blog' : language === 'de' ? 'Blog Erkunden' : 'Bekijk Blog'}
+                    {t('blog.exploreBlog')}
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
@@ -200,7 +186,7 @@ const Blog = () => {
           <div className="text-center mb-12">
             <h2 className="font-cosmic text-3xl font-bold mb-4">
               <span className="text-mystical-gradient">
-                {language === 'en' ? 'Latest Articles' : language === 'de' ? 'Neueste Artikel' : 'Nieuwste Artikelen'}
+                {t('blog.latestArticles')}
               </span>
             </h2>
           </div>
@@ -243,13 +229,13 @@ const Blog = () => {
                       </div>
                     </div>
                     
-                    <Button 
-                      variant="mystical" 
+                    <Button
+                      variant="mystical"
                       className="w-full group"
                       asChild
                     >
                       <Link to={`/blog/${article.blogHandle || 'ego-to-eden'}/${article.handle}`}>
-                        {language === 'en' ? 'Read More' : language === 'de' ? 'Mehr Lesen' : 'Lees Meer'}
+                        {t('blog.readMore')}
                         <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                       </Link>
                     </Button>
@@ -263,15 +249,10 @@ const Blog = () => {
                 <Calendar className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-                {language === 'en' ? 'No articles found' : language === 'de' ? 'Keine Artikel gefunden' : 'Geen artikelen gevonden'}
+                {t('blog.noArticlesTitle')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                {language === 'en' 
-                  ? 'The cosmic messages are still on their way. Come back soon for new insights.'
-                  : language === 'de' 
-                  ? 'Die kosmischen Botschaften sind noch unterwegs. Kehre bald zurück für neue Einsichten.'
-                  : 'De kosmische berichten zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten.'
-                }
+                {t('blog.noArticlesDescription')}
               </p>
             </div>
           )}

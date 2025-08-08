@@ -28,7 +28,7 @@ interface BlogArticle {
 
 const Unity = () => {
   const navigate = useNavigate();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,16 +101,15 @@ const Unity = () => {
             </div>
             
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-mystical-gradient">Eenheid</span>
+              <span className="text-mystical-gradient">{t('unity.title')}</span>
             </h1>
             
             <h2 className="font-cosmic text-2xl md:text-3xl mb-6 text-cosmic-gradient">
-              Gezien door het Enkele Oog
+              {t('unity.subtitle')}
             </h2>
             
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ontdek de verbondenheid van alle dingen. Berichten over kosmische eenheid, 
-              universele liefde en het zien door het oog van waarheid.
+              {t('unity.description')}
             </p>
           </div>
 
@@ -158,7 +157,7 @@ const Unity = () => {
                         navigate(`/blog/eenheid-gezien-door-het-enkele-oog/${article.handle}`);
                       }}
                     >
-                      {language === 'en' ? 'Read Full Article' : language === 'de' ? 'Vollständigen Artikel lesen' : 'Lees Volledig Artikel'}
+                      {t('unity.readArticle')}
                       <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </CardContent>
@@ -171,11 +170,10 @@ const Unity = () => {
                 <Eye className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-cosmic text-2xl font-bold text-mystical-gradient mb-4">
-                Geen artikelen gevonden
+                {t('unity.noArticlesTitle')}
               </h3>
               <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-                De berichten over eenheid en verbondenheid zijn nog onderweg. 
-                Keer binnenkort terug voor nieuwe inzichten door het enkele oog van waarheid.
+                {t('unity.noArticlesDescription')}
               </p>
             </div>
           )}

@@ -198,6 +198,23 @@ const translations = {
     'shop.redirecting': 'Je wordt doorgestuurd naar de checkout.',
     'shop.errorAdding': 'Fout bij toevoegen',
     'shop.errorMessage': 'Product kon niet worden toegevoegd aan de winkelwagen.',
+    'shop.noProductsDescription': 'De kosmische merchandise is nog onderweg. Keer binnenkort terug voor nieuwe items.',
+    'shop.products': 'Producten',
+    'shop.allProducts': 'Alle Producten',
+    'shop.errorAddingProduct': 'Dit product kan momenteel niet worden toegevoegd aan de winkelwagen.',
+
+    // Blog Page
+    'blog.title': 'Blogs',
+    'blog.description': 'Ontdek onze kosmische blogs vol goddelijke wijsheid en heilige kennis.',
+    'blog.egoToEden.title': 'Van Ego naar Eden',
+    'blog.egoToEden.description': 'Reis van ego-bewustzijn naar goddelijk ontwaken. Ontdek het pad naar spirituele transformatie.',
+    'blog.unity.title': 'Eenheid',
+    'blog.unity.description': 'Ontdek de verbondenheid van alle dingen. Berichten over kosmische eenheid en verbondenheid.',
+    'blog.exploreBlog': 'Bekijk Blog',
+    'blog.latestArticles': 'Nieuwste Artikelen',
+    'blog.readMore': 'Lees Meer',
+    'blog.noArticlesTitle': 'Geen artikelen gevonden',
+    'blog.noArticlesDescription': 'De kosmische berichten zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten.',
 
     // Error messages and other community text
     'community.noPosts': 'Geen berichten gevonden',
@@ -217,12 +234,60 @@ const translations = {
     'community.postDeletedMessage': 'Je post is succesvol verwijderd.',
     'community.errorDeleting': 'Fout bij verwijderen',
     'community.errorDeleteMessage': 'Er ging iets mis bij het verwijderen van je post. Probeer het opnieuw.',
+    
+    // Friends
+    'friends.title': 'Vrienden van het Licht',
+    'friends.subtitle': 'Alle leden van onze kosmische gemeenschap',
+    'friends.noMembers': 'Nog geen leden in de gemeenschap',
+    'friends.noName': 'Naamloos',
+    'friends.chosenOne': 'Uitverkorene',
+    'friends.showMore': 'Meer tonen',
+    'friends.showLess': 'Minder tonen',
+    
+    // Products
+    'products.digital': 'Digitaal',
+    'products.priceOnRequest': 'Prijs op aanvraag',
+    'products.instantDownload': 'Direct Download',
+    'products.view': 'Bekijk',
+
+    // Unity Page
+    'unity.title': 'Eenheid',
+    'unity.subtitle': 'Gezien door het Enkele Oog',
+    'unity.description': 'Ontdek de verbondenheid van alle dingen. Berichten over kosmische eenheid, universele liefde en het zien door het oog van waarheid.',
+    'unity.readArticle': 'Lees Volledig Artikel',
+    'unity.noArticlesTitle': 'Geen artikelen gevonden',
+    'unity.noArticlesDescription': 'De berichten over eenheid en verbondenheid zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten door het enkele oog van waarheid.',
+
+    // Ego to Eden Page
+    'egoToEden.title': 'Van Ego naar Eden',
+    'egoToEden.description': 'Een spirituele reis van ontwaking. Transformeer jouw innerlijke wereld en ontdek de weg terug naar je oorspronkelijke paradijs.',
+    'egoToEden.readArticle': 'Lees Volledig Artikel',
+    'egoToEden.noArticlesTitle': 'Geen artikelen gevonden',
+    'egoToEden.noArticlesDescription': 'De spirituele berichten uit "From Ego to Eden" zijn nog onderweg. Keer binnenkort terug voor nieuwe inzichten op je reis naar ontwaking.',
+
+    // Collection Page
+    'collection.notFoundTitle': 'Collectie niet gevonden',
+    'collection.notFoundDescription': 'De gevraagde collectie bestaat niet.',
+    'collection.loadErrorTitle': 'Fout bij laden',
+    'collection.loadErrorDescription': 'Collectie kon niet worden geladen.',
+    'collection.addedToCart': 'Toegevoegd aan winkelwagen',
+    'collection.addErrorTitle': 'Fout bij toevoegen',
+    'collection.addErrorDescription': 'Product kon niet worden toegevoegd aan de winkelwagen.',
+    'collection.loading': 'Collectie laden...',
+    'collection.backToShop': 'Terug naar winkel',
+    'collection.view': 'Bekijk',
+    'collection.noProductsTitle': 'Geen producten beschikbaar',
+    'collection.noProductsDescription': 'Deze collectie bevat momenteel geen producten. Keer binnenkort terug voor nieuwe items.',
+    'collection.viewOtherCollections': 'Bekijk andere collecties',
 
     // Common
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
     'common.chosenOne': 'Chosen One',
-    'common.loadingCommunity': 'Kosmische community laden...'
+    'common.loadingCommunity': 'Kosmische community laden...',
+    
+    // Product
+    'product.view': 'Bekijk product'
   },
   
   en: {
@@ -408,6 +473,23 @@ const translations = {
     'shop.addToCart': 'Add to Cart',
     'shop.viewProduct': 'View Product',
     'shop.noProducts': 'No products found',
+    'shop.noProductsDescription': 'The cosmic merchandise is still on its way. Return soon for new items.',
+    'shop.products': 'Products',
+    'shop.allProducts': 'All Products',
+    'shop.errorAddingProduct': 'This product cannot currently be added to the cart.',
+
+    // Blog Page
+    'blog.title': 'Blogs',
+    'blog.description': 'Explore our cosmic blogs filled with divine wisdom and sacred knowledge.',
+    'blog.egoToEden.title': 'From Ego to Eden',
+    'blog.egoToEden.description': 'Journey from ego consciousness to divine awakening. Discover the path to spiritual transformation.',
+    'blog.unity.title': 'Unity',
+    'blog.unity.description': 'Explore the interconnectedness of all things. Messages about cosmic unity and oneness.',
+    'blog.exploreBlog': 'Explore Blog',
+    'blog.latestArticles': 'Latest Articles',
+    'blog.readMore': 'Read More',
+    'blog.noArticlesTitle': 'No articles found',
+    'blog.noArticlesDescription': 'The cosmic messages are still on their way. Come back soon for new insights.',
     'shop.addedToCart': 'Added to cart',
     'shop.redirecting': 'You are being redirected to checkout.',
     'shop.errorAdding': 'Error adding',
@@ -431,12 +513,60 @@ const translations = {
     'community.postDeletedMessage': 'Your post has been successfully deleted.',
     'community.errorDeleting': 'Error deleting',
     'community.errorDeleteMessage': 'Something went wrong while deleting your post. Please try again.',
+    
+    // Friends
+    'friends.title': 'Friends of Light',
+    'friends.subtitle': 'All members of our cosmic community',
+    'friends.noMembers': 'No members in the community yet',
+    'friends.noName': 'Nameless',
+    'friends.chosenOne': 'Chosen One',
+    'friends.showMore': 'Show more',
+    'friends.showLess': 'Show less',
+    
+    // Products
+    'products.digital': 'Digital',
+    'products.priceOnRequest': 'Price on request',
+    'products.instantDownload': 'Instant Download',
+    'products.view': 'View',
+
+    // Unity Page
+    'unity.title': 'Unity',
+    'unity.subtitle': 'Seen Through the Single Eye',
+    'unity.description': 'Discover the interconnectedness of all things. Messages about cosmic unity, universal love and seeing through the eye of truth.',
+    'unity.readArticle': 'Read Full Article',
+    'unity.noArticlesTitle': 'No Articles Found',
+    'unity.noArticlesDescription': 'The messages about unity and connection are still on their way. Return soon for new insights through the single eye of truth.',
+
+    // Ego to Eden Page
+    'egoToEden.title': 'From Ego to Eden',
+    'egoToEden.description': 'A spiritual journey of awakening. Transform your inner world and discover the way back to your original paradise.',
+    'egoToEden.readArticle': 'Read Full Article',
+    'egoToEden.noArticlesTitle': 'No Articles Found',
+    'egoToEden.noArticlesDescription': 'The spiritual messages from "From Ego to Eden" are still on their way. Return soon for new insights on your journey to awakening.',
+
+    // Collection Page
+    'collection.notFoundTitle': 'Collection Not Found',
+    'collection.notFoundDescription': 'The requested collection does not exist.',
+    'collection.loadErrorTitle': 'Loading Error',
+    'collection.loadErrorDescription': 'Collection could not be loaded.',
+    'collection.addedToCart': 'Added to Cart',
+    'collection.addErrorTitle': 'Error Adding',
+    'collection.addErrorDescription': 'Product could not be added to cart.',
+    'collection.loading': 'Loading collection...',
+    'collection.backToShop': 'Back to Shop',
+    'collection.view': 'View',
+    'collection.noProductsTitle': 'No Products Available',
+    'collection.noProductsDescription': 'This collection currently contains no products. Return soon for new items.',
+    'collection.viewOtherCollections': 'View Other Collections',
 
     // Common
     'common.loading': 'Loading...',
     'common.cosmic': 'Cosmic',
     'common.chosenOne': 'Chosen One',
-    'common.loadingCommunity': 'Loading cosmic community...'
+    'common.loadingCommunity': 'Loading cosmic community...',
+    
+    // Product
+    'product.view': 'View Product'
   },
   
   de: {
@@ -622,6 +752,23 @@ const translations = {
     'shop.addToCart': 'In den Warenkorb',
     'shop.viewProduct': 'Produkt Ansehen',
     'shop.noProducts': 'Keine Produkte gefunden',
+    'shop.noProductsDescription': 'Die kosmische Merchandise ist noch unterwegs. Kehre bald zurück für neue Artikel.',
+    'shop.products': 'Produkte',
+    'shop.allProducts': 'Alle Produkte',
+    'shop.errorAddingProduct': 'Dieses Produkt kann derzeit nicht zum Warenkorb hinzugefügt werden.',
+
+    // Blog Page
+    'blog.title': 'Blogs',
+    'blog.description': 'Entdecke unsere kosmischen Blogs voller göttlicher Weisheit und heiligen Wissens.',
+    'blog.egoToEden.title': 'Vom Ego zu Eden',
+    'blog.egoToEden.description': 'Reise vom Ego-Bewusstsein zum göttlichen Erwachen. Entdecke den Pfad zur spirituellen Transformation.',
+    'blog.unity.title': 'Einheit',
+    'blog.unity.description': 'Erkunde die Verbundenheit aller Dinge. Botschaften über kosmische Einheit und Einssein.',
+    'blog.exploreBlog': 'Blog Erkunden',
+    'blog.latestArticles': 'Neueste Artikel',
+    'blog.readMore': 'Mehr Lesen',
+    'blog.noArticlesTitle': 'Keine Artikel gefunden',
+    'blog.noArticlesDescription': 'Die kosmischen Botschaften sind noch unterwegs. Kehre bald zurück für neue Einsichten.',
     'shop.addedToCart': 'Zum Warenkorb hinzugefügt',
     'shop.redirecting': 'Du wirst zur Kasse weitergeleitet.',
     'shop.errorAdding': 'Fehler beim Hinzufügen',
@@ -645,12 +792,60 @@ const translations = {
     'community.postDeletedMessage': 'Ihr Beitrag wurde erfolgreich gelöscht.',
     'community.errorDeleting': 'Fehler beim Löschen',
     'community.errorDeleteMessage': 'Beim Löschen Ihres Beitrags ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+    
+    // Friends
+    'friends.title': 'Freunde des Lichts',
+    'friends.subtitle': 'Alle Mitglieder unserer kosmischen Gemeinschaft',
+    'friends.noMembers': 'Noch keine Mitglieder in der Gemeinschaft',
+    'friends.noName': 'Namenlos',
+    'friends.chosenOne': 'Auserwählter',
+    'friends.showMore': 'Mehr anzeigen',
+    'friends.showLess': 'Weniger anzeigen',
+    
+    // Products
+    'products.digital': 'Digital',
+    'products.priceOnRequest': 'Preis auf Anfrage',
+    'products.instantDownload': 'Sofortiger Download',
+    'products.view': 'Ansehen',
+
+    // Unity Page
+    'unity.title': 'Einheit',
+    'unity.subtitle': 'Durch das Eine Auge gesehen',
+    'unity.description': 'Entdecke die Verbundenheit aller Dinge. Botschaften über kosmische Einheit, universelle Liebe und das Sehen durch das Auge der Wahrheit.',
+    'unity.readArticle': 'Vollständigen Artikel lesen',
+    'unity.noArticlesTitle': 'Keine Artikel gefunden',
+    'unity.noArticlesDescription': 'Die Botschaften über Einheit und Verbundenheit sind noch unterwegs. Kehre bald zurück für neue Erkenntnisse durch das eine Auge der Wahrheit.',
+
+    // Ego to Eden Page
+    'egoToEden.title': 'Vom Ego zu Eden',
+    'egoToEden.description': 'Eine spirituelle Reise des Erwachens. Verwandle deine innere Welt und entdecke den Weg zurück zu deinem ursprünglichen Paradies.',
+    'egoToEden.readArticle': 'Vollständigen Artikel lesen',
+    'egoToEden.noArticlesTitle': 'Keine Artikel gefunden',
+    'egoToEden.noArticlesDescription': 'Die spirituellen Botschaften aus "From Ego to Eden" sind noch unterwegs. Kehre bald zurück für neue Erkenntnisse auf deiner Reise zum Erwachen.',
+
+    // Collection Page
+    'collection.notFoundTitle': 'Kollektion nicht gefunden',
+    'collection.notFoundDescription': 'Die angeforderte Kollektion existiert nicht.',
+    'collection.loadErrorTitle': 'Ladenfehler',
+    'collection.loadErrorDescription': 'Kollektion konnte nicht geladen werden.',
+    'collection.addedToCart': 'Zum Warenkorb hinzugefügt',
+    'collection.addErrorTitle': 'Fehler beim Hinzufügen',
+    'collection.addErrorDescription': 'Produkt konnte nicht zum Warenkorb hinzugefügt werden.',
+    'collection.loading': 'Kollektion laden...',
+    'collection.backToShop': 'Zurück zum Shop',
+    'collection.view': 'Ansehen',
+    'collection.noProductsTitle': 'Keine Produkte verfügbar',
+    'collection.noProductsDescription': 'Diese Kollektion enthält derzeit keine Produkte. Kehre bald zurück für neue Artikel.',
+    'collection.viewOtherCollections': 'Andere Kollektionen ansehen',
 
     // Common
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
     'common.chosenOne': 'Chosen One',
-    'common.loadingCommunity': 'Kosmische Community laden...'
+    'common.loadingCommunity': 'Kosmische Community laden...',
+    
+    // Product
+    'product.view': 'Produkt Ansehen'
   }
 };
 
