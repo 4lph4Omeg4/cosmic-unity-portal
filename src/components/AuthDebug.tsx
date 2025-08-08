@@ -8,6 +8,7 @@ import { Bug, CheckCircle, AlertCircle, Info } from 'lucide-react';
 const AuthDebug = () => {
   const [debugInfo, setDebugInfo] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [repairing, setRepairing] = useState(false);
 
   const runDiagnostics = async () => {
     setLoading(true);
