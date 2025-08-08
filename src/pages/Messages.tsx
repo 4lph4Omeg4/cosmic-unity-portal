@@ -574,7 +574,7 @@ const Messages = () => {
                   <div className="p-4 border-t border-border/50">
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Type a message..."
+                        placeholder={language === 'en' ? 'Type a message...' : language === 'de' ? 'Nachricht eingeben...' : 'Typ een bericht...'}
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
