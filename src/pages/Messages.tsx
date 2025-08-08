@@ -161,6 +161,10 @@ const Messages = () => {
       const isTableError = errorMessage.includes('relation "public.messages" does not exist') ||
                           errorMessage.includes('table "messages" does not exist');
 
+      if (isTableError) {
+        setDatabaseError("The messages table hasn't been created yet. Please run the SQL script from create_tables.sql in your Supabase dashboard.");
+      }
+
       toast({
         title: "Error loading conversations",
         description: isTableError
