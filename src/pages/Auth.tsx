@@ -242,6 +242,7 @@ const Auth = () => {
 
         {/* Debug Component - Remove this in production */}
         <AuthDebug />
+        <AuthTroubleshooting />
       </div>
     </div>
   );
