@@ -523,7 +523,7 @@ export const fetchAllBlogs = async (language: string = 'en') => {
   }
 };
 
-export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'nl') => {
+export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', language: string = 'en') => {
   try {
     console.log(`=== FETCHING BLOG ARTICLES ===`);
     console.log(`Requested blog handle: ${blogHandle}, language: ${language}`);
@@ -600,7 +600,7 @@ export const fetchShopPolicies = async (language: string = 'nl') => {
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'NL', country: 'NL' }; // Default to Dutch
+          return { language: 'EN', country: 'US' }; // Default to English
       }
     };
     

@@ -284,7 +284,10 @@ const translations = {
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
     'common.chosenOne': 'Chosen One',
-    'common.loadingCommunity': 'Kosmische community laden...'
+    'common.loadingCommunity': 'Kosmische community laden...',
+    
+    // Product
+    'product.view': 'Bekijk product'
   },
   
   en: {
@@ -560,7 +563,10 @@ const translations = {
     'common.loading': 'Loading...',
     'common.cosmic': 'Cosmic',
     'common.chosenOne': 'Chosen One',
-    'common.loadingCommunity': 'Loading cosmic community...'
+    'common.loadingCommunity': 'Loading cosmic community...',
+    
+    // Product
+    'product.view': 'View Product'
   },
   
   de: {
@@ -836,7 +842,10 @@ const translations = {
     'common.loading': 'Laden...',
     'common.cosmic': 'Cosmic',
     'common.chosenOne': 'Chosen One',
-    'common.loadingCommunity': 'Kosmische Community laden...'
+    'common.loadingCommunity': 'Kosmische Community laden...',
+    
+    // Product
+    'product.view': 'Produkt Ansehen'
   }
 };
 

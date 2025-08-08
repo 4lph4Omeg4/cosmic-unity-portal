@@ -4,7 +4,6 @@ import HeroSection from '@/components/HeroSection';
 import FeaturedSection from '@/components/FeaturedSection';
 import LatestPosts from '@/components/LatestPosts';
 import NewsletterSection from '@/components/NewsletterSection';
-import NewsletterPopup from '@/components/NewsletterPopup';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -16,7 +15,6 @@ const Index = () => {
       <NewsletterSection />
       <LatestPosts />
       <Footer />
-      <NewsletterPopup />
     </div>
   );
 };

@@ -137,14 +137,24 @@ const Footer = () => {
               <ul className="space-y-2">
                 {footerLinks.community.map((link) => (
                   <li key={link.name}>
-                    <Link 
-                      to={link.href} 
+                    <Link
+                      to={link.href}
                       className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
                     >
                       {link.name}
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <a
+                    href="https://g.co/gemini/share/6d4720253bb2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
+                  >
+                    The Direct Path
+                  </a>
+                </li>
               </ul>
             </div>
 
