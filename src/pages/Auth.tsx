@@ -238,6 +238,9 @@ const Auth = () => {
             </Tabs>
           </CardContent>
         </Card>
+
+        {/* Debug Component - Remove this in production */}
+        <AuthDebug />
       </div>
     </div>
   );
