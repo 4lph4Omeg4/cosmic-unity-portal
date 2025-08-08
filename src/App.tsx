@@ -38,8 +38,9 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <AuthProvider>
-        <CartProvider>
-          <TooltipProvider>
+        <FriendsProvider>
+          <CartProvider>
+            <TooltipProvider>
             <Toaster />
             <Sonner />
             <NewsletterPopup delay={20000} exitIntent={true} />
@@ -55,6 +56,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/user/:userId" element={<UserProfile />} />
+              <Route path="/messages" element={<Messages />} />
+              <Route path="/messages/:userId" element={<Messages />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/ego-to-eden" element={<EgoToEden />} />
               <Route path="/unity" element={<Unity />} />
@@ -79,8 +82,9 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </TooltipProvider>
-        </CartProvider>
+          </TooltipProvider>
+          </CartProvider>
+        </FriendsProvider>
       </AuthProvider>
     </LanguageProvider>
   </QueryClientProvider>
