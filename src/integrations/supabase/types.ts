@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.12 (cd3cf9e)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
@@ -49,33 +49,24 @@ export type Database = {
           },
         ]
       }
-      messages: {
+      journal_entries: {
         Row: {
+          created_at: string | null
+          entry_text: string | null
           id: string
-          sender_id: string
-          receiver_id: string
-          content: string
-          read: boolean
-          created_at: string
-          updated_at: string
+          user_id: string
         }
         Insert: {
+          created_at?: string | null
+          entry_text?: string | null
           id?: string
-          sender_id: string
-          receiver_id: string
-          content: string
-          read?: boolean
-          created_at?: string
-          updated_at?: string
+          user_id: string
         }
         Update: {
+          created_at?: string | null
+          entry_text?: string | null
           id?: string
-          sender_id?: string
-          receiver_id?: string
-          content?: string
-          read?: boolean
-          created_at?: string
-          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -105,6 +96,54 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "posts"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean
+          read: boolean
+          receiver_id: string
+          sender_id: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          read?: boolean
+          receiver_id: string
+          sender_id: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          read?: boolean
+          receiver_id?: string
+          sender_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
           },
         ]
       }
@@ -164,6 +203,24 @@ export type Database = {
           display_name?: string | null
           id?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          progress_data: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          progress_data?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          progress_data?: Json | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []

@@ -413,11 +413,11 @@ const Messages = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
       
-      <main className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-20 pb-32">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           {/* Page Header */}
           <div className="flex items-center gap-4 mb-8">
             <Button
@@ -444,7 +444,7 @@ const Messages = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-12rem)] min-h-[500px]">
             {/* Conversations List */}
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
               <CardHeader>
