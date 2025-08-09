@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import CommunityMembersList from '@/components/CommunityMembersList';
-import DatabaseDebug from '@/components/DatabaseDebug';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -258,11 +257,6 @@ const Profile = () => {
               </Button>
             </CardContent>
           </Card>
-
-          {/* Database Debug Section */}
-          <div className="mt-8">
-            <DatabaseDebug />
-          </div>
 
           {/* Community Members Section */}
           <div className="mt-8">
