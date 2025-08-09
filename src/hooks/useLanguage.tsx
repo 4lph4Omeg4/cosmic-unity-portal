@@ -13,7 +13,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const translations = {
   nl: {
     common: {
-      cosmic: 'Kosmisch',
+      cosmic: 'Cosmisch',
       unity: 'Eenheid',
       portal: 'Portaal',
       buyNow: 'Koop Nu',
@@ -29,7 +29,7 @@ const translations = {
       logout: 'Uitloggen',
     },
     footer: {
-      description: 'Verken de kosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
+      description: 'Verken de cosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
       quickLinks: 'Snelle Links',
       legal: 'Wettelijk',
       social: 'Volg Ons',
@@ -41,11 +41,11 @@ const translations = {
     auth: {
       login: {
         title: 'Welkom Terug',
-        description: 'Log in op je account om je kosmische reis voort te zetten.',
+        description: 'Log in op je account om je cosmische reis voort te zetten.',
       },
       signup: {
         title: 'Word lid van de Community',
-        description: 'Maak een account aan om het volledige potentieel van de kosmos te ontsluiten.',
+        description: 'Maak een account aan om het volledige potentieel van de cosmos te ontsluiten.',
       },
       emailLabel: 'E-mail',
       passwordLabel: 'Wachtwoord',
@@ -60,7 +60,7 @@ const translations = {
       error: 'Authenticatiefout',
     },
     community: {
-      title: 'Kosmische Community',
+      title: 'Cosmische Community',
       description: 'Maak verbinding met gelijkgestemde zielen op hun spirituele reis.',
       allMembers: 'Alle Leden',
       searchPlaceholder: 'Zoek leden...',
@@ -102,7 +102,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Kosmische Berichten',
+      title: 'Cosmische Berichten',
       back: 'Terug',
       conversations: 'Gesprekken',
       recentConversations: 'Je recente gesprekken',
@@ -142,7 +142,7 @@ const translations = {
       newsletter: 'Sign up for our newsletter',
       'newsletter.placeholder': 'Your email address',
       'newsletter.subscribe': 'Subscribe',
-      copyright: '© 2024 Cosmic Unity Portal. All rights reserved.',
+      copyright: '© 2025 Cosmic Unity Portal. All rights reserved.',
     },
     auth: {
       login: {
