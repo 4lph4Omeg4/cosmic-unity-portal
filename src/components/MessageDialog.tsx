@@ -96,12 +96,15 @@ const MessageDialog: React.FC<MessageDialogProps> = ({
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} modal={true}>
       <DialogTrigger asChild>
         {trigger || defaultTrigger}
       </DialogTrigger>
       
-      <DialogContent className="sm:max-w-md cosmic-hover bg-card/95 backdrop-blur-sm border-border/50">
+      <DialogContent 
+        className="sm:max-w-md cosmic-hover bg-card/95 backdrop-blur-sm border-border/50 fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="font-cosmic text-cosmic-gradient flex items-center gap-3">
             <MessageCircle className="w-5 h-5" />
