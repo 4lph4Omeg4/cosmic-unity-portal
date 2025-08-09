@@ -6,12 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Send, ArrowLeft, Inbox, MessageCircle } from 'lucide-react';
+import { Send, ArrowLeft, Inbox } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
-import { Skeleton } from '@/components/ui/skeleton';
 
 interface Profile {
   id: string;
@@ -99,7 +98,6 @@ const Messages = () => {
 
       try {
         setLoading(true);
-        // Fetch recipient profile
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*')
@@ -116,7 +114,6 @@ const Messages = () => {
         }
         setRecipient(profileData);
 
-        // Fetch messages
         const { data: messagesData, error: messagesError } = await supabase
           .from('messages')
           .select('*')
@@ -138,6 +135,17 @@ const Messages = () => {
     };
 
     fetchMessages();
+    // Real-time subscription
+    const channel = supabase.channel(`messages:${user.id}:${userId}`)
+    .on<Message>('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${user.id}` }, payload => {
+        setMessages(prevMessages => [...prevMessages, payload.new as Message]);
+    })
+    .subscribe();
+
+    return () => {
+        supabase.removeChannel(channel);
+    };
+
   }, [userId, user, toast, t]);
   
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -166,8 +174,7 @@ const Messages = () => {
     }
   };
 
-
-  if (loading && !databaseError) {
+  if (loading && conversations.length === 0) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
@@ -182,8 +189,7 @@ const Messages = () => {
       </div>
     );
   }
-  
-  // Render the rest of the component...
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
@@ -205,7 +211,6 @@ const Messages = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-[calc(100vh-250px)]">
-            {/* Conversations List */}
             <Card className="col-span-1 lg:col-span-1 cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic flex flex-col">
               <CardHeader>
                 <CardTitle className="font-cosmic text-cosmic-gradient">{t('messages.conversations')}</CardTitle>
@@ -229,7 +234,6 @@ const Messages = () => {
               </CardContent>
             </Card>
 
-            {/* Message Area */}
             <Card className="md:col-span-2 lg:col-span-3 cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic flex flex-col h-full">
               {userId && recipient ? (
                 <>
