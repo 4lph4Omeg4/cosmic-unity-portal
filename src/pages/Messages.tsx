@@ -135,9 +135,8 @@ const Messages = () => {
     };
 
     fetchMessages();
-    // Real-time subscription
-    const channel = supabase.channel(`messages:${user.id}:${userId}`)
-    .on<Message>('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${user.id}` }, payload => {
+    const channel = supabase.channel(`messages:${user?.id}:${userId}`)
+    .on<Message>('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${user?.id}` }, payload => {
         setMessages(prevMessages => [...prevMessages, payload.new as Message]);
     })
     .subscribe();
