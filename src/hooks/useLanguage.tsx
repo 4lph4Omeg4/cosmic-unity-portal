@@ -12,7 +12,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const translations = {
   nl: {
-    'common.cosmic': 'Kosmisch',
+    'common.cosmic': 'Cosmisch',
     'common.unity': 'Eenheid',
     'common.portal': 'Portaal',
     'common.buyNow': 'Koop Nu',
@@ -24,7 +24,7 @@ const translations = {
     'nav.contact': 'Contact',
     'nav.profile': 'Profiel',
     'nav.logout': 'Uitloggen',
-    'footer.description': 'Verken de kosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
+    'footer.description': 'Verken de cosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
     'footer.quickLinks': 'Snelle Links',
     'footer.legal': 'Wettelijk',
     'footer.social': 'Volg Ons',
@@ -33,9 +33,9 @@ const translations = {
     'footer.newsletter.subscribe': 'Abonneren',
     'footer.copyright': '© 2024 Cosmic Unity Portal. Alle rechten voorbehouden.',
     'auth.login.title': 'Welkom Terug',
-    'auth.login.description': 'Log in op je account om je kosmische reis voort te zetten.',
+    'auth.login.description': 'Log in op je account om je cosmische reis voort te zetten.',
     'auth.signup.title': 'Word lid van de Community',
-    'auth.signup.description': 'Maak een account aan om het volledige potentieel van de kosmos te ontsluiten.',
+    'auth.signup.description': 'Maak een account aan om het volledige potentieel van de cosmos te ontsluiten.',
     'auth.emailLabel': 'E-mail',
     'auth.passwordLabel': 'Wachtwoord',
     'auth.loginButton': 'Inloggen',
@@ -47,7 +47,7 @@ const translations = {
     'auth.loginSuccess': 'Succesvol ingelogd!',
     'auth.signupSuccess': 'Account succesvol aangemaakt!',
     'auth.error': 'Authenticatiefout',
-    'community.title': 'Kosmische Community',
+    'community.title': 'Cosmische Community',
     'community.description': 'Maak verbinding met gelijkgestemde zielen op hun spirituele reis.',
     'community.allMembers': 'Alle Leden',
     'community.searchPlaceholder': 'Zoek leden...',
@@ -63,7 +63,6 @@ const translations = {
     'community.noFriends': 'Je hebt nog geen vrienden. Voeg wat toe!',
     'community.noRequests': 'Je hebt geen openstaande vriendschapsverzoeken.',
     'community.backToCommunity': 'Terug naar Community',
-    // Friend Status Toasts
     'friend.requestSent': 'Vriendschapsverzoek verzonden!',
     'friend.requestError': 'Fout bij verzenden van vriendschapsverzoek.',
     'friend.requestAccepted': 'Vriendschapsverzoek geaccepteerd!',
@@ -72,10 +71,9 @@ const translations = {
     'friend.declineError': 'Fout bij weigeren van vriendschapsverzoek.',
     'friend.removed': 'Vriend verwijderd.',
     'friend.removeError': 'Fout bij verwijderen van vriend.',
-    // User Profile Page
     'userProfile.friends': 'Vrienden',
     'userProfile.since': 'Lid sinds',
-    'userProfile.noFriends': 'Nog geen vrienden in de kosmos.',
+    'userProfile.noFriends': 'Nog geen vrienden in de cosmos.',
     'userProfile.loading': 'Profiel laden...',
     'userProfile.notFound': 'Gebruiker niet gevonden.',
     'userProfile.editProfile': 'Profiel Bewerken',
@@ -83,9 +81,7 @@ const translations = {
     'userProfile.status.pending': 'Verzoek In Afwachting',
     'userProfile.status.notFriends': 'Vriend Toevoegen',
     'userProfile.status.isSelf': 'Dit ben jij',
-
-    // Messages
-    'messages.title': 'Kosmische Berichten',
+    'messages.title': 'Cosmische Berichten',
     'messages.back': 'Terug',
     'messages.conversations': 'Gesprekken',
     'messages.recentConversations': 'Je recente gesprekken',
@@ -151,7 +147,6 @@ const translations = {
     'community.noFriends': "You don't have any friends yet. Add some!",
     'community.noRequests': 'You have no pending friend requests.',
     'community.backToCommunity': 'Back to Community',
-    // Friend Status Toasts
     'friend.requestSent': 'Friend request sent!',
     'friend.requestError': 'Error sending friend request.',
     'friend.requestAccepted': 'Friend request accepted!',
@@ -160,7 +155,6 @@ const translations = {
     'friend.declineError': 'Error declining friend request.',
     'friend.removed': 'Friend removed.',
     'friend.removeError': 'Error removing friend.',
-    // User Profile Page
     'userProfile.friends': 'Friends',
     'userProfile.since': 'Member since',
     'userProfile.noFriends': 'No friends in the cosmos yet.',
@@ -171,8 +165,6 @@ const translations = {
     'userProfile.status.pending': 'Request Pending',
     'userProfile.status.notFriends': 'Add Friend',
     'userProfile.status.isSelf': 'This is you',
-
-    // Messages
     'messages.title': 'Cosmic Messages',
     'messages.back': 'Back',
     'messages.conversations': 'Conversations',
@@ -239,7 +231,6 @@ const translations = {
     'community.noFriends': 'Du hast noch keine Freunde. Füge welche hinzu!',
     'community.noRequests': 'Du hast keine ausstehenden Freundschaftsanfragen.',
     'community.backToCommunity': 'Zurück zur Community',
-    // Friend Status Toasts
     'friend.requestSent': 'Freundschaftsanfrage gesendet!',
     'friend.requestError': 'Fehler beim Senden der Freundschaftsanfrage.',
     'friend.requestAccepted': 'Freundschaftsanfrage angenommen!',
@@ -248,7 +239,6 @@ const translations = {
     'friend.declineError': 'Fehler beim Ablehnen der Freundschaftsanfrage.',
     'friend.removed': 'Freund entfernt.',
     'friend.removeError': 'Fehler beim Entfernen des Freundes.',
-    // User Profile Page
     'userProfile.friends': 'Freunde',
     'userProfile.since': 'Mitglied seit',
     'userProfile.noFriends': 'Noch keine Freunde im Kosmos.',
@@ -259,8 +249,6 @@ const translations = {
     'userProfile.status.pending': 'Anfrage Ausstehend',
     'userProfile.status.notFriends': 'Freund Hinzufügen',
     'userProfile.status.isSelf': 'Das bist du',
-    
-    // Messages
     'messages.title': 'Kosmische Nachrichten',
     'messages.back': 'Zurück',
     'messages.conversations': 'Gespräche',
@@ -292,34 +280,4 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('language', lang);
   };
 
-  const t = (key: string): string => {
-    const keys = key.split('.');
-    let result: any = translations[language];
-    for (const k of keys) {
-      result = result?.[k];
-      if (result === undefined) {
-        // Fallback to English if translation is missing
-        let fallbackResult: any = translations.en;
-        for (const fk of keys) {
-          fallbackResult = fallbackResult?.[fk];
-        }
-        return fallbackResult || key;
-      }
-    }
-    return result || key;
-  };
-
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
-};
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-};
+  const t
