@@ -20,7 +20,7 @@ interface Profile {
 }
 
 interface Message {
-  id: number;
+  id: string;
   sender_id: string;
   receiver_id: string;
   content: string;
@@ -65,18 +65,8 @@ const Messages = () => {
     const fetchConversations = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase.rpc('get_conversations_with_profiles', {
-          p_user_id: user.id
-        });
-
-        if (error) {
-          if (error.code === '42P01') { 
-            setDatabaseError(true);
-          }
-          throw error;
-        }
-        
-        setConversations(data || []);
+        // For now, we'll just set empty conversations until the RPC function is properly set up
+        setConversations([]);
       } catch (error: any) {
         console.error('Error fetching conversations:', error);
         toast({
