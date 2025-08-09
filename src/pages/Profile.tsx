@@ -6,6 +6,7 @@ import CommunityMembersList from '@/components/CommunityMembersList';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Upload, User, Save, MessageCircle } from 'lucide-react';
@@ -65,12 +66,10 @@ const Profile = () => {
 
       if (uploadError) throw uploadError;
 
-      // Get the public URL
       const { data } = supabase.storage
         .from('user-avatars')
         .getPublicUrl(filePath);
 
-      // Update profile with new avatar URL
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ avatar_url: data.publicUrl })
@@ -78,7 +77,6 @@ const Profile = () => {
 
       if (updateError) throw updateError;
 
-      // Refresh the profile data to update the navigation
       refreshProfile();
       
       setLocalProfile(prev => prev ? { ...prev, avatar_url: data.publicUrl } : null);
@@ -113,7 +111,6 @@ const Profile = () => {
 
       if (error) throw error;
 
-      // Refresh the profile data to update the navigation
       refreshProfile();
 
       toast({
@@ -154,7 +151,6 @@ const Profile = () => {
       
       <main className="py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Page Header */}
           <div className="text-center mb-12">
             <div className="flex justify-center mb-6">
               <div className="w-12 h-12 bg-cosmic-gradient rounded-full flex items-center justify-center shadow-cosmic animate-cosmic-pulse">
@@ -183,7 +179,6 @@ const Profile = () => {
             </CardHeader>
             
             <CardContent className="space-y-6">
-              {/* Avatar Section */}
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="w-32 h-32 border-4 border-cosmic/20 shadow-cosmic">
                   <AvatarImage src={localProfile?.avatar_url} />
@@ -212,7 +207,6 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* Profile Fields */}
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="displayName" className="font-mystical">
@@ -233,19 +227,18 @@ const Profile = () => {
                   <Label htmlFor="bio" className="font-mystical">
                     Bio
                   </Label>
-                  <textarea
+                  <Textarea
                     id="bio"
                     value={localProfile?.bio || ''}
                     onChange={(e) => setLocalProfile(prev => 
                       prev ? { ...prev, bio: e.target.value } : null
                     )}
-                    className="w-full min-h-[100px] px-3 py-2 text-sm border border-input bg-background rounded-md font-mystical"
+                    className="font-mystical"
                     placeholder="Vertel over je spirituele reis..."
                   />
                 </div>
               </div>
 
-              {/* Save Button */}
               <Button 
                 onClick={updateProfile}
                 disabled={saving}
@@ -258,7 +251,6 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          {/* Community Members Section */}
           <div className="mt-8">
             <CommunityMembersList
               title="Community Members"
@@ -267,7 +259,6 @@ const Profile = () => {
             />
           </div>
 
-          {/* Quick Actions */}
           <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic mt-8">
             <CardHeader>
               <CardTitle className="font-cosmic text-cosmic-gradient">
