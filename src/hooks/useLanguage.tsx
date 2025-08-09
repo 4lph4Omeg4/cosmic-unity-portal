@@ -24,7 +24,7 @@ const translations = {
     'nav.contact': 'Contact',
     'nav.profile': 'Profiel',
     'nav.logout': 'Uitloggen',
-    'footer.description': 'Verken de cosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
+    'footer.description': 'Verken de Cosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
     'footer.quickLinks': 'Snelle Links',
     'footer.legal': 'Wettelijk',
     'footer.social': 'Volg Ons',
@@ -33,9 +33,9 @@ const translations = {
     'footer.newsletter.subscribe': 'Abonneren',
     'footer.copyright': '© 2024 Cosmic Unity Portal. Alle rechten voorbehouden.',
     'auth.login.title': 'Welkom Terug',
-    'auth.login.description': 'Log in op je account om je cosmische reis voort te zetten.',
+    'auth.login.description': 'Log in op je account om je Cosmische reis voort te zetten.',
     'auth.signup.title': 'Word lid van de Community',
-    'auth.signup.description': 'Maak een account aan om het volledige potentieel van de cosmos te ontsluiten.',
+    'auth.signup.description': 'Maak een account aan om het volledige potentieel van de Cosmos te ontsluiten.',
     'auth.emailLabel': 'E-mail',
     'auth.passwordLabel': 'Wachtwoord',
     'auth.loginButton': 'Inloggen',
@@ -73,7 +73,7 @@ const translations = {
     'friend.removeError': 'Fout bij verwijderen van vriend.',
     'userProfile.friends': 'Vrienden',
     'userProfile.since': 'Lid sinds',
-    'userProfile.noFriends': 'Nog geen vrienden in de cosmos.',
+    'userProfile.noFriends': 'Nog geen vrienden in de kosmos.',
     'userProfile.loading': 'Profiel laden...',
     'userProfile.notFound': 'Gebruiker niet gevonden.',
     'userProfile.editProfile': 'Profiel Bewerken',
@@ -280,4 +280,34 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('language', lang);
   };
 
-  const t
+  const t = (key: string): string => {
+    const keys = key.split('.');
+    let result: any = translations[language];
+    for (const k of keys) {
+      result = result?.[k];
+      if (result === undefined) {
+        // Fallback to English if translation is missing
+        let fallbackResult: any = translations.en;
+        for (const fk of keys) {
+          fallbackResult = fallbackResult?.[fk];
+        }
+        return fallbackResult || key;
+      }
+    }
+    return result || key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
