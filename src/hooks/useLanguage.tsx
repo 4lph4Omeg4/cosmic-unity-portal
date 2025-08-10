@@ -469,7 +469,8 @@ footer: {
     },
   }
 }
-  }}
+  }
+}
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('nl');
 
