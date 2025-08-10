@@ -152,15 +152,32 @@ hero: {
       profile: 'Profile',
       logout: 'Logout',
     },
-    footer: {
-      description: 'Explore the cosmos within. Connect, grow, and awaken with Cosmic Unity Portal.',
+    hero: {
+  subtitle: 'Discover your infinite potential',
+  cta: { explore: 'Explore' }
+},
+footer: {
+  allProducts: 'All Products',
+  newArrivals: 'New Arrivals',
+  featured: 'Featured',
+  shop: 'Shop',
+  community: 'Community',
+  blog: 'Blog',
+  about: 'About Us',
+  contact: 'Contact',
+  contactUs: 'Contact Us',
+  shipping: 'Shipping',
+  returns: 'Returns',
+  privacy: 'Privacy Policy',
+  terms: 'Terms of Service',
+      description: 'Explore the cosmos within. Connect, expand, and awaken with Cosmic Unity Portal.',
       quickLinks: 'Quick Links',
       legal: 'Legal',
       social: 'Follow Us',
       newsletter: 'Sign up for our newsletter',
       'newsletter.placeholder': 'Your email address',
       'newsletter.subscribe': 'Subscribe',
-      copyright: '© 2024 Cosmic Unity Portal. All rights reserved.',
+      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. All rights reserved.',
     },
     auth: {
       login: {
@@ -258,7 +275,24 @@ hero: {
       profile: 'Profil',
       logout: 'Abmelden',
     },
-    footer: {
+    hero: {
+  subtitle: 'Entdecke dein grenzenloses Potenzial',
+  cta: { explore: 'Entdecken' }
+},
+footer: {
+  allProducts: 'Alle Produkte',
+  newArrivals: 'Neuheiten',
+  featured: 'Empfohlen',
+  shop: 'Shop',           // of 'Laden', afhankelijk van je voorkeur
+  community: 'Gemeinschaft',
+  blog: 'Blog',
+  about: 'Über uns',
+  contact: 'Kontakt',
+  contactUs: 'Kontaktieren Sie uns',
+  shipping: 'Versand',
+  returns: 'Rückgabe',
+  privacy: 'Datenschutz',
+  terms: 'Nutzungsbedingungen',
       description: 'Erkunde den Kosmos im Inneren. Verbinde dich, wachse und erwache mit dem Cosmic Unity Portal.',
       quickLinks: 'Schnell-Links',
       legal: 'Rechtliches',
@@ -266,7 +300,7 @@ hero: {
       newsletter: 'Melde dich für unseren Newsletter an',
       'newsletter.placeholder': 'Deine E-Mail-Adresse',
       'newsletter.subscribe': 'Abonnieren',
-      copyright: '© 2024 Cosmic Unity Portal. Alle Rechte vorbehalten.',
+      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle Rechte vorbehalten.',
     },
     auth: {
       login: {
@@ -347,7 +381,7 @@ hero: {
       userNotFoundError: 'Benutzer nicht gefunden',
     },
   }
-}}
+}
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('nl');
