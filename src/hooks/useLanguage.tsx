@@ -28,15 +28,28 @@ const translations = {
       profile: 'Profiel',
       logout: 'Uitloggen',
     },
-    footer: {
-      description: 'Verken de cosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
-      quickLinks: 'Snelle Links',
-      legal: 'Wettelijk',
-      social: 'Volg Ons',
-      newsletter: 'Schrijf je in voor onze nieuwsbrief',
-      'newsletter.placeholder': 'Jouw emailadres',
-      'newsletter.subscribe': 'Abonneren',
-      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle rechten voorbehouden.',
+ footer: {
+  allProducts: 'Alle producten',
+  newArrivals: 'Nieuwe producten',
+  featured: 'Aanbevolen',
+  shop: 'Winkel',
+  community: 'Community',
+  blog: 'Blog',
+  about: 'Over ons',
+  contact: 'Contact',
+  contactUs: 'Contacteer ons',
+  shipping: 'Verzending',
+  returns: 'Retouren',
+  privacy: 'Privacybeleid',
+  terms: 'Algemene voorwaarden',
+  description: 'Verken de cosmos binnenin. Maak verbinding, groei en ontwaak met Cosmic Unity Portal.',
+  quickLinks: 'Snelle Links',
+  legal: 'Wettelijk',
+  social: 'Volg Ons',
+  newsletter: 'Schrijf je in voor onze nieuwsbrief',
+  'newsletter.placeholder': 'Jouw emailadres',
+  'newsletter.subscribe': 'Abonneren',
+  copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle rechten voorbehouden.',
     },
     auth: {
       login: {
@@ -100,6 +113,7 @@ const translations = {
         notFriends: 'Vriend Toevoegen',
         isSelf: 'Dit ben jij',
       },
+      
     },
     messages: {
       title: 'Cosmische Berichten',
@@ -116,13 +130,10 @@ const translations = {
       fetchConversationsError: 'Fout bij ophalen van gesprekken',
       userNotFoundError: 'Gebruiker niet gevonden',
     },
-    hero: {
-  subtitle: {
-    nl: 'Ontdek je oneindige potentieel',
-      },
-  cta: {
-    explore: {
-      nl: 'Ontdek',
+hero: {
+  subtitle: 'Ontdek je oneindige potentieel',
+  cta: { explore: 'Ontdek' }
+},
   },
   en: {
     common: {
