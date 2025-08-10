@@ -116,6 +116,13 @@ const translations = {
       fetchConversationsError: 'Fout bij ophalen van gesprekken',
       userNotFoundError: 'Gebruiker niet gevonden',
     },
+    hero: {
+  subtitle: {
+    nl: 'Ontdek je oneindige potentieel',
+      },
+  cta: {
+    explore: {
+      nl: 'Ontdek',
   },
   en: {
     common: {
