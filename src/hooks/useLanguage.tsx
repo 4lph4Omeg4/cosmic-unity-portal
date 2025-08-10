@@ -81,7 +81,7 @@ const translations = {
         message: 'Check je e-mail voor ons kosmische welkomstgeschenk.',
         status: 'Je account is aangemaakt. Log in om te verkennen.',
       },
-      button: { loading: 'Bezig…' },
+buttonLoading: 'Bezig…',
     },
     auth: {
       login: {
@@ -237,7 +237,7 @@ const translations = {
         message: 'Check your email for a cosmic welcome gift.',
         status: 'Your account has been created. Log in to explore.',
       },
-      button: { loading: 'Sending…' },
+      buttonLoading: 'Sending…',
     },
     auth: {
       login: {
@@ -393,7 +393,7 @@ const translations = {
         message: 'Prüfe deine E-Mail auf unser kosmisches Willkommensgeschenk.',
         status: 'Dein Konto wurde erstellt. Logge dich ein, um zu entdecken.',
       },
-      button: { loading: 'Senden…' },
+      buttonLoading: 'Senden…',
     },
     auth: {
       login: {
