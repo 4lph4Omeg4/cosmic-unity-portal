@@ -76,7 +76,7 @@ const translations = {
     auth: {
       login: {
         title: 'Welkom Terug',
-        description: 'Log in op je account om je cosmische reis voort te zetten.',
+        description; 'Log in op je account om je cosmische reis voort te zetten.',
       },
       signup: {
         title: 'Word lid van de Community',
