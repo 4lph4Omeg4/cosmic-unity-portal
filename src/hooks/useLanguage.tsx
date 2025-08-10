@@ -54,7 +54,7 @@ const translations = {
                 placeholder: 'Jouw emailadres',
                 button: 'Abonneer',
                 subscribe: 'Abonneren',
-                subtitle: 'Schrijf je in voor de nieuwsbrief en wees als eerste op de hoogte van nieuwe drops, spirituele inzichten en speciale aanbiedingen'},
+                subtitle: 'Schrijf je in voor de nieuwsbrief en wees als eerste op de hoogte van nieuwe drops, spirituele inzichten en speciale aanbiedingen',
       compact: { title: 'Nieuwsbrief'},
         email: { label: 'E‑mailadres'},
       account: { create: 'Account aanmaken',
@@ -71,6 +71,7 @@ const translations = {
                 message: 'Check je e‑mail voor ons kosmische welkomstgeschenk.',
                 status: 'Je account is aangemaakt. Log in om te verkennen.'},
         button: { loading: 'Bezig…'},
+               }
     auth: {
       login: {
         title: 'Welkom Terug',
