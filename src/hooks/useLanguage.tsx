@@ -80,7 +80,6 @@ const translations = {
       signup; {
         title: 'Word lid van de Community',
         description; 'Maak een account aan om het volledige potentieel van de cosmos te ontsluiten.',
-      },
       emailLabel: 'E-mail',
       passwordLabel: 'Wachtwoord',
       loginButton: 'Inloggen',
