@@ -72,7 +72,7 @@ const translations = {
                 status: 'Je account is aangemaakt. Log in om te verkennen.'},
         button: { loading: 'Bezig…'},
                }
-  }
+  }}
     auth: {
       login: {
         title: 'Welkom Terug',
