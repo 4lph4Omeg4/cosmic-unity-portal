@@ -79,7 +79,7 @@ const translations = {
         description; 'Log in op je account om je cosmische reis voort te zetten.',
       signup; {
         title: 'Word lid van de Community',
-        description: 'Maak een account aan om het volledige potentieel van de cosmos te ontsluiten.',
+        description; 'Maak een account aan om het volledige potentieel van de cosmos te ontsluiten.',
       },
       emailLabel: 'E-mail',
       passwordLabel: 'Wachtwoord',
