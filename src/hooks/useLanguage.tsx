@@ -49,7 +49,7 @@ const translations = {
   legal: 'Wettelijk',
   social: 'Volg Ons',
   newsletter: 'Schrijf je in voor onze nieuwsbrief',
-  'newsletter.title': 'Word lid van onze inner circle',
+  newsletter.title: 'Word lid van onze inner circle',
   'newsletter.placeholder': 'Jouw emailadres',
   'newsletter.subscribe': 'Abonneren',
   'newsletter.subtitle': 'Schrijf je in voor de nieuwsbrief en wees als eerste op de hoogte van nieuwe drops, spirituele inzichten en speciale aanbiedingen',
