@@ -48,38 +48,29 @@ const translations = {
   quickLinks: 'Snelle Links',
   legal: 'Wettelijk',
   social: 'Volg Ons',
-  newsletter: {
-    title: 'Word lid van onze inner circle',
-    placeholder: 'Jouw emailadres',
-    button: 'Abonneer',
-    subscribe: 'Abonneren',
-    subtitle: 'Schrijf je in voor de nieuwsbrief en wees als eerste op de hoogte van nieuwe drops, spirituele inzichten en speciale aanbiedingen',
-    compact: {
-      title: 'Nieuwsbrief'},
-      email: {
-      label: 'E‑mailadres'},
-      account: {
-      create: 'Account aanmaken',
-      benefits: 'Maak een account aan voor exclusieve voordelen'},
-      password: {
-      label: 'Wachtwoord',
-      hint: 'Minimaal 8 tekens'},
-  consent: 'Ik ga akkoord met het ontvangen van kosmische updates en marketingmails',
-    error: {
-      incomplete: 'Vul alle verplichte velden in en accepteer ons privacybeleid',
-      password: 'Wachtwoord is verplicht om een account aan te maken'},
-success: {
-  title: 'Bedankt voor je inschrijving!',
-  description: 'Je inschrijving is gelukt',
-  message: 'Je bent nu geabonneerd. Check je inbox voor bevestiging.'},
-welcome: {
-  title: 'Welkom, spirituele reiziger!',
-  message: 'Check je e‑mail voor ons kosmische welkomstgeschenk.',
-  status: 'Je account is aangemaakt. Log in om te verkennen.'},
-button: {
-  loading: 'Bezig…'},
    copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle rechten voorbehouden.',
     },
+   newsletter: { title: 'Word lid van onze inner circle',
+                placeholder: 'Jouw emailadres',
+                button: 'Abonneer',
+                subscribe: 'Abonneren',
+                subtitle: 'Schrijf je in voor de nieuwsbrief en wees als eerste op de hoogte van nieuwe drops, spirituele inzichten en speciale aanbiedingen',
+      compact: { title: 'Nieuwsbrief'},
+        email: { label: 'E‑mailadres'},
+      account: { create: 'Account aanmaken',
+                benefits: 'Maak een account aan voor exclusieve voordelen'},
+      password: { label: 'Wachtwoord',
+                hint: 'Minimaal 8 tekens'},
+                consent: 'Ik ga akkoord met het ontvangen van kosmische updates en marketingmails',
+        error: { incomplete: 'Vul alle verplichte velden in en accepteer ons privacybeleid',
+                password: 'Wachtwoord is verplicht om een account aan te maken'},
+      success: { title: 'Bedankt voor je inschrijving!',
+                description: 'Je inschrijving is gelukt',
+                message: 'Je bent nu geabonneerd. Check je inbox voor bevestiging.'},
+      welcome: { title: 'Welkom, spirituele reiziger!',
+                message: 'Check je e‑mail voor ons kosmische welkomstgeschenk.',
+                status: 'Je account is aangemaakt. Log in om te verkennen.'},
+        button: { loading: 'Bezig…'},
     auth: {
       login: {
         title: 'Welkom Terug',
@@ -205,38 +196,29 @@ footer: {
       quickLinks: 'Quick Links',
       legal: 'Legal',
       social: 'Follow Us',
-      newsletter: { 
-        title: 'Join our inner circle',
+      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. All rights reserved.',
+    },
+      newsletter: { title: 'Join our inner circle',
         placeholder: 'Your email address',
         subscribe: 'Subscribe',
         subtitle: 'Sign up for the newsletter and be the first to know about new drops, spiritual insights and special offers',
         consent: 'I agree to receive cosmic updates and marketing emails',
         button: 'Subscribe'},
-      compact: {
-        title: 'Newsletter',
-      email: {
-        label: 'Email address'},
-      account: {
-        create: 'Create an account', 
-        benefits: 'Unlock exclusive benefits when you create an account'},
-      password: {
-        label: 'Password',
-        hint: 'Minimum 8 characters'},
-      error: {
-        password: 'Password is required to create an account',
-        incomplete: 'Please fill in all required fields and accept our privacy policy'},
-      success: {
-        title: 'Thank you for joining!',
-        description: 'Your subscription was successful',
-        message: 'You’re now subscribed. Check your inbox for a confirmation.',
-      welcome: {
-        title: 'Welcome, spiritual traveller!',
-        message: 'Check your email for a cosmic welcome gift.',
-        status: 'Your account has been created. Log in to explore.'},
-      button: {
-        loading: 'Sending…'},      
-      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. All rights reserved.',
-    },
+      compact: { title: 'Newsletter',
+        email: { label: 'Email address'},
+      account: { create: 'Create an account', 
+          benefits: 'Unlock exclusive benefits when you create an account'},
+      password: { label: 'Password',
+          hint: 'Minimum 8 characters'},
+      error: { password: 'Password is required to create an account',
+          incomplete: 'Please fill in all required fields and accept our privacy policy'},
+      success: { title: 'Thank you for joining!',
+          description: 'Your subscription was successful',
+          message: 'You’re now subscribed. Check your inbox for a confirmation.',
+      welcome: { title: 'Welcome, spiritual traveller!',
+          message: 'Check your email for a cosmic welcome gift.',
+          status: 'Your account has been created. Log in to explore.'},
+      button: { loading: 'Sending…'},      
     auth: {
       login: {
         title: 'Welcome Back',
@@ -357,38 +339,29 @@ footer: {
       quickLinks: 'Schnell-Links',
       legal: 'Rechtliches',
       social: 'Folge Uns',
-      newsletter: { 
-      title: 'Werde Teil unseres Inner Circle',
+      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle Rechte vorbehalten.',
+    },
+    newsletter: { title: 'Werde Teil unseres Inner Circle',
       placeholder: 'Deine E-Mail-Adresse',
       subscribe: 'Abonnieren',
       consent: 'Ich stimme zu, kosmische Updates und Marketing‑E‑Mails zu erhalten',
       subtitle: 'Melde dich für den Newsletter an und sei der Erste, der von neuen Drops, spirituellen Erkenntnissen und besonderen Angeboten erfährt',
       button: 'Abonnieren'},
-    compact: {
-      title: 'Newsletter'},
-  email: {
-    label: 'E‑Mail‑Adresse'},
-  account: {
-    create: 'Konto erstellen',
+    compact: { title: 'Newsletter'},
+    email: { label: 'E‑Mail‑Adresse'},
+  account: { create: 'Konto erstellen',
     benefits: 'Erhalte exklusive Vorteile mit einem Konto'},
-  password: {
-    label: 'Passwort',
+  password: { label: 'Passwort',
     hint: 'Mindestens 8 Zeichen'},
-  error: {
-    password: 'Passwort ist erforderlich, um ein Konto zu erstellen', 
+  error: { password: 'Passwort ist erforderlich, um ein Konto zu erstellen', 
     incomplete: 'Bitte fülle alle Pflichtfelder aus und akzeptiere unsere Datenschutzrichtlinie'},
-  success: {
-    title: 'Danke für deine Anmeldung!',
+  success: { title: 'Danke für deine Anmeldung!',
     description: 'Deine Anmeldung war erfolgreich',
     message: 'Du bist jetzt angemeldet. Prüfe dein Postfach auf eine Bestätigung.'},
-  welcome: {
-    title: 'Willkommen, spiritueller Reisender!',
+  welcome: { title: 'Willkommen, spiritueller Reisender!',
     message: 'Prüfe deine E‑Mail auf unser kosmisches Willkommensgeschenk.',
     status: 'Dein Konto wurde erstellt. Logge dich ein, um zu entdecken.'},
-  button: {
-    loading: 'Senden…'},
-      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle Rechte vorbehalten.',
-    },
+  button: { loading: 'Senden…'},
     auth: {
       login: {
         title: 'Willkommen zurück',
