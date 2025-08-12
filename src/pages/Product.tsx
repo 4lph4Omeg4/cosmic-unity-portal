@@ -346,18 +346,29 @@ const Product = () => {
               </div>
 
               {/* Size and Color Selectors */}
-              {product.variants.edges.length > 1 && (
-                <SizeColorSelector
-                  variants={product.variants.edges.map(edge => edge.node)}
-                  selectedVariant={selectedVariant}
-                  onVariantChange={(variant) => {
-                    setSelectedVariant(variant);
-                    const imageIndex = findImageForVariant(variant);
-                    setSelectedImageIndex(imageIndex);
-                  }}
-                  formatPrice={formatPrice}
-                />
-              )}
+              {(() => {
+                console.log('Product variants check:', product.variants.edges.length);
+                console.log('Full product variants:', product.variants.edges);
+                
+                if (product.variants.edges.length > 1) {
+                  console.log('Rendering SizeColorSelector with variants:', product.variants.edges.map(edge => edge.node));
+                  return (
+                    <SizeColorSelector
+                      variants={product.variants.edges.map(edge => edge.node)}
+                      selectedVariant={selectedVariant}
+                      onVariantChange={(variant) => {
+                        setSelectedVariant(variant);
+                        const imageIndex = findImageForVariant(variant);
+                        setSelectedImageIndex(imageIndex);
+                      }}
+                      formatPrice={formatPrice}
+                    />
+                  );
+                } else {
+                  console.log('Only one variant found, not showing SizeColorSelector');
+                  return null;
+                }
+              })()}
 
               {/* Quantity Selection */}
               <div className="flex items-center space-x-4">
