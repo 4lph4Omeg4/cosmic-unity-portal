@@ -32,29 +32,40 @@ const SizeColorSelector: React.FC<SizeColorSelectorProps> = ({
   onVariantChange,
   formatPrice
 }) => {
+  console.log('SizeColorSelector variants:', variants);
+  console.log('SizeColorSelector selectedVariant:', selectedVariant);
+
   // Extract unique sizes and colors from variants
   const sizes = Array.from(new Set(
-    variants.flatMap(variant => 
-      variant.selectedOptions
-        .filter(option => 
-          option.name.toLowerCase().includes('size') || 
-          option.name.toLowerCase().includes('maat')
-        )
-        .map(option => option.value)
-    )
+    variants.flatMap(variant => {
+      console.log('Variant selectedOptions:', variant.selectedOptions);
+      return variant.selectedOptions
+        .filter(option => {
+          const isSizeOption = option.name.toLowerCase().includes('size') || 
+                              option.name.toLowerCase().includes('maat');
+          console.log(`Option "${option.name}" (${option.value}) is size:`, isSizeOption);
+          return isSizeOption;
+        })
+        .map(option => option.value);
+    })
   ));
 
   const colors = Array.from(new Set(
     variants.flatMap(variant => 
       variant.selectedOptions
-        .filter(option => 
-          option.name.toLowerCase().includes('color') || 
-          option.name.toLowerCase().includes('colour') ||
-          option.name.toLowerCase().includes('kleur')
-        )
+        .filter(option => {
+          const isColorOption = option.name.toLowerCase().includes('color') || 
+                               option.name.toLowerCase().includes('colour') ||
+                               option.name.toLowerCase().includes('kleur');
+          console.log(`Option "${option.name}" (${option.value}) is color:`, isColorOption);
+          return isColorOption;
+        })
         .map(option => option.value)
     )
   ));
+
+  console.log('Extracted sizes:', sizes);
+  console.log('Extracted colors:', colors);
 
   // Get current size and color from selected variant
   const currentSize = selectedVariant?.selectedOptions?.find(option =>
@@ -113,8 +124,11 @@ const SizeColorSelector: React.FC<SizeColorSelectorProps> = ({
   };
 
   if (sizes.length === 0 && colors.length === 0) {
+    console.log('No sizes or colors found, not rendering SizeColorSelector');
     return null;
   }
+
+  console.log('Rendering SizeColorSelector with', sizes.length, 'sizes and', colors.length, 'colors');
 
   return (
     <Card className="bg-card/80 backdrop-blur-sm border-border/50">
