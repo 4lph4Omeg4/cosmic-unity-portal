@@ -155,6 +155,16 @@ const Footer = () => {
                     The Direct Path
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
+                  >
+                    Timeline Alchemy
+                  </a>
+                </li>
               </ul>
             </div>
 
