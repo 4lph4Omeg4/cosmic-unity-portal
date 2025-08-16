@@ -201,7 +201,7 @@ const translations = {
       quickLinks: 'Snelle Links',
       legal: 'Wettelijk',
       social: 'Volg Ons',
-      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle rechten voorbehouden.',
+      copyright: ' Cosmic Unity Portal. Alle rechten voorbehouden.',
     },
     newsletter: {
       title: 'Word lid van onze inner circle',
@@ -582,7 +582,7 @@ const translations = {
       quickLinks: 'Quick Links',
       legal: 'Legal',
       social: 'Follow Us',
-      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. All rights reserved.',
+      copyright: ' Cosmic Unity Portal. All rights reserved.',
     },
     newsletter: {
       title: 'Join our inner circle',
@@ -963,7 +963,7 @@ const translations = {
       quickLinks: 'Schnell-Links',
       legal: 'Rechtliches',
       social: 'Folge Uns',
-      copyright: '© 2025 SH4M4NI4K - Cosmic Unity Portal. Alle Rechte vorbehalten.',
+      copyright: ' Cosmic Unity Portal. Alle Rechte vorbehalten.',
     },
     newsletter: {
       title: 'Werde Teil unseres Inner Circle',
