@@ -51,15 +51,6 @@ const Messages = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [recipient, setRecipient] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const messagesEndRef = useRef<null | HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   // Auth check + (voor nu) lege conversations tot RPC klaar is
   useEffect(() => {
