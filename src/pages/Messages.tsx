@@ -419,7 +419,11 @@ const Messages = () => {
                   {recipient ? recipient.display_name : t('messages.selectConversation')}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 overflow-y-auto space-y-4 min-h-0 pb-4">
+              <CardContent
+                ref={messagesContainerRef}
+                onScroll={handleScroll}
+                className="flex-1 overflow-y-auto space-y-4 min-h-0 pb-4 relative"
+              >
                 {messages.length === 0 ? (
                   <div className="text-center text-muted-foreground">{t('messages.noMessagesYet')}</div>
                 ) : (
