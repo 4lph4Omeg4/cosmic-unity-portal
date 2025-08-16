@@ -208,6 +208,45 @@ const translations = {
       readMore: 'Lees meer',
       viewAll: 'Bekijk alles',
     },
+    friends: {
+      title: 'Vrienden',
+      subtitle: 'Verbind met andere leden van de community',
+      noMembers: 'Nog geen leden om te tonen',
+      noName: 'Naamloos',
+      showMore: 'Toon meer',
+      showLess: 'Toon minder',
+    },
+    about: {
+      title: {
+        the: 'De',
+        chosenOnes: 'Uitverkorenen',
+      },
+      subtitle: 'Ontdek onze kosmische missie en spirituele begeleiding',
+      mission: {
+        title: 'Onze Missie',
+        p1: 'Welkom bij SH4M4NI4K - een kosmische gemeenschap gewijd aan spirituele ontwaking en eenheid.',
+        p2: 'Wij geloven in de kracht van collectief bewustzijn en de reis naar spirituele verlichting.',
+      },
+      principles: {
+        unity: {
+          title: 'Kosmische Eenheid',
+          text: 'Alle wezens zijn verbonden in het kosmische weefsel van bestaan.',
+        },
+        awakening: {
+          title: 'Spirituele Ontwaking',
+          text: 'De reis naar bewustzijn is een pad van innerlijke transformatie.',
+        },
+        love: {
+          title: 'Universele Liefde',
+          text: 'Liefde is de hoogste frequentie die alle dimensies doordringt.',
+        },
+      },
+      cta: {
+        title: 'Begin Je Spirituele Reis',
+        text: 'Word onderdeel van onze kosmische gemeenschap en ontdek je ware potentieel.',
+        button: 'Begin je Reis',
+      },
+    },
     products: {
       digital: 'Digitaal Product',
       priceOnRequest: 'Prijs op aanvraag',
@@ -426,6 +465,45 @@ const translations = {
       readMore: 'Read more',
       viewAll: 'View all',
     },
+    friends: {
+      title: 'Friends',
+      subtitle: 'Connect with other community members',
+      noMembers: 'No members to show yet',
+      noName: 'Nameless',
+      showMore: 'Show more',
+      showLess: 'Show less',
+    },
+    about: {
+      title: {
+        the: 'The',
+        chosenOnes: 'Chosen Ones',
+      },
+      subtitle: 'Discover our cosmic mission and spiritual guidance',
+      mission: {
+        title: 'Our Mission',
+        p1: 'Welcome to SH4M4NI4K - a cosmic community dedicated to spiritual awakening and unity.',
+        p2: 'We believe in the power of collective consciousness and the journey towards spiritual enlightenment.',
+      },
+      principles: {
+        unity: {
+          title: 'Cosmic Unity',
+          text: 'All beings are connected in the cosmic fabric of existence.',
+        },
+        awakening: {
+          title: 'Spiritual Awakening',
+          text: 'The journey to consciousness is a path of inner transformation.',
+        },
+        love: {
+          title: 'Universal Love',
+          text: 'Love is the highest frequency that permeates all dimensions.',
+        },
+      },
+      cta: {
+        title: 'Begin Your Spiritual Journey',
+        text: 'Become part of our cosmic community and discover your true potential.',
+        button: 'Begin Your Journey',
+      },
+    },
     products: {
       digital: 'Digital Product',
       priceOnRequest: 'Price on request',
@@ -643,6 +721,45 @@ const translations = {
       loginToPost: 'Anmelden zum Posten',
       readMore: 'Mehr lesen',
       viewAll: 'Alle ansehen',
+    },
+    friends: {
+      title: 'Freunde',
+      subtitle: 'Verbinde dich mit anderen Gemeinschaftsmitgliedern',
+      noMembers: 'Noch keine Mitglieder zu zeigen',
+      noName: 'Namenlos',
+      showMore: 'Mehr anzeigen',
+      showLess: 'Weniger anzeigen',
+    },
+    about: {
+      title: {
+        the: 'Die',
+        chosenOnes: 'Auserwählten',
+      },
+      subtitle: 'Entdecke unsere kosmische Mission und spirituelle Führung',
+      mission: {
+        title: 'Unsere Mission',
+        p1: 'Willkommen bei SH4M4NI4K - einer kosmischen Gemeinschaft, die der spirituellen Erweckung und Einheit gewidmet ist.',
+        p2: 'Wir glauben an die Kraft des kollektiven Bewusstseins und die Reise zur spirituellen Erleuchtung.',
+      },
+      principles: {
+        unity: {
+          title: 'Kosmische Einheit',
+          text: 'Alle Wesen sind im kosmischen Gewebe der Existenz verbunden.',
+        },
+        awakening: {
+          title: 'Spirituelle Erweckung',
+          text: 'Die Reise zum Bewusstsein ist ein Pfad der inneren Transformation.',
+        },
+        love: {
+          title: 'Universelle Liebe',
+          text: 'Liebe ist die höchste Frequenz, die alle Dimensionen durchdringt.',
+        },
+      },
+      cta: {
+        title: 'Beginne Deine Spirituelle Reise',
+        text: 'Werde Teil unserer kosmischen Gemeinschaft und entdecke dein wahres Potenzial.',
+        button: 'Beginne Deine Reise',
+      },
     },
     products: {
       digital: 'Digitales Produkt',
