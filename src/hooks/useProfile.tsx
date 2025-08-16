@@ -8,6 +8,14 @@ interface Profile {
   display_name: string;
   avatar_url?: string;
   bio?: string;
+  social_links?: {
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+    facebook?: string;
+  };
 }
 
 export const useProfile = () => {
@@ -56,7 +64,14 @@ export const useProfile = () => {
 
       if (error) throw error;
       console.log('Profile loaded:', data);
-      setProfile(data);
+      // Parse social_links if it exists
+      const profileData = {
+        ...data,
+        social_links: data.social_links && typeof data.social_links === 'object' 
+          ? data.social_links as any 
+          : {}
+      };
+      setProfile(profileData);
     } catch (error) {
       console.error('Error loading profile:', error);
       setProfile(null);

@@ -6,7 +6,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Menu, X, Star, Home, ShoppingBag, BookOpen, Users, Mail, User, LogOut, LogIn } from 'lucide-react';
+import { Menu, X, Star, Home, ShoppingBag, BookOpen, Users, Mail, User, LogOut, LogIn, MessageCircle } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
 import Cart from '@/components/Cart';
 
@@ -16,7 +16,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
@@ -98,6 +98,12 @@ const Navigation = () => {
                     <Link to="/profile" className="flex items-center">
                       <User className="mr-2 h-4 w-4" />
                       <span>{t('nav.profile')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="font-mystical">
+                    <Link to="/messages" className="flex items-center">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      <span>{language === 'en' ? 'Messages' : language === 'de' ? 'Nachrichten' : 'Berichten'}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="font-mystical">

@@ -86,13 +86,9 @@ const About = () => {
             <h2 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-6">
               {t('about.cta.title')}
             </h2>
-            <p className="font-mystical text-lg text-muted-foreground mb-8">
+            <p className="font-mystical text-lg text-muted-foreground">
               {t('about.cta.text')}
             </p>
-            <Button variant="divine" size="lg" className="group">
-              {t('about.cta.button')}
-              <Star className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-            </Button>
           </div>
         </div>
       </main>

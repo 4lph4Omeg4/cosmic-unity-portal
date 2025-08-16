@@ -4,6 +4,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import MessageButton from '@/components/MessageButton';
 import CommunityMembersList from '@/components/CommunityMembersList';
+import SocialMediaLinks from '@/components/SocialMediaLinks';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,6 +22,14 @@ interface Profile {
   avatar_url?: string;
   bio?: string;
   created_at: string;
+  social_links?: {
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+    facebook?: string;
+  };
 }
 
 interface UserPost {
@@ -62,7 +71,14 @@ const UserProfile = () => {
 
       if (profileError) throw profileError;
 
-      setProfile(profileData);
+      // Parse social_links if it exists
+      const profileDataWithSocial = {
+        ...profileData,
+        social_links: profileData.social_links && typeof profileData.social_links === 'object' 
+          ? profileData.social_links as any 
+          : {}
+      };
+      setProfile(profileDataWithSocial);
 
       // Get user's posts with likes and comments count
       const { data: postsData, error: postsError } = await supabase
@@ -204,9 +220,15 @@ const UserProfile = () => {
                         <MessageCircle className="w-4 h-4" />
                         {posts.length} posts
                       </div>
-                    </div>
+                     </div>
+                     
+                     {/* Social Media Links */}
+                     <SocialMediaLinks 
+                       socialLinks={profile.social_links} 
+                       className="justify-center md:justify-start"
+                     />
 
-                    {/* Message Action - only show if viewing someone else's profile */}
+                     {/* Message Action - only show if viewing someone else's profile */}
                     {user && userId && user.id !== userId && (
                       <div className="flex justify-center md:justify-start">
                         <MessageButton

@@ -45,27 +45,26 @@ const Messages = () => {
   const [newMessage, setNewMessage] = useState('');
   const [recipient, setRecipient] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [databaseError, setDatabaseError] = useState(false);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-  
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
+  // Auth check + (voor nu) lege conversations tot RPC klaar is
   useEffect(() => {
     if (!user) {
       navigate('/auth');
       return;
     }
-
     const fetchConversations = async () => {
       setLoading(true);
       try {
-        // For now, we'll just set empty conversations until the RPC function is properly set up
+        // TODO: vervang met je RPC zodra beschikbaar
         setConversations([]);
       } catch (error: any) {
         console.error('Error fetching conversations:', error);
@@ -78,16 +77,19 @@ const Messages = () => {
         setLoading(false);
       }
     };
-
     fetchConversations();
   }, [user, toast, navigate, t]);
 
+  // Messages laden + realtime subscriben
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (!userId || !user) return;
+    if (!userId || !user) return;
 
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    const fetchMessages = async () => {
       try {
         setLoading(true);
+
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*')
@@ -102,6 +104,7 @@ const Messages = () => {
           });
           return;
         }
+
         setRecipient(profileData);
 
         const { data: messagesData, error: messagesError } = await supabase
@@ -111,7 +114,22 @@ const Messages = () => {
           .order('created_at', { ascending: true });
 
         if (messagesError) throw messagesError;
+
         setMessages(messagesData || []);
+
+        // Realtime inserts (filter client-side om beide richtingen te pakken)
+        channel = supabase
+          .channel(`messages:${user.id}:${userId}`)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+            const m = payload.new as Message;
+            const relevant =
+              (m.sender_id === user.id && m.receiver_id === userId) ||
+              (m.sender_id === userId && m.receiver_id === user.id);
+            if (relevant) {
+              setMessages((prev) => [...prev, m]);
+            }
+          })
+          .subscribe();
       } catch (error: any) {
         console.error('Error fetching messages:', error);
         toast({
@@ -125,18 +143,12 @@ const Messages = () => {
     };
 
     fetchMessages();
-    const channel = supabase.channel(`messages:${user?.id}:${userId}`)
-    .on<Message>('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${user?.id}` }, payload => {
-        setMessages(prevMessages => [...prevMessages, payload.new as Message]);
-    })
-    .subscribe();
 
     return () => {
-        supabase.removeChannel(channel);
+      if (channel) supabase.removeChannel(channel);
     };
-
   }, [userId, user, toast, t]);
-  
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !user || !userId) return;
@@ -148,9 +160,9 @@ const Messages = () => {
         .select();
 
       if (error) throw error;
-      
-      if(data) {
-        setMessages(prev => [...prev, data[0]]);
+
+      if (data) {
+        setMessages((prev) => [...prev, data[0]]);
       }
       setNewMessage('');
     } catch (error: any) {
@@ -185,11 +197,7 @@ const Messages = () => {
       <main className="flex-1 py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center gap-4 mb-8">
-             <Button 
-              onClick={() => navigate('/community')} 
-              variant="outline"
-              className="gap-2"
-            >
+            <Button onClick={() => navigate('/community')} variant="outline" className="gap-2">
               <ArrowLeft className="w-4 h-4" />
               {t('messages.back')}
             </Button>
@@ -198,7 +206,7 @@ const Messages = () => {
               <span className="text-mystical-gradient">{t('messages.title')}</span>
             </h1>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-[calc(100vh-250px)]">
             <Card className="col-span-1 lg:col-span-1 cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic flex flex-col">
               <CardHeader>
@@ -206,63 +214,81 @@ const Messages = () => {
                 <CardDescription className="font-mystical">{t('messages.recentConversations')}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 overflow-y-auto pr-2 space-y-2">
-                {conversations.length > 0 ? conversations.map(convo => (
-                  <div key={convo.profile.user_id} onClick={() => navigate(`/messages/${convo.profile.user_id}`)} className={`flex items-center p-3 rounded-lg cursor-pointer transition-all ${userId === convo.profile.user_id ? 'bg-cosmic-gradient' : 'hover:bg-muted/50'}`}>
-                    <Avatar className="w-10 h-10 mr-3">
-                      <AvatarImage src={convo.profile.avatar_url} />
-                      <AvatarFallback>{convo.profile.display_name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 overflow-hidden">
-                       <p className={`font-bold truncate ${userId === convo.profile.user_id ? 'text-white' : ''}`}>{convo.profile.display_name}</p>
-                       <p className={`text-xs truncate ${userId === convo.profile.user_id ? 'text-gray-200' : 'text-muted-foreground'}`}>{convo.last_message}</p>
+                {conversations.length > 0 ? (
+                  conversations.map((convo) => (
+                    <div
+                      key={convo.profile.user_id}
+                      onClick={() => navigate(`/messages/${convo.profile.user_id}`)}
+                      className={`flex items-center p-3 rounded-lg cursor-pointer transition-all ${
+                        userId === convo.profile.user_id ? 'bg-cosmic-gradient' : 'hover:bg-muted/50'
+                      }`}
+                    >
+                      <Avatar className="w-10 h-10 mr-3">
+                        <AvatarImage src={convo.profile.avatar_url} />
+                        <AvatarFallback>
+                          {convo.profile.display_name?.slice(0, 2)?.toUpperCase() || '??'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">{convo.profile.display_name}</div>
+                        <div className="text-sm text-muted-foreground truncate">{convo.last_message}</div>
+                      </div>
+                      <div className="text-xs text-muted-foreground ml-3 whitespace-nowrap">
+                        {new Date(convo.last_message_time).toLocaleTimeString()}
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
+                    <Inbox className="w-10 h-10 mb-2" />
+                    <p>{t('messages.noConversations')}</p>
                   </div>
-                )) : (
-                  <p className="text-center font-mystical text-muted-foreground pt-4">{t('messages.noConversations')}</p>
                 )}
               </CardContent>
             </Card>
 
-            <Card className="md:col-span-2 lg:col-span-3 cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic flex flex-col h-full">
-              {userId && recipient ? (
-                <>
-                  <CardHeader className="flex flex-row items-center space-x-4 border-b">
-                     <Avatar>
-                       <AvatarImage src={recipient.avatar_url} />
-                       <AvatarFallback>{recipient.display_name.charAt(0)}</AvatarFallback>
-                     </Avatar>
-                     <CardTitle className="font-cosmic text-mystical-gradient">{recipient.display_name}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {messages.map((msg, index) => (
-                      <div key={index} className={`flex items-end gap-2 ${msg.sender_id === user?.id ? 'justify-end' : 'justify-start'}`}>
-                        {msg.sender_id !== user?.id && <Avatar className="w-8 h-8"><AvatarImage src={recipient.avatar_url} /></Avatar>}
-                        <div className={`max-w-xs md:max-w-md p-3 rounded-2xl ${msg.sender_id === user?.id ? 'bg-cosmic-gradient text-white rounded-br-none' : 'bg-muted rounded-bl-none'}`}>
-                          <p>{msg.content}</p>
+            <Card className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+              <CardHeader>
+                <CardTitle className="font-cosmic text-cosmic-gradient">
+                  {recipient ? recipient.display_name : t('messages.selectConversation')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 overflow-y-auto space-y-4">
+                {messages.length === 0 ? (
+                  <div className="text-center text-muted-foreground">{t('messages.noMessagesYet')}</div>
+                ) : (
+                  messages.map((m) => {
+                    const mine = m.sender_id === user?.id;
+                    return (
+                      <div key={m.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
+                        <div
+                          className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
+                            mine ? 'bg-cosmic-gradient text-white' : 'bg-muted'
+                          }`}
+                        >
+                          <div className="whitespace-pre-wrap break-words">{m.content}</div>
+                          <div className={`text-[10px] mt-1 opacity-70 ${mine ? 'text-white' : 'text-foreground'}`}>
+                            {new Date(m.created_at).toLocaleTimeString()}
+                          </div>
                         </div>
                       </div>
-                    ))}
-                    <div ref={messagesEndRef} />
-                  </CardContent>
-                  <div className="p-4 border-t">
-                    <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
-                      <Input
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder={t('messages.typeMessage')}
-                        className="flex-1"
-                      />
-                      <Button type="submit" variant="cosmic" size="icon"><Send className="w-4 h-4" /></Button>
-                    </form>
-                  </div>
-                </>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center">
-                   <Inbox className="w-16 h-16 text-muted-foreground/50 mb-4" />
-                   <h3 className="text-xl font-bold font-cosmic text-cosmic-gradient">{t('messages.selectConversation')}</h3>
-                   <p className="text-muted-foreground font-mystical">{t('messages.startMessaging')}</p>
-                </div>
-              )}
+                    );
+                  })
+                )}
+                <div ref={messagesEndRef} />
+              </CardContent>
+
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-border/50 flex gap-2">
+                <Input
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder={t('messages.typeMessage')}
+                />
+                <Button type="submit" className="gap-2">
+                  <Send className="w-4 h-4" />
+                  {t('messages.send')}
+                </Button>
+              </form>
             </Card>
           </div>
         </div>
