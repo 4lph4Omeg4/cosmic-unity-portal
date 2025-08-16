@@ -218,12 +218,13 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
             <p className="font-mystical text-sm text-muted-foreground">
               © {currentYear} SH4M4NI4K - The Chosen Ones. {t('footer.copyright')}
             </p>
           </div>
+          <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-sm">
             <Link 
               to={policyUrls.shipping} 
               className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
