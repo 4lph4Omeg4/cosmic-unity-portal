@@ -104,8 +104,6 @@ const Messages = () => {
           ...(receivedMessages.data || [])
         ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-        if (messagesError) throw messagesError;
-
         if (!messagesData || messagesData.length === 0) {
           setConversations([]);
           return;
