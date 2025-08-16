@@ -993,37 +993,59 @@ const translations = {
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('nl');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && ['nl', 'en', 'de'].includes(savedLanguage)) {
-      setLanguageState(savedLanguage);
+    try {
+      const savedLanguage = localStorage.getItem('language') as Language;
+      if (savedLanguage && ['nl', 'en', 'de'].includes(savedLanguage)) {
+        setLanguageState(savedLanguage);
+      }
+    } catch (error) {
+      console.warn('Could not access localStorage for language preference:', error);
+    } finally {
+      setIsInitialized(true);
     }
   }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('language', lang);
+    try {
+      localStorage.setItem('language', lang);
+    } catch (error) {
+      console.warn('Could not save language preference to localStorage:', error);
+    }
   };
 
   const t = (key: string): string => {
-    const keys = key.split('.');
-    let result: any = translations[language];
-    for (const k of keys) {
-      result = result?.[k];
-      if (result === undefined) {
-        let fallbackResult: any = translations.en;
-        for (const fk of keys) {
-          fallbackResult = fallbackResult?.[fk];
+    try {
+      const keys = key.split('.');
+      let result: any = translations[language];
+      for (const k of keys) {
+        result = result?.[k];
+        if (result === undefined) {
+          let fallbackResult: any = translations.en;
+          for (const fk of keys) {
+            fallbackResult = fallbackResult?.[fk];
+          }
+          return fallbackResult || key;
         }
-        return fallbackResult || key;
       }
+      return result || key;
+    } catch (error) {
+      console.warn('Translation error for key:', key, error);
+      return key;
     }
-    return result || key;
+  };
+
+  const contextValue = {
+    language,
+    setLanguage,
+    t
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
