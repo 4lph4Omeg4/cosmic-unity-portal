@@ -333,8 +333,8 @@ const Messages = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
-      <main className="flex-1 py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+      <main className="flex-1 py-12 md:py-20 min-h-0 flex flex-col">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col min-h-0">
           <div className="flex items-center gap-4 mb-8">
             <Button onClick={() => navigate('/community')} variant="outline" className="gap-2">
               <ArrowLeft className="w-4 h-4" />
