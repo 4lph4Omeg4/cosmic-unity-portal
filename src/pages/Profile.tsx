@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Upload, User, Save, MessageCircle } from 'lucide-react';
+import { Upload, User, Save, MessageCircle, Instagram, Twitter, Linkedin, Youtube, Music, Facebook } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
@@ -21,6 +21,14 @@ interface Profile {
   display_name: string;
   avatar_url?: string;
   bio?: string;
+  social_links?: {
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+    facebook?: string;
+  };
 }
 
 const Profile = () => {
@@ -107,7 +115,8 @@ const Profile = () => {
         .from('profiles')
         .update({
           display_name: localProfile?.display_name,
-          bio: localProfile?.bio
+          bio: localProfile?.bio,
+          social_links: localProfile?.social_links || {}
         })
         .eq('user_id', user?.id);
 
@@ -244,6 +253,199 @@ const Profile = () => {
                   />
                 </div>
               </div>
+
+              {/* Social Media Links Section */}
+              <div className="space-y-4">
+                <Label className="font-mystical text-base">
+                  Social Media Links
+                </Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="instagram" className="font-mystical text-sm flex items-center gap-2">
+                      <Instagram className="w-4 h-4" />
+                      Instagram
+                    </Label>
+                    <Input
+                      id="instagram"
+                      value={localProfile?.social_links?.instagram || ''}
+                      onChange={(e) => setLocalProfile(prev => 
+                        prev ? { 
+                          ...prev, 
+                          social_links: { 
+                            ...prev.social_links, 
+                            instagram: e.target.value 
+                          } 
+                        } : null
+                      )}
+                      className="font-mystical"
+                      placeholder="https://instagram.com/jouwgebruikersnaam"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="twitter" className="font-mystical text-sm flex items-center gap-2">
+                      <Twitter className="w-4 h-4" />
+                      Twitter/X
+                    </Label>
+                    <Input
+                      id="twitter"
+                      value={localProfile?.social_links?.twitter || ''}
+                      onChange={(e) => setLocalProfile(prev => 
+                        prev ? { 
+                          ...prev, 
+                          social_links: { 
+                            ...prev.social_links, 
+                            twitter: e.target.value 
+                          } 
+                        } : null
+                      )}
+                      className="font-mystical"
+                      placeholder="https://twitter.com/jouwgebruikersnaam"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="linkedin" className="font-mystical text-sm flex items-center gap-2">
+                      <Linkedin className="w-4 h-4" />
+                      LinkedIn
+                    </Label>
+                    <Input
+                      id="linkedin"
+                      value={localProfile?.social_links?.linkedin || ''}
+                      onChange={(e) => setLocalProfile(prev => 
+                        prev ? { 
+                          ...prev, 
+                          social_links: { 
+                            ...prev.social_links, 
+                            linkedin: e.target.value 
+                          } 
+                        } : null
+                      )}
+                      className="font-mystical"
+                      placeholder="https://linkedin.com/in/jouwprofiel"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="youtube" className="font-mystical text-sm flex items-center gap-2">
+                      <Youtube className="w-4 h-4" />
+                      YouTube
+                    </Label>
+                    <Input
+                      id="youtube"
+                      value={localProfile?.social_links?.youtube || ''}
+                      onChange={(e) => setLocalProfile(prev => 
+                        prev ? { 
+                          ...prev, 
+                          social_links: { 
+                            ...prev.social_links, 
+                            youtube: e.target.value 
+                          } 
+                        } : null
+                      )}
+                      className="font-mystical"
+                      placeholder="https://youtube.com/@jouwkanaal"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="tiktok" className="font-mystical text-sm flex items-center gap-2">
+                      <Music className="w-4 h-4" />
+                      TikTok
+                    </Label>
+                    <Input
+                      id="tiktok"
+                      value={localProfile?.social_links?.tiktok || ''}
+                      onChange={(e) => setLocalProfile(prev => 
+                        prev ? { 
+                          ...prev, 
+                          social_links: { 
+                            ...prev.social_links, 
+                            tiktok: e.target.value 
+                          } 
+                        } : null
+                      )}
+                      className="font-mystical"
+                      placeholder="https://tiktok.com/@jouwgebruikersnaam"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="facebook" className="font-mystical text-sm flex items-center gap-2">
+                      <Facebook className="w-4 h-4" />
+                      Facebook
+                    </Label>
+                    <Input
+                      id="facebook"
+                      value={localProfile?.social_links?.facebook || ''}
+                      onChange={(e) => setLocalProfile(prev => 
+                        prev ? { 
+                          ...prev, 
+                          social_links: { 
+                            ...prev.social_links, 
+                            facebook: e.target.value 
+                          } 
+                        } : null
+                      )}
+                      className="font-mystical"
+                      placeholder="https://facebook.com/jouwprofiel"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Links Preview */}
+              {localProfile?.social_links && Object.values(localProfile.social_links).some(link => link) && (
+                <div className="space-y-2">
+                  <Label className="font-mystical text-sm">
+                    Preview van je sociale links:
+                  </Label>
+                  <div className="flex flex-wrap gap-2 p-3 bg-muted/50 rounded-lg">
+                    {localProfile.social_links.instagram && (
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-pink-500">
+                        <a href={localProfile.social_links.instagram} target="_blank" rel="noopener noreferrer">
+                          <Instagram className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                    {localProfile.social_links.twitter && (
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-blue-400">
+                        <a href={localProfile.social_links.twitter} target="_blank" rel="noopener noreferrer">
+                          <Twitter className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                    {localProfile.social_links.linkedin && (
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-blue-600">
+                        <a href={localProfile.social_links.linkedin} target="_blank" rel="noopener noreferrer">
+                          <Linkedin className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                    {localProfile.social_links.youtube && (
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-red-500">
+                        <a href={localProfile.social_links.youtube} target="_blank" rel="noopener noreferrer">
+                          <Youtube className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                    {localProfile.social_links.tiktok && (
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-foreground">
+                        <a href={localProfile.social_links.tiktok} target="_blank" rel="noopener noreferrer">
+                          <Music className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                    {localProfile.social_links.facebook && (
+                      <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-blue-500">
+                        <a href={localProfile.social_links.facebook} target="_blank" rel="noopener noreferrer">
+                          <Facebook className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Save Button */}
               <Button 
