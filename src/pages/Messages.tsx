@@ -65,8 +65,71 @@ const Messages = () => {
     const fetchConversations = async () => {
       setLoading(true);
       try {
-        // TODO: vervang met je RPC zodra beschikbaar
-        setConversations([]);
+        // Haal alle berichten op waarbij de gebruiker betrokken is
+        const { data: messagesData, error: messagesError } = await supabase
+          .from('messages')
+          .select(`
+            id,
+            sender_id,
+            receiver_id,
+            content,
+            created_at,
+            read
+          `)
+          .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+          .order('created_at', { ascending: false });
+
+        if (messagesError) throw messagesError;
+
+        if (!messagesData || messagesData.length === 0) {
+          setConversations([]);
+          return;
+        }
+
+        // Groepeer berichten per gesprek (unieke combinatie van sender/receiver)
+        const conversationMap = new Map();
+
+        messagesData.forEach(message => {
+          const otherUserId = message.sender_id === user.id ? message.receiver_id : message.sender_id;
+          const conversationKey = otherUserId;
+
+          if (!conversationMap.has(conversationKey) ||
+              new Date(message.created_at) > new Date(conversationMap.get(conversationKey).lastMessage.created_at)) {
+            conversationMap.set(conversationKey, {
+              otherUserId,
+              lastMessage: message,
+              unreadCount: 0 // TODO: tel ongelezen berichten
+            });
+          }
+        });
+
+        // Haal profielen op van alle gesprekspartners
+        const otherUserIds = Array.from(conversationMap.keys());
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('user_id, display_name, avatar_url')
+          .in('user_id', otherUserIds);
+
+        if (profilesError) {
+          console.warn('Could not load all profiles:', profilesError);
+        }
+
+        // Combineer gesprekken met profieldata
+        const conversations = Array.from(conversationMap.entries()).map(([otherUserId, conversation]) => {
+          const profile = profilesData?.find(p => p.user_id === otherUserId);
+          return {
+            id: otherUserId,
+            otherUser: profile || {
+              user_id: otherUserId,
+              display_name: 'Unknown User',
+              avatar_url: null
+            },
+            lastMessage: conversation.lastMessage,
+            unreadCount: conversation.unreadCount
+          };
+        });
+
+        setConversations(conversations);
       } catch (error: any) {
         logError('Error fetching conversations', error);
         toast({
