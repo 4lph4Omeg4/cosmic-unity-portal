@@ -195,29 +195,32 @@ const Messages = () => {
 
         setRecipient(profileData);
 
-        // Fetch messages between the current user and the selected user
-        const { data: messagesData, error: messagesError } = await supabase
-          .rpc('get_conversation_messages', {
-            user1_id: user.id,
-            user2_id: userId
-          });
-
-        // Fallback to manual query if RPC doesn't exist
-        if (messagesError && messagesError.code === '42883') {
-          console.log('RPC not found, using manual query...');
-          const { data: fallbackMessages, error: fallbackError } = await supabase
+        // Fetch messages between current user and selected user using two queries
+        const [sentMessages, receivedMessages] = await Promise.all([
+          // Messages sent by current user to selected user
+          supabase
             .from('messages')
             .select('*')
-            .or(`sender_id.eq.${user.id}.and.receiver_id.eq.${userId},sender_id.eq.${userId}.and.receiver_id.eq.${user.id}`)
-            .order('created_at', { ascending: true });
+            .eq('sender_id', user.id)
+            .eq('receiver_id', userId),
+          // Messages sent by selected user to current user
+          supabase
+            .from('messages')
+            .select('*')
+            .eq('sender_id', userId)
+            .eq('receiver_id', user.id)
+        ]);
 
-          if (fallbackError) throw fallbackError;
-          setMessages(fallbackMessages || []);
-        } else if (messagesError) {
-          throw messagesError;
-        } else {
-          setMessages(messagesData || []);
-        }
+        if (sentMessages.error) throw sentMessages.error;
+        if (receivedMessages.error) throw receivedMessages.error;
+
+        // Combine and sort messages by timestamp
+        const allMessages = [
+          ...(sentMessages.data || []),
+          ...(receivedMessages.data || [])
+        ].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+
+        setMessages(allMessages);
 
         if (messagesError) throw messagesError;
 
