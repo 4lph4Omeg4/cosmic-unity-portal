@@ -255,10 +255,6 @@ const Messages = () => {
 
         setMessages(allMessages);
 
-        if (messagesError) throw messagesError;
-
-        setMessages(messagesData || []);
-
         // Realtime inserts (filter client-side om beide richtingen te pakken)
         channel = supabase
           .channel(`messages:${user.id}:${userId}`)
