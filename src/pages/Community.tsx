@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/hooks/useLanguage';
+import { logError, getUserFriendlyError } from '@/utils/errorUtils';
 import FriendsList from '@/components/FriendsList';
 
 interface Profile {
@@ -150,10 +151,10 @@ const Community = () => {
       console.log('Final posts with data:', postsWithData);
       setPosts(postsWithData as any);
     } catch (error) {
-      console.error('Error loading posts:', error);
+      logError('Error loading posts', error);
       toast({
         title: t('community.errorLoading'),
-        description: t('community.errorLoadingMessage'),
+        description: getUserFriendlyError(error, t('community.errorLoadingMessage')),
         variant: "destructive",
       });
     } finally {
@@ -224,7 +225,7 @@ const Community = () => {
 
       return publicUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      logError('Error uploading image', error);
       return null;
     }
   };
@@ -272,10 +273,10 @@ const Community = () => {
         description: t('community.postShared'),
       });
     } catch (error) {
-      console.error('Error creating post:', error);
+      logError('Error creating post', error);
       toast({
         title: t('community.errorCreating'),
-        description: t('community.errorPostMessage'),
+        description: getUserFriendlyError(error, t('community.errorPostMessage')),
         variant: "destructive",
       });
     } finally {
@@ -302,7 +303,7 @@ const Community = () => {
           .insert({ post_id: postId, user_id: user.id });
       }
     } catch (error) {
-      console.error('Error toggling like:', error);
+      logError('Error toggling like', error);
     }
   };
 
@@ -326,10 +327,10 @@ const Community = () => {
         description: t('community.commentPlaced'),
       });
     } catch (error) {
-      console.error('Error adding comment:', error);
+      logError('Error adding comment', error);
       toast({
         title: t('community.errorComment'),
-        description: t('community.errorCommentMessage'),
+        description: getUserFriendlyError(error, t('community.errorCommentMessage')),
         variant: "destructive",
       });
     }
@@ -352,10 +353,10 @@ const Community = () => {
         description: t('community.postDeletedMessage'),
       });
     } catch (error) {
-      console.error('Error deleting post:', error);
+      logError('Error deleting post', error);
       toast({
         title: t('community.errorDeleting'),
-        description: t('community.errorDeleteMessage'),
+        description: getUserFriendlyError(error, t('community.errorDeleteMessage')),
         variant: "destructive",
       });
     }
