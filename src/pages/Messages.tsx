@@ -144,6 +144,27 @@ const Messages = () => {
       }
     };
     fetchConversations();
+
+    // Realtime subscription voor nieuwe berichten die gesprekken kunnen updaten
+    const conversationsChannel = supabase
+      .channel('conversations-updates')
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+          filter: `or(sender_id.eq.${user.id},receiver_id.eq.${user.id})`
+        },
+        () => {
+          console.log('Message update detected, refreshing conversations...');
+          fetchConversations();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(conversationsChannel);
+    };
   }, [user, toast, navigate, t]);
 
   // Messages laden + realtime subscriben
