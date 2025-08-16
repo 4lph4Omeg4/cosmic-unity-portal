@@ -98,9 +98,10 @@ const Messages = () => {
           .single();
 
         if (profileError || !profileData) {
+          logError('Error loading user profile for messages', profileError);
           toast({
             title: t('messages.userNotFoundError'),
-            description: profileError?.message,
+            description: getUserFriendlyError(profileError),
             variant: 'destructive',
           });
           return;
