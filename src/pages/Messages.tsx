@@ -29,9 +29,10 @@ interface Message {
 }
 
 interface Conversation {
-  profile: Profile;
-  last_message: string;
-  last_message_time: string;
+  id: string;
+  otherUser: Profile;
+  lastMessage: Message;
+  unreadCount: number;
 }
 
 const Messages = () => {
