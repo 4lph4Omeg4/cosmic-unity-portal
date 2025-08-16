@@ -17,6 +17,7 @@ const translations = {
       unity: 'Eenheid',
       portal: 'Portaal',
       buyNow: 'Koop Nu',
+      loading: 'Laden...',
     },
     nav: {
       login: 'Inloggen',
@@ -81,7 +82,27 @@ const translations = {
         message: 'Check je e-mail voor ons kosmische welkomstgeschenk.',
         status: 'Je account is aangemaakt. Log in om te verkennen.',
       },
-buttonLoading: 'Bezig…',
+      buttonLoading: 'Bezig…',
+      section: {
+        title: 'Word lid van onze inner circle',
+        subtitle: 'Schrijf je in voor de nieuwsbrief en wees als eerste op de hoogte',
+        description: 'Ontvang exclusieve inzichten, speciale aanbiedingen en spirituele begeleiding',
+      },
+      benefits: {
+        title: 'Kosmische Voordelen',
+        wisdom: {
+          title: 'Spirituele Wijsheid',
+          desc: 'Ontvang diepgaande inzichten en spirituele begeleiding',
+        },
+        access: {
+          title: 'Exclusieve Toegang',
+          desc: 'Krijg vroege toegang tot nieuwe producten en content',
+        },
+        guidance: {
+          title: 'Persoonlijke Begeleiding',
+          desc: 'Ontvang gepersonaliseerde spirituele begeleiding',
+        },
+      },
     },
     auth: {
       login: {
@@ -165,6 +186,36 @@ buttonLoading: 'Bezig…',
       subtitle: 'Ontdek je oneindige potentieel',
       cta: { explore: 'Ontdek' },
     },
+    featured: {
+      title: {
+        sacred: 'Heilige',
+        geometry: 'Geometrie',
+      },
+      subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
+    },
+    posts: {
+      title: {
+        latest: 'Laatste',
+        posts: 'Berichten',
+      },
+      subtitle: 'Verbind met de gemeenschap en deel je reis',
+      viewCommunity: 'Bekijk Community',
+      newPost: 'Nieuw Bericht',
+      noPosts: 'Nog geen berichten',
+      firstPost: 'Wees de eerste om te posten!',
+      createFirst: 'Maak het eerste bericht',
+      loginToPost: 'Log in om te posten',
+      readMore: 'Lees meer',
+      viewAll: 'Bekijk alles',
+    },
+    products: {
+      digital: 'Digitaal Product',
+      priceOnRequest: 'Prijs op aanvraag',
+      instantDownload: 'Directe download',
+    },
+    product: {
+      view: 'Bekijk Product',
+    },
   },
 
   en: {
@@ -173,6 +224,7 @@ buttonLoading: 'Bezig…',
       unity: 'Unity',
       portal: 'Portal',
       buyNow: 'Buy Now',
+      loading: 'Loading...',
     },
     nav: {
       login: 'Login',
@@ -238,6 +290,26 @@ buttonLoading: 'Bezig…',
         status: 'Your account has been created. Log in to explore.',
       },
       buttonLoading: 'Sending…',
+      section: {
+        title: 'Join our inner circle',
+        subtitle: 'Subscribe to the newsletter and be the first to know',
+        description: 'Receive exclusive insights, special offers and spiritual guidance',
+      },
+      benefits: {
+        title: 'Cosmic Benefits',
+        wisdom: {
+          title: 'Spiritual Wisdom',
+          desc: 'Receive deep insights and spiritual guidance',
+        },
+        access: {
+          title: 'Exclusive Access',
+          desc: 'Get early access to new products and content',
+        },
+        guidance: {
+          title: 'Personal Guidance',
+          desc: 'Receive personalized spiritual guidance',
+        },
+      },
     },
     auth: {
       login: {
@@ -321,6 +393,36 @@ buttonLoading: 'Bezig…',
       subtitle: 'Discover your infinite potential',
       cta: { explore: 'Explore' },
     },
+    featured: {
+      title: {
+        sacred: 'Sacred',
+        geometry: 'Geometry',
+      },
+      subtitle: 'Discover our collection of spiritual art and merchandise',
+    },
+    posts: {
+      title: {
+        latest: 'Latest',
+        posts: 'Posts',
+      },
+      subtitle: 'Connect with the community and share your journey',
+      viewCommunity: 'View Community',
+      newPost: 'New Post',
+      noPosts: 'No posts yet',
+      firstPost: 'Be the first to post!',
+      createFirst: 'Create the first post',
+      loginToPost: 'Login to post',
+      readMore: 'Read more',
+      viewAll: 'View all',
+    },
+    products: {
+      digital: 'Digital Product',
+      priceOnRequest: 'Price on request',
+      instantDownload: 'Instant download',
+    },
+    product: {
+      view: 'View Product',
+    },
   },
 
   de: {
@@ -329,6 +431,7 @@ buttonLoading: 'Bezig…',
       unity: 'Einheit',
       portal: 'Portal',
       buyNow: 'Jetzt Kaufen',
+      loading: 'Wird geladen...',
     },
     nav: {
       login: 'Anmelden',
@@ -394,6 +497,26 @@ buttonLoading: 'Bezig…',
         status: 'Dein Konto wurde erstellt. Logge dich ein, um zu entdecken.',
       },
       buttonLoading: 'Senden…',
+      section: {
+        title: 'Werde Teil unseres Inner Circle',
+        subtitle: 'Melde dich für den Newsletter an und sei der Erste',
+        description: 'Erhalte exklusive Einblicke, Sonderangebote und spirituelle Führung',
+      },
+      benefits: {
+        title: 'Kosmische Vorteile',
+        wisdom: {
+          title: 'Spirituelle Weisheit',
+          desc: 'Erhalte tiefe Einblicke und spirituelle Führung',
+        },
+        access: {
+          title: 'Exklusiver Zugang',
+          desc: 'Erhalte frühen Zugang zu neuen Produkten und Inhalten',
+        },
+        guidance: {
+          title: 'Persönliche Führung',
+          desc: 'Erhalte personalisierte spirituelle Führung',
+        },
+      },
     },
     auth: {
       login: {
@@ -476,6 +599,36 @@ buttonLoading: 'Bezig…',
     hero: {
       subtitle: 'Entdecke dein grenzenloses Potenzial',
       cta: { explore: 'Entdecken' },
+    },
+    featured: {
+      title: {
+        sacred: 'Heilige',
+        geometry: 'Geometrie',
+      },
+      subtitle: 'Entdecke unsere Sammlung spiritueller Kunst und Merchandise',
+    },
+    posts: {
+      title: {
+        latest: 'Neueste',
+        posts: 'Beiträge',
+      },
+      subtitle: 'Verbinde dich mit der Gemeinschaft und teile deine Reise',
+      viewCommunity: 'Gemeinschaft ansehen',
+      newPost: 'Neuer Beitrag',
+      noPosts: 'Noch keine Beiträge',
+      firstPost: 'Sei der Erste, der postet!',
+      createFirst: 'Erstelle den ersten Beitrag',
+      loginToPost: 'Anmelden zum Posten',
+      readMore: 'Mehr lesen',
+      viewAll: 'Alle ansehen',
+    },
+    products: {
+      digital: 'Digitales Produkt',
+      priceOnRequest: 'Preis auf Anfrage',
+      instantDownload: 'Sofortiger Download',
+    },
+    product: {
+      view: 'Produkt ansehen',
     },
   },
 } as const;
