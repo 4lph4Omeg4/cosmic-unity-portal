@@ -271,6 +271,10 @@ const Messages = () => {
               (m.sender_id === userId && m.receiver_id === user.id);
             if (relevant) {
               setMessages((prev) => [...prev, m]);
+              // Auto-scroll naar beneden bij nieuwe berichten
+              setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
             }
           })
           .subscribe();
