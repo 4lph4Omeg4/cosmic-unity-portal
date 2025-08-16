@@ -329,6 +329,18 @@ const Messages = () => {
     }
   };
 
+  // Scroll to bottom functie
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Detecteer of gebruiker aan het scrollen is
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+    setShowScrollToBottom(!isAtBottom && container.scrollHeight > container.clientHeight);
+  };
+
   if (loading && conversations.length === 0) {
     return (
       <div className="min-h-screen bg-background">
