@@ -18,6 +18,158 @@ const translations = {
       portal: 'Portaal',
       buyNow: 'Koop Nu',
       loading: 'Laden...',
+      loadingCommunity: 'Community laden...',
+      error: 'Fout',
+      success: 'Succes',
+      cancel: 'Annuleren',
+      save: 'Opslaan',
+      delete: 'Verwijderen',
+      edit: 'Bewerken',
+      back: 'Terug',
+      next: 'Volgende',
+      previous: 'Vorige',
+      close: 'Sluiten',
+      open: 'Openen',
+      yes: 'Ja',
+      no: 'Nee',
+      search: 'Zoeken',
+      filter: 'Filteren',
+      sort: 'Sorteren',
+      view: 'Bekijken',
+      share: 'Delen',
+      like: 'Leuk vinden',
+      comment: 'Reactie',
+      send: 'Verzenden',
+      reply: 'Antwoorden',
+      follow: 'Volgen',
+      unfollow: 'Ontvolgen',
+      block: 'Blokkeren',
+      unblock: 'Deblokkeren',
+      report: 'Rapporteren',
+      settings: 'Instellingen',
+      profile: 'Profiel',
+      account: 'Account',
+      logout: 'Uitloggen',
+      login: 'Inloggen',
+      register: 'Registreren',
+      forgotPassword: 'Wachtwoord vergeten',
+      resetPassword: 'Wachtwoord resetten',
+      changePassword: 'Wachtwoord wijzigen',
+      email: 'E-mail',
+      password: 'Wachtwoord',
+      confirmPassword: 'Bevestig wachtwoord',
+      firstName: 'Voornaam',
+      lastName: 'Achternaam',
+      fullName: 'Volledige naam',
+      phoneNumber: 'Telefoonnummer',
+      address: 'Adres',
+      city: 'Stad',
+      country: 'Land',
+      zipCode: 'Postcode',
+      birthDate: 'Geboortedatum',
+      gender: 'Geslacht',
+      male: 'Man',
+      female: 'Vrouw',
+      other: 'Anders',
+      preferNotToSay: 'Wil ik niet zeggen',
+      notifications: 'Meldingen',
+      privacy: 'Privacy',
+      security: 'Beveiliging',
+      help: 'Hulp',
+      support: 'Ondersteuning',
+      feedback: 'Feedback',
+      aboutUs: 'Over ons',
+      contact: 'Contact',
+      termsOfService: 'Gebruiksvoorwaarden',
+      privacyPolicy: 'Privacybeleid',
+      cookiePolicy: 'Cookiebeleid',
+      legal: 'Juridisch',
+      copyright: 'Copyright',
+      allRightsReserved: 'Alle rechten voorbehouden',
+      version: 'Versie',
+      language: 'Taal',
+      theme: 'Thema',
+      darkMode: 'Donkere modus',
+      lightMode: 'Lichte modus',
+      systemMode: 'Systeemmodus',
+      online: 'Online',
+      offline: 'Offline',
+      lastSeen: 'Laatst gezien',
+      active: 'Actief',
+      inactive: 'Inactief',
+      banned: 'Geblokkeerd',
+      suspended: 'Geschorst',
+      verified: 'Geverifieerd',
+      unverified: 'Niet geverifieerd',
+      premium: 'Premium',
+      free: 'Gratis',
+      pro: 'Pro',
+      basic: 'Basis',
+      advanced: 'Geavanceerd',
+      expert: 'Expert',
+      beginner: 'Beginner',
+      intermediate: 'Gemiddeld',
+      all: 'Alle',
+      none: 'Geen',
+      selected: 'Geselecteerd',
+      unselected: 'Niet geselecteerd',
+      enabled: 'Ingeschakeld',
+      disabled: 'Uitgeschakeld',
+      public: 'Openbaar',
+      private: 'Privé',
+      draft: 'Concept',
+      published: 'Gepubliceerd',
+      archived: 'Gearchiveerd',
+      deleted: 'Verwijderd',
+      pending: 'In afwachting',
+      approved: 'Goedgekeurd',
+      rejected: 'Afgewezen',
+      completed: 'Voltooid',
+      incomplete: 'Onvolledig',
+      inProgress: 'In uitvoering',
+      notStarted: 'Niet gestart',
+      failed: 'Mislukt',
+      successful: 'Succesvol',
+      warning: 'Waarschuwing',
+      info: 'Informatie',
+      debug: 'Debug',
+      trace: 'Traceren',
+      fatal: 'Fataal',
+      unknown: 'Onbekend',
+      notAvailable: 'Niet beschikbaar',
+      comingSoon: 'Binnenkort beschikbaar',
+      maintenanceMode: 'Onderhoudsmodus',
+      pageNotFound: 'Pagina niet gevonden',
+      serverError: 'Serverfout',
+      networkError: 'Netwerkfout',
+      timeout: 'Time-out',
+      unauthorized: 'Niet geautoriseerd',
+      forbidden: 'Verboden',
+      tooManyRequests: 'Te veel verzoeken',
+      badRequest: 'Slecht verzoek',
+      conflict: 'Conflict',
+      gone: 'Verdwenen',
+      lengthRequired: 'Lengte vereist',
+      payloadTooLarge: 'Payload te groot',
+      unsupportedMediaType: 'Niet-ondersteund mediatype',
+      unprocessableEntity: 'Niet-verwerkbare entiteit',
+      tooEarly: 'Te vroeg',
+      upgradeRequired: 'Upgrade vereist',
+      preconditionRequired: 'Voorwaarde vereist',
+      tooManyRequestsFromThisIP: 'Te veel verzoeken van dit IP',
+      requestHeaderFieldsTooLarge: 'Verzoekheadervelden te groot',
+      unavailableForLegalReasons: 'Niet beschikbaar om juridische redenen',
+      internalServerError: 'Interne serverfout',
+      notImplemented: 'Niet geïmplementeerd',
+      badGateway: 'Slechte gateway',
+      serviceUnavailable: 'Service niet beschikbaar',
+      gatewayTimeout: 'Gateway time-out',
+      httpVersionNotSupported: 'HTTP-versie niet ondersteund',
+      variantAlsoNegotiates: 'Variant onderhandelt ook',
+      insufficientStorage: 'Onvoldoende opslag',
+      loopDetected: 'Lus gedetecteerd',
+      notExtended: 'Niet uitgebreid',
+      networkAuthenticationRequired: 'Netwerkauthenticatie vereist',
     },
     nav: {
       login: 'Inloggen',
@@ -103,6 +255,12 @@ const translations = {
           desc: 'Ontvang gepersonaliseerde spirituele begeleiding',
         },
       },
+      trust: {
+        members: 'Word onderdeel van meer dan 1.000 spirituele reizigers',
+        privacy: 'Privacy beschermd',
+        spam: 'Geen spam, ooit',
+        unsubscribe: 'Altijd afmelden',
+      },
     },
     auth: {
       login: {
@@ -168,7 +326,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Cosmische Berichten',
+      title: 'Berichten',
       back: 'Terug',
       conversations: 'Gesprekken',
       recentConversations: 'Je recente gesprekken',
@@ -181,6 +339,8 @@ const translations = {
       fetchMessageError: 'Fout bij ophalen van berichten',
       fetchConversationsError: 'Fout bij ophalen van gesprekken',
       userNotFoundError: 'Gebruiker niet gevonden',
+      noMessagesYet: 'Nog geen berichten',
+      send: 'Versturen',
     },
     hero: {
       subtitle: 'Ontdek je oneindige potentieel',
@@ -208,6 +368,45 @@ const translations = {
       readMore: 'Lees meer',
       viewAll: 'Bekijk alles',
     },
+    friends: {
+      title: 'Vrienden',
+      subtitle: 'Verbind met andere leden van de community',
+      noMembers: 'Nog geen leden om te tonen',
+      noName: 'Naamloos',
+      showMore: 'Toon meer',
+      showLess: 'Toon minder',
+    },
+    about: {
+      title: {
+        the: 'De',
+        chosenOnes: 'Uitverkorenen',
+      },
+      subtitle: 'Ontdek onze kosmische missie en spirituele begeleiding',
+      mission: {
+        title: 'Onze Missie',
+        p1: 'Welkom bij SH4M4NI4K - een kosmische gemeenschap gewijd aan spirituele ontwaking en eenheid.',
+        p2: 'Wij geloven in de kracht van collectief bewustzijn en de reis naar spirituele verlichting.',
+      },
+      principles: {
+        unity: {
+          title: 'Kosmische Eenheid',
+          text: 'Alle wezens zijn verbonden in het kosmische weefsel van bestaan.',
+        },
+        awakening: {
+          title: 'Spirituele Ontwaking',
+          text: 'De reis naar bewustzijn is een pad van innerlijke transformatie.',
+        },
+        love: {
+          title: 'Universele Liefde',
+          text: 'Liefde is de hoogste frequentie die alle dimensies doordringt.',
+        },
+      },
+      cta: {
+        title: 'Begin Je Spirituele Reis',
+        text: 'Word onderdeel van onze kosmische gemeenschap en ontdek je ware potentieel.',
+        button: 'Begin je Reis',
+      },
+    },
     products: {
       digital: 'Digitaal Product',
       priceOnRequest: 'Prijs op aanvraag',
@@ -215,6 +414,105 @@ const translations = {
     },
     product: {
       view: 'Bekijk Product',
+    },
+    profile: {
+      title: 'Kosmisch Profiel',
+      subtitle: 'Personaliseer je spirituele identiteit in onze community',
+      info: 'Profiel Informatie',
+      description: 'Beheer je profiel en avatar voor de community',
+      displayName: 'Weergavenaam',
+      bio: 'Bio',
+      saving: 'Opslaan...',
+      save: 'Profiel Opslaan',
+      loading: 'Profiel laden...',
+    },
+    contact: {
+      title: {
+        contact: 'Contact',
+      },
+      subtitle: 'Neem contact met ons op voor vragen, begeleiding of om deel te worden van onze kosmische gemeenschap.',
+      form: {
+        title: 'Stuur ons een bericht',
+        description: 'We horen graag van je. Stuur ons een bericht en we nemen zo snel mogelijk contact met je op.',
+        firstName: 'Voornaam',
+        firstNamePlaceholder: 'Je voornaam',
+        lastName: 'Achternaam',
+        lastNamePlaceholder: 'Je achternaam',
+        email: 'E-mailadres',
+        emailPlaceholder: 'je@email.com',
+        subject: 'Onderwerp',
+        subjectPlaceholder: 'Waar gaat je bericht over?',
+        message: 'Bericht',
+        messagePlaceholder: 'Deel je gedachten, vragen of spirituele inzichten met ons...',
+        send: 'Verstuur Bericht',
+      },
+      info: {
+        title: 'Contactinformatie',
+        email: 'E-mail',
+        phone: 'Telefoon',
+        location: 'Locatie',
+      },
+      response: {
+        title: 'Responstijd',
+        text: 'We streven ernaar om binnen 24 uur te reageren op alle berichten. Voor dringende zaken kun je ons ook telefonisch bereiken.',
+      },
+      hours: {
+        title: 'Beschikbare tijden',
+        weekdays: 'Maandag - Vrijdag:',
+        weekdaysTime: '9:00 - 17:00',
+        weekend: 'Weekend:',
+        weekendText: 'Op afspraak',
+        always: 'Spirituele begeleiding is altijd beschikbaar voor onze community leden.',
+      },
+    },
+    blog: {
+      title: 'Kosmische Blogs',
+      description: 'Ontdek spirituele inzichten, wijsheid en begeleiding op je reis naar ontwaking en eenheid.',
+      egoToEden: {
+        title: 'Van Ego naar Eden',
+        description: 'Spirituele transformatie en persoonlijke groei door bewustzijnsverruiming.',
+      },
+      unity: {
+        title: 'Eenheid door het Enkele Oog',
+        description: 'Kosmische eenheid en de reis naar universeel bewustzijn.',
+      },
+      exploreBlog: 'Verken Blog',
+      latestArticles: 'Laatste Artikelen',
+      readMore: 'Lees meer',
+      noArticlesTitle: 'Nog geen artikelen',
+      noArticlesDescription: 'We werken aan nieuwe spirituele inzichten. Kom binnenkort terug!',
+    },
+    community: {
+      title: {
+        cosmic: 'Kosmische',
+        community: 'Community',
+      },
+      subtitle: 'Verbind met gelijkgestemde zielen en deel je spirituele reis.',
+      newPost: 'Nieuw Bericht',
+      shareInsight: 'Deel je Inzicht',
+      inspire: 'Inspireer de community met je wijsheid en ervaringen',
+      postTitle: 'Titel van je bericht...',
+      postContent: 'Deel je gedachten en inzichten...',
+      publish: 'Publiceren',
+      cancel: 'Annuleren',
+      noPosts: 'Nog geen berichten',
+      firstPostMessage: 'Wees de eerste om je spirituele inzichten te delen met de community.',
+      createFirstPost: 'Maak het eerste bericht',
+      postCreated: 'Bericht geplaatst',
+      postShared: 'Je bericht is gedeeld met de community',
+      errorCreating: 'Fout bij maken van bericht',
+      errorPostMessage: 'Er ging iets mis bij het plaatsen van je bericht',
+      addComment: 'Voeg reactie toe...',
+      commentAdded: 'Reactie toegevoegd',
+      commentPlaced: 'Je reactie is geplaatst',
+      errorComment: 'Fout bij reactie',
+      errorCommentMessage: 'Er ging iets mis bij het plaatsen van je reactie',
+      postDeleted: 'Bericht verwijderd',
+      postDeletedMessage: 'Je bericht is verwijderd',
+      errorDeleting: 'Fout bij verwijderen',
+      errorDeleteMessage: 'Er ging iets mis bij het verwijderen van je bericht',
+      errorLoading: 'Fout bij laden',
+      errorLoadingMessage: 'Er ging iets mis bij het laden van de berichten',
     },
   },
 
@@ -225,6 +523,34 @@ const translations = {
       portal: 'Portal',
       buyNow: 'Buy Now',
       loading: 'Loading...',
+      loadingCommunity: 'Loading community...',
+      error: 'Error',
+      success: 'Success',
+      cancel: 'Cancel',
+      save: 'Save',
+      delete: 'Delete',
+      edit: 'Edit',
+      back: 'Back',
+      next: 'Next',
+      previous: 'Previous',
+      close: 'Close',
+      open: 'Open',
+      yes: 'Yes',
+      no: 'No',
+      search: 'Search',
+      filter: 'Filter',
+      sort: 'Sort',
+      view: 'View',
+      share: 'Share',
+      like: 'Like',
+      comment: 'Comment',
+      send: 'Send',
+      reply: 'Reply',
+      follow: 'Follow',
+      unfollow: 'Unfollow',
+      block: 'Block',
+      unblock: 'Unblock',
+      report: 'Report',
     },
     nav: {
       login: 'Login',
@@ -310,6 +636,12 @@ const translations = {
           desc: 'Receive personalized spiritual guidance',
         },
       },
+      trust: {
+        members: 'Join over 1,000 spiritual travelers',
+        privacy: 'Privacy protected',
+        spam: 'No spam, ever',
+        unsubscribe: 'Always unsubscribe',
+      },
     },
     auth: {
       login: {
@@ -375,7 +707,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Cosmic Messages',
+      title: 'Messages',
       back: 'Back',
       conversations: 'Conversations',
       recentConversations: 'Your recent conversations',
@@ -388,6 +720,8 @@ const translations = {
       fetchMessageError: 'Error fetching messages',
       fetchConversationsError: 'Error fetching conversations',
       userNotFoundError: 'User not found',
+      noMessagesYet: 'No messages yet',
+      send: 'Send',
     },
     hero: {
       subtitle: 'Discover your infinite potential',
@@ -415,6 +749,45 @@ const translations = {
       readMore: 'Read more',
       viewAll: 'View all',
     },
+    friends: {
+      title: 'Friends',
+      subtitle: 'Connect with other community members',
+      noMembers: 'No members to show yet',
+      noName: 'Nameless',
+      showMore: 'Show more',
+      showLess: 'Show less',
+    },
+    about: {
+      title: {
+        the: 'The',
+        chosenOnes: 'Chosen Ones',
+      },
+      subtitle: 'Discover our cosmic mission and spiritual guidance',
+      mission: {
+        title: 'Our Mission',
+        p1: 'Welcome to SH4M4NI4K - a cosmic community dedicated to spiritual awakening and unity.',
+        p2: 'We believe in the power of collective consciousness and the journey towards spiritual enlightenment.',
+      },
+      principles: {
+        unity: {
+          title: 'Cosmic Unity',
+          text: 'All beings are connected in the cosmic fabric of existence.',
+        },
+        awakening: {
+          title: 'Spiritual Awakening',
+          text: 'The journey to consciousness is a path of inner transformation.',
+        },
+        love: {
+          title: 'Universal Love',
+          text: 'Love is the highest frequency that permeates all dimensions.',
+        },
+      },
+      cta: {
+        title: 'Begin Your Spiritual Journey',
+        text: 'Become part of our cosmic community and discover your true potential.',
+        button: 'Begin Your Journey',
+      },
+    },
     products: {
       digital: 'Digital Product',
       priceOnRequest: 'Price on request',
@@ -422,6 +795,105 @@ const translations = {
     },
     product: {
       view: 'View Product',
+    },
+    profile: {
+      title: 'Cosmic Profile',
+      subtitle: 'Personalize your spiritual identity in our community',
+      info: 'Profile Information',
+      description: 'Manage your profile and avatar for the community',
+      displayName: 'Display Name',
+      bio: 'Bio',
+      saving: 'Saving...',
+      save: 'Save Profile',
+      loading: 'Loading profile...',
+    },
+    contact: {
+      title: {
+        contact: 'Contact',
+      },
+      subtitle: 'Get in touch with us for questions, guidance, or to become part of our cosmic community.',
+      form: {
+        title: 'Send us a message',
+        description: 'We\'d love to hear from you. Send us a message and we\'ll get back to you as soon as possible.',
+        firstName: 'First Name',
+        firstNamePlaceholder: 'Your first name',
+        lastName: 'Last Name',
+        lastNamePlaceholder: 'Your last name',
+        email: 'Email Address',
+        emailPlaceholder: 'you@email.com',
+        subject: 'Subject',
+        subjectPlaceholder: 'What is your message about?',
+        message: 'Message',
+        messagePlaceholder: 'Share your thoughts, questions, or spiritual insights with us...',
+        send: 'Send Message',
+      },
+      info: {
+        title: 'Contact Information',
+        email: 'Email',
+        phone: 'Phone',
+        location: 'Location',
+      },
+      response: {
+        title: 'Response Time',
+        text: 'We strive to respond to all messages within 24 hours. For urgent matters, you can also reach us by phone.',
+      },
+      hours: {
+        title: 'Available Hours',
+        weekdays: 'Monday - Friday:',
+        weekdaysTime: '9:00 AM - 5:00 PM',
+        weekend: 'Weekend:',
+        weekendText: 'By appointment',
+        always: 'Spiritual guidance is always available for our community members.',
+      },
+    },
+    blog: {
+      title: 'Cosmic Blogs',
+      description: 'Discover spiritual insights, wisdom, and guidance on your journey to awakening and unity.',
+      egoToEden: {
+        title: 'From Ego to Eden',
+        description: 'Spiritual transformation and personal growth through consciousness expansion.',
+      },
+      unity: {
+        title: 'Unity Through the Single Eye',
+        description: 'Cosmic unity and the journey to universal consciousness.',
+      },
+      exploreBlog: 'Explore Blog',
+      latestArticles: 'Latest Articles',
+      readMore: 'Read more',
+      noArticlesTitle: 'No articles yet',
+      noArticlesDescription: 'We\'re working on new spiritual insights. Check back soon!',
+    },
+    community: {
+      title: {
+        cosmic: 'Cosmic',
+        community: 'Community',
+      },
+      subtitle: 'Connect with like-minded souls and share your spiritual journey.',
+      newPost: 'New Post',
+      shareInsight: 'Share your Insight',
+      inspire: 'Inspire the community with your wisdom and experiences',
+      postTitle: 'Your post title...',
+      postContent: 'Share your thoughts and insights...',
+      publish: 'Publish',
+      cancel: 'Cancel',
+      noPosts: 'No posts yet',
+      firstPostMessage: 'Be the first to share your spiritual insights with the community.',
+      createFirstPost: 'Create the first post',
+      postCreated: 'Post created',
+      postShared: 'Your post has been shared with the community',
+      errorCreating: 'Error creating post',
+      errorPostMessage: 'Something went wrong while creating your post',
+      addComment: 'Add a comment...',
+      commentAdded: 'Comment added',
+      commentPlaced: 'Your comment has been posted',
+      errorComment: 'Error posting comment',
+      errorCommentMessage: 'Something went wrong while posting your comment',
+      postDeleted: 'Post deleted',
+      postDeletedMessage: 'Your post has been deleted',
+      errorDeleting: 'Error deleting',
+      errorDeleteMessage: 'Something went wrong while deleting your post',
+      errorLoading: 'Error loading',
+      errorLoadingMessage: 'Something went wrong while loading the posts',
     },
   },
 
@@ -432,6 +904,34 @@ const translations = {
       portal: 'Portal',
       buyNow: 'Jetzt Kaufen',
       loading: 'Wird geladen...',
+      loadingCommunity: 'Gemeinschaft wird geladen...',
+      error: 'Fehler',
+      success: 'Erfolg',
+      cancel: 'Abbrechen',
+      save: 'Speichern',
+      delete: 'Löschen',
+      edit: 'Bearbeiten',
+      back: 'Zurück',
+      next: 'Weiter',
+      previous: 'Vorherige',
+      close: 'Schließen',
+      open: 'Öffnen',
+      yes: 'Ja',
+      no: 'Nein',
+      search: 'Suchen',
+      filter: 'Filtern',
+      sort: 'Sortieren',
+      view: 'Ansehen',
+      share: 'Teilen',
+      like: 'Gefällt mir',
+      comment: 'Kommentar',
+      send: 'Senden',
+      reply: 'Antworten',
+      follow: 'Folgen',
+      unfollow: 'Entfolgen',
+      block: 'Blockieren',
+      unblock: 'Blockierung aufheben',
+      report: 'Melden',
     },
     nav: {
       login: 'Anmelden',
@@ -517,6 +1017,12 @@ const translations = {
           desc: 'Erhalte personalisierte spirituelle Führung',
         },
       },
+      trust: {
+        members: 'Werde Teil von über 1.000 spirituellen Reisenden',
+        privacy: 'Datenschutz geschützt',
+        spam: 'Kein Spam, niemals',
+        unsubscribe: 'Jederzeit abmelden',
+      },
     },
     auth: {
       login: {
@@ -582,7 +1088,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Kosmische Nachrichten',
+      title: 'Nachrichten',
       back: 'Zurück',
       conversations: 'Gespräche',
       recentConversations: 'Ihre letzten Gespräche',
@@ -595,6 +1101,8 @@ const translations = {
       fetchMessageError: 'Fehler beim Abrufen von Nachrichten',
       fetchConversationsError: 'Fehler beim Abrufen von Gesprächen',
       userNotFoundError: 'Benutzer nicht gefunden',
+      noMessagesYet: 'Noch keine Nachrichten',
+      send: 'Senden',
     },
     hero: {
       subtitle: 'Entdecke dein grenzenloses Potenzial',
@@ -622,6 +1130,45 @@ const translations = {
       readMore: 'Mehr lesen',
       viewAll: 'Alle ansehen',
     },
+    friends: {
+      title: 'Freunde',
+      subtitle: 'Verbinde dich mit anderen Gemeinschaftsmitgliedern',
+      noMembers: 'Noch keine Mitglieder zu zeigen',
+      noName: 'Namenlos',
+      showMore: 'Mehr anzeigen',
+      showLess: 'Weniger anzeigen',
+    },
+    about: {
+      title: {
+        the: 'Die',
+        chosenOnes: 'Auserwählten',
+      },
+      subtitle: 'Entdecke unsere kosmische Mission und spirituelle Führung',
+      mission: {
+        title: 'Unsere Mission',
+        p1: 'Willkommen bei SH4M4NI4K - einer kosmischen Gemeinschaft, die der spirituellen Erweckung und Einheit gewidmet ist.',
+        p2: 'Wir glauben an die Kraft des kollektiven Bewusstseins und die Reise zur spirituellen Erleuchtung.',
+      },
+      principles: {
+        unity: {
+          title: 'Kosmische Einheit',
+          text: 'Alle Wesen sind im kosmischen Gewebe der Existenz verbunden.',
+        },
+        awakening: {
+          title: 'Spirituelle Erweckung',
+          text: 'Die Reise zum Bewusstsein ist ein Pfad der inneren Transformation.',
+        },
+        love: {
+          title: 'Universelle Liebe',
+          text: 'Liebe ist die höchste Frequenz, die alle Dimensionen durchdringt.',
+        },
+      },
+      cta: {
+        title: 'Beginne Deine Spirituelle Reise',
+        text: 'Werde Teil unserer kosmischen Gemeinschaft und entdecke dein wahres Potenzial.',
+        button: 'Beginne Deine Reise',
+      },
+    },
     products: {
       digital: 'Digitales Produkt',
       priceOnRequest: 'Preis auf Anfrage',
@@ -630,42 +1177,163 @@ const translations = {
     product: {
       view: 'Produkt ansehen',
     },
+    profile: {
+      title: 'Kosmisches Profil',
+      subtitle: 'Personalisiere deine spirituelle Identität in unserer Gemeinschaft',
+      info: 'Profil Informationen',
+      description: 'Verwalte dein Profil und Avatar für die Gemeinschaft',
+      displayName: 'Anzeigename',
+      bio: 'Bio',
+      saving: 'Speichern...',
+      save: 'Profil Speichern',
+      loading: 'Profil wird geladen...',
+    },
+    contact: {
+      title: {
+        contact: 'Kontakt',
+      },
+      subtitle: 'Kontaktiere uns für Fragen, Führung oder um Teil unserer kosmischen Gemeinschaft zu werden.',
+      form: {
+        title: 'Sende uns eine Nachricht',
+        description: 'Wir hören gerne von dir. Sende uns eine Nachricht und wir melden uns so schnell wie möglich bei dir.',
+        firstName: 'Vorname',
+        firstNamePlaceholder: 'Dein Vorname',
+        lastName: 'Nachname',
+        lastNamePlaceholder: 'Dein Nachname',
+        email: 'E-Mail-Adresse',
+        emailPlaceholder: 'du@email.com',
+        subject: 'Betreff',
+        subjectPlaceholder: 'Worum geht es in deiner Nachricht?',
+        message: 'Nachricht',
+        messagePlaceholder: 'Teile deine Gedanken, Fragen oder spirituellen Einsichten mit uns...',
+        send: 'Nachricht senden',
+      },
+      info: {
+        title: 'Kontaktinformationen',
+        email: 'E-Mail',
+        phone: 'Telefon',
+        location: 'Standort',
+      },
+      response: {
+        title: 'Antwortzeit',
+        text: 'Wir bemühen uns, auf alle Nachrichten innerhalb von 24 Stunden zu antworten. Für dringende Angelegenheiten kannst du uns auch telefonisch erreichen.',
+      },
+      hours: {
+        title: 'Verfügbare Zeiten',
+        weekdays: 'Montag - Freitag:',
+        weekdaysTime: '9:00 - 17:00',
+        weekend: 'Wochenende:',
+        weekendText: 'Nach Vereinbarung',
+        always: 'Spirituelle Führung ist immer für unsere Gemeinschaftsmitglieder verfügbar.',
+      },
+    },
+    blog: {
+      title: 'Kosmische Blogs',
+      description: 'Entdecke spirituelle Einsichten, Weisheit und Führung auf deiner Reise zu Erwachen und Einheit.',
+      egoToEden: {
+        title: 'Vom Ego zum Eden',
+        description: 'Spirituelle Transformation und persönliches Wachstum durch Bewusstseinserweiterung.',
+      },
+      unity: {
+        title: 'Einheit durch das Einzelne Auge',
+        description: 'Kosmische Einheit und die Reise zum universellen Bewusstsein.',
+      },
+      exploreBlog: 'Blog erkunden',
+      latestArticles: 'Neueste Artikel',
+      readMore: 'Mehr lesen',
+      noArticlesTitle: 'Noch keine Artikel',
+      noArticlesDescription: 'Wir arbeiten an neuen spirituellen Einsichten. Schau bald wieder vorbei!',
+    },
+    community: {
+      title: {
+        cosmic: 'Kosmische',
+        community: 'Gemeinschaft',
+      },
+      subtitle: 'Verbinde dich mit Gleichgesinnten und teile deine spirituelle Reise.',
+      newPost: 'Neuer Beitrag',
+      shareInsight: 'Teile deine Einsicht',
+      inspire: 'Inspiriere die Gemeinschaft mit deiner Weisheit und deinen Erfahrungen',
+      postTitle: 'Dein Beitragstitel...',
+      postContent: 'Teile deine Gedanken und Einsichten...',
+      publish: 'Veröffentlichen',
+      cancel: 'Abbrechen',
+      noPosts: 'Noch keine Beiträge',
+      firstPostMessage: 'Sei der Erste, der seine spirituellen Einsichten mit der Gemeinschaft teilt.',
+      createFirstPost: 'Erstelle den ersten Beitrag',
+      postCreated: 'Beitrag erstellt',
+      postShared: 'Dein Beitrag wurde mit der Gemeinschaft geteilt',
+      errorCreating: 'Fehler beim Erstellen des Beitrags',
+      errorPostMessage: 'Etwas ging beim Erstellen deines Beitrags schief',
+      addComment: 'Kommentar hinzufügen...',
+      commentAdded: 'Kommentar hinzugefügt',
+      commentPlaced: 'Dein Kommentar wurde gepostet',
+      errorComment: 'Fehler beim Posten des Kommentars',
+      errorCommentMessage: 'Etwas ging beim Posten deines Kommentars schief',
+      postDeleted: 'Beitrag gelöscht',
+      postDeletedMessage: 'Dein Beitrag wurde gelöscht',
+      errorDeleting: 'Fehler beim Löschen',
+      errorDeleteMessage: 'Etwas ging beim Löschen deines Beitrags schief',
+      errorLoading: 'Fehler beim Laden',
+      errorLoadingMessage: 'Etwas ging beim Laden der Beiträge schief',
+    },
   },
 } as const;
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('nl');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && ['nl', 'en', 'de'].includes(savedLanguage)) {
-      setLanguageState(savedLanguage);
+    try {
+      const savedLanguage = localStorage.getItem('language') as Language;
+      if (savedLanguage && ['nl', 'en', 'de'].includes(savedLanguage)) {
+        setLanguageState(savedLanguage);
+      }
+    } catch (error) {
+      console.warn('Could not access localStorage for language preference:', error);
+    } finally {
+      setIsInitialized(true);
     }
   }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('language', lang);
+    try {
+      localStorage.setItem('language', lang);
+    } catch (error) {
+      console.warn('Could not save language preference to localStorage:', error);
+    }
   };
 
   const t = (key: string): string => {
-    const keys = key.split('.');
-    let result: any = translations[language];
-    for (const k of keys) {
-      result = result?.[k];
-      if (result === undefined) {
-        let fallbackResult: any = translations.en;
-        for (const fk of keys) {
-          fallbackResult = fallbackResult?.[fk];
+    try {
+      const keys = key.split('.');
+      let result: any = translations[language];
+      for (const k of keys) {
+        result = result?.[k];
+        if (result === undefined) {
+          let fallbackResult: any = translations.en;
+          for (const fk of keys) {
+            fallbackResult = fallbackResult?.[fk];
+          }
+          return fallbackResult || key;
         }
-        return fallbackResult || key;
       }
+      return result || key;
+    } catch (error) {
+      console.warn('Translation error for key:', key, error);
+      return key;
     }
-    return result || key;
+  };
+
+  const contextValue = {
+    language,
+    setLanguage,
+    t
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
@@ -674,7 +1342,34 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    console.error('useLanguage must be used within a LanguageProvider. This usually means the component is being rendered outside the provider tree.');
+
+    // Provide a working fallback to prevent application crashes
+    const fallbackT = (key: string): string => {
+      console.warn(`Translation fallback used for key: ${key}`);
+      // Try to get Dutch translation as fallback
+      try {
+        const keys = key.split('.');
+        let result: any = translations.nl;
+        for (const k of keys) {
+          result = result?.[k];
+          if (result === undefined) {
+            return key;
+          }
+        }
+        return result || key;
+      } catch {
+        return key;
+      }
+    };
+
+    return {
+      language: 'nl' as Language,
+      setLanguage: (lang: Language) => {
+        console.warn(`Language change to ${lang} ignored - no provider context`);
+      },
+      t: fallbackT
+    };
   }
   return context;
 };

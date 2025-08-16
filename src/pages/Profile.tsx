@@ -35,7 +35,7 @@ interface Profile {
 const Profile = () => {
   const { user } = useAuth();
   const { profile, refreshProfile } = useProfile();
-  const { t } = useLanguage(); // niet overal gebruikt, maar laten staan voor later i18n
+  const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   

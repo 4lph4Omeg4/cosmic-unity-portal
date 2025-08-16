@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Send, ArrowLeft, Inbox } from 'lucide-react';
+import { Send, ArrowLeft, Inbox, ChevronDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
+import { logError, getUserFriendlyError } from '@/utils/errorUtils';
 
 interface Profile {
   id: string;
@@ -25,12 +26,14 @@ interface Message {
   receiver_id: string;
   content: string;
   created_at: string;
+  read: boolean;
 }
 
 interface Conversation {
-  profile: Profile;
-  last_message: string;
-  last_message_time: string;
+  id: string;
+  otherUser: Profile;
+  lastMessage: Message;
+  unreadCount: number;
 }
 
 const Messages = () => {
@@ -43,17 +46,11 @@ const Messages = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [recipient, setRecipient] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const messagesEndRef = useRef<null | HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   // Auth check + (voor nu) lege conversations tot RPC klaar is
   useEffect(() => {
@@ -64,13 +61,97 @@ const Messages = () => {
     const fetchConversations = async () => {
       setLoading(true);
       try {
-        // TODO: vervang met je RPC zodra beschikbaar
-        setConversations([]);
+        // Haal alle berichten op waarbij de gebruiker betrokken is
+        const [sentMessages, receivedMessages] = await Promise.all([
+          // Messages sent by current user
+          supabase
+            .from('messages')
+            .select(`
+              id,
+              sender_id,
+              receiver_id,
+              content,
+              created_at,
+              read
+            `)
+            .eq('sender_id', user.id),
+          // Messages received by current user
+          supabase
+            .from('messages')
+            .select(`
+              id,
+              sender_id,
+              receiver_id,
+              content,
+              created_at,
+              read
+            `)
+            .eq('receiver_id', user.id)
+        ]);
+
+        if (sentMessages.error) throw sentMessages.error;
+        if (receivedMessages.error) throw receivedMessages.error;
+
+        // Combine all messages and sort by creation time (newest first)
+        const messagesData = [
+          ...(sentMessages.data || []),
+          ...(receivedMessages.data || [])
+        ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+        if (!messagesData || messagesData.length === 0) {
+          setConversations([]);
+          return;
+        }
+
+        // Groepeer berichten per gesprek (unieke combinatie van sender/receiver)
+        const conversationMap = new Map();
+
+        messagesData.forEach(message => {
+          const otherUserId = message.sender_id === user.id ? message.receiver_id : message.sender_id;
+          const conversationKey = otherUserId;
+
+          if (!conversationMap.has(conversationKey) ||
+              new Date(message.created_at) > new Date(conversationMap.get(conversationKey).lastMessage.created_at)) {
+            conversationMap.set(conversationKey, {
+              otherUserId,
+              lastMessage: message,
+              unreadCount: 0 // TODO: tel ongelezen berichten
+            });
+          }
+        });
+
+        // Haal profielen op van alle gesprekspartners
+        const otherUserIds = Array.from(conversationMap.keys());
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('user_id, display_name, avatar_url')
+          .in('user_id', otherUserIds);
+
+        if (profilesError) {
+          console.warn('Could not load all profiles:', profilesError);
+        }
+
+        // Combineer gesprekken met profieldata
+        const conversations = Array.from(conversationMap.entries()).map(([otherUserId, conversation]) => {
+          const profile = profilesData?.find(p => p.user_id === otherUserId);
+          return {
+            id: otherUserId,
+            otherUser: profile || {
+              user_id: otherUserId,
+              display_name: 'Unknown User',
+              avatar_url: null
+            },
+            lastMessage: conversation.lastMessage,
+            unreadCount: conversation.unreadCount
+          };
+        });
+
+        setConversations(conversations);
       } catch (error: any) {
-        console.error('Error fetching conversations:', error);
+        logError('Error fetching conversations', error);
         toast({
           title: t('messages.fetchConversationsError'),
-          description: error.message,
+          description: getUserFriendlyError(error),
           variant: 'destructive',
         });
       } finally {
@@ -78,6 +159,39 @@ const Messages = () => {
       }
     };
     fetchConversations();
+
+    // Realtime subscriptions voor nieuwe berichten die gesprekken kunnen updaten
+    const conversationsChannel = supabase
+      .channel('conversations-updates')
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+          filter: `sender_id=eq.${user.id}`
+        },
+        () => {
+          console.log('Sent message update detected, refreshing conversations...');
+          fetchConversations();
+        }
+      )
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+          filter: `receiver_id=eq.${user.id}`
+        },
+        () => {
+          console.log('Received message update detected, refreshing conversations...');
+          fetchConversations();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(conversationsChannel);
+    };
   }, [user, toast, navigate, t]);
 
   // Messages laden + realtime subscriben
@@ -97,9 +211,10 @@ const Messages = () => {
           .single();
 
         if (profileError || !profileData) {
+          logError('Error loading user profile for messages', profileError);
           toast({
             title: t('messages.userNotFoundError'),
-            description: profileError?.message,
+            description: getUserFriendlyError(profileError),
             variant: 'destructive',
           });
           return;
@@ -107,15 +222,37 @@ const Messages = () => {
 
         setRecipient(profileData);
 
-        const { data: messagesData, error: messagesError } = await supabase
-          .from('messages')
-          .select('*')
-          .or(`(sender_id.eq.${user.id},receiver_id.eq.${userId}),(sender_id.eq.${userId},receiver_id.eq.${user.id})`)
-          .order('created_at', { ascending: true });
+        // Fetch messages between current user and selected user using two queries
+        const [sentMessages, receivedMessages] = await Promise.all([
+          // Messages sent by current user to selected user
+          supabase
+            .from('messages')
+            .select('*')
+            .eq('sender_id', user.id)
+            .eq('receiver_id', userId),
+          // Messages sent by selected user to current user
+          supabase
+            .from('messages')
+            .select('*')
+            .eq('sender_id', userId)
+            .eq('receiver_id', user.id)
+        ]);
 
-        if (messagesError) throw messagesError;
+        if (sentMessages.error) throw sentMessages.error;
+        if (receivedMessages.error) throw receivedMessages.error;
 
-        setMessages(messagesData || []);
+        // Combine and sort messages by timestamp
+        const allMessages = [
+          ...(sentMessages.data || []),
+          ...(receivedMessages.data || [])
+        ].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+
+        setMessages(allMessages);
+
+        // Auto-scroll naar beneden bij het laden van berichten
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
 
         // Realtime inserts (filter client-side om beide richtingen te pakken)
         channel = supabase
@@ -127,14 +264,18 @@ const Messages = () => {
               (m.sender_id === userId && m.receiver_id === user.id);
             if (relevant) {
               setMessages((prev) => [...prev, m]);
+              // Auto-scroll naar beneden bij nieuwe berichten
+              setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
             }
           })
           .subscribe();
       } catch (error: any) {
-        console.error('Error fetching messages:', error);
+        logError('Error fetching messages', error);
         toast({
           title: t('messages.fetchMessageError'),
-          description: error.message,
+          description: getUserFriendlyError(error),
           variant: 'destructive',
         });
       } finally {
@@ -163,16 +304,32 @@ const Messages = () => {
 
       if (data) {
         setMessages((prev) => [...prev, data[0]]);
+        // Auto-scroll naar beneden na het versturen van een bericht
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
       }
       setNewMessage('');
     } catch (error: any) {
-      console.error('Error sending message:', error);
+      logError('Error sending message', error);
       toast({
         title: t('messages.sendMessageError'),
-        description: error.message,
+        description: getUserFriendlyError(error),
         variant: 'destructive',
       });
     }
+  };
+
+  // Scroll to bottom functie
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Detecteer of gebruiker aan het scrollen is
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+    setShowScrollToBottom(!isAtBottom && container.scrollHeight > container.clientHeight);
   };
 
   if (loading && conversations.length === 0) {
@@ -194,8 +351,8 @@ const Messages = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
-      <main className="flex-1 py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+      <main className="flex-1 py-12 md:py-20 min-h-0 flex flex-col">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col min-h-0">
           <div className="flex items-center gap-4 mb-8">
             <Button onClick={() => navigate('/community')} variant="outline" className="gap-2">
               <ArrowLeft className="w-4 h-4" />
@@ -207,7 +364,7 @@ const Messages = () => {
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-[calc(100vh-250px)]">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 flex-1 min-h-0">
             <Card className="col-span-1 lg:col-span-1 cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic flex flex-col">
               <CardHeader>
                 <CardTitle className="font-cosmic text-cosmic-gradient">{t('messages.conversations')}</CardTitle>
@@ -217,24 +374,24 @@ const Messages = () => {
                 {conversations.length > 0 ? (
                   conversations.map((convo) => (
                     <div
-                      key={convo.profile.user_id}
-                      onClick={() => navigate(`/messages/${convo.profile.user_id}`)}
+                      key={convo.otherUser.user_id}
+                      onClick={() => navigate(`/messages/${convo.otherUser.user_id}`)}
                       className={`flex items-center p-3 rounded-lg cursor-pointer transition-all ${
-                        userId === convo.profile.user_id ? 'bg-cosmic-gradient' : 'hover:bg-muted/50'
+                        userId === convo.otherUser.user_id ? 'bg-cosmic-gradient' : 'hover:bg-muted/50'
                       }`}
                     >
                       <Avatar className="w-10 h-10 mr-3">
-                        <AvatarImage src={convo.profile.avatar_url} />
+                        <AvatarImage src={convo.otherUser.avatar_url} />
                         <AvatarFallback>
-                          {convo.profile.display_name?.slice(0, 2)?.toUpperCase() || '??'}
+                          {convo.otherUser.display_name?.slice(0, 2)?.toUpperCase() || '??'}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium truncate">{convo.profile.display_name}</div>
-                        <div className="text-sm text-muted-foreground truncate">{convo.last_message}</div>
+                        <div className="font-medium truncate">{convo.otherUser.display_name}</div>
+                        <div className="text-sm text-muted-foreground truncate">{convo.lastMessage.content}</div>
                       </div>
                       <div className="text-xs text-muted-foreground ml-3 whitespace-nowrap">
-                        {new Date(convo.last_message_time).toLocaleTimeString()}
+                        {new Date(convo.lastMessage.created_at).toLocaleTimeString()}
                       </div>
                     </div>
                   ))
@@ -253,7 +410,11 @@ const Messages = () => {
                   {recipient ? recipient.display_name : t('messages.selectConversation')}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 overflow-y-auto space-y-4">
+              <CardContent
+                ref={messagesContainerRef}
+                onScroll={handleScroll}
+                className="flex-1 overflow-y-auto space-y-4 min-h-0 pb-4 relative"
+              >
                 {messages.length === 0 ? (
                   <div className="text-center text-muted-foreground">{t('messages.noMessagesYet')}</div>
                 ) : (
@@ -276,6 +437,17 @@ const Messages = () => {
                   })
                 )}
                 <div ref={messagesEndRef} />
+
+                {/* Scroll to bottom knop */}
+                {showScrollToBottom && (
+                  <Button
+                    onClick={scrollToBottom}
+                    className="absolute bottom-6 right-6 rounded-full p-2 shadow-lg cosmic-hover bg-cosmic-gradient text-white z-10"
+                    size="sm"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                )}
               </CardContent>
 
               <form onSubmit={handleSendMessage} className="p-4 border-t border-border/50 flex gap-2">
@@ -293,7 +465,9 @@ const Messages = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      <div className="mt-8">
+        <Footer />
+      </div>
     </div>
   );
 };

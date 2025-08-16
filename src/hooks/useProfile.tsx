@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { logError } from '@/utils/errorUtils';
 
 interface Profile {
   id: string;
@@ -73,7 +74,7 @@ export const useProfile = () => {
       };
       setProfile(profileData);
     } catch (error) {
-      console.error('Error loading profile:', error);
+      logError('Error loading profile', error);
       setProfile(null);
     } finally {
       setLoading(false);
