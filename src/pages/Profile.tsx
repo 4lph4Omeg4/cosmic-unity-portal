@@ -33,9 +33,20 @@ interface Profile {
 }
 
 const Profile = () => {
+  console.log('Profile component rendering...');
   const { user } = useAuth();
   const { profile, refreshProfile } = useProfile();
-  const { t } = useLanguage(); // niet overal gebruikt, maar laten staan voor later i18n
+
+  let t;
+  try {
+    const languageContext = useLanguage();
+    t = languageContext.t;
+    console.log('Language context loaded successfully');
+  } catch (error) {
+    console.error('Failed to load language context:', error);
+    t = (key: string) => key; // fallback
+  }
+
   const { toast } = useToast();
   const navigate = useNavigate();
   
