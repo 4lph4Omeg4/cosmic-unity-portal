@@ -219,7 +219,7 @@ const translations = {
         label: 'Wachtwoord',
         hint: 'Minimaal 8 tekens',
       },
-      consent: 'Ik ga akkoord met het ontvangen van kosmische updates en marketingmails',
+      consent: 'Ik ga akkoord met het ontvangen van cosmische updates en marketingmails',
       error: {
         incomplete: 'Vul alle verplichte velden in en accepteer ons privacybeleid',
         password: 'Wachtwoord is verplicht om een account aan te maken',
@@ -241,7 +241,7 @@ const translations = {
         description: 'Ontvang exclusieve inzichten, speciale aanbiedingen en spirituele begeleiding',
       },
       benefits: {
-        title: 'Kosmische Voordelen',
+        title: 'Cosmische Voordelen',
         wisdom: {
           title: 'Spirituele Wijsheid',
           desc: 'Ontvang diepgaande inzichten en spirituele begeleiding',
@@ -256,7 +256,7 @@ const translations = {
         },
       },
       trust: {
-        members: 'Word onderdeel van meer dan 1.000 spirituele reizigers',
+        members: 'Word onderdeel van meer dan 144.000 spirituele reizigers',
         privacy: 'Privacy beschermd',
         spam: 'Geen spam, ooit',
         unsubscribe: 'Altijd afmelden',
@@ -349,7 +349,7 @@ const translations = {
     featured: {
       title: {
         sacred: 'Heilige',
-        geometry: 'Geometrie',
+        geometry: 'Geschriften',
       },
       subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
     },
@@ -381,7 +381,7 @@ const translations = {
         the: 'De',
         chosenOnes: 'Uitverkorenen',
       },
-      subtitle: 'Ontdek onze kosmische missie en spirituele begeleiding',
+      subtitle: 'Ontdek onze cosmische missie en spirituele begeleiding',
       mission: {
         title: 'Onze Missie',
         p1: 'Welkom bij SH4M4NI4K - een kosmische gemeenschap gewijd aan spirituele ontwaking en eenheid.',
@@ -389,7 +389,7 @@ const translations = {
       },
       principles: {
         unity: {
-          title: 'Kosmische Eenheid',
+          title: 'Cosmische Eenheid',
           text: 'Alle wezens zijn verbonden in het kosmische weefsel van bestaan.',
         },
         awakening: {
@@ -416,7 +416,7 @@ const translations = {
       view: 'Bekijk Product',
     },
     profile: {
-      title: 'Kosmisch Profiel',
+      title: 'Cosmisch Profiel',
       subtitle: 'Personaliseer je spirituele identiteit in onze community',
       info: 'Profiel Informatie',
       description: 'Beheer je profiel en avatar voor de community',
@@ -430,7 +430,7 @@ const translations = {
       title: {
         contact: 'Contact',
       },
-      subtitle: 'Neem contact met ons op voor vragen, begeleiding of om deel te worden van onze kosmische gemeenschap.',
+      subtitle: 'Neem contact met ons op voor vragen, begeleiding of om deel te worden van onze cosmische gemeenschap.',
       form: {
         title: 'Stuur ons een bericht',
         description: 'We horen graag van je. Stuur ons een bericht en we nemen zo snel mogelijk contact met je op.',
@@ -466,7 +466,7 @@ const translations = {
       },
     },
     blog: {
-      title: 'Kosmische Blogs',
+      title: 'Cosmische Blogs',
       description: 'Ontdek spirituele inzichten, wijsheid en begeleiding op je reis naar ontwaking en eenheid.',
       egoToEden: {
         title: 'Van Ego naar Eden',
@@ -474,7 +474,7 @@ const translations = {
       },
       unity: {
         title: 'Eenheid door het Enkele Oog',
-        description: 'Kosmische eenheid en de reis naar universeel bewustzijn.',
+        description: 'Cosmische eenheid en de reis naar universeel bewustzijn.',
       },
       exploreBlog: 'Verken Blog',
       latestArticles: 'Laatste Artikelen',
@@ -484,7 +484,7 @@ const translations = {
     },
     community: {
       title: {
-        cosmic: 'Kosmische',
+        cosmic: 'Cosmische',
         community: 'Community',
       },
       subtitle: 'Verbind met gelijkgestemde zielen en deel je spirituele reis.',
@@ -730,7 +730,7 @@ const translations = {
     featured: {
       title: {
         sacred: 'Sacred',
-        geometry: 'Geometry',
+        geometry: 'Scripture',
       },
       subtitle: 'Discover our collection of spiritual art and merchandise',
     },
