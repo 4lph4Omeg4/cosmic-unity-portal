@@ -133,10 +133,10 @@ const Messages = () => {
           })
           .subscribe();
       } catch (error: any) {
-        console.error('Error fetching messages:', error);
+        logError('Error fetching messages', error);
         toast({
           title: t('messages.fetchMessageError'),
-          description: error.message,
+          description: getUserFriendlyError(error),
           variant: 'destructive',
         });
       } finally {
