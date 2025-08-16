@@ -255,6 +255,12 @@ const translations = {
           desc: 'Ontvang gepersonaliseerde spirituele begeleiding',
         },
       },
+      trust: {
+        members: 'Word onderdeel van meer dan 1.000 spirituele reizigers',
+        privacy: 'Privacy beschermd',
+        spam: 'Geen spam, ooit',
+        unsubscribe: 'Altijd afmelden',
+      },
     },
     auth: {
       login: {
@@ -630,6 +636,12 @@ const translations = {
           desc: 'Receive personalized spiritual guidance',
         },
       },
+      trust: {
+        members: 'Join over 1,000 spiritual travelers',
+        privacy: 'Privacy protected',
+        spam: 'No spam, ever',
+        unsubscribe: 'Always unsubscribe',
+      },
     },
     auth: {
       login: {
@@ -1004,6 +1016,12 @@ const translations = {
           title: 'Persönliche Führung',
           desc: 'Erhalte personalisierte spirituelle Führung',
         },
+      },
+      trust: {
+        members: 'Werde Teil von über 1.000 spirituellen Reisenden',
+        privacy: 'Datenschutz geschützt',
+        spam: 'Kein Spam, niemals',
+        unsubscribe: 'Jederzeit abmelden',
       },
     },
     auth: {
