@@ -346,7 +346,7 @@ const Messages = () => {
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-[calc(100vh-250px)]">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 flex-1 min-h-0">
             <Card className="col-span-1 lg:col-span-1 cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic flex flex-col">
               <CardHeader>
                 <CardTitle className="font-cosmic text-cosmic-gradient">{t('messages.conversations')}</CardTitle>
