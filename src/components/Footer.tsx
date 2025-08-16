@@ -156,14 +156,12 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to="/timeline-alchemy"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
                   >
                     Timeline Alchemy
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
