@@ -283,21 +283,21 @@ const Messages = () => {
                 {conversations.length > 0 ? (
                   conversations.map((convo) => (
                     <div
-                      key={convo.profile.user_id}
-                      onClick={() => navigate(`/messages/${convo.profile.user_id}`)}
+                      key={convo.otherUser.user_id}
+                      onClick={() => navigate(`/messages/${convo.otherUser.user_id}`)}
                       className={`flex items-center p-3 rounded-lg cursor-pointer transition-all ${
-                        userId === convo.profile.user_id ? 'bg-cosmic-gradient' : 'hover:bg-muted/50'
+                        userId === convo.otherUser.user_id ? 'bg-cosmic-gradient' : 'hover:bg-muted/50'
                       }`}
                     >
                       <Avatar className="w-10 h-10 mr-3">
-                        <AvatarImage src={convo.profile.avatar_url} />
+                        <AvatarImage src={convo.otherUser.avatar_url} />
                         <AvatarFallback>
-                          {convo.profile.display_name?.slice(0, 2)?.toUpperCase() || '??'}
+                          {convo.otherUser.display_name?.slice(0, 2)?.toUpperCase() || '??'}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium truncate">{convo.profile.display_name}</div>
-                        <div className="text-sm text-muted-foreground truncate">{convo.last_message}</div>
+                        <div className="font-medium truncate">{convo.otherUser.display_name}</div>
+                        <div className="text-sm text-muted-foreground truncate">{convo.lastMessage.content}</div>
                       </div>
                       <div className="text-xs text-muted-foreground ml-3 whitespace-nowrap">
                         {new Date(convo.last_message_time).toLocaleTimeString()}
