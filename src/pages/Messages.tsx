@@ -68,18 +68,41 @@ const Messages = () => {
       setLoading(true);
       try {
         // Haal alle berichten op waarbij de gebruiker betrokken is
-        const { data: messagesData, error: messagesError } = await supabase
-          .from('messages')
-          .select(`
-            id,
-            sender_id,
-            receiver_id,
-            content,
-            created_at,
-            read
-          `)
-          .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
-          .order('created_at', { ascending: false });
+        const [sentMessages, receivedMessages] = await Promise.all([
+          // Messages sent by current user
+          supabase
+            .from('messages')
+            .select(`
+              id,
+              sender_id,
+              receiver_id,
+              content,
+              created_at,
+              read
+            `)
+            .eq('sender_id', user.id),
+          // Messages received by current user
+          supabase
+            .from('messages')
+            .select(`
+              id,
+              sender_id,
+              receiver_id,
+              content,
+              created_at,
+              read
+            `)
+            .eq('receiver_id', user.id)
+        ]);
+
+        if (sentMessages.error) throw sentMessages.error;
+        if (receivedMessages.error) throw receivedMessages.error;
+
+        // Combine all messages and sort by creation time (newest first)
+        const messagesData = [
+          ...(sentMessages.data || []),
+          ...(receivedMessages.data || [])
+        ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
         if (messagesError) throw messagesError;
 
