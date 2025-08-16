@@ -9,6 +9,7 @@ import { MessageCircle, Plus, Users } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/hooks/useLanguage';
+import { logError, serializeError } from '@/utils/errorUtils';
 
 interface Profile {
   id: string;
@@ -77,18 +78,8 @@ const LatestPosts = () => {
 
       setPosts(postsWithProfiles as any);
     } catch (error) {
-      console.error('Error loading latest posts:', error);
-      let errorMessage = 'Failed to load posts';
-
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (typeof error === 'object' && error !== null) {
-        errorMessage = JSON.stringify(error);
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-      }
-
-      setError(errorMessage);
+      logError('Error loading latest posts', error);
+      setError(serializeError(error));
     } finally {
       setLoading(false);
     }
