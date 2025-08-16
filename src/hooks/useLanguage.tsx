@@ -320,7 +320,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Cosmische Berichten',
+      title: 'Berichten',
       back: 'Terug',
       conversations: 'Gesprekken',
       recentConversations: 'Je recente gesprekken',
@@ -333,6 +333,8 @@ const translations = {
       fetchMessageError: 'Fout bij ophalen van berichten',
       fetchConversationsError: 'Fout bij ophalen van gesprekken',
       userNotFoundError: 'Gebruiker niet gevonden',
+      noMessagesYet: 'Nog geen berichten',
+      send: 'Versturen',
     },
     hero: {
       subtitle: 'Ontdek je oneindige potentieel',
@@ -693,7 +695,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Cosmic Messages',
+      title: 'Messages',
       back: 'Back',
       conversations: 'Conversations',
       recentConversations: 'Your recent conversations',
@@ -706,6 +708,8 @@ const translations = {
       fetchMessageError: 'Error fetching messages',
       fetchConversationsError: 'Error fetching conversations',
       userNotFoundError: 'User not found',
+      noMessagesYet: 'No messages yet',
+      send: 'Send',
     },
     hero: {
       subtitle: 'Discover your infinite potential',
@@ -1066,7 +1070,7 @@ const translations = {
       },
     },
     messages: {
-      title: 'Kosmische Nachrichten',
+      title: 'Nachrichten',
       back: 'Zurück',
       conversations: 'Gespräche',
       recentConversations: 'Ihre letzten Gespräche',
@@ -1079,6 +1083,8 @@ const translations = {
       fetchMessageError: 'Fehler beim Abrufen von Nachrichten',
       fetchConversationsError: 'Fehler beim Abrufen von Gesprächen',
       userNotFoundError: 'Benutzer nicht gefunden',
+      noMessagesYet: 'Noch keine Nachrichten',
+      send: 'Senden',
     },
     hero: {
       subtitle: 'Entdecke dein grenzenloses Potenzial',
