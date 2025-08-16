@@ -198,7 +198,7 @@ const Messages = () => {
         const { data: messagesData, error: messagesError } = await supabase
           .from('messages')
           .select('*')
-          .or(`(sender_id.eq.${user.id},receiver_id.eq.${userId}),(sender_id.eq.${userId},receiver_id.eq.${user.id})`)
+          .or(`and(sender_id.eq.${user.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${user.id})`)
           .order('created_at', { ascending: true });
 
         if (messagesError) throw messagesError;
