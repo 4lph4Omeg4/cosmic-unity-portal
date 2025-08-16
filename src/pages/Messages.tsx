@@ -46,6 +46,7 @@ const Messages = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [recipient, setRecipient] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
