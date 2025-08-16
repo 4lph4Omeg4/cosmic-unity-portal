@@ -446,6 +446,17 @@ const Messages = () => {
                   })
                 )}
                 <div ref={messagesEndRef} />
+
+                {/* Scroll to bottom knop */}
+                {showScrollToBottom && (
+                  <Button
+                    onClick={scrollToBottom}
+                    className="absolute bottom-6 right-6 rounded-full p-2 shadow-lg cosmic-hover bg-cosmic-gradient text-white z-10"
+                    size="sm"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                )}
               </CardContent>
 
               <form onSubmit={handleSendMessage} className="p-4 border-t border-border/50 flex gap-2">
