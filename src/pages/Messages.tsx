@@ -168,10 +168,10 @@ const Messages = () => {
       }
       setNewMessage('');
     } catch (error: any) {
-      console.error('Error sending message:', error);
+      logError('Error sending message', error);
       toast({
         title: t('messages.sendMessageError'),
-        description: error.message,
+        description: getUserFriendlyError(error),
         variant: 'destructive',
       });
     }
