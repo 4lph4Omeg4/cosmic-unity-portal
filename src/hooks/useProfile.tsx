@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { logError } from '@/utils/errorUtils';
 
 interface Profile {
   id: string;
@@ -73,21 +74,7 @@ export const useProfile = () => {
       };
       setProfile(profileData);
     } catch (error) {
-      let errorMessage = 'Failed to load profile';
-
-      if (error instanceof Error) {
-        errorMessage = error.message;
-        console.error('Error loading profile:', errorMessage, error);
-      } else if (typeof error === 'object' && error !== null) {
-        errorMessage = JSON.stringify(error);
-        console.error('Error loading profile (object):', errorMessage, error);
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-        console.error('Error loading profile (string):', errorMessage);
-      } else {
-        console.error('Error loading profile (unknown):', error, typeof error);
-      }
-
+      logError('Error loading profile', error);
       setProfile(null);
     } finally {
       setLoading(false);
