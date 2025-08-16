@@ -311,6 +311,10 @@ const Messages = () => {
 
       if (data) {
         setMessages((prev) => [...prev, data[0]]);
+        // Auto-scroll naar beneden na het versturen van een bericht
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
       }
       setNewMessage('');
     } catch (error: any) {
