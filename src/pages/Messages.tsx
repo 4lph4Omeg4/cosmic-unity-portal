@@ -68,10 +68,10 @@ const Messages = () => {
         // TODO: vervang met je RPC zodra beschikbaar
         setConversations([]);
       } catch (error: any) {
-        console.error('Error fetching conversations:', error);
+        logError('Error fetching conversations', error);
         toast({
           title: t('messages.fetchConversationsError'),
-          description: error.message,
+          description: getUserFriendlyError(error),
           variant: 'destructive',
         });
       } finally {
