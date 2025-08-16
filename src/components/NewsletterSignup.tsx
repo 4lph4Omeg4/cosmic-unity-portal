@@ -408,17 +408,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:hover:shadow-none pointer-events-auto relative z-10"
             size={compact ? "default" : "lg"}
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {t('newsletter.button.loading')}
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4 mr-2" />
-                {t('newsletter.button')}
-              </>
-            )}
+           {isSubmitting ? t('newsletter.buttonLoading') : t('newsletter.button')}
           </Button>
         </form>
       </CardContent>
