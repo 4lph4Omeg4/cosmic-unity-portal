@@ -300,7 +300,7 @@ const Messages = () => {
                         <div className="text-sm text-muted-foreground truncate">{convo.lastMessage.content}</div>
                       </div>
                       <div className="text-xs text-muted-foreground ml-3 whitespace-nowrap">
-                        {new Date(convo.last_message_time).toLocaleTimeString()}
+                        {new Date(convo.lastMessage.created_at).toLocaleTimeString()}
                       </div>
                     </div>
                   ))
