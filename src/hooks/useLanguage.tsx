@@ -1054,12 +1054,33 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
-    console.error('useLanguage must be used within a LanguageProvider. Component hierarchy:', new Error().stack);
-    // Return a default context to prevent crashes during development
+    console.error('useLanguage must be used within a LanguageProvider. This usually means the component is being rendered outside the provider tree.');
+
+    // Provide a working fallback to prevent application crashes
+    const fallbackT = (key: string): string => {
+      console.warn(`Translation fallback used for key: ${key}`);
+      // Try to get Dutch translation as fallback
+      try {
+        const keys = key.split('.');
+        let result: any = translations.nl;
+        for (const k of keys) {
+          result = result?.[k];
+          if (result === undefined) {
+            return key;
+          }
+        }
+        return result || key;
+      } catch {
+        return key;
+      }
+    };
+
     return {
       language: 'nl' as Language,
-      setLanguage: () => {},
-      t: (key: string) => key
+      setLanguage: (lang: Language) => {
+        console.warn(`Language change to ${lang} ignored - no provider context`);
+      },
+      t: fallbackT
     };
   }
   return context;
