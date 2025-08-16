@@ -166,7 +166,7 @@ const Messages = () => {
     };
     fetchConversations();
 
-    // Realtime subscription voor nieuwe berichten die gesprekken kunnen updaten
+    // Realtime subscriptions voor nieuwe berichten die gesprekken kunnen updaten
     const conversationsChannel = supabase
       .channel('conversations-updates')
       .on('postgres_changes',
@@ -174,10 +174,22 @@ const Messages = () => {
           event: '*',
           schema: 'public',
           table: 'messages',
-          filter: `or(sender_id.eq.${user.id},receiver_id.eq.${user.id})`
+          filter: `sender_id=eq.${user.id}`
         },
         () => {
-          console.log('Message update detected, refreshing conversations...');
+          console.log('Sent message update detected, refreshing conversations...');
+          fetchConversations();
+        }
+      )
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+          filter: `receiver_id=eq.${user.id}`
+        },
+        () => {
+          console.log('Received message update detected, refreshing conversations...');
           fetchConversations();
         }
       )
