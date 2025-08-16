@@ -344,7 +344,7 @@ const translations = {
     },
     hero: {
       subtitle: 'Ontdek je oneindige potentieel',
-      cta: { explore: 'Ontdek' },
+      cta: { explore: 'DigiTemple' },
     },
     featured: {
       title: {
@@ -725,7 +725,7 @@ const translations = {
     },
     hero: {
       subtitle: 'Discover your infinite potential',
-      cta: { explore: 'Explore' },
+      cta: { explore: 'DigiTemple' },
     },
     featured: {
       title: {
@@ -1106,7 +1106,7 @@ const translations = {
     },
     hero: {
       subtitle: 'Entdecke dein grenzenloses Potenzial',
-      cta: { explore: 'Entdecken' },
+      cta: { explore: 'DigiTemple' },
     },
     featured: {
       title: {
