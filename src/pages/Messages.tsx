@@ -256,6 +256,11 @@ const Messages = () => {
 
         setMessages(allMessages);
 
+        // Auto-scroll naar beneden bij het laden van berichten
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+
         // Realtime inserts (filter client-side om beide richtingen te pakken)
         channel = supabase
           .channel(`messages:${user.id}:${userId}`)
