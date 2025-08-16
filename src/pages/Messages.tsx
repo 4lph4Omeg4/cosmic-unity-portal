@@ -474,7 +474,9 @@ const Messages = () => {
           </div>
         </div>
       </main>
-      <Footer />
+      <div className="mt-8">
+        <Footer />
+      </div>
     </div>
   );
 };
