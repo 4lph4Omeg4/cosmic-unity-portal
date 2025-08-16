@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Upload, User, Save, MessageCircle, Instagram, Twitter, Linkedin, Youtube, Music, Facebook } from 'lucide-react';
+import { Upload, User, Save, MessageCircle, Instagram, Twitter, Linkedin, Youtube, Facebook } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
@@ -350,7 +350,9 @@ const Profile = () => {
                   
                   <div>
                     <Label htmlFor="tiktok" className="font-mystical text-sm flex items-center gap-2">
-                      <Music className="w-4 h-4" />
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                        <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 2.895-2.895c.183 0 .363.018.535.052V11.19a6.329 6.329 0 0 0-.535-.024 6.335 6.335 0 0 0-6.336 6.336A6.335 6.335 0 0 0 10.069 24a6.335 6.335 0 0 0 6.336-6.336V8.031a8.188 8.188 0 0 0 4.759 1.544V6.686h-.575Z"/>
+                      </svg>
                       TikTok
                     </Label>
                     <Input
@@ -432,7 +434,9 @@ const Profile = () => {
                     {localProfile.social_links.tiktok && (
                       <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-foreground">
                         <a href={localProfile.social_links.tiktok} target="_blank" rel="noopener noreferrer">
-                          <Music className="h-4 w-4" />
+                          <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                            <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 2.895-2.895c.183 0 .363.018.535.052V11.19a6.329 6.329 0 0 0-.535-.024 6.335 6.335 0 0 0-6.336 6.336A6.335 6.335 0 0 0 10.069 24a6.335 6.335 0 0 0 6.336-6.336V8.031a8.188 8.188 0 0 0 4.759 1.544V6.686h-.575Z"/>
+                          </svg>
                         </a>
                       </Button>
                     )}
