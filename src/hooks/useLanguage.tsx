@@ -216,6 +216,17 @@ const translations = {
     product: {
       view: 'Bekijk Product',
     },
+    profile: {
+      title: 'Kosmisch Profiel',
+      subtitle: 'Personaliseer je spirituele identiteit in onze community',
+      info: 'Profiel Informatie',
+      description: 'Beheer je profiel en avatar voor de community',
+      displayName: 'Weergavenaam',
+      bio: 'Bio',
+      saving: 'Opslaan...',
+      save: 'Profiel Opslaan',
+      loading: 'Profiel laden...',
+    },
   },
 
   en: {
@@ -423,6 +434,17 @@ const translations = {
     product: {
       view: 'View Product',
     },
+    profile: {
+      title: 'Cosmic Profile',
+      subtitle: 'Personalize your spiritual identity in our community',
+      info: 'Profile Information',
+      description: 'Manage your profile and avatar for the community',
+      displayName: 'Display Name',
+      bio: 'Bio',
+      saving: 'Saving...',
+      save: 'Save Profile',
+      loading: 'Loading profile...',
+    },
   },
 
   de: {
@@ -629,6 +651,17 @@ const translations = {
     },
     product: {
       view: 'Produkt ansehen',
+    },
+    profile: {
+      title: 'Kosmisches Profil',
+      subtitle: 'Personalisiere deine spirituelle Identität in unserer Gemeinschaft',
+      info: 'Profil Informationen',
+      description: 'Verwalte dein Profil und Avatar für die Gemeinschaft',
+      displayName: 'Anzeigename',
+      bio: 'Bio',
+      saving: 'Speichern...',
+      save: 'Profil Speichern',
+      loading: 'Profil wird geladen...',
     },
   },
 } as const;
