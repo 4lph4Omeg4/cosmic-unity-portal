@@ -26,6 +26,7 @@ interface Message {
   receiver_id: string;
   content: string;
   created_at: string;
+  read: boolean;
 }
 
 interface Conversation {
