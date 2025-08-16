@@ -195,11 +195,29 @@ const Messages = () => {
 
         setRecipient(profileData);
 
+        // Fetch messages between the current user and the selected user
         const { data: messagesData, error: messagesError } = await supabase
-          .from('messages')
-          .select('*')
-          .or(`and(sender_id.eq.${user.id},receiver_id.eq.${userId}),and(sender_id.eq.${userId},receiver_id.eq.${user.id})`)
-          .order('created_at', { ascending: true });
+          .rpc('get_conversation_messages', {
+            user1_id: user.id,
+            user2_id: userId
+          });
+
+        // Fallback to manual query if RPC doesn't exist
+        if (messagesError && messagesError.code === '42883') {
+          console.log('RPC not found, using manual query...');
+          const { data: fallbackMessages, error: fallbackError } = await supabase
+            .from('messages')
+            .select('*')
+            .or(`sender_id.eq.${user.id}.and.receiver_id.eq.${userId},sender_id.eq.${userId}.and.receiver_id.eq.${user.id}`)
+            .order('created_at', { ascending: true });
+
+          if (fallbackError) throw fallbackError;
+          setMessages(fallbackMessages || []);
+        } else if (messagesError) {
+          throw messagesError;
+        } else {
+          setMessages(messagesData || []);
+        }
 
         if (messagesError) throw messagesError;
 
