@@ -1156,7 +1156,6 @@ const translations = {
       errorLoading: 'Fehler beim Laden',
       errorLoadingMessage: 'Etwas ging beim Laden der Beiträge schief',
     },
-    },
     friend: {
       requestSent: 'Freundschaftsanfrage gesendet!',
       requestError: 'Fehler beim Senden der Freundschaftsanfrage.',
@@ -1372,16 +1371,6 @@ const translations = {
       errorDeleteMessage: 'Etwas ging beim Löschen deines Beitrags schief',
       errorLoading: 'Fehler beim Laden',
       errorLoadingMessage: 'Etwas ging beim Laden der Beiträge schief',
-    },
-    friend: {
-      requestSent: 'Freundschaftsanfrage gesendet!',
-      requestError: 'Fehler beim Senden der Freundschaftsanfrage.',
-      requestAccepted: 'Freundschaftsanfrage angenommen!',
-      acceptError: 'Fehler beim Annehmen der Freundschaftsanfrage.',
-      requestDeclined: 'Freundschaftsanfrage abgelehnt.',
-      declineError: 'Fehler beim Ablehnen der Freundschaftsanfrage.',
-      removedSuccess: 'Freund entfernt.',
-      removeError: 'Fehler beim Entfernen des Freundes.',
     },
   },
 } as const;
