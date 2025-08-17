@@ -22,6 +22,7 @@ const Navigation = () => {
     { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
     { name: t('nav.community'), href: '/community', icon: Users },
     { name: 'Blog', href: '/blog', icon: BookOpen },
+    { name: 'Timeline Alchemy', href: '/timeline-alchemy', icon: Star },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
     // This will open the file as a URL, not as a route in your app.
