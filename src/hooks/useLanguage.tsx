@@ -231,7 +231,7 @@ const translations = {
       },
       welcome: {
         title: 'Welkom, spirituele reiziger!',
-        message: 'Check je e-mail voor ons kosmische welkomstgeschenk.',
+        message: 'Check je e-mail voor ons cosmische welkomstgeschenk.',
         status: 'Je account is aangemaakt. Log in om te verkennen.',
       },
       buttonLoading: 'Bezig…',
@@ -378,7 +378,7 @@ const translations = {
     },
     featured: {
       title: {
-        sacred: 'Heilige',
+        sacred: 'Universele',
         geometry: 'Geschriften',
       },
       subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
@@ -695,7 +695,7 @@ const translations = {
         },
       },
       trust: {
-        members: 'Join over 1,000 spiritual travelers',
+        members: 'Join over 144.000 spiritual travelers',
         privacy: 'Privacy protected',
         spam: 'No spam, ever',
         unsubscribe: 'Always unsubscribe',
