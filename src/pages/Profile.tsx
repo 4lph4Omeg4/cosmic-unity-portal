@@ -161,7 +161,7 @@ const Profile = () => {
               </div>
             </div>
             <h1 className="font-cosmic text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-cosmic-gradient">Kosmisch</span>{' '}
+              <span className="text-cosmic-gradient">Cosmisch</span>{' '}
               <span className="text-mystical-gradient">Profiel</span>
             </h1>
             <p className="font-mystical text-lg text-muted-foreground">
