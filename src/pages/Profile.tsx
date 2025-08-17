@@ -432,7 +432,7 @@ const Profile = () => {
           {/* Community Members Section */}
           <div className="mt-8">
             <CommunityMembersList
-              title="Community Members"
+              title={t('profile.communityMembers')}
               maxMembers={10}
               onMessageClick={(memberId) => navigate(`/messages/${memberId}`)}
             />
@@ -440,21 +440,21 @@ const Profile = () => {
 
           <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic mt-8">
             <CardHeader>
-              <CardTitle className="font-cosmic text-cosmic-gradient">Quick Actions</CardTitle>
+              <CardTitle className="font-cosmic text-cosmic-gradient">{t('profile.quickActions')}</CardTitle>
               <CardDescription className="font-mystical">
-                Navigate to other sections of your cosmic journey
+                {t('profile.quickActionsDesc')}
               </CardDescription>
             </CardHeader>
 
             <CardContent className="flex flex-wrap gap-4">
               <Button onClick={() => navigate('/messages')} variant="cosmic" className="gap-2">
                 <MessageCircle className="w-4 h-4" />
-                View Messages
+                {t('profile.viewMessages')}
               </Button>
 
               <Button onClick={() => navigate('/community')} variant="mystical" className="gap-2">
                 <User className="w-4 h-4" />
-                Community
+                {t('profile.community')}
               </Button>
             </CardContent>
           </Card>

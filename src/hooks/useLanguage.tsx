@@ -291,6 +291,7 @@ const translations = {
       subtitle: 'Verbind met gelijkgestemde zielen en deel je spirituele reis.',
       description: 'Maak verbinding met gelijkgestemde zielen op hun spirituele reis.',
       allMembers: 'Alle Leden',
+      viewAllMembers: 'Bekijk Alle Leden',
       searchPlaceholder: 'Zoek leden...',
       friends: 'Vrienden',
       requests: 'Verzoeken',
@@ -397,6 +398,26 @@ const translations = {
       readMore: 'Lees meer',
       viewAll: 'Bekijk alles',
     },
+    shop: {
+      title: {
+        sacred: 'Heilige',
+        shop: 'Winkel',
+      },
+      subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
+      loading: 'Winkel laden...',
+      filter: {
+        all: 'Alle Producten',
+      },
+      products: 'Producten',
+      allProducts: 'Alle Producten',
+      viewProduct: 'Bekijk Product',
+      noProducts: 'Geen producten gevonden',
+      noProductsDescription: 'Er zijn momenteel geen producten beschikbaar in deze collectie.',
+      errorAdding: 'Fout bij toevoegen aan winkelwagen',
+      addedToCart: 'Toegevoegd aan winkelwagen',
+      redirecting: 'Je wordt doorverwezen naar de checkout...',
+      errorMessage: 'Er ging iets mis. Probeer het opnieuw.',
+    },
     friends: {
       title: 'Vrienden',
       subtitle: 'Verbind met andere leden van de community',
@@ -457,6 +478,11 @@ const translations = {
       saving: 'Opslaan...',
       save: 'Profiel Opslaan',
       loading: 'Profiel laden...',
+      communityMembers: 'Community Leden',
+      quickActions: 'Snelle Acties',
+      viewMessages: 'Bekijk Berichten',
+      community: 'Community',
+      quickActionsDesc: 'Navigeer naar andere secties van je kosmische reis',
     },
     contact: {
       title: {
@@ -704,6 +730,7 @@ const translations = {
       subtitle: 'Connect with like-minded souls and share your spiritual journey.',
       description: 'Connect with like-minded souls on their spiritual journey.',
       allMembers: 'All Members',
+      viewAllMembers: 'View All Members',
       searchPlaceholder: 'Search members...',
       friends: 'Friends',
       requests: 'Requests',
@@ -860,6 +887,26 @@ const translations = {
     product: {
       view: 'View Product',
     },
+    shop: {
+      title: {
+        sacred: 'Sacred',
+        shop: 'Shop',
+      },
+      subtitle: 'Discover our collection of spiritual art and merchandise',
+      loading: 'Loading shop...',
+      filter: {
+        all: 'All Products',
+      },
+      products: 'Products',
+      allProducts: 'All Products',
+      viewProduct: 'View Product',
+      noProducts: 'No products found',
+      noProductsDescription: 'There are currently no products available in this collection.',
+      errorAdding: 'Error adding to cart',
+      addedToCart: 'Added to cart',
+      redirecting: 'Redirecting you to checkout...',
+      errorMessage: 'Something went wrong. Please try again.',
+    },
     profile: {
       title: 'Cosmic Profile',
       subtitle: 'Personalize your spiritual identity in our community',
@@ -870,6 +917,11 @@ const translations = {
       saving: 'Saving...',
       save: 'Save Profile',
       loading: 'Loading profile...',
+      communityMembers: 'Community Members',
+      quickActions: 'Quick Actions',
+      viewMessages: 'View Messages',
+      community: 'Community',
+      quickActionsDesc: 'Navigate to other sections of your cosmic journey',
     },
     contact: {
       title: {
@@ -1117,6 +1169,7 @@ const translations = {
       subtitle: 'Verbinde dich mit Gleichgesinnten und teile deine spirituelle Reise.',
       description: 'Verbinde dich mit Gleichgesinnten auf ihrer spirituellen Reise.',
       allMembers: 'Alle Mitglieder',
+      viewAllMembers: 'Alle Mitglieder ansehen',
       searchPlaceholder: 'Mitglieder suchen...',
       friends: 'Freunde',
       requests: 'Anfragen',
@@ -1273,6 +1326,26 @@ const translations = {
     product: {
       view: 'Produkt ansehen',
     },
+    shop: {
+      title: {
+        sacred: 'Heilige',
+        shop: 'Geschäft',
+      },
+      subtitle: 'Entdecke unsere Sammlung von spiritueller Kunst und Merchandise',
+      loading: 'Shop wird geladen...',
+      filter: {
+        all: 'Alle Produkte',
+      },
+      products: 'Produkte',
+      allProducts: 'Alle Produkte',
+      viewProduct: 'Produkt ansehen',
+      noProducts: 'Keine Produkte gefunden',
+      noProductsDescription: 'Derzeit sind keine Produkte in dieser Kollektion verfügbar.',
+      errorAdding: 'Fehler beim Hinzufügen zum Warenkorb',
+      addedToCart: 'Zum Warenkorb hinzugefügt',
+      redirecting: 'Du wirst zur Kasse weitergeleitet...',
+      errorMessage: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+    },
     profile: {
       title: 'Kosmisches Profil',
       subtitle: 'Personalisiere deine spirituelle Identität in unserer Gemeinschaft',
@@ -1283,6 +1356,11 @@ const translations = {
       saving: 'Speichern...',
       save: 'Profil Speichern',
       loading: 'Profil wird geladen...',
+      communityMembers: 'Gemeinschaftsmitglieder',
+      quickActions: 'Schnelle Aktionen',
+      viewMessages: 'Nachrichten ansehen',
+      community: 'Gemeinschaft',
+      quickActionsDesc: 'Navigiere zu anderen Bereichen deiner kosmischen Reise',
     },
     contact: {
       title: {
