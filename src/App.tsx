@@ -30,6 +30,7 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import UnderConstruction from "./pages/UnderConstruction";
 import TimelineAlchemy from "./pages/TimelineAlchemy";
+import Friends from "./pages/Friends";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/user/:userId" element={<UserProfile />} />
+              <Route path="/friends" element={<Friends />} />
               <Route path="/messages" element={<Messages />} />
               <Route path="/messages/:userId" element={<Messages />} />
               <Route path="/blog" element={<Blog />} />

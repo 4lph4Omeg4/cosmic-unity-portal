@@ -375,6 +375,9 @@ const translations = {
       noName: 'Naamloos',
       showMore: 'Toon meer',
       showLess: 'Toon minder',
+      pageTitle: 'Mijn Vrienden',
+      pageSubtitle: 'Beheer je vriendschappen in de cosmische community',
+      totalFriends: 'vrienden',
     },
     about: {
       title: {
@@ -482,7 +485,7 @@ const translations = {
       noArticlesTitle: 'Nog geen artikelen',
       noArticlesDescription: 'We werken aan nieuwe spirituele inzichten. Kom binnenkort terug!',
     },
-    community: {
+    communityPosts: {
       title: {
         cosmic: 'Cosmische',
         community: 'Community',
@@ -756,6 +759,9 @@ const translations = {
       noName: 'Nameless',
       showMore: 'Show more',
       showLess: 'Show less',
+      pageTitle: 'My Friends',
+      pageSubtitle: 'Manage your friendships in the cosmic community',
+      totalFriends: 'friends',
     },
     about: {
       title: {
@@ -863,7 +869,7 @@ const translations = {
       noArticlesTitle: 'No articles yet',
       noArticlesDescription: 'We\'re working on new spiritual insights. Check back soon!',
     },
-    community: {
+    communityPosts: {
       title: {
         cosmic: 'Cosmic',
         community: 'Community',
@@ -1137,6 +1143,9 @@ const translations = {
       noName: 'Namenlos',
       showMore: 'Mehr anzeigen',
       showLess: 'Weniger anzeigen',
+      pageTitle: 'Meine Freunde',
+      pageSubtitle: 'Verwalte deine Freundschaften in der kosmischen Gemeinschaft',
+      totalFriends: 'Freunde',
     },
     about: {
       title: {
@@ -1244,7 +1253,7 @@ const translations = {
       noArticlesTitle: 'Noch keine Artikel',
       noArticlesDescription: 'Wir arbeiten an neuen spirituellen Einsichten. Schau bald wieder vorbei!',
     },
-    community: {
+    communityPosts: {
       title: {
         cosmic: 'Kosmische',
         community: 'Gemeinschaft',
