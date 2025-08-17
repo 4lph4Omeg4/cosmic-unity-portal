@@ -400,7 +400,7 @@ const translations = {
     },
     shop: {
       title: {
-        sacred: 'Heilige',
+        sacred: 'Galactische',
         shop: 'Winkel',
       },
       subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
