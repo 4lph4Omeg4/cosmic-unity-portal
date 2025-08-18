@@ -17,12 +17,19 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
   const { t, language } = useLanguage();
+  const timelineAlchemyEntryHref = user
+    ? (profile?.role === 'admin'
+        ? '/timeline-alchemy/admin/dashboard'
+        : (profile?.role === 'client'
+            ? '/timeline-alchemy/client/my-previews'
+            : '/timeline-alchemy'))
+    : '/timeline-alchemy';
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
     { name: t('nav.community'), href: '/community', icon: Users },
     { name: 'Blog', href: '/blog', icon: BookOpen },
-    { name: 'Timeline Alchemy', href: '/timeline-alchemy', icon: Star },
+    { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
     // This will open the file as a URL, not as a route in your app.
