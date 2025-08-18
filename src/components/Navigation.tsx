@@ -29,6 +29,17 @@ const Navigation = () => {
     { name: 'The Direct Path', href: '/the-direct-path/index.html', icon: Star, external: true },
   ];
 
+  // Timeline Alchemy sub-navigation based on user role
+  const timelineAlchemyNav = user && profile?.role === 'admin' ? [
+    { name: 'Dashboard', href: '/timeline-alchemy/admin/dashboard', icon: Star },
+    { name: 'Ideas', href: '/timeline-alchemy/admin/ideas', icon: Star },
+    { name: 'Preview Wizard', href: '/timeline-alchemy/admin/preview-wizard', icon: Star },
+    { name: 'Publish Queue', href: '/timeline-alchemy/admin/publish-queue', icon: Star },
+  ] : user && profile?.role === 'client' ? [
+    { name: 'My Previews', href: '/timeline-alchemy/client/my-previews', icon: Star },
+    { name: 'Social Connections', href: '/timeline-alchemy/client/social-connections', icon: Star },
+  ] : [];
+
   async function handleSignOut() {
     await signOut();
     navigate('/');
@@ -113,6 +124,25 @@ const Navigation = () => {
                       <span>{language === 'en' ? 'Messages' : language === 'de' ? 'Nachrichten' : 'Berichten'}</span>
                     </Link>
                   </DropdownMenuItem>
+                  
+                  {/* Timeline Alchemy Section */}
+                  {timelineAlchemyNav.length > 0 && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="font-mystical text-xs text-muted-foreground cursor-default">
+                        Timeline Alchemy
+                      </DropdownMenuItem>
+                      {timelineAlchemyNav.map((item) => (
+                        <DropdownMenuItem key={item.name} asChild className="font-mystical">
+                          <Link to={item.href} className="flex items-center">
+                            <item.icon className="mr-2 h-4 w-4" />
+                            <span>{item.name}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </>
+                  )}
+                  
                   <DropdownMenuItem className="font-mystical">
                     <span className="text-xs text-muted-foreground">{user.email}</span>
                   </DropdownMenuItem>

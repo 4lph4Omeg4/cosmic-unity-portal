@@ -33,6 +33,16 @@ import TimelineAlchemy from "./pages/TimelineAlchemy";
 import Friends from "./pages/Friends";
 import NotFound from "./pages/NotFound";
 
+// Timeline Alchemy Admin Pages
+import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
+import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
+import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
+import TimelineAlchemyPublishQueue from "./pages/timeline-alchemy/admin/PublishQueue";
+
+// Timeline Alchemy Client Pages
+import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
+import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -80,6 +90,17 @@ const App = () => (
               <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
               <Route path="/digitempel" element={<UnderConstruction />} />
               <Route path="/timeline-alchemy" element={<TimelineAlchemy />} />
+              
+              {/* Timeline Alchemy Admin Routes */}
+              <Route path="/timeline-alchemy/admin/dashboard" element={<TimelineAlchemyDashboard />} />
+              <Route path="/timeline-alchemy/admin/ideas" element={<TimelineAlchemyIdeas />} />
+              <Route path="/timeline-alchemy/admin/preview-wizard" element={<TimelineAlchemyPreviewWizard />} />
+              <Route path="/timeline-alchemy/admin/publish-queue" element={<TimelineAlchemyPublishQueue />} />
+              
+              {/* Timeline Alchemy Client Routes */}
+              <Route path="/timeline-alchemy/client/my-previews" element={<TimelineAlchemyMyPreviews />} />
+              <Route path="/timeline-alchemy/client/social-connections" element={<TimelineAlchemySocialConnections />} />
+              
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
