@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
 import { Star, Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import NewsletterSignup from '@/components/NewsletterSignup';
@@ -7,6 +9,15 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { t, language } = useLanguage();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  const timelineAlchemyEntryHref = user
+    ? (profile?.role === 'admin'
+        ? '/timeline-alchemy/admin/dashboard'
+        : (profile?.role === 'client'
+            ? '/timeline-alchemy/client/my-previews'
+            : '/timeline-alchemy'))
+    : '/timeline-alchemy';
 
   // Generate language-specific policy URLs
   const getPolicyUrls = () => {
@@ -157,7 +168,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/timeline-alchemy"
+                    to={timelineAlchemyEntryHref}
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
                   >
                     Timeline Alchemy
