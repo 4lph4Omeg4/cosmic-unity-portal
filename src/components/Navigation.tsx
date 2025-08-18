@@ -102,6 +102,12 @@ const Navigation = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="font-mystical">
+                    <Link to="/friends" className="flex items-center">
+                      <Users className="mr-2 h-4 w-4" />
+                      <span>{t('friends.title')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="font-mystical">
                     <Link to="/messages" className="flex items-center">
                       <MessageCircle className="mr-2 h-4 w-4" />
                       <span>{language === 'en' ? 'Messages' : language === 'de' ? 'Nachrichten' : 'Berichten'}</span>

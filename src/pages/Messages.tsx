@@ -136,7 +136,13 @@ const Messages = () => {
           const profile = profilesData?.find(p => p.user_id === otherUserId);
           return {
             id: otherUserId,
-            otherUser: profile || {
+            otherUser: profile ? {
+              id: profile.user_id,
+              user_id: profile.user_id,
+              display_name: profile.display_name,
+              avatar_url: profile.avatar_url
+            } : {
+              id: otherUserId,
               user_id: otherUserId,
               display_name: 'Unknown User',
               avatar_url: null

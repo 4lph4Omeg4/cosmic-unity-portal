@@ -231,7 +231,7 @@ const translations = {
       },
       welcome: {
         title: 'Welkom, spirituele reiziger!',
-        message: 'Check je e-mail voor ons kosmische welkomstgeschenk.',
+        message: 'Check je e-mail voor ons cosmische welkomstgeschenk.',
         status: 'Je account is aangemaakt. Log in om te verkennen.',
       },
       buttonLoading: 'Bezig…',
@@ -284,9 +284,14 @@ const translations = {
       error: 'Authenticatiefout',
     },
     community: {
-      title: 'Cosmische Community',
+      title: {
+        cosmic: 'Cosmische',
+        community: 'Community',
+      },
+      subtitle: 'Verbind met gelijkgestemde zielen en deel je spirituele reis.',
       description: 'Maak verbinding met gelijkgestemde zielen op hun spirituele reis.',
       allMembers: 'Alle Leden',
+      viewAllMembers: 'Bekijk Alle Leden',
       searchPlaceholder: 'Zoek leden...',
       friends: 'Vrienden',
       requests: 'Verzoeken',
@@ -300,6 +305,31 @@ const translations = {
       noFriends: 'Je hebt nog geen vrienden. Voeg wat toe!',
       noRequests: 'Je hebt geen openstaande vriendschapsverzoeken.',
       backToCommunity: 'Terug naar Community',
+      newPost: 'Nieuw Bericht',
+      shareInsight: 'Deel je Inzicht',
+      inspire: 'Inspireer de community met je wijsheid en ervaringen',
+      postTitle: 'Titel van je bericht...',
+      postContent: 'Deel je gedachten en inzichten...',
+      publish: 'Publiceren',
+      cancel: 'Annuleren',
+      noPosts: 'Nog geen berichten',
+      firstPostMessage: 'Wees de eerste om je spirituele inzichten te delen met de community.',
+      createFirstPost: 'Maak het eerste bericht',
+      postCreated: 'Bericht geplaatst',
+      postShared: 'Je bericht is gedeeld met de community',
+      errorCreating: 'Fout bij maken van bericht',
+      errorPostMessage: 'Er ging iets mis bij het plaatsen van je bericht',
+      addComment: 'Voeg reactie toe...',
+      commentAdded: 'Reactie toegevoegd',
+      commentPlaced: 'Je reactie is geplaatst',
+      errorComment: 'Fout bij reactie',
+      errorCommentMessage: 'Er ging iets mis bij het plaatsen van je reactie',
+      postDeleted: 'Bericht verwijderd',
+      postDeletedMessage: 'Je bericht is verwijderd',
+      errorDeleting: 'Fout bij verwijderen',
+      errorDeleteMessage: 'Er ging iets mis bij het verwijderen van je bericht',
+      errorLoading: 'Fout bij laden',
+      errorLoadingMessage: 'Er ging iets mis bij het laden van de berichten',
     },
     friend: {
       requestSent: 'Vriendschapsverzoek verzonden!',
@@ -348,7 +378,7 @@ const translations = {
     },
     featured: {
       title: {
-        sacred: 'Heilige',
+        sacred: 'Universele',
         geometry: 'Geschriften',
       },
       subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
@@ -368,6 +398,26 @@ const translations = {
       readMore: 'Lees meer',
       viewAll: 'Bekijk alles',
     },
+    shop: {
+      title: {
+        sacred: 'Galactische',
+        shop: 'Winkel',
+      },
+      subtitle: 'Ontdek onze collectie van spirituele kunst en merchandise',
+      loading: 'Winkel laden...',
+      filter: {
+        all: 'Alle Producten',
+      },
+      products: 'Producten',
+      allProducts: 'Alle Producten',
+      viewProduct: 'Bekijk Product',
+      noProducts: 'Geen producten gevonden',
+      noProductsDescription: 'Er zijn momenteel geen producten beschikbaar in deze collectie.',
+      errorAdding: 'Fout bij toevoegen aan winkelwagen',
+      addedToCart: 'Toegevoegd aan winkelwagen',
+      redirecting: 'Je wordt doorverwezen naar de checkout...',
+      errorMessage: 'Er ging iets mis. Probeer het opnieuw.',
+    },
     friends: {
       title: 'Vrienden',
       subtitle: 'Verbind met andere leden van de community',
@@ -375,6 +425,9 @@ const translations = {
       noName: 'Naamloos',
       showMore: 'Toon meer',
       showLess: 'Toon minder',
+      pageTitle: 'Mijn Vrienden',
+      pageSubtitle: 'Beheer je vriendschappen in de cosmische community',
+      totalFriends: 'vrienden',
     },
     about: {
       title: {
@@ -425,6 +478,11 @@ const translations = {
       saving: 'Opslaan...',
       save: 'Profiel Opslaan',
       loading: 'Profiel laden...',
+      communityMembers: 'Community Leden',
+      quickActions: 'Snelle Acties',
+      viewMessages: 'Bekijk Berichten',
+      community: 'Community',
+      quickActionsDesc: 'Navigeer naar andere secties van je kosmische reis',
     },
     contact: {
       title: {
@@ -482,7 +540,7 @@ const translations = {
       noArticlesTitle: 'Nog geen artikelen',
       noArticlesDescription: 'We werken aan nieuwe spirituele inzichten. Kom binnenkort terug!',
     },
-    community: {
+    communityPosts: {
       title: {
         cosmic: 'Cosmische',
         community: 'Community',
@@ -637,7 +695,7 @@ const translations = {
         },
       },
       trust: {
-        members: 'Join over 1,000 spiritual travelers',
+        members: 'Join over 144.000 spiritual travelers',
         privacy: 'Privacy protected',
         spam: 'No spam, ever',
         unsubscribe: 'Always unsubscribe',
@@ -665,9 +723,14 @@ const translations = {
       error: 'Authentication Error',
     },
     community: {
-      title: 'Cosmic Community',
+      title: {
+        cosmic: 'Cosmic',
+        community: 'Community',
+      },
+      subtitle: 'Connect with like-minded souls and share your spiritual journey.',
       description: 'Connect with like-minded souls on their spiritual journey.',
       allMembers: 'All Members',
+      viewAllMembers: 'View All Members',
       searchPlaceholder: 'Search members...',
       friends: 'Friends',
       requests: 'Requests',
@@ -681,6 +744,31 @@ const translations = {
       noFriends: "You don't have any friends yet. Add some!",
       noRequests: 'You have no pending friend requests.',
       backToCommunity: 'Back to Community',
+      newPost: 'New Post',
+      shareInsight: 'Share your Insight',
+      inspire: 'Inspire the community with your wisdom and experiences',
+      postTitle: 'Your post title...',
+      postContent: 'Share your thoughts and insights...',
+      publish: 'Publish',
+      cancel: 'Cancel',
+      noPosts: 'No posts yet',
+      firstPostMessage: 'Be the first to share your spiritual insights with the community.',
+      createFirstPost: 'Create the first post',
+      postCreated: 'Post created',
+      postShared: 'Your post has been shared with the community',
+      errorCreating: 'Error creating post',
+      errorPostMessage: 'Something went wrong while creating your post',
+      addComment: 'Add a comment...',
+      commentAdded: 'Comment added',
+      commentPlaced: 'Your comment has been posted',
+      errorComment: 'Error posting comment',
+      errorCommentMessage: 'Something went wrong while posting your comment',
+      postDeleted: 'Post deleted',
+      postDeletedMessage: 'Your post has been deleted',
+      errorDeleting: 'Error deleting',
+      errorDeleteMessage: 'Something went wrong while deleting your post',
+      errorLoading: 'Error loading',
+      errorLoadingMessage: 'Something went wrong while loading the posts',
     },
     friend: {
       requestSent: 'Friend request sent!',
@@ -756,6 +844,9 @@ const translations = {
       noName: 'Nameless',
       showMore: 'Show more',
       showLess: 'Show less',
+      pageTitle: 'My Friends',
+      pageSubtitle: 'Manage your friendships in the cosmic community',
+      totalFriends: 'friends',
     },
     about: {
       title: {
@@ -796,6 +887,26 @@ const translations = {
     product: {
       view: 'View Product',
     },
+    shop: {
+      title: {
+        sacred: 'Sacred',
+        shop: 'Shop',
+      },
+      subtitle: 'Discover our collection of spiritual art and merchandise',
+      loading: 'Loading shop...',
+      filter: {
+        all: 'All Products',
+      },
+      products: 'Products',
+      allProducts: 'All Products',
+      viewProduct: 'View Product',
+      noProducts: 'No products found',
+      noProductsDescription: 'There are currently no products available in this collection.',
+      errorAdding: 'Error adding to cart',
+      addedToCart: 'Added to cart',
+      redirecting: 'Redirecting you to checkout...',
+      errorMessage: 'Something went wrong. Please try again.',
+    },
     profile: {
       title: 'Cosmic Profile',
       subtitle: 'Personalize your spiritual identity in our community',
@@ -806,6 +917,11 @@ const translations = {
       saving: 'Saving...',
       save: 'Save Profile',
       loading: 'Loading profile...',
+      communityMembers: 'Community Members',
+      quickActions: 'Quick Actions',
+      viewMessages: 'View Messages',
+      community: 'Community',
+      quickActionsDesc: 'Navigate to other sections of your cosmic journey',
     },
     contact: {
       title: {
@@ -863,7 +979,7 @@ const translations = {
       noArticlesTitle: 'No articles yet',
       noArticlesDescription: 'We\'re working on new spiritual insights. Check back soon!',
     },
-    community: {
+    communityPosts: {
       title: {
         cosmic: 'Cosmic',
         community: 'Community',
@@ -1046,9 +1162,14 @@ const translations = {
       error: 'Authentifizierungsfehler',
     },
     community: {
-      title: 'Kosmische Gemeinschaft',
+      title: {
+        cosmic: 'Kosmische',
+        community: 'Gemeinschaft',
+      },
+      subtitle: 'Verbinde dich mit Gleichgesinnten und teile deine spirituelle Reise.',
       description: 'Verbinde dich mit Gleichgesinnten auf ihrer spirituellen Reise.',
       allMembers: 'Alle Mitglieder',
+      viewAllMembers: 'Alle Mitglieder ansehen',
       searchPlaceholder: 'Mitglieder suchen...',
       friends: 'Freunde',
       requests: 'Anfragen',
@@ -1062,6 +1183,31 @@ const translations = {
       noFriends: 'Du hast noch keine Freunde. Füge welche hinzu!',
       noRequests: 'Du hast keine ausstehenden Freundschaftsanfragen.',
       backToCommunity: 'Zurück zur Community',
+      newPost: 'Neuer Beitrag',
+      shareInsight: 'Teile deine Einsicht',
+      inspire: 'Inspiriere die Gemeinschaft mit deiner Weisheit und deinen Erfahrungen',
+      postTitle: 'Dein Beitragstitel...',
+      postContent: 'Teile deine Gedanken und Einsichten...',
+      publish: 'Veröffentlichen',
+      cancel: 'Abbrechen',
+      noPosts: 'Noch keine Beiträge',
+      firstPostMessage: 'Sei der Erste, der seine spirituellen Einsichten mit der Gemeinschaft teilt.',
+      createFirstPost: 'Erstelle den ersten Beitrag',
+      postCreated: 'Beitrag erstellt',
+      postShared: 'Dein Beitrag wurde mit der Gemeinschaft geteilt',
+      errorCreating: 'Fehler beim Erstellen des Beitrags',
+      errorPostMessage: 'Etwas ging beim Erstellen deines Beitrags schief',
+      addComment: 'Kommentar hinzufügen...',
+      commentAdded: 'Kommentar hinzugefügt',
+      commentPlaced: 'Dein Kommentar wurde gepostet',
+      errorComment: 'Fehler beim Posten des Kommentars',
+      errorCommentMessage: 'Etwas ging beim Posten deines Kommentars schief',
+      postDeleted: 'Beitrag gelöscht',
+      postDeletedMessage: 'Dein Beitrag wurde gelöscht',
+      errorDeleting: 'Fehler beim Löschen',
+      errorDeleteMessage: 'Etwas ging beim Löschen deines Beitrags schief',
+      errorLoading: 'Fehler beim Laden',
+      errorLoadingMessage: 'Etwas ging beim Laden der Beiträge schief',
     },
     friend: {
       requestSent: 'Freundschaftsanfrage gesendet!',
@@ -1137,6 +1283,9 @@ const translations = {
       noName: 'Namenlos',
       showMore: 'Mehr anzeigen',
       showLess: 'Weniger anzeigen',
+      pageTitle: 'Meine Freunde',
+      pageSubtitle: 'Verwalte deine Freundschaften in der kosmischen Gemeinschaft',
+      totalFriends: 'Freunde',
     },
     about: {
       title: {
@@ -1177,6 +1326,26 @@ const translations = {
     product: {
       view: 'Produkt ansehen',
     },
+    shop: {
+      title: {
+        sacred: 'Heilige',
+        shop: 'Geschäft',
+      },
+      subtitle: 'Entdecke unsere Sammlung von spiritueller Kunst und Merchandise',
+      loading: 'Shop wird geladen...',
+      filter: {
+        all: 'Alle Produkte',
+      },
+      products: 'Produkte',
+      allProducts: 'Alle Produkte',
+      viewProduct: 'Produkt ansehen',
+      noProducts: 'Keine Produkte gefunden',
+      noProductsDescription: 'Derzeit sind keine Produkte in dieser Kollektion verfügbar.',
+      errorAdding: 'Fehler beim Hinzufügen zum Warenkorb',
+      addedToCart: 'Zum Warenkorb hinzugefügt',
+      redirecting: 'Du wirst zur Kasse weitergeleitet...',
+      errorMessage: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+    },
     profile: {
       title: 'Kosmisches Profil',
       subtitle: 'Personalisiere deine spirituelle Identität in unserer Gemeinschaft',
@@ -1187,6 +1356,11 @@ const translations = {
       saving: 'Speichern...',
       save: 'Profil Speichern',
       loading: 'Profil wird geladen...',
+      communityMembers: 'Gemeinschaftsmitglieder',
+      quickActions: 'Schnelle Aktionen',
+      viewMessages: 'Nachrichten ansehen',
+      community: 'Gemeinschaft',
+      quickActionsDesc: 'Navigiere zu anderen Bereichen deiner kosmischen Reise',
     },
     contact: {
       title: {
@@ -1244,7 +1418,7 @@ const translations = {
       noArticlesTitle: 'Noch keine Artikel',
       noArticlesDescription: 'Wir arbeiten an neuen spirituellen Einsichten. Schau bald wieder vorbei!',
     },
-    community: {
+    communityPosts: {
       title: {
         cosmic: 'Kosmische',
         community: 'Gemeinschaft',
