@@ -33,6 +33,7 @@ import TimelineAlchemy from "./pages/TimelineAlchemy";
 import Friends from "./pages/Friends";
 import NotFound from "./pages/NotFound";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 // Timeline Alchemy Admin Pages
 import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
