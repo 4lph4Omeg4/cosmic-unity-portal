@@ -22,6 +22,7 @@ interface Profile {
   avatar_url?: string;
   bio?: string;
   created_at: string;
+  role?: 'admin' | 'client' | 'user';
   social_links?: {
     instagram?: string;
     twitter?: string;

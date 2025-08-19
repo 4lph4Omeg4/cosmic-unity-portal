@@ -18,6 +18,7 @@ interface Profile {
   user_id: string;
   display_name: string;
   avatar_url?: string;
+  role?: 'admin' | 'client' | 'user';
 }
 
 interface Message {

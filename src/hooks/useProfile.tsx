@@ -9,6 +9,7 @@ interface Profile {
   display_name: string;
   avatar_url?: string;
   bio?: string;
+  role?: 'admin' | 'client' | 'user';
   social_links?: {
     instagram?: string;
     twitter?: string;
