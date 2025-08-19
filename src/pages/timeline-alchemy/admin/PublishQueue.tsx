@@ -161,8 +161,8 @@ export default function TimelineAlchemyPublishQueue() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Publish Queue</h1>
-          <p className="text-gray-600 mt-2">Monitor publishing status and results</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Publish Queue</h1>
+          <p className="mt-2 text-gray-300">Monitor publishing status en resultaten</p>
         </div>
         <Button onClick={refreshPublishQueue} variant="outline" className="flex items-center gap-2">
           <RefreshCw className="w-4 h-4" />

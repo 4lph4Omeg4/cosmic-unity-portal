@@ -208,8 +208,8 @@ export default function TimelineAlchemyIdeas() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Content Ideas</h1>
-          <p className="text-gray-600 mt-2">Manage and organize your content ideas</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Content Ideeën</h1>
+          <p className="mt-2 text-gray-300">Beheer en organiseer je content ideeën</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className="flex items-center gap-2">

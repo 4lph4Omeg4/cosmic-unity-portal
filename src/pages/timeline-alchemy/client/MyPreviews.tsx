@@ -171,8 +171,8 @@ export default function TimelineAlchemyMyPreviews() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Previews</h1>
-          <p className="text-gray-600 mt-2">Review and manage your content previews</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Mijn Previews</h1>
+          <p className="mt-2 text-gray-300">Bekijk en beheer je content previews</p>
         </div>
         <Button onClick={refreshPreviews} variant="outline" className="flex items-center gap-2">
           <RefreshCw className="w-4 h-4" />

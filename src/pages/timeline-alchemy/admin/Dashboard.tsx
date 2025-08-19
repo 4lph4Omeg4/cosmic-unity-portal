@@ -110,8 +110,8 @@ export default function TimelineAlchemyDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Timeline Alchemy Dashboard</h1>
-          <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your content.</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Timeline Alchemy Dashboard</h1>
+          <p className="mt-2 text-gray-300">Beheer je content en monitor prestaties</p>
         </div>
         <Button onClick={loadDashboardStats} variant="outline" className="flex items-center gap-2">
           <RefreshCw className="w-4 h-4" />

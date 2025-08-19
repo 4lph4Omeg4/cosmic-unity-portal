@@ -396,8 +396,8 @@ export default function TimelineAlchemyPreviewWizard() {
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Preview Wizard</h1>
-        <p className="text-gray-600 mt-2">Create engaging content previews in 6 simple steps</p>
+        <h1 className="text-3xl font-bold text-white tracking-tight">Preview Wizard</h1>
+        <p className="mt-2 text-gray-300">Maak previews in 6 eenvoudige stappen</p>
       </div>
 
       {/* Progress Steps */}
