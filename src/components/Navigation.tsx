@@ -132,6 +132,16 @@ const Navigation = () => {
                     </Link>
                   </DropdownMenuItem>
                   
+                  {/* Timeline Alchemy Direct Link */}
+                  {timelineAlchemyNav.length > 0 && (
+                    <DropdownMenuItem asChild className="font-mystical">
+                      <Link to={timelineAlchemyNav[0].href} className="flex items-center">
+                        <Star className="mr-2 h-4 w-4" />
+                        <span>Timeline Alchemy</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  
                   {/* Timeline Alchemy Section */}
                   {timelineAlchemyNav.length > 0 && (
                     <>
