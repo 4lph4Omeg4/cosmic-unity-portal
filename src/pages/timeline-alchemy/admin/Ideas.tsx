@@ -345,27 +345,35 @@ export default function TimelineAlchemyIdeas() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <Badge className={getStatusColor(post.status)}>
-                            {post.status}
-                          </Badge>
-                          <Badge className={getCategoryColor(post.category || 'Algemeen')}>
-                            {post.category || 'Algemeen'}
-                          </Badge>
-                          {post.ai_blog && (
-                            <Badge className="bg-purple-100 text-purple-800">
-                              AI Generated
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                          {post.title}
-                        </h3>
-                        
-                        <p className="text-gray-600 mb-3">
-                          {post.excerpt}
-                        </p>
+                         <div className="flex items-center gap-3 mb-2">
+                           <Badge className={getStatusColor(post.status)}>
+                             {post.status}
+                           </Badge>
+                           <Badge className={getCategoryColor(post.category || 'Algemeen')}>
+                             {post.category || 'Algemeen'}
+                           </Badge>
+                           {post.ai_blog && (
+                             <Badge className="bg-purple-100 text-purple-800">
+                               AI Generated
+                             </Badge>
+                           )}
+                           {/* Tags - Display as badges in the top section */}
+                           {post.tags && post.tags.length > 0 && (
+                             post.tags.map((tag, index) => (
+                               <Badge key={index} className="bg-blue-100 text-blue-700">
+                                 #{tag}
+                               </Badge>
+                             ))
+                           )}
+                         </div>
+                         
+                         <h3 className="font-semibold text-lg text-white mb-2">
+                           {post.title}
+                         </h3>
+                         
+                         <p className="text-gray-200 mb-3">
+                           {post.excerpt}
+                         </p>
                         
                         {/* Show full content if available */}
                         {post.content && post.content.length > 150 && (
@@ -378,86 +386,6 @@ export default function TimelineAlchemyIdeas() {
                             </div>
                           </details>
                         )}
-                        
-                        {/* Show extracted tags in main section */}
-                        {post.tags && post.tags.length > 0 && (
-                          <div className="mb-3">
-                            <span className="text-sm text-gray-600 font-medium">Tags:</span>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {post.tags.map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* AI Blog Data Section - for debugging and comparison */}
-                        {post.ai_blog && (
-                          <div className="mb-3 p-3 bg-purple-50 rounded border-l-4 border-purple-200">
-                            <h4 className="font-medium text-purple-800 mb-2">AI Blog Data (Raw):</h4>
-                            <div className="space-y-2 text-sm">
-                              <div><strong>AI Titel:</strong> {post.ai_blog.Title || post.ai_blog.title || 'Geen titel'}</div>
-                              <div><strong>AI Body:</strong> {post.ai_blog.Body || post.ai_blog.body || post.ai_blog.content || 'Geen content'}</div>
-                              
-                              {/* AI Tags - Always safe to render */}
-                              {(post.ai_blog.Tags || post.ai_blog.tags) && (post.ai_blog.Tags || post.ai_blog.tags).length > 0 && (
-                                <div><strong>AI Tags:</strong> {(post.ai_blog.Tags || post.ai_blog.tags).join(', ')}</div>
-                              )}
-                              
-                              {/* Sources - Safe rendering with fallback */}
-                              {(post.ai_blog.Sources || post.ai_blog.sources) && (post.ai_blog.Sources || post.ai_blog.sources).length > 0 && (
-                                <div><strong>Sources:</strong> {(post.ai_blog.Sources || post.ai_blog.sources).join(', ')}</div>
-                              )}
-                              
-                              {/* Social - Safe rendering with optional chaining */}
-                              {(post.ai_blog.Social || post.ai_blog.social) && (
-                                <div className="mt-2 p-2 bg-blue-50 rounded">
-                                  <strong>Social:</strong>
-                                  <div className="ml-2 space-y-1">
-                                    {(post.ai_blog.Social || post.ai_blog.social).title && <div>Title: {(post.ai_blog.Social || post.ai_blog.social).title}</div>}
-                                    {(post.ai_blog.Social || post.ai_blog.social).description && <div>Description: {(post.ai_blog.Social || post.ai_blog.social).description}</div>}
-                                    {(post.ai_blog.Social || post.ai_blog.social).image && <div>Image: {(post.ai_blog.Social || post.ai_blog.social).image}</div>}
-                                  </div>
-                                </div>
-                              )}
-                              
-                              {/* SEO - Safe rendering with optional chaining */}
-                              {(post.ai_blog.SEO || post.ai_blog.seo) && (
-                                <div className="mt-2 p-2 bg-green-50 rounded">
-                                  <div className="ml-2 space-y-1">
-                                    {(post.ai_blog.SEO || post.ai_blog.seo).title && <div>Title: {(post.ai_blog.SEO || post.ai_blog.seo).title}</div>}
-                                    {(post.ai_blog.SEO || post.ai_blog.seo).description && <div>Description: {(post.ai_blog.SEO || post.ai_blog.seo).description}</div>}
-                                    {(post.ai_blog.SEO || post.ai_blog.seo).keywords && (post.ai_blog.SEO || post.ai_blog.seo).keywords.length > 0 && (
-                                      <div>Keywords: {(post.ai_blog.SEO || post.ai_blog.seo).keywords.join(', ')}</div>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                        
-                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                          <div className="flex items-center gap-1">
-                            <User className="w-4 h-4" />
-                            {post.author_id}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            Created: {new Date(post.created_at).toLocaleDateString('nl-NL')}
-                          </div>
-                          {post.updated_at !== post.created_at && (
-                            <div className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              Updated: {new Date(post.updated_at).toLocaleDateString('nl-NL')}
-                            </div>
-                          )}
-                        </div>
                         
                         {/* Sources - Safe rendering with fallback */}
                         {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
