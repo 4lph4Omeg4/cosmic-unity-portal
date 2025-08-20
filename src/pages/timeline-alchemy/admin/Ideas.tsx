@@ -378,10 +378,10 @@ export default function TimelineAlchemyIdeas() {
                         {/* Show full content if available */}
                         {post.content && post.content.length > 150 && (
                           <details className="mb-3">
-                            <summary className="cursor-pointer text-blue-600 hover:text-blue-800 text-sm">
+                            <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
                               Toon volledige content
                             </summary>
-                            <div className="mt-2 p-3 bg-gray-50 rounded text-sm text-gray-700 whitespace-pre-wrap">
+                            <div className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 whitespace-pre-wrap border border-gray-700">
                               {post.content}
                             </div>
                           </details>
