@@ -24,7 +24,7 @@ interface BlogPost {
   title: string
   content: string
   excerpt?: string
-  status: 'draft' | 'published' | 'archived'
+  status: 'draft' | 'published' | 'approved' | 'changes_requested' | 'submitted' | 'scheduled' | 'canceled'
   author_id: string
   created_at: string
   updated_at: string
@@ -54,39 +54,46 @@ export default function TimelineAlchemyIdeas() {
       setLoading(true)
       
       const { data, error } = await supabase
-        .from('blog_posts')
+        .from('posts')
         .select('*')
         .order('created_at', { ascending: false })
 
       if (error) {
-        console.error('Error loading blog posts:', error)
+        console.error('Error loading posts:', error)
         toast({
           title: "Fout bij laden",
-          description: "Kon blog posts niet laden uit de database.",
+          description: "Kon posts niet laden uit de database.",
           variant: "destructive",
         })
         return
       }
 
-      // Transform the data to match our interface
-      const transformedPosts: BlogPost[] = (data || []).map(post => ({
-        id: post.id,
-        title: post.title || 'Geen titel',
-        content: post.content || '',
-        excerpt: post.excerpt || post.content?.substring(0, 150) + '...',
-        status: post.status || 'draft',
-        author_id: post.author_id || '',
-        created_at: post.created_at,
-        updated_at: post.updated_at,
-        published_at: post.published_at,
-        tags: post.tags || [],
-        category: post.category || 'Algemeen',
-        featured_image: post.featured_image
-      }))
+      console.log('Raw posts data:', data) // Debug log
 
+      // Transform the data to match our interface
+      const transformedPosts: BlogPost[] = (data || []).map(post => {
+        console.log('Processing post:', post) // Debug log
+        
+        return {
+          id: post.id,
+          title: post.title || 'Geen titel',
+          content: post.content || '',
+          excerpt: post.content ? post.content.substring(0, 150) + '...' : 'Geen content',
+          status: post.status || 'published',
+          author_id: post.user_id || 'Onbekende auteur',
+          created_at: post.created_at,
+          updated_at: post.updated_at || post.created_at,
+          published_at: post.published_at || post.created_at,
+          tags: [], // Posts table doesn't have tags field
+          category: 'Algemeen', // Posts table doesn't have category field
+          featured_image: post.image_url // Use image_url from posts table
+        }
+      })
+
+      console.log('Transformed posts:', transformedPosts) // Debug log
       setBlogPosts(transformedPosts)
     } catch (error) {
-      console.error('Error loading blog posts:', error)
+      console.error('Error loading posts:', error)
       toast({
         title: "Fout bij laden",
         description: "Er is een onverwachte fout opgetreden.",
@@ -98,10 +105,16 @@ export default function TimelineAlchemyIdeas() {
   }
 
   const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.author_id.toLowerCase().includes(searchTerm.toLowerCase())
+    const searchLower = searchTerm.toLowerCase()
+    
+    const matchesSearch = 
+      post.title.toLowerCase().includes(searchLower) ||
+      (post.excerpt && post.excerpt.toLowerCase().includes(searchLower)) ||
+      (post.content && post.content.toLowerCase().includes(searchLower)) ||
+      (post.author_id && post.author_id.toLowerCase().includes(searchLower)) ||
+      (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchLower))) ||
+      (post.category && post.category.toLowerCase().includes(searchLower))
+    
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
     const matchesStatus = selectedStatus === 'all' || post.status === selectedStatus
     
@@ -143,8 +156,12 @@ export default function TimelineAlchemyIdeas() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'published': return 'bg-green-100 text-green-800'
+      case 'approved': return 'bg-blue-100 text-blue-800'
+      case 'submitted': return 'bg-yellow-100 text-yellow-800'
+      case 'scheduled': return 'bg-purple-100 text-purple-800'
       case 'draft': return 'bg-gray-100 text-gray-800'
-      case 'archived': return 'bg-red-100 text-red-800'
+      case 'changes_requested': return 'bg-orange-100 text-orange-800'
+      case 'canceled': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -282,6 +299,17 @@ export default function TimelineAlchemyIdeas() {
                           {post.excerpt}
                         </p>
                         
+                        {post.content && post.content.length > 150 && (
+                          <details className="mb-3">
+                            <summary className="cursor-pointer text-blue-600 hover:text-blue-800 text-sm">
+                              Toon volledige content
+                            </summary>
+                            <div className="mt-2 p-3 bg-gray-50 rounded text-sm text-gray-700 whitespace-pre-wrap">
+                              {post.content}
+                            </div>
+                          </details>
+                        )}
+                        
                         <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                           <div className="flex items-center gap-1">
                             <User className="w-4 h-4" />
@@ -289,26 +317,36 @@ export default function TimelineAlchemyIdeas() {
                           </div>
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            Created: {new Date(post.created_at).toLocaleDateString()}
+                            Created: {new Date(post.created_at).toLocaleDateString('nl-NL')}
                           </div>
                           {post.updated_at !== post.created_at && (
                             <div className="flex items-center gap-1">
                               <Calendar className="w-4 h-4" />
-                              Updated: {new Date(post.updated_at).toLocaleDateString()}
+                              Updated: {new Date(post.updated_at).toLocaleDateString('nl-NL')}
                             </div>
                           )}
                         </div>
                         
                         {post.tags && post.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
-                            {post.tags.map((tag) => (
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {post.tags.map((tag, index) => (
                               <span
-                                key={tag}
-                                className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                                key={index}
+                                className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
                               >
-                                {tag}
+                                #{tag}
                               </span>
                             ))}
+                          </div>
+                        )}
+                        
+                        {post.featured_image && (
+                          <div className="mb-3">
+                            <img 
+                              src={post.featured_image} 
+                              alt={post.title}
+                              className="w-32 h-20 object-cover rounded border"
+                            />
                           </div>
                         )}
                       </div>
