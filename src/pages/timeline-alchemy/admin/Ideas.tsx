@@ -127,6 +127,13 @@ export default function TimelineAlchemyIdeas() {
         const normalizedSources = Array.isArray(safeSources) ? safeSources : []
         const normalizedKeywords = Array.isArray(safeSEO?.keywords) ? safeSEO.keywords : []
         
+        console.log('Safe extraction results:', {
+          safeTitle,
+          safeBody: safeBody?.substring(0, 100) + '...',
+          normalizedTags,
+          aiBlogKeys: aiBlog ? Object.keys(aiBlog) : 'no aiBlog'
+        })
+        
         return {
           id: post.id,
           title: safeTitle,
@@ -140,18 +147,7 @@ export default function TimelineAlchemyIdeas() {
           tags: normalizedTags,
           category: post.category || 'Algemeen',
           featured_image: post.featured_image || post.image_url,
-          ai_blog: {
-            Title: safeTitle,
-            Body: safeBody,
-            Tags: normalizedTags,
-            Sources: normalizedSources,
-            Social: safeSocial,
-            SEO: safeSEO ? {
-              title: safeSEO.title || '',
-              description: safeSEO.description || '',
-              keywords: normalizedKeywords
-            } : undefined
-          }
+          ai_blog: aiBlog
         }
       })
 
@@ -383,6 +379,7 @@ export default function TimelineAlchemyIdeas() {
                           {post.excerpt}
                         </p>
                         
+                        {/* Show full content if available */}
                         {post.content && post.content.length > 150 && (
                           <details className="mb-3">
                             <summary className="cursor-pointer text-blue-600 hover:text-blue-800 text-sm">
@@ -394,20 +391,21 @@ export default function TimelineAlchemyIdeas() {
                           </details>
                         )}
                         
+                        {/* AI Blog Data Section */}
                         {post.ai_blog && (
                           <div className="mb-3 p-3 bg-purple-50 rounded border-l-4 border-purple-200">
                             <h4 className="font-medium text-purple-800 mb-2">AI Blog Data:</h4>
                             <div className="space-y-2 text-sm">
-                              <div><strong>Titel:</strong> {post.ai_blog.Title || 'Geen titel'}</div>
-                              <div><strong>Body:</strong> {post.ai_blog.Body ? (post.ai_blog.Body.length > 200 ? post.ai_blog.Body.substring(0, 200) + '...' : post.ai_blog.Body) : 'Geen content'}</div>
+                              <div><strong>AI Titel:</strong> {post.ai_blog.Title || 'Geen titel'}</div>
+                              <div><strong>AI Body:</strong> {post.ai_blog.Body ? (post.ai_blog.Body.length > 200 ? post.ai_blog.Body.substring(0, 200) + '...' : post.ai_blog.Body) : 'Geen content'}</div>
                               
-                              {/* Tags - Always safe to render */}
+                              {/* AI Tags - Always safe to render */}
                               {post.ai_blog.Tags && post.ai_blog.Tags.length > 0 && (
-                                <div><strong>Tags:</strong> {post.ai_blog.Tags.join(', ')}</div>
+                                <div><strong>AI Tags:</strong> {post.ai_blog.Tags.join(', ')}</div>
                               )}
                               
                               {/* Sources - Safe rendering with fallback */}
-                              {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
+                              {post.ai_blog.Sources && post.ai_blog.Sources.length > 0 && (
                                 <div><strong>Sources:</strong> {post.ai_blog.Sources.join(', ')}</div>
                               )}
                               
@@ -426,7 +424,6 @@ export default function TimelineAlchemyIdeas() {
                               {/* SEO - Safe rendering with optional chaining */}
                               {post.ai_blog.SEO && (
                                 <div className="mt-2 p-2 bg-green-50 rounded">
-                                  <strong>SEO:</strong>
                                   <div className="ml-2 space-y-1">
                                     {post.ai_blog.SEO.title && <div>Title: {post.ai_blog.SEO.title}</div>}
                                     {post.ai_blog.SEO.description && <div>Description: {post.ai_blog.SEO.description}</div>}
@@ -459,15 +456,35 @@ export default function TimelineAlchemyIdeas() {
                         
                         {/* Tags - Safe rendering with fallback */}
                         {post.tags && post.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {post.tags.map((tag, index) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
-                              >
-                                #{tag}
-                              </span>
-                            ))}
+                          <div className="mb-3">
+                            <span className="text-sm text-gray-600 font-medium">Tags:</span>
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {post.tags.map((tag, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
+                                >
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* AI Tags - Display separately if different from regular tags */}
+                        {post.ai_blog?.Tags && post.ai_blog.Tags.length > 0 && (
+                          <div className="mb-3">
+                            <span className="text-sm text-gray-600 font-medium">AI Tags:</span>
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {post.ai_blog.Tags.map((tag, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full"
+                                >
+                                  🤖 {tag}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         )}
                         
