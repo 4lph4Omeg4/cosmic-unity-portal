@@ -74,13 +74,34 @@ export default function TimelineAlchemyIdeas() {
       }
 
       console.log('Raw blog posts data:', data) // Debug log
+      console.log('Number of posts found:', data?.length || 0)
+      
+      if (data && data.length > 0) {
+        console.log('First post structure:', data[0])
+        console.log('First post ai_blog field:', data[0].ai_blog)
+        console.log('First post ai_blog type:', typeof data[0].ai_blog)
+      }
 
       // Transform the data to match our interface
       const transformedPosts: BlogPost[] = (data || []).map((post: any) => {
         console.log('Processing post:', post) // Debug log
         
-        // Extract ai_blog data if it exists
-        const aiBlog = post.ai_blog ? JSON.parse(post.ai_blog) : null
+        // Extract ai_blog data if it exists - with better error handling
+        let aiBlog = null
+        if (post.ai_blog) {
+          try {
+            // Check if it's already an object or needs parsing
+            if (typeof post.ai_blog === 'string') {
+              aiBlog = JSON.parse(post.ai_blog)
+            } else if (typeof post.ai_blog === 'object') {
+              aiBlog = post.ai_blog
+            }
+            console.log('Parsed ai_blog:', aiBlog)
+          } catch (parseError) {
+            console.error('Error parsing ai_blog JSON:', parseError, 'Raw value:', post.ai_blog)
+            aiBlog = null
+          }
+        }
         
         return {
           id: post.id,
@@ -100,6 +121,20 @@ export default function TimelineAlchemyIdeas() {
       })
 
       console.log('Transformed posts:', transformedPosts) // Debug log
+      
+      // Test if we have any data at all
+      if (transformedPosts.length === 0) {
+        console.log('No posts found - checking if this is a data issue or parsing issue')
+        if (data && data.length > 0) {
+          console.log('Raw data exists but transformation failed')
+        } else {
+          console.log('No raw data from database')
+        }
+      } else {
+        console.log('Successfully transformed posts:', transformedPosts.length)
+        console.log('Sample transformed post:', transformedPosts[0])
+      }
+      
       setBlogPosts(transformedPosts)
     } catch (error) {
       console.error('Error loading blog posts:', error)
