@@ -16,6 +16,7 @@ import {
   Save
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '@/integrations/supabase/client'
 
 interface Client {
   id: string
@@ -24,11 +25,12 @@ interface Client {
   organization: string
 }
 
-interface Idea {
+interface BlogPost {
   id: string
   title: string
-  description: string
-  category: string
+  content: string
+  excerpt?: string
+  category?: string
 }
 
 interface PreviewForm {
@@ -39,7 +41,7 @@ interface PreviewForm {
   content: string
   scheduledDate: string
   scheduledTime: string
-  selectedIdeas: string[]
+  selectedPosts: string[]
 }
 
 const channels = ['Instagram', 'LinkedIn', 'Twitter', 'Facebook', 'YouTube']
@@ -55,7 +57,7 @@ const templates = [
 export default function TimelineAlchemyPreviewWizard() {
   const navigate = useNavigate()
   const [clients, setClients] = useState<Client[]>([])
-  const [ideas, setIdeas] = useState<Idea[]>([])
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState<PreviewForm>({
     step: 1,
@@ -65,7 +67,7 @@ export default function TimelineAlchemyPreviewWizard() {
     content: '',
     scheduledDate: '',
     scheduledTime: '',
-    selectedIdeas: []
+    selectedPosts: []
   })
 
   useEffect(() => {
@@ -74,31 +76,38 @@ export default function TimelineAlchemyPreviewWizard() {
 
   const loadData = async () => {
     try {
-      // TODO: Implement actual API calls
+      // TODO: Implement actual API calls for clients
       const mockClients: Client[] = [
         { id: '1', name: 'TechCorp', email: 'contact@techcorp.com', organization: 'Technology Solutions' },
         { id: '2', name: 'Wellness Inc', email: 'hello@wellnessinc.com', organization: 'Health & Wellness' },
         { id: '3', name: 'Community Builders', email: 'team@communitybuilders.com', organization: 'Community Development' }
       ]
       
-      const mockIdeas: Idea[] = [
-        { id: '1', title: 'AI-Powered Content Calendar', description: 'Intelligent content scheduling system', category: 'Technology' },
-        { id: '2', title: 'Mindfulness Integration', description: 'Mindfulness practices for creators', category: 'Wellness' },
-        { id: '3', title: 'Community Collaboration Hub', description: 'Platform for creator collaboration', category: 'Community' }
-      ]
-
       setClients(mockClients)
-      setIdeas(mockIdeas)
 
-      // Load selected ideas from sessionStorage if coming from Ideas page
-      const storedIdeas = sessionStorage.getItem('selectedIdeaIds')
-      if (storedIdeas) {
+      // Load selected posts from sessionStorage if coming from Posts page
+      const storedPosts = sessionStorage.getItem('selectedPostIds')
+      if (storedPosts) {
         try {
-          const ideaIds = JSON.parse(storedIdeas)
-          setForm(prev => ({ ...prev, selectedIdeas: ideaIds }))
-          sessionStorage.removeItem('selectedIdeas') // Clean up
+          const postIds = JSON.parse(storedPosts)
+          setForm(prev => ({ ...prev, selectedPosts: postIds }))
+          sessionStorage.removeItem('selectedPostIds') // Clean up
         } catch (error) {
-          console.error('Error parsing stored ideas:', error)
+          console.error('Error parsing stored post IDs:', error)
+        }
+      }
+
+      // Load the actual selected blog posts from database
+      if (form.selectedPosts.length > 0) {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('id, title, content, excerpt, category')
+          .in('id', form.selectedPosts)
+
+        if (error) {
+          console.error('Error loading selected posts:', error)
+        } else {
+          setBlogPosts(data || [])
         }
       }
     } catch (error) {
@@ -128,7 +137,7 @@ export default function TimelineAlchemyPreviewWizard() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      // Navigate back to Ideas page
+      // Navigate back to Posts page
       navigate('/timeline-alchemy/admin/ideas')
     } catch (error) {
       console.error('Error saving preview:', error)
@@ -264,16 +273,16 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             </div>
             
-            {form.selectedIdeas.length > 0 && (
+            {form.selectedPosts.length > 0 && (
               <div className="p-3 bg-blue-50 rounded-lg">
-                <h4 className="font-medium text-blue-900 mb-2">Selected Ideas:</h4>
+                <h4 className="font-medium text-blue-900 mb-2">Selected Posts:</h4>
                 <div className="space-y-2">
-                  {form.selectedIdeas.map((ideaId) => {
-                    const idea = ideas.find(i => i.id === ideaId)
-                    return idea ? (
-                      <div key={idea.id} className="flex items-center gap-2">
+                  {form.selectedPosts.map((postId) => {
+                    const post = blogPosts.find(p => p.id === postId)
+                    return post ? (
+                      <div key={post.id} className="flex items-center gap-2">
                         <Star className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm text-blue-800">{idea.title}</span>
+                        <span className="text-sm text-blue-800">{post.title}</span>
                       </div>
                     ) : null
                   })}
