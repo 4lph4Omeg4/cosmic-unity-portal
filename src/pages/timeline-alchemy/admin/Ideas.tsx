@@ -69,6 +69,7 @@ export default function TimelineAlchemyIdeas() {
         return
       }
 
+      console.log('=== LOADING FROM BLOG_POSTS TABLE ===')
       console.log('Raw blog posts data:', data) // Debug log
       console.log('Number of posts found:', data?.length || 0)
       
@@ -91,6 +92,12 @@ export default function TimelineAlchemyIdeas() {
         imageColumns.forEach(col => {
           console.log(`Column "${col}" value:`, data[0][col])
         })
+        
+        // Specifically check image_url column
+        console.log('=== IMAGE_URL COLUMN CHECK ===')
+        console.log('image_url value:', data[0].image_url)
+        console.log('image_url type:', typeof data[0].image_url)
+        console.log('image_url exists:', !!data[0].image_url)
       }
 
       // Transform the data to match our interface
