@@ -293,21 +293,21 @@ export default function TimelineAlchemyIdeas() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 focus:border-blue-400"
             >
-              <option value="all">All Categories</option>
+              <option value="all" className="bg-gray-800 text-gray-200">All Categories</option>
               {categories.map(category => (
-                <option key={category} value={category}>{category}</option>
+                <option key={category} value={category} className="bg-gray-800 text-gray-200">{category}</option>
               ))}
             </select>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 focus:border-blue-400"
             >
-              <option value="all">All Statuses</option>
+              <option value="all" className="bg-gray-800 text-gray-200">All Statuses</option>
               {statuses.map(status => (
-                <option key={status} value={status}>{status}</option>
+                <option key={status} value={status} className="bg-gray-800 text-gray-200">{status}</option>
               ))}
             </select>
           </div>

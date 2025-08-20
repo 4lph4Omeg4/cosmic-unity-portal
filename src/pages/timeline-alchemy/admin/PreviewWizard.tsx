@@ -99,16 +99,16 @@ export default function TimelineAlchemyPreviewWizard() {
 
       // Load the actual selected blog posts from database
       if (form.selectedPosts.length > 0) {
-        const { data, error } = await supabase
-          .from('blog_posts')
+        const { data, error } = (await supabase
+          .from('blog_posts' as any)
           .select('id, title, content, excerpt, category')
-          .in('id', form.selectedPosts)
+          .in('id', form.selectedPosts)) as any
 
         if (error) {
           console.error('Error loading selected posts:', error)
         } else {
           // Transform the data to match our interface
-          const transformedPosts: BlogPost[] = (data || []).map(post => ({
+          const transformedPosts: BlogPost[] = (data || []).map((post: any) => ({
             id: post.id,
             title: post.title || 'Geen titel',
             content: post.content || '',
@@ -247,7 +247,7 @@ export default function TimelineAlchemyPreviewWizard() {
                   className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                     form.selectedTemplate === template
                       ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-600 hover:border-gray-500'
                   }`}
                 >
                   <div className="flex items-center justify-between">
