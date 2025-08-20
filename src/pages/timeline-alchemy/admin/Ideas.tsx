@@ -32,22 +32,7 @@ interface BlogPost {
   tags?: string[]
   category?: string
   featured_image?: string
-  ai_blog?: {
-    Title?: string
-    Body?: string
-    Tags?: string[]
-    Sources?: string[]
-    Social?: {
-      title?: string
-      description?: string
-      image?: string
-    }
-    SEO?: {
-      title?: string
-      description?: string
-      keywords?: string[]
-    }
-  }
+  ai_blog?: any // Use any to avoid TypeScript issues with dynamic field names
 }
 
 export default function TimelineAlchemyIdeas() {
@@ -108,30 +93,33 @@ export default function TimelineAlchemyIdeas() {
               aiBlog = post.ai_blog
             }
             console.log('Parsed ai_blog:', aiBlog)
+            console.log('ai_blog keys:', aiBlog ? Object.keys(aiBlog) : 'no keys')
           } catch (parseError) {
             console.error('Error parsing ai_blog JSON:', parseError, 'Raw value:', post.ai_blog)
             aiBlog = null
           }
         }
         
-        // Safe extraction with fallbacks for all fields
-        const safeTitle = aiBlog?.Title || post.title || 'Geen titel'
-        const safeBody = aiBlog?.Body || post.content || ''
-        const safeTags = aiBlog?.Tags || post.tags || []
-        const safeSources = aiBlog?.Sources || []
-        const safeSocial = aiBlog?.Social || null
-        const safeSEO = aiBlog?.SEO || null
+        // Safe extraction with fallbacks for all fields - check multiple possible field names
+        const safeTitle = aiBlog?.Title || aiBlog?.title || aiBlog?.Title || post.title || 'Geen titel'
+        const safeBody = aiBlog?.Body || aiBlog?.body || aiBlog?.content || post.content || ''
+        const safeTags = aiBlog?.Tags || aiBlog?.tags || aiBlog?.tag || post.tags || []
+        const safeSources = aiBlog?.Sources || aiBlog?.sources || aiBlog?.source || []
+        const safeSocial = aiBlog?.Social || aiBlog?.social || null
+        const safeSEO = aiBlog?.SEO || aiBlog?.seo || null
         
         // Ensure arrays are always arrays to prevent .length errors
-        const normalizedTags = Array.isArray(safeTags) ? safeTags : []
-        const normalizedSources = Array.isArray(safeSources) ? safeSources : []
+        const normalizedTags = Array.isArray(safeTags) ? safeTags : (safeTags ? [safeTags] : [])
+        const normalizedSources = Array.isArray(safeSources) ? safeSources : (safeSources ? [safeSources] : [])
         const normalizedKeywords = Array.isArray(safeSEO?.keywords) ? safeSEO.keywords : []
         
         console.log('Safe extraction results:', {
           safeTitle,
-          safeBody: safeBody?.substring(0, 100) + '...',
+          safeBody: safeBody ? (safeBody.substring(0, 100) + '...') : 'NO BODY',
           normalizedTags,
-          aiBlogKeys: aiBlog ? Object.keys(aiBlog) : 'no aiBlog'
+          aiBlogKeys: aiBlog ? Object.keys(aiBlog) : 'no aiBlog',
+          originalPostTitle: post.title,
+          originalPostContent: post.content ? post.content.substring(0, 50) + '...' : 'NO CONTENT'
         })
         
         return {
@@ -391,44 +379,61 @@ export default function TimelineAlchemyIdeas() {
                           </details>
                         )}
                         
-                        {/* AI Blog Data Section */}
+                        {/* Show extracted tags in main section */}
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="mb-3">
+                            <span className="text-sm text-gray-600 font-medium">Tags:</span>
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {post.tags.map((tag, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
+                                >
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* AI Blog Data Section - for debugging and comparison */}
                         {post.ai_blog && (
                           <div className="mb-3 p-3 bg-purple-50 rounded border-l-4 border-purple-200">
-                            <h4 className="font-medium text-purple-800 mb-2">AI Blog Data:</h4>
+                            <h4 className="font-medium text-purple-800 mb-2">AI Blog Data (Raw):</h4>
                             <div className="space-y-2 text-sm">
-                              <div><strong>AI Titel:</strong> {post.ai_blog.Title || 'Geen titel'}</div>
-                              <div><strong>AI Body:</strong> {post.ai_blog.Body ? (post.ai_blog.Body.length > 200 ? post.ai_blog.Body.substring(0, 200) + '...' : post.ai_blog.Body) : 'Geen content'}</div>
+                              <div><strong>AI Titel:</strong> {post.ai_blog.Title || post.ai_blog.title || 'Geen titel'}</div>
+                              <div><strong>AI Body:</strong> {post.ai_blog.Body || post.ai_blog.body || post.ai_blog.content || 'Geen content'}</div>
                               
                               {/* AI Tags - Always safe to render */}
-                              {post.ai_blog.Tags && post.ai_blog.Tags.length > 0 && (
-                                <div><strong>AI Tags:</strong> {post.ai_blog.Tags.join(', ')}</div>
+                              {(post.ai_blog.Tags || post.ai_blog.tags) && (post.ai_blog.Tags || post.ai_blog.tags).length > 0 && (
+                                <div><strong>AI Tags:</strong> {(post.ai_blog.Tags || post.ai_blog.tags).join(', ')}</div>
                               )}
                               
                               {/* Sources - Safe rendering with fallback */}
-                              {post.ai_blog.Sources && post.ai_blog.Sources.length > 0 && (
-                                <div><strong>Sources:</strong> {post.ai_blog.Sources.join(', ')}</div>
+                              {(post.ai_blog.Sources || post.ai_blog.sources) && (post.ai_blog.Sources || post.ai_blog.sources).length > 0 && (
+                                <div><strong>Sources:</strong> {(post.ai_blog.Sources || post.ai_blog.sources).join(', ')}</div>
                               )}
                               
                               {/* Social - Safe rendering with optional chaining */}
-                              {post.ai_blog.Social && (
+                              {(post.ai_blog.Social || post.ai_blog.social) && (
                                 <div className="mt-2 p-2 bg-blue-50 rounded">
                                   <strong>Social:</strong>
                                   <div className="ml-2 space-y-1">
-                                    {post.ai_blog.Social.title && <div>Title: {post.ai_blog.Social.title}</div>}
-                                    {post.ai_blog.Social.description && <div>Description: {post.ai_blog.Social.description}</div>}
-                                    {post.ai_blog.Social.image && <div>Image: {post.ai_blog.Social.image}</div>}
+                                    {(post.ai_blog.Social || post.ai_blog.social).title && <div>Title: {(post.ai_blog.Social || post.ai_blog.social).title}</div>}
+                                    {(post.ai_blog.Social || post.ai_blog.social).description && <div>Description: {(post.ai_blog.Social || post.ai_blog.social).description}</div>}
+                                    {(post.ai_blog.Social || post.ai_blog.social).image && <div>Image: {(post.ai_blog.Social || post.ai_blog.social).image}</div>}
                                   </div>
                                 </div>
                               )}
                               
                               {/* SEO - Safe rendering with optional chaining */}
-                              {post.ai_blog.SEO && (
+                              {(post.ai_blog.SEO || post.ai_blog.seo) && (
                                 <div className="mt-2 p-2 bg-green-50 rounded">
                                   <div className="ml-2 space-y-1">
-                                    {post.ai_blog.SEO.title && <div>Title: {post.ai_blog.SEO.title}</div>}
-                                    {post.ai_blog.SEO.description && <div>Description: {post.ai_blog.SEO.description}</div>}
-                                    {post.ai_blog.SEO.keywords && post.ai_blog.SEO.keywords.length > 0 && (
-                                      <div>Keywords: {post.ai_blog.SEO.keywords.join(', ')}</div>
+                                    {(post.ai_blog.SEO || post.ai_blog.seo).title && <div>Title: {(post.ai_blog.SEO || post.ai_blog.seo).title}</div>}
+                                    {(post.ai_blog.SEO || post.ai_blog.seo).description && <div>Description: {(post.ai_blog.SEO || post.ai_blog.seo).description}</div>}
+                                    {(post.ai_blog.SEO || post.ai_blog.seo).keywords && (post.ai_blog.SEO || post.ai_blog.seo).keywords.length > 0 && (
+                                      <div>Keywords: {(post.ai_blog.SEO || post.ai_blog.seo).keywords.join(', ')}</div>
                                     )}
                                   </div>
                                 </div>
@@ -453,40 +458,6 @@ export default function TimelineAlchemyIdeas() {
                             </div>
                           )}
                         </div>
-                        
-                        {/* Tags - Safe rendering with fallback */}
-                        {post.tags && post.tags.length > 0 && (
-                          <div className="mb-3">
-                            <span className="text-sm text-gray-600 font-medium">Tags:</span>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {post.tags.map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* AI Tags - Display separately if different from regular tags */}
-                        {post.ai_blog?.Tags && post.ai_blog.Tags.length > 0 && (
-                          <div className="mb-3">
-                            <span className="text-sm text-gray-600 font-medium">AI Tags:</span>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {post.ai_blog.Tags.map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full"
-                                >
-                                  🤖 {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
                         
                         {/* Sources - Safe rendering with fallback */}
                         {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
