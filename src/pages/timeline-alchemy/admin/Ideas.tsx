@@ -32,6 +32,11 @@ interface BlogPost {
   tags?: string[]
   category?: string
   featured_image?: string
+  ai_blog?: {
+    Title: string
+    Body: string
+    Tags: string[]
+  }
 }
 
 export default function TimelineAlchemyIdeas() {
@@ -74,19 +79,23 @@ export default function TimelineAlchemyIdeas() {
       const transformedPosts: BlogPost[] = (data || []).map((post: any) => {
         console.log('Processing post:', post) // Debug log
         
+        // Extract ai_blog data if it exists
+        const aiBlog = post.ai_blog ? JSON.parse(post.ai_blog) : null
+        
         return {
           id: post.id,
-          title: post.title || 'Geen titel',
-          content: post.content || '',
-          excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : 'Geen content'),
+          title: aiBlog?.Title || post.title || 'Geen titel',
+          content: aiBlog?.Body || post.content || '',
+          excerpt: post.excerpt || (aiBlog?.Body ? aiBlog.Body.substring(0, 150) + '...' : (post.content ? post.content.substring(0, 150) + '...' : 'Geen content')),
           status: post.status || 'draft',
           author_id: post.author_id || post.user_id || 'Onbekende auteur',
           created_at: post.created_at,
           updated_at: post.updated_at || post.created_at,
           published_at: post.published_at || post.created_at,
-          tags: Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []),
+          tags: aiBlog?.Tags || Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []),
           category: post.category || 'Algemeen',
-          featured_image: post.featured_image || post.image_url
+          featured_image: post.featured_image || post.image_url,
+          ai_blog: aiBlog
         }
       })
 
@@ -113,7 +122,10 @@ export default function TimelineAlchemyIdeas() {
       (post.content && post.content.toLowerCase().includes(searchLower)) ||
       (post.author_id && post.author_id.toLowerCase().includes(searchLower)) ||
       (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchLower))) ||
-      (post.category && post.category.toLowerCase().includes(searchLower))
+      (post.category && post.category.toLowerCase().includes(searchLower)) ||
+      (post.ai_blog?.Title && post.ai_blog.Title.toLowerCase().includes(searchLower)) ||
+      (post.ai_blog?.Body && post.ai_blog.Body.toLowerCase().includes(searchLower)) ||
+      (post.ai_blog?.Tags && post.ai_blog.Tags.some(tag => tag.toLowerCase().includes(searchLower)))
     
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
     const matchesStatus = selectedStatus === 'all' || post.status === selectedStatus
@@ -286,6 +298,11 @@ export default function TimelineAlchemyIdeas() {
                           <Badge className={getCategoryColor(post.category || 'Algemeen')}>
                             {post.category || 'Algemeen'}
                           </Badge>
+                          {post.ai_blog && (
+                            <Badge className="bg-purple-100 text-purple-800">
+                              AI Generated
+                            </Badge>
+                          )}
                         </div>
                         
                         <h3 className="font-semibold text-lg text-gray-900 mb-2">
@@ -305,6 +322,19 @@ export default function TimelineAlchemyIdeas() {
                               {post.content}
                             </div>
                           </details>
+                        )}
+                        
+                        {post.ai_blog && (
+                          <div className="mb-3 p-3 bg-purple-50 rounded border-l-4 border-purple-200">
+                            <h4 className="font-medium text-purple-800 mb-2">AI Blog Data:</h4>
+                            <div className="space-y-2 text-sm">
+                              <div><strong>Titel:</strong> {post.ai_blog.Title}</div>
+                              <div><strong>Body:</strong> {post.ai_blog.Body.length > 200 ? post.ai_blog.Body.substring(0, 200) + '...' : post.ai_blog.Body}</div>
+                              {post.ai_blog.Tags && post.ai_blog.Tags.length > 0 && (
+                                <div><strong>Tags:</strong> {post.ai_blog.Tags.join(', ')}</div>
+                              )}
+                            </div>
+                          </div>
                         )}
                         
                         <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
