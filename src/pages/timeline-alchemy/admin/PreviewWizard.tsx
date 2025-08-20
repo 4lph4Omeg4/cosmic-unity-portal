@@ -100,8 +100,8 @@ export default function TimelineAlchemyPreviewWizard() {
       // Load the actual selected blog posts from database
       if (form.selectedPosts.length > 0) {
         const { data, error } = await supabase
-          .from('posts')
-          .select('id, title, content')
+          .from('blog_posts')
+          .select('id, title, content, excerpt, category')
           .in('id', form.selectedPosts)
 
         if (error) {
@@ -112,8 +112,8 @@ export default function TimelineAlchemyPreviewWizard() {
             id: post.id,
             title: post.title || 'Geen titel',
             content: post.content || '',
-            excerpt: post.content ? post.content.substring(0, 150) + '...' : 'Geen content',
-            category: 'Algemeen'
+            excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : 'Geen content'),
+            category: post.category || 'Algemeen'
           }))
           setBlogPosts(transformedPosts)
         }

@@ -24,7 +24,7 @@ interface BlogPost {
   title: string
   content: string
   excerpt?: string
-  status: 'draft' | 'published' | 'approved' | 'changes_requested' | 'submitted' | 'scheduled' | 'canceled'
+  status: 'draft' | 'published' | 'scheduled' | 'archived'
   author_id: string
   created_at: string
   updated_at: string
@@ -53,47 +53,47 @@ export default function TimelineAlchemyIdeas() {
     try {
       setLoading(true)
       
-      const { data, error } = await supabase
-        .from('posts')
+      const { data, error } = (await supabase
+        .from('blog_posts' as any)
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: false })) as any
 
       if (error) {
-        console.error('Error loading posts:', error)
+        console.error('Error loading blog posts:', error)
         toast({
           title: "Fout bij laden",
-          description: "Kon posts niet laden uit de database.",
+          description: "Kon blog posts niet laden uit de database.",
           variant: "destructive",
         })
         return
       }
 
-      console.log('Raw posts data:', data) // Debug log
+      console.log('Raw blog posts data:', data) // Debug log
 
       // Transform the data to match our interface
-      const transformedPosts: BlogPost[] = (data || []).map(post => {
+      const transformedPosts: BlogPost[] = (data || []).map((post: any) => {
         console.log('Processing post:', post) // Debug log
         
         return {
           id: post.id,
           title: post.title || 'Geen titel',
           content: post.content || '',
-          excerpt: post.content ? post.content.substring(0, 150) + '...' : 'Geen content',
-          status: post.status || 'published',
-          author_id: post.user_id || 'Onbekende auteur',
+          excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : 'Geen content'),
+          status: post.status || 'draft',
+          author_id: post.author_id || post.user_id || 'Onbekende auteur',
           created_at: post.created_at,
           updated_at: post.updated_at || post.created_at,
           published_at: post.published_at || post.created_at,
-          tags: [], // Posts table doesn't have tags field
-          category: 'Algemeen', // Posts table doesn't have category field
-          featured_image: post.image_url // Use image_url from posts table
+          tags: Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []),
+          category: post.category || 'Algemeen',
+          featured_image: post.featured_image || post.image_url
         }
       })
 
       console.log('Transformed posts:', transformedPosts) // Debug log
       setBlogPosts(transformedPosts)
     } catch (error) {
-      console.error('Error loading posts:', error)
+      console.error('Error loading blog posts:', error)
       toast({
         title: "Fout bij laden",
         description: "Er is een onverwachte fout opgetreden.",
@@ -156,12 +156,9 @@ export default function TimelineAlchemyIdeas() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'published': return 'bg-green-100 text-green-800'
-      case 'approved': return 'bg-blue-100 text-blue-800'
-      case 'submitted': return 'bg-yellow-100 text-yellow-800'
       case 'scheduled': return 'bg-purple-100 text-purple-800'
       case 'draft': return 'bg-gray-100 text-gray-800'
-      case 'changes_requested': return 'bg-orange-100 text-orange-800'
-      case 'canceled': return 'bg-red-100 text-red-800'
+      case 'archived': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
