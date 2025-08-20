@@ -46,12 +46,12 @@ interface PreviewForm {
 
 const channels = ['Instagram', 'LinkedIn', 'Twitter', 'Facebook', 'YouTube']
 const templates = [
-  'Educational Post',
+  'Blogpost',
+  'Blogpost Reference AD',
   'Inspirational Quote',
-  'Behind the Scenes',
-  'Product Showcase',
-  'Community Highlight',
-  'Custom'
+  'Seen through the Single-Eye View',
+  'Single-Eye Reference AD',
+  'Custom Post'
 ]
 
 export default function TimelineAlchemyPreviewWizard() {
