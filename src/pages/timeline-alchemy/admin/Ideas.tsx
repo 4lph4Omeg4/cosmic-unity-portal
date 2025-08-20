@@ -342,80 +342,77 @@ export default function TimelineAlchemyIdeas() {
                     onCheckedChange={(checked) => handleSelectPost(post.id, checked as boolean)}
                   />
                   
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex-1">
-                         <div className="flex items-center gap-3 mb-2">
-                           <Badge className={getStatusColor(post.status)}>
-                             {post.status}
-                           </Badge>
-                           <Badge className={getCategoryColor(post.category || 'Algemeen')}>
-                             {post.category || 'Algemeen'}
-                           </Badge>
-                           {post.ai_blog && (
-                             <Badge className="bg-purple-100 text-purple-800">
-                               AI Generated
-                             </Badge>
-                           )}
-                           {/* Tags - Display as badges in the top section */}
-                           {post.tags && post.tags.length > 0 && (
-                             post.tags.map((tag, index) => (
-                               <Badge key={index} className="bg-blue-100 text-blue-700">
-                                 #{tag}
-                               </Badge>
-                             ))
-                           )}
-                         </div>
-                         
-                         <h3 className="font-semibold text-lg text-white mb-2">
-                           {post.title}
-                         </h3>
-                         
-                         <p className="text-gray-200 mb-3">
-                           {post.excerpt}
-                         </p>
-                        
-                        {/* Show full content if available */}
-                        {post.content && post.content.length > 150 && (
-                          <details className="mb-3">
-                            <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
-                              Toon volledige content
-                            </summary>
-                            <div className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 whitespace-pre-wrap border border-gray-700">
-                              {post.content}
-                            </div>
-                          </details>
-                        )}
-                        
-                        {/* Sources - Safe rendering with fallback */}
-                        {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
-                          <div className="mb-3">
-                            <span className="text-sm text-gray-600 font-medium">Sources:</span>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {post.ai_blog.Sources.map((source, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-                                >
-                                  📚 {source}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {post.featured_image && (
-                          <div className="mb-3">
-                            <img 
-                              src={post.featured_image} 
-                              alt={post.title}
-                              className="w-32 h-20 object-cover rounded border"
-                            />
-                          </div>
-                        )}
-                      </div>
+                  {/* Featured Image - Prominent position */}
+                  {post.featured_image && (
+                    <div className="flex-shrink-0">
+                      <img 
+                        src={post.featured_image} 
+                        alt={post.title}
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-600 shadow-sm"
+                      />
                     </div>
-                  </div>
+                  )}
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Badge className={getStatusColor(post.status)}>
+                        {post.status}
+                      </Badge>
+                      <Badge className={getCategoryColor(post.category || 'Algemeen')}>
+                        {post.category || 'Algemeen'}
+                      </Badge>
+                      {post.ai_blog && (
+                        <Badge className="bg-purple-100 text-purple-800">
+                          AI Generated
+                        </Badge>
+                      )}
+                      {/* Tags - Display as badges in the top section */}
+                      {post.tags && post.tags.length > 0 && (
+                        post.tags.map((tag, index) => (
+                          <Badge key={index} className="bg-blue-100 text-blue-700">
+                            #{tag}
+                          </Badge>
+                        ))
+                      )}
+                    </div>
+                    
+                    <h3 className="font-semibold text-lg text-white mb-2">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-gray-200 mb-3">
+                      {post.excerpt}
+                    </p>
+                   
+                   {/* Show full content if available */}
+                   {post.content && post.content.length > 150 && (
+                     <details className="mb-3">
+                       <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
+                         Toon volledige content
+                       </summary>
+                       <div className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 whitespace-pre-wrap border border-gray-700">
+                         {post.content}
+                       </div>
+                     </details>
+                   )}
+                   
+                   {/* Sources - Safe rendering with fallback */}
+                   {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
+                     <div className="mb-3">
+                       <span className="text-sm text-gray-600 font-medium">Sources:</span>
+                       <div className="flex flex-wrap gap-2 mt-1">
+                         {post.ai_blog.Sources.map((source, index) => (
+                           <span
+                             key={index}
+                             className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                           >
+                             📚 {source}
+                           </span>
+                         ))}
+                       </div>
+                     </div>
+                   )}
+                 </div>
                   
                   <div className="flex flex-col gap-2 ml-4">
                     <Button variant="outline" size="sm" className="flex items-center gap-2">
