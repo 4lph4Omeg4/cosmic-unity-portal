@@ -130,10 +130,8 @@ export default function TimelineAlchemyIdeas() {
         const safeSocial = aiBlog?.Social || aiBlog?.social || null
         const safeSEO = aiBlog?.SEO || aiBlog?.seo || null
         
-        // Image extraction - prioritize image_url column
-        const safeImage = post.image_url || post.featured_image || post.image || post.img || 
-                         aiBlog?.Image || aiBlog?.image || aiBlog?.FeaturedImage || aiBlog?.featured_image ||
-                         aiBlog?.ImageUrl || aiBlog?.image_url || null
+        // Image extraction - use only image_url from blog_posts table
+        const safeImage = post.image_url || null
         
         // Ensure arrays are always arrays to prevent .length errors
         const normalizedTags = Array.isArray(safeTags) ? safeTags : (safeTags ? [safeTags] : [])
@@ -148,15 +146,7 @@ export default function TimelineAlchemyIdeas() {
           originalPostTitle: post.title,
           originalPostContent: post.content ? post.content.substring(0, 50) + '...' : 'NO CONTENT',
           safeImage,
-          imageUrlColumn: post.image_url,
-          originalImageFields: {
-            image_url: post.image_url, // Primary image column
-            featured_image: post.featured_image,
-            image: post.image,
-            img: post.img,
-            aiBlogImage: aiBlog?.Image,
-            aiBlogImageUrl: aiBlog?.ImageUrl
-          }
+          imageUrlFromBlogPosts: post.image_url
         })
         
         return {
