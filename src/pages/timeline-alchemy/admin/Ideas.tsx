@@ -33,9 +33,20 @@ interface BlogPost {
   category?: string
   featured_image?: string
   ai_blog?: {
-    Title: string
-    Body: string
-    Tags: string[]
+    Title?: string
+    Body?: string
+    Tags?: string[]
+    Sources?: string[]
+    Social?: {
+      title?: string
+      description?: string
+      image?: string
+    }
+    SEO?: {
+      title?: string
+      description?: string
+      keywords?: string[]
+    }
   }
 }
 
@@ -86,7 +97,7 @@ export default function TimelineAlchemyIdeas() {
       const transformedPosts: BlogPost[] = (data || []).map((post: any) => {
         console.log('Processing post:', post) // Debug log
         
-        // Extract ai_blog data if it exists - with better error handling
+        // Safely parse ai_blog JSON with comprehensive error handling
         let aiBlog = null
         if (post.ai_blog) {
           try {
@@ -103,20 +114,44 @@ export default function TimelineAlchemyIdeas() {
           }
         }
         
+        // Safe extraction with fallbacks for all fields
+        const safeTitle = aiBlog?.Title || post.title || 'Geen titel'
+        const safeBody = aiBlog?.Body || post.content || ''
+        const safeTags = aiBlog?.Tags || post.tags || []
+        const safeSources = aiBlog?.Sources || []
+        const safeSocial = aiBlog?.Social || null
+        const safeSEO = aiBlog?.SEO || null
+        
+        // Ensure arrays are always arrays to prevent .length errors
+        const normalizedTags = Array.isArray(safeTags) ? safeTags : []
+        const normalizedSources = Array.isArray(safeSources) ? safeSources : []
+        const normalizedKeywords = Array.isArray(safeSEO?.keywords) ? safeSEO.keywords : []
+        
         return {
           id: post.id,
-          title: aiBlog?.Title || post.title || 'Geen titel',
-          content: aiBlog?.Body || post.content || '',
-          excerpt: post.excerpt || (aiBlog?.Body ? aiBlog.Body.substring(0, 150) + '...' : (post.content ? post.content.substring(0, 150) + '...' : 'Geen content')),
+          title: safeTitle,
+          content: safeBody,
+          excerpt: post.excerpt || (safeBody ? safeBody.substring(0, 150) + '...' : 'Geen content'),
           status: post.status || 'draft',
           author_id: post.author_id || post.user_id || 'Onbekende auteur',
           created_at: post.created_at,
           updated_at: post.updated_at || post.created_at,
           published_at: post.published_at || post.created_at,
-          tags: aiBlog?.Tags || Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []),
+          tags: normalizedTags,
           category: post.category || 'Algemeen',
           featured_image: post.featured_image || post.image_url,
-          ai_blog: aiBlog
+          ai_blog: {
+            Title: safeTitle,
+            Body: safeBody,
+            Tags: normalizedTags,
+            Sources: normalizedSources,
+            Social: safeSocial,
+            SEO: safeSEO ? {
+              title: safeSEO.title || '',
+              description: safeSEO.description || '',
+              keywords: normalizedKeywords
+            } : undefined
+          }
         }
       })
 
@@ -363,10 +398,43 @@ export default function TimelineAlchemyIdeas() {
                           <div className="mb-3 p-3 bg-purple-50 rounded border-l-4 border-purple-200">
                             <h4 className="font-medium text-purple-800 mb-2">AI Blog Data:</h4>
                             <div className="space-y-2 text-sm">
-                              <div><strong>Titel:</strong> {post.ai_blog.Title}</div>
-                              <div><strong>Body:</strong> {post.ai_blog.Body.length > 200 ? post.ai_blog.Body.substring(0, 200) + '...' : post.ai_blog.Body}</div>
+                              <div><strong>Titel:</strong> {post.ai_blog.Title || 'Geen titel'}</div>
+                              <div><strong>Body:</strong> {post.ai_blog.Body ? (post.ai_blog.Body.length > 200 ? post.ai_blog.Body.substring(0, 200) + '...' : post.ai_blog.Body) : 'Geen content'}</div>
+                              
+                              {/* Tags - Always safe to render */}
                               {post.ai_blog.Tags && post.ai_blog.Tags.length > 0 && (
                                 <div><strong>Tags:</strong> {post.ai_blog.Tags.join(', ')}</div>
+                              )}
+                              
+                              {/* Sources - Safe rendering with fallback */}
+                              {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
+                                <div><strong>Sources:</strong> {post.ai_blog.Sources.join(', ')}</div>
+                              )}
+                              
+                              {/* Social - Safe rendering with optional chaining */}
+                              {post.ai_blog.Social && (
+                                <div className="mt-2 p-2 bg-blue-50 rounded">
+                                  <strong>Social:</strong>
+                                  <div className="ml-2 space-y-1">
+                                    {post.ai_blog.Social.title && <div>Title: {post.ai_blog.Social.title}</div>}
+                                    {post.ai_blog.Social.description && <div>Description: {post.ai_blog.Social.description}</div>}
+                                    {post.ai_blog.Social.image && <div>Image: {post.ai_blog.Social.image}</div>}
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* SEO - Safe rendering with optional chaining */}
+                              {post.ai_blog.SEO && (
+                                <div className="mt-2 p-2 bg-green-50 rounded">
+                                  <strong>SEO:</strong>
+                                  <div className="ml-2 space-y-1">
+                                    {post.ai_blog.SEO.title && <div>Title: {post.ai_blog.SEO.title}</div>}
+                                    {post.ai_blog.SEO.description && <div>Description: {post.ai_blog.SEO.description}</div>}
+                                    {post.ai_blog.SEO.keywords && post.ai_blog.SEO.keywords.length > 0 && (
+                                      <div>Keywords: {post.ai_blog.SEO.keywords.join(', ')}</div>
+                                    )}
+                                  </div>
+                                </div>
                               )}
                             </div>
                           </div>
@@ -389,6 +457,7 @@ export default function TimelineAlchemyIdeas() {
                           )}
                         </div>
                         
+                        {/* Tags - Safe rendering with fallback */}
                         {post.tags && post.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2 mb-3">
                             {post.tags.map((tag, index) => (
@@ -399,6 +468,23 @@ export default function TimelineAlchemyIdeas() {
                                 #{tag}
                               </span>
                             ))}
+                          </div>
+                        )}
+                        
+                        {/* Sources - Safe rendering with fallback */}
+                        {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
+                          <div className="mb-3">
+                            <span className="text-sm text-gray-600 font-medium">Sources:</span>
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {post.ai_blog.Sources.map((source, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                                >
+                                  📚 {source}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         )}
                         
