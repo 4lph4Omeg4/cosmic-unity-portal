@@ -76,6 +76,21 @@ export default function TimelineAlchemyIdeas() {
         console.log('First post structure:', data[0])
         console.log('First post ai_blog field:', data[0].ai_blog)
         console.log('First post ai_blog type:', typeof data[0].ai_blog)
+        console.log('All available columns in first post:', Object.keys(data[0]))
+        
+        // Check for image-related columns
+        const imageColumns = Object.keys(data[0]).filter(key => 
+          key.toLowerCase().includes('image') || 
+          key.toLowerCase().includes('img') || 
+          key.toLowerCase().includes('picture') ||
+          key.toLowerCase().includes('photo')
+        )
+        console.log('Image-related columns found:', imageColumns)
+        
+        // Show values for image columns
+        imageColumns.forEach(col => {
+          console.log(`Column "${col}" value:`, data[0][col])
+        })
       }
 
       // Transform the data to match our interface
@@ -108,6 +123,11 @@ export default function TimelineAlchemyIdeas() {
         const safeSocial = aiBlog?.Social || aiBlog?.social || null
         const safeSEO = aiBlog?.SEO || aiBlog?.seo || null
         
+        // Image extraction - prioritize image_url column
+        const safeImage = post.image_url || post.featured_image || post.image || post.img || 
+                         aiBlog?.Image || aiBlog?.image || aiBlog?.FeaturedImage || aiBlog?.featured_image ||
+                         aiBlog?.ImageUrl || aiBlog?.image_url || null
+        
         // Ensure arrays are always arrays to prevent .length errors
         const normalizedTags = Array.isArray(safeTags) ? safeTags : (safeTags ? [safeTags] : [])
         const normalizedSources = Array.isArray(safeSources) ? safeSources : (safeSources ? [safeSources] : [])
@@ -119,7 +139,17 @@ export default function TimelineAlchemyIdeas() {
           normalizedTags,
           aiBlogKeys: aiBlog ? Object.keys(aiBlog) : 'no aiBlog',
           originalPostTitle: post.title,
-          originalPostContent: post.content ? post.content.substring(0, 50) + '...' : 'NO CONTENT'
+          originalPostContent: post.content ? post.content.substring(0, 50) + '...' : 'NO CONTENT',
+          safeImage,
+          imageUrlColumn: post.image_url,
+          originalImageFields: {
+            image_url: post.image_url, // Primary image column
+            featured_image: post.featured_image,
+            image: post.image,
+            img: post.img,
+            aiBlogImage: aiBlog?.Image,
+            aiBlogImageUrl: aiBlog?.ImageUrl
+          }
         })
         
         return {
@@ -134,7 +164,7 @@ export default function TimelineAlchemyIdeas() {
           published_at: post.published_at || post.created_at,
           tags: normalizedTags,
           category: post.category || 'Algemeen',
-          featured_image: post.featured_image || post.image_url,
+          featured_image: safeImage,
           ai_blog: aiBlog
         }
       })
@@ -349,7 +379,24 @@ export default function TimelineAlchemyIdeas() {
                         src={post.featured_image} 
                         alt={post.title}
                         className="w-24 h-24 object-cover rounded-lg border border-gray-600 shadow-sm"
+                        onError={(e) => {
+                          console.error('Image failed to load:', post.featured_image, 'for post:', post.title)
+                          e.currentTarget.style.display = 'none'
+                        }}
+                        onLoad={() => {
+                          console.log('Image loaded successfully:', post.featured_image, 'for post:', post.title)
+                        }}
                       />
+                    </div>
+                  )}
+                  
+                  {/* Fallback placeholder when no image */}
+                  {!post.featured_image && (
+                    <div className="flex-shrink-0 w-24 h-24 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
+                      <div className="text-gray-400 text-xs text-center">
+                        <div className="w-8 h-8 mx-auto mb-1">📄</div>
+                        Geen afbeelding
+                      </div>
                     </div>
                   )}
                   
