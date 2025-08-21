@@ -348,19 +348,53 @@ export default function TimelineAlchemyPreviewWizard() {
                </div>
              )}
              
-             <div className="space-y-3">
-               <label className="text-sm font-medium text-gray-700">Content Message</label>
-               <Textarea
-                 value={form.content}
-                 onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                 placeholder="Write your content message here..."
-                 rows={6}
-                 className="resize-none"
-               />
-               <div className="flex items-center justify-between text-sm text-gray-500">
-                 <span>Character count: {form.content.length}</span>
-                 <span>Max: 280 characters</span>
-               </div>
+                           <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700">Content Message</label>
+                
+                {/* Auto-fill content from database */}
+                {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                  <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                    <h4 className="font-medium text-green-900 mb-2">📊 Database Content Available</h4>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {blogPosts.find(p => p.id === form.selectedPosts[0])?.facebook && (
+                        <div className="p-2 bg-white rounded border">
+                          <span className="font-medium text-blue-600">Facebook:</span>
+                          <p className="text-gray-700 truncate">{blogPosts.find(p => p.id === form.selectedPosts[0])?.facebook}</p>
+                        </div>
+                      )}
+                      {blogPosts.find(p => p.id === form.selectedPosts[0])?.instagram && (
+                        <div className="p-2 bg-white rounded border">
+                          <span className="font-medium text-pink-600">Instagram:</span>
+                          <p className="text-gray-700 truncate">{blogPosts.find(p => p.id === form.selectedPosts[0])?.instagram}</p>
+                        </div>
+                      )}
+                      {blogPosts.find(p => p.id === form.selectedPosts[0])?.x && (
+                        <div className="p-2 bg-white rounded border">
+                          <span className="font-medium text-black">X (Twitter):</span>
+                          <p className="text-gray-700 truncate">{blogPosts.find(p => p.id === form.selectedPosts[0])?.x}</p>
+                        </div>
+                      )}
+                      {blogPosts.find(p => p.id === form.selectedPosts[0])?.linkedin && (
+                        <div className="p-2 bg-white rounded border">
+                          <span className="font-medium text-blue-700">LinkedIn:</span>
+                          <p className="text-gray-700 truncate">{blogPosts.find(p => p.id === form.selectedPosts[0])?.linkedin}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                <Textarea
+                  value={form.content}
+                  onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder="Write your content message here..."
+                  rows={6}
+                  className="resize-none"
+                />
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                  <span>Character count: {form.content.length}</span>
+                  <span>Max: 280 characters</span>
+                </div>
                
                                {/* Auto-fill buttons for social media templates */}
                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
@@ -387,22 +421,30 @@ export default function TimelineAlchemyPreviewWizard() {
                             switch (form.selectedTemplate) {
                               case 'Facebook':
                                 if (post.facebook) {
-                                  content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${post.facebook}\n\n#content #socialmedia #facebook`
+                                  // Use the actual Facebook content from database
+                                  const facebookContent = post.facebook
+                                  content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${facebookContent}\n\n#content #socialmedia #facebook`
                                 }
                                 break
                               case 'Instagram':
                                 if (post.instagram) {
-                                  content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${post.instagram}\n\n#instagram #content #socialmedia #trending`
+                                  // Use the actual Instagram content from database
+                                  const instagramContent = post.instagram
+                                  content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${instagramContent}\n\n#instagram #content #socialmedia #trending`
                                 }
                                 break
                               case 'X (Twitter)':
                                 if (post.x) {
-                                  content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${post.x}\n\n#twitter #content #socialmedia #insights`
+                                  // Use the actual X (Twitter) content from database
+                                  const xContent = post.x
+                                  content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${xContent}\n\n#twitter #content #socialmedia #insights`
                                 }
                                 break
                               case 'LinkedIn':
                                 if (post.linkedin) {
-                                  content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${post.linkedin}\n\n#linkedin #professional #content #networking`
+                                  // Use the actual LinkedIn content from database
+                                  const linkedinContent = post.linkedin
+                                  content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${linkedinContent}\n\n#linkedin #professional #content #networking`
                                 }
                                 break
                               case 'Blog Post':
@@ -426,13 +468,15 @@ export default function TimelineAlchemyPreviewWizard() {
                           onClick={() => {
                             const post = blogPosts.find(p => p.id === form.selectedPosts[0])
                             if (post?.facebook) {
-                              const content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${post.facebook}\n\n#content #socialmedia #facebook`
+                              // Use the actual Facebook content from database if available
+                              const facebookContent = post.facebook
+                              const content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${facebookContent}\n\n#content #socialmedia #facebook`
                               setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
                             }
                           }}
                           className="text-blue-600 border-blue-200 hover:bg-blue-50"
                         >
-                          Use Facebook Link
+                          Use Facebook Content
                         </Button>
                       )}
                                            {form.selectedTemplate === 'Instagram' && (
@@ -443,13 +487,15 @@ export default function TimelineAlchemyPreviewWizard() {
                           onClick={() => {
                             const post = blogPosts.find(p => p.id === form.selectedPosts[0])
                             if (post?.instagram) {
-                              const content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${post.instagram}\n\n#instagram #content #socialmedia #trending`
+                              // Use the actual Instagram content from database if available
+                              const instagramContent = post.instagram
+                              const content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${instagramContent}\n\n#instagram #content #socialmedia #trending`
                               setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
                             }
                           }}
                           className="text-pink-600 border-pink-200 hover:bg-pink-50"
                         >
-                          Use Instagram Link
+                          Use Instagram Content
                         </Button>
                       )}
                                            {form.selectedTemplate === 'X (Twitter)' && (
@@ -460,13 +506,15 @@ export default function TimelineAlchemyPreviewWizard() {
                           onClick={() => {
                             const post = blogPosts.find(p => p.id === form.selectedPosts[0])
                             if (post?.x) {
-                              const content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${post.x}\n\n#twitter #content #socialmedia #insights`
+                              // Use the actual X (Twitter) content from database if available
+                              const xContent = post.x
+                              const content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${xContent}\n\n#twitter #content #socialmedia #insights`
                               setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
                             }
                           }}
                           className="text-black border-gray-200 hover:bg-gray-50"
                         >
-                          Use X (Twitter) Link
+                          Use X (Twitter) Content
                         </Button>
                       )}
                                            {form.selectedTemplate === 'LinkedIn' && (
@@ -477,13 +525,15 @@ export default function TimelineAlchemyPreviewWizard() {
                           onClick={() => {
                             const post = blogPosts.find(p => p.id === form.selectedPosts[0])
                             if (post?.linkedin) {
-                              const content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${post.linkedin}\n\n#linkedin #professional #content #networking`
+                              // Use the actual LinkedIn content from database if available
+                              const linkedinContent = post.linkedin
+                              const content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${linkedinContent}\n\n#linkedin #professional #content #networking`
                               setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
                             }
                           }}
                           className="text-blue-700 border-blue-200 hover:bg-blue-50"
                         >
-                          Use LinkedIn Link
+                          Use LinkedIn Content
                         </Button>
                       )}
                                            {form.selectedTemplate === 'Blog Post' && (
