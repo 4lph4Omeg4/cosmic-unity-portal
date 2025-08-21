@@ -33,6 +33,8 @@ interface BlogPost {
   category?: string
   featured_image?: string
   ai_blog?: any // Use any to avoid TypeScript issues with dynamic field names
+  imageLoading?: boolean
+  imageError?: boolean
 }
 
 export default function TimelineAlchemyIdeas() {
@@ -45,6 +47,7 @@ export default function TimelineAlchemyIdeas() {
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedPosts, setSelectedPosts] = useState<Set<string>>(new Set())
   const [selectAll, setSelectAll] = useState(false)
+  const [imageStates, setImageStates] = useState<Record<string, { loading: boolean; error: boolean }>>({})
 
   useEffect(() => {
     loadBlogPosts()
@@ -98,6 +101,18 @@ export default function TimelineAlchemyIdeas() {
         console.log('image_url value:', data[0].image_url)
         console.log('image_url type:', typeof data[0].image_url)
         console.log('image_url exists:', !!data[0].image_url)
+        
+        // Check if image_url is a valid URL
+        if (data[0].image_url) {
+          try {
+            const url = new URL(data[0].image_url)
+            console.log('image_url is valid URL:', url.href)
+            console.log('image_url protocol:', url.protocol)
+            console.log('image_url hostname:', url.hostname)
+          } catch (urlError) {
+            console.log('image_url is not a valid URL:', data[0].image_url)
+          }
+        }
       }
 
       // Transform the data to match our interface
@@ -182,6 +197,25 @@ export default function TimelineAlchemyIdeas() {
       }
       
       setBlogPosts(transformedPosts)
+      
+      // Initialize image loading states for posts with images
+      const initialImageStates: Record<string, { loading: boolean; error: boolean }> = {}
+      transformedPosts.forEach(post => {
+        if (post.featured_image) {
+          initialImageStates[post.id] = { loading: true, error: false }
+          
+          // Test image URL validity
+          testImageUrl(post.featured_image).then(isValid => {
+            if (!isValid) {
+              setImageStates(prev => ({
+                ...prev,
+                [post.id]: { loading: false, error: true }
+              }))
+            }
+          })
+        }
+      })
+      setImageStates(initialImageStates)
     } catch (error) {
       console.error('Error loading blog posts:', error)
       toast({
@@ -233,6 +267,29 @@ export default function TimelineAlchemyIdeas() {
     }
     setSelectedPosts(newSelected)
     setSelectAll(newSelected.size === filteredPosts.length)
+  }
+
+  const handleImageLoad = (postId: string) => {
+    setImageStates(prev => ({
+      ...prev,
+      [postId]: { loading: false, error: false }
+    }))
+  }
+
+  const handleImageError = (postId: string) => {
+    setImageStates(prev => ({
+      ...prev,
+      [postId]: { loading: false, error: true }
+    }))
+  }
+
+  const testImageUrl = async (url: string): Promise<boolean> => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' })
+      return response.ok
+    } catch {
+      return false
+    }
   }
 
   const handleCreatePreview = () => {
@@ -371,25 +428,54 @@ export default function TimelineAlchemyIdeas() {
                   
                   {/* Featured Image - Prominent position */}
                   {post.featured_image && (
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 relative">
+                      {/* Loading state */}
+                      {imageStates[post.id]?.loading !== false && (
+                        <div className="w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        </div>
+                      )}
+                      
+                      {/* Image */}
                       <img 
                         src={post.featured_image} 
                         alt={post.title}
-                        className="w-24 h-24 object-cover rounded-lg border border-gray-600 shadow-sm"
-                        onError={(e) => {
-                          console.error('Image failed to load:', post.featured_image, 'for post:', post.title)
-                          e.currentTarget.style.display = 'none'
+                        className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
+                          imageStates[post.id]?.loading !== false ? 'hidden' : ''
+                        }`}
+                        onLoad={() => handleImageLoad(post.id)}
+                        onError={() => handleImageError(post.id)}
+                        onClick={() => {
+                          // Open image in full size in new tab
+                          window.open(post.featured_image, '_blank')
                         }}
-                        onLoad={() => {
-                          console.log('Image loaded successfully:', post.featured_image, 'for post:', post.title)
-                        }}
+                        title="Klik om afbeelding in volledige grootte te bekijken"
                       />
+                      
+                      {/* Error state */}
+                      {imageStates[post.id]?.error && (
+                        <div className="absolute inset-0 w-32 h-32 bg-red-900 rounded-lg border border-red-600 shadow-sm flex items-center justify-center">
+                          <div className="text-red-400 text-xs text-center">
+                            <div className="w-8 h-8 mx-auto mb-1">❌</div>
+                            Afbeelding kon niet laden
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Image overlay with info */}
+                      {!imageStates[post.id]?.error && !imageStates[post.id]?.loading && (
+                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
+                          <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                            Bekijk afbeelding
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                   
                   {/* Fallback placeholder when no image */}
                   {!post.featured_image && (
-                    <div className="flex-shrink-0 w-24 h-24 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
+                    <div className="flex-shrink-0 w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
                       <div className="text-gray-400 text-xs text-center">
                         <div className="w-8 h-8 mx-auto mb-1">📄</div>
                         Geen afbeelding
