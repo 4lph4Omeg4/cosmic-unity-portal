@@ -28,7 +28,6 @@ interface Client {
 interface BlogPost {
   id: string
   title: string
-  content: string
   body?: string
   excerpt?: string
   category?: string
@@ -115,8 +114,8 @@ export default function TimelineAlchemyPreviewWizard() {
             }
             break
           case 'Blog Post':
-            if (post.body || post.content) {
-              content = (post.body || post.content || '').substring(0, 280)
+            if (post.body) {
+              content = post.body.substring(0, 280)
             }
             break
           case 'Custom Post':
@@ -178,9 +177,23 @@ export default function TimelineAlchemyPreviewWizard() {
     console.log('Loading blog posts for IDs:', postIds)
     
     try {
+      // First, let's see what columns actually exist in the table
+      console.log('=== CHECKING AVAILABLE COLUMNS ===')
+      const { data: columnCheck, error: columnError } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .limit(1)
+      
+      if (columnError) {
+        console.error('Error checking columns:', columnError)
+      } else if (columnCheck && columnCheck.length > 0) {
+        console.log('Available columns in blog_posts table:', Object.keys(columnCheck[0]))
+      }
+
+      // Now try to select the specific columns we need
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('id, title, content, body, excerpt, category, facebook, instagram, x, linkedin, featured_image')
+        .select('*')
         .in('id', postIds)
 
       if (error) {
@@ -191,25 +204,51 @@ export default function TimelineAlchemyPreviewWizard() {
       console.log('Number of posts found:', data?.length || 0)
       if (data && data.length > 0) {
         console.log('First post structure:', data[0])
-        console.log('Facebook column value:', data[0].facebook)
-        console.log('Instagram column value:', data[0].instagram)
-        console.log('X column value:', data[0].x)
-        console.log('LinkedIn column value:', data[0].linkedin)
         console.log('All available columns:', Object.keys(data[0]))
+        
+        // Check if social media columns exist and show their values
+        if ('facebook' in data[0]) {
+          console.log('✅ Facebook column exists, value:', data[0].facebook)
+        } else {
+          console.log('❌ Facebook column does NOT exist')
+        }
+        
+        if ('instagram' in data[0]) {
+          console.log('✅ Instagram column exists, value:', data[0].instagram)
+        } else {
+          console.log('❌ Instagram column does NOT exist')
+        }
+        
+        if ('x' in data[0]) {
+          console.log('✅ X column exists, value:', data[0].x)
+        } else {
+          console.log('❌ X column does NOT exist')
+        }
+        
+        if ('linkedin' in data[0]) {
+          console.log('✅ LinkedIn column exists, value:', data[0].linkedin)
+        } else {
+          console.log('❌ LinkedIn column does NOT exist')
+        }
+        
+        if ('body' in data[0]) {
+          console.log('✅ Body column exists, value:', data[0].body)
+        } else {
+          console.log('❌ Body column does NOT exist')
+        }
       }
         // Transform the data to match our interface
         const transformedPosts: BlogPost[] = (data || []).map((post: any) => ({
           id: post.id,
           title: post.title || 'Geen titel',
-          content: post.content || '',
-          body: post.body || post.content || '',
-          excerpt: post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content'),
+          body: post.body || '',
+          excerpt: post.excerpt || (post.body ? post.body.substring(0, 150) + '...' : 'Geen content'),
           category: post.category || 'Algemeen',
-          facebook: post.facebook || null,
-          instagram: post.instagram || null,
-          x: post.x || null,
-          linkedin: post.linkedin || null,
-          featured_image: post.featured_image || null
+          facebook: 'facebook' in post ? post.facebook : null,
+          instagram: 'instagram' in post ? post.instagram : null,
+          x: 'x' in post ? post.x : null,
+          linkedin: 'linkedin' in post ? post.linkedin : null,
+          featured_image: 'featured_image' in post ? post.featured_image : null
         }))
         console.log('Transformed posts:', transformedPosts)
         setBlogPosts(transformedPosts)
@@ -390,7 +429,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                 {template === 'Blog Post' && (
                                   <div>
                                     <p className="font-medium text-green-600">Blog Content:</p>
-                                    <p className="text-gray-700 whitespace-pre-wrap">{(selectedPost.body || selectedPost.content || '').substring(0, 200)}...</p>
+                                    <p className="text-gray-700 whitespace-pre-wrap">{(selectedPost.body || '').substring(0, 200)}...</p>
                                   </div>
                                 )}
                                 {template === 'Custom Post' && (
@@ -617,7 +656,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                 }
                                 break
                               case 'Blog Post':
-                                content = `📝 ${post.title}\n\n${(post.body || post.content || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
+                                content = `📝 ${post.title}\n\n${(post.body || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
                                 break
                               default:
                                 content = `✨ ${post.title}\n\n${post.excerpt || 'Amazing content to share!'}\n\n#content #socialmedia #sharing`
@@ -659,7 +698,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                 }
                                 break
                               case 'Blog Post':
-                                content = (post.body || post.content || '').substring(0, 280)
+                                content = (post.body || '').substring(0, 280)
                                 break
                               default:
                                 content = post.excerpt || 'No content available'
@@ -774,8 +813,8 @@ export default function TimelineAlchemyPreviewWizard() {
                           size="sm"
                           onClick={() => {
                             const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                            if (post?.body || post?.content) {
-                              const content = `📝 ${post.title}\n\n${(post.body || post.content || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
+                                                          if (post?.body) {
+                                const content = `📝 ${post.title}\n\n${(post.body || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
                               setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
                             }
                           }}
