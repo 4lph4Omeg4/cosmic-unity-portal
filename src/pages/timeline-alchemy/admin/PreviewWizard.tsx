@@ -589,6 +589,48 @@ export default function TimelineAlchemyPreviewWizard() {
                       >
                         Smart Fill
                       </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                          if (post) {
+                            let content = ''
+                            switch (form.selectedTemplate) {
+                              case 'Facebook':
+                                if (post.facebook) {
+                                  content = post.facebook
+                                }
+                                break
+                              case 'Instagram':
+                                if (post.instagram) {
+                                  content = post.instagram
+                                }
+                                break
+                              case 'X (Twitter)':
+                                if (post.x) {
+                                  content = post.x
+                                }
+                                break
+                              case 'LinkedIn':
+                                if (post.linkedin) {
+                                  content = post.linkedin
+                                }
+                                break
+                              case 'Blog Post':
+                                content = (post.body || post.content || '').substring(0, 280)
+                                break
+                              default:
+                                content = post.excerpt || 'No content available'
+                            }
+                            setForm(prev => ({ ...prev, content }))
+                          }
+                        }}
+                        className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                      >
+                        Raw Database Content
+                      </Button>
                                            {form.selectedTemplate === 'Facebook' && (
                         <Button
                           type="button"
@@ -608,7 +650,7 @@ export default function TimelineAlchemyPreviewWizard() {
                           Use Facebook Content
                         </Button>
                       )}
-                                           {form.selectedTemplate === 'Instagram' && (
+                      {form.selectedTemplate === 'Instagram' && (
                         <Button
                           type="button"
                           variant="outline"
@@ -627,7 +669,7 @@ export default function TimelineAlchemyPreviewWizard() {
                           Use Instagram Content
                         </Button>
                       )}
-                                           {form.selectedTemplate === 'X (Twitter)' && (
+                      {form.selectedTemplate === 'X (Twitter)' && (
                         <Button
                           type="button"
                           variant="outline"
@@ -646,7 +688,7 @@ export default function TimelineAlchemyPreviewWizard() {
                           Use X (Twitter) Content
                         </Button>
                       )}
-                                           {form.selectedTemplate === 'LinkedIn' && (
+                      {form.selectedTemplate === 'LinkedIn' && (
                         <Button
                           type="button"
                           variant="outline"
@@ -665,7 +707,7 @@ export default function TimelineAlchemyPreviewWizard() {
                           Use LinkedIn Content
                         </Button>
                       )}
-                                           {form.selectedTemplate === 'Blog Post' && (
+                      {form.selectedTemplate === 'Blog Post' && (
                         <Button
                           type="button"
                           variant="outline"
