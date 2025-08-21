@@ -19,6 +19,36 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 
+// Add image upload functionality
+const uploadImageToSupabase = async (file: File): Promise<string | null> => {
+  try {
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+    
+    const { data, error } = await supabase.storage
+      .from('blog-images') // We'll create this bucket
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+    
+    if (error) {
+      console.error('Error uploading image:', error)
+      return null
+    }
+    
+    // Get the public URL
+    const { data: urlData } = supabase.storage
+      .from('blog-images')
+      .getPublicUrl(fileName)
+    
+    return urlData.publicUrl
+  } catch (error) {
+    console.error('Error in uploadImageToSupabase:', error)
+    return null
+  }
+}
+
 interface BlogPost {
   id: string
   title: string
@@ -699,10 +729,65 @@ export default function TimelineAlchemyIdeas() {
                  </div>
                   
                   <div className="flex flex-col gap-2 ml-4">
-                                         <Button variant="outline" size="sm" className="flex items-center gap-2 bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600">
+                     <Button variant="outline" size="sm" className="flex items-center gap-2 bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600">
                        <Edit className="w-4 h-4" />
                        Edit
                      </Button>
+                     
+                     {/* Image Upload Button */}
+                     <input
+                       type="file"
+                       id={`image-upload-${post.id}`}
+                       accept="image/*"
+                       className="hidden"
+                       onChange={async (e) => {
+                         const file = e.target.files?.[0]
+                         if (file) {
+                           const imageUrl = await uploadImageToSupabase(file)
+                           if (imageUrl) {
+                             // Update the post's image_url in the database
+                             const { error } = await supabase
+                               .from('blog_posts')
+                               .update({ image_url: imageUrl })
+                               .eq('id', post.id)
+                             
+                             if (error) {
+                               console.error('Error updating post:', error)
+                               toast({
+                                 title: "Fout bij bijwerken",
+                                 description: "Kon afbeelding niet bijwerken in database.",
+                                 variant: "destructive",
+                               })
+                             } else {
+                               // Update local state
+                               setBlogPosts(prev => prev.map(p => 
+                                 p.id === post.id ? { ...p, image_url: imageUrl } : p
+                               ))
+                               toast({
+                                 title: "Succes!",
+                                 description: "Afbeelding geüpload en bijgewerkt.",
+                                 variant: "default",
+                               })
+                             }
+                           } else {
+                             toast({
+                               title: "Fout bij uploaden",
+                               description: "Kon afbeelding niet uploaden naar Supabase.",
+                               variant: "destructive",
+                             })
+                           }
+                         }
+                       }}
+                     />
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="flex items-center gap-2 bg-blue-900 border-blue-700 text-blue-200 hover:bg-blue-800"
+                       onClick={() => document.getElementById(`image-upload-${post.id}`)?.click()}
+                     >
+                       📷 Upload Image
+                     </Button>
+                     
                      <Button variant="outline" size="sm" className="flex items-center gap-2 bg-red-900 border-red-700 text-red-200 hover:bg-red-800">
                        <Trash2 className="w-4 h-4" />
                        Delete
