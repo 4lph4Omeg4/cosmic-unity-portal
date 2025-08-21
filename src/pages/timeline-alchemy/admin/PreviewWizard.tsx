@@ -362,91 +362,147 @@ export default function TimelineAlchemyPreviewWizard() {
                  <span>Max: 280 characters</span>
                </div>
                
-               {/* Auto-fill buttons for social media templates */}
-               {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                 <div className="space-y-2">
-                   <p className="text-sm text-gray-600">Quick fill options:</p>
-                   <div className="flex flex-wrap gap-2">
-                     {form.selectedTemplate === 'Facebook' && (
-                       <Button
-                         type="button"
-                         variant="outline"
-                         size="sm"
-                         onClick={() => {
-                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                           if (post?.facebook) {
-                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.facebook}` }))
-                           }
-                         }}
-                         className="text-blue-600 border-blue-200 hover:bg-blue-50"
-                       >
-                         Use Facebook Link
-                       </Button>
-                     )}
-                     {form.selectedTemplate === 'Instagram' && (
-                       <Button
-                         type="button"
-                         variant="outline"
-                         size="sm"
-                         onClick={() => {
-                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                           if (post?.instagram) {
-                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.instagram}` }))
-                           }
-                         }}
-                         className="text-pink-600 border-pink-200 hover:bg-pink-50"
-                       >
-                         Use Instagram Link
-                       </Button>
-                     )}
-                     {form.selectedTemplate === 'X (Twitter)' && (
-                       <Button
-                         type="button"
-                         variant="outline"
-                         size="sm"
-                         onClick={() => {
-                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                           if (post?.x) {
-                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.x}` }))
-                           }
-                         }}
-                         className="text-black border-gray-200 hover:bg-gray-50"
-                       >
-                         Use X (Twitter) Link
-                       </Button>
-                     )}
-                     {form.selectedTemplate === 'LinkedIn' && (
-                       <Button
-                         type="button"
-                         variant="outline"
-                         size="sm"
-                         onClick={() => {
-                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                           if (post?.linkedin) {
-                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.linkedin}` }))
-                           }
-                         }}
-                         className="text-blue-700 border-blue-200 hover:bg-blue-50"
-                       >
-                         Use LinkedIn Link
-                       </Button>
-                     )}
-                     {form.selectedTemplate === 'Blog Post' && (
-                       <Button
-                         type="button"
-                         variant="outline"
-                         size="sm"
-                         onClick={() => {
-                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                           if (post?.body || post?.content) {
-                             setForm(prev => ({ ...prev, content: (post.body || post.content || '').substring(0, 280) }))
-                           }
-                         }}
-                         className="text-green-600 border-green-200 hover:bg-green-50"
-                       >
-                         Use Blog Content
-                       </Button>
-                     )}
+                               {/* Auto-fill buttons for social media templates */}
+                {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-600">Quick fill options:</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setForm(prev => ({ ...prev, content: '' }))}
+                        className="text-gray-600 border-gray-200 hover:bg-gray-50"
+                      >
+                        Clear Content
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                          if (post) {
+                            let content = ''
+                            switch (form.selectedTemplate) {
+                              case 'Facebook':
+                                if (post.facebook) {
+                                  content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${post.facebook}\n\n#content #socialmedia #facebook`
+                                }
+                                break
+                              case 'Instagram':
+                                if (post.instagram) {
+                                  content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${post.instagram}\n\n#instagram #content #socialmedia #trending`
+                                }
+                                break
+                              case 'X (Twitter)':
+                                if (post.x) {
+                                  content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${post.x}\n\n#twitter #content #socialmedia #insights`
+                                }
+                                break
+                              case 'LinkedIn':
+                                if (post.linkedin) {
+                                  content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${post.linkedin}\n\n#linkedin #professional #content #networking`
+                                }
+                                break
+                              case 'Blog Post':
+                                content = `📝 ${post.title}\n\n${(post.body || post.content || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
+                                break
+                              default:
+                                content = `✨ ${post.title}\n\n${post.excerpt || 'Amazing content to share!'}\n\n#content #socialmedia #sharing`
+                            }
+                            setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                          }
+                        }}
+                        className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                      >
+                        Smart Fill
+                      </Button>
+                                           {form.selectedTemplate === 'Facebook' && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                            if (post?.facebook) {
+                              const content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${post.facebook}\n\n#content #socialmedia #facebook`
+                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                            }
+                          }}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          Use Facebook Link
+                        </Button>
+                      )}
+                                           {form.selectedTemplate === 'Instagram' && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                            if (post?.instagram) {
+                              const content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${post.instagram}\n\n#instagram #content #socialmedia #trending`
+                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                            }
+                          }}
+                          className="text-pink-600 border-pink-200 hover:bg-pink-50"
+                        >
+                          Use Instagram Link
+                        </Button>
+                      )}
+                                           {form.selectedTemplate === 'X (Twitter)' && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                            if (post?.x) {
+                              const content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${post.x}\n\n#twitter #content #socialmedia #insights`
+                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                            }
+                          }}
+                          className="text-black border-gray-200 hover:bg-gray-50"
+                        >
+                          Use X (Twitter) Link
+                        </Button>
+                      )}
+                                           {form.selectedTemplate === 'LinkedIn' && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                            if (post?.linkedin) {
+                              const content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${post.linkedin}\n\n#linkedin #professional #content #networking`
+                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                            }
+                          }}
+                          className="text-blue-700 border-blue-200 hover:bg-blue-50"
+                        >
+                          Use LinkedIn Link
+                        </Button>
+                      )}
+                                           {form.selectedTemplate === 'Blog Post' && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                            if (post?.body || post?.content) {
+                              const content = `📝 ${post.title}\n\n${(post.body || post.content || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
+                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                            }
+                          }}
+                          className="text-green-600 border-green-200 hover:bg-green-50"
+                        >
+                          Use Blog Content
+                        </Button>
+                      )}
                    </div>
                  </div>
                )}
