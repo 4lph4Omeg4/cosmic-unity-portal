@@ -309,174 +309,174 @@ export default function TimelineAlchemyPreviewWizard() {
 
   const renderStepContent = () => {
     switch (form.step) {
-      case 1:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Select a Client</h3>
-            <div className="grid gap-3">
-              {clients.map((client) => (
-                <div
-                  key={client.id}
-                  onClick={() => setForm(prev => ({ ...prev, selectedClient: client.id }))}
-                  className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                    form.selectedClient === client.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-gray-900">{client.name}</h4>
-                      <p className="text-sm text-gray-600">{client.organization}</p>
-                      <p className="text-xs text-gray-500">{client.email}</p>
-                    </div>
-                    {form.selectedClient === client.id && (
-                      <CheckCircle className="w-5 h-5 text-blue-500" />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )
-
-             case 2:
-         return (
-           <div className="space-y-4">
-             <h3 className="text-lg font-semibold">Select Content Template</h3>
-             <p className="text-sm text-gray-600 mb-4">
-               Choose a template for your content. The first 4 options are social media shortlinks, 
-               or create a custom blog post.
-             </p>
-             
-             {/* Show selected posts info */}
-             {form.selectedPosts.length > 0 && (
-               <div className="p-4 bg-blue-50 rounded-lg mb-4">
-                 <h4 className="font-medium text-blue-900 mb-2">Selected Posts:</h4>
-                 <div className="space-y-2">
-                   {form.selectedPosts.map((postId) => {
-                     const post = blogPosts.find(p => p.id === postId)
-                     return post ? (
-                       <div key={post.id} className="flex items-center gap-2">
-                         <Star className="w-4 h-4 text-blue-500" />
-                         <span className="text-sm text-blue-800">{post.title}</span>
-                       </div>
-                     ) : null
-                   })}
-                 </div>
-               </div>
-             )}
-             
-             <div className="grid gap-3">
-               {templates.map((template) => {
-                 // Get the first selected post for template preview
-                 const selectedPost = blogPosts.find(p => p.id === form.selectedPosts[0])
-                 
-                 return (
+               case 1:
+           return (
+             <div className="space-y-4">
+               <h3 className="text-lg font-semibold text-white">Select a Client</h3>
+               <div className="grid gap-3">
+                 {clients.map((client) => (
                    <div
-                     key={template}
-                     onClick={() => setForm(prev => ({ ...prev, selectedTemplate: template }))}
+                     key={client.id}
+                     onClick={() => setForm(prev => ({ ...prev, selectedClient: client.id }))}
                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                       form.selectedTemplate === template
-                         ? 'border-blue-500 bg-blue-50'
-                         : 'border-gray-600 hover:border-gray-500'
+                       form.selectedClient === client.id
+                         ? 'border-blue-500 bg-blue-900/20'
+                         : 'border-gray-600 hover:border-gray-500 bg-gray-700'
                      }`}
                    >
                      <div className="flex items-center justify-between">
-                       <div className="flex items-center gap-3">
-                         {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                         {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                         {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                         {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                         {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                         {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                         <div className="flex-1">
-                           <span className="font-medium">{template}</span>
-                           {template === 'Facebook' && <p className="text-sm text-gray-600">Facebook shortlink template</p>}
-                           {template === 'Instagram' && <p className="text-sm text-gray-600">Instagram shortlink template</p>}
-                           {template === 'X (Twitter)' && <p className="text-sm text-gray-600">X (Twitter) shortlink template</p>}
-                           {template === 'LinkedIn' && <p className="text-sm text-gray-600">LinkedIn shortlink template</p>}
-                           {template === 'Blog Post' && <p className="text-sm text-gray-600">Blog post template</p>}
-                           {template === 'Custom Post' && <p className="text-sm text-gray-600">Custom content template</p>}
-                           
-                                                       {/* Show template preview if post is selected */}
-                            {selectedPost && (
-                              <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
-                                {template === 'Facebook' && selectedPost.facebook && (
-                                  <div>
-                                    <p className="font-medium text-blue-600">Facebook Content:</p>
-                                    <p className="text-gray-700 whitespace-pre-wrap break-all">{selectedPost.facebook}</p>
-                                  </div>
-                                )}
-                                {template === 'Instagram' && selectedPost.instagram && (
-                                  <div>
-                                    <p className="font-medium text-pink-600">Instagram Content:</p>
-                                    <p className="text-gray-700 whitespace-pre-wrap break-all">{selectedPost.instagram}</p>
-                                  </div>
-                                )}
-                                {template === 'X (Twitter)' && selectedPost.x && (
-                                  <div>
-                                    <p className="font-medium text-black">X (Twitter) Content:</p>
-                                    <p className="text-gray-700 whitespace-pre-wrap break-all">{selectedPost.x}</p>
-                                  </div>
-                                )}
-                                {template === 'LinkedIn' && selectedPost.linkedin && (
-                                  <div>
-                                    <p className="font-medium text-blue-700">LinkedIn Content:</p>
-                                    <p className="text-gray-700 whitespace-pre-wrap break-all">{selectedPost.linkedin}</p>
-                                  </div>
-                                )}
-                                {template === 'Blog Post' && (
-                                  <div>
-                                    <p className="font-medium text-green-600">Blog Content:</p>
-                                    <p className="text-gray-700 whitespace-pre-wrap">{(selectedPost.body || '').substring(0, 200)}...</p>
-                                  </div>
-                                )}
-                                {template === 'Custom Post' && (
-                                  <div>
-                                    <p className="font-medium text-purple-600">Custom Content:</p>
-                                    <p className="text-gray-700">Write your own content</p>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                         </div>
-                         {form.selectedTemplate === template && (
-                           <CheckCircle className="w-5 h-5 text-blue-500" />
-                         )}
+                       <div>
+                         <h4 className="font-medium text-white">{client.name}</h4>
+                         <p className="text-sm text-gray-300">{client.organization}</p>
+                         <p className="text-xs text-gray-400">{client.email}</p>
                        </div>
+                       {form.selectedClient === client.id && (
+                         <CheckCircle className="w-5 h-5 text-blue-400" />
+                       )}
                      </div>
                    </div>
-                 )
-               })}
+                 ))}
+               </div>
              </div>
+           )
+
+                           case 2:
+          return (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Select Content Template</h3>
+              <p className="text-sm text-gray-300 mb-4">
+                Choose a template for your content. The first 4 options are social media shortlinks, 
+                or create a custom blog post.
+              </p>
+              
+              {/* Show selected posts info */}
+              {form.selectedPosts.length > 0 && (
+                <div className="p-4 bg-blue-900/20 rounded-lg mb-4 border border-blue-700">
+                  <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
+                  <div className="space-y-2">
+                    {form.selectedPosts.map((postId) => {
+                      const post = blogPosts.find(p => p.id === postId)
+                      return post ? (
+                        <div key={post.id} className="flex items-center gap-2">
+                          <Star className="w-4 h-4 text-blue-400" />
+                          <span className="text-sm text-blue-200">{post.title}</span>
+                        </div>
+                      ) : null
+                    })}
+                  </div>
+                </div>
+              )}
+             
+                           <div className="grid gap-3">
+                {templates.map((template) => {
+                  // Get the first selected post for template preview
+                  const selectedPost = blogPosts.find(p => p.id === form.selectedPosts[0])
+                  
+                  return (
+                    <div
+                      key={template}
+                      onClick={() => setForm(prev => ({ ...prev, selectedTemplate: template }))}
+                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                        form.selectedTemplate === template
+                          ? 'border-blue-500 bg-blue-900/20'
+                          : 'border-gray-600 hover:border-gray-500 bg-gray-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                          {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                          {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                          {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                          {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                          {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                          <div className="flex-1">
+                            <span className="font-medium text-white">{template}</span>
+                            {template === 'Facebook' && <p className="text-sm text-gray-300">Facebook shortlink template</p>}
+                            {template === 'Instagram' && <p className="text-sm text-gray-300">Instagram shortlink template</p>}
+                            {template === 'X (Twitter)' && <p className="text-sm text-gray-300">X (Twitter) shortlink template</p>}
+                            {template === 'LinkedIn' && <p className="text-sm text-gray-300">LinkedIn shortlink template</p>}
+                            {template === 'Blog Post' && <p className="text-sm text-gray-300">Blog post template</p>}
+                            {template === 'Custom Post' && <p className="text-sm text-gray-300">Custom content template</p>}
+                            
+                                                        {/* Show template preview if post is selected */}
+                             {selectedPost && (
+                               <div className="mt-2 p-2 bg-gray-600 rounded text-xs">
+                                 {template === 'Facebook' && selectedPost.facebook && (
+                                   <div>
+                                     <p className="font-medium text-blue-400">Facebook Content:</p>
+                                     <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.facebook}</p>
+                                   </div>
+                                 )}
+                                 {template === 'Instagram' && selectedPost.instagram && (
+                                   <div>
+                                     <p className="font-medium text-pink-400">Instagram Content:</p>
+                                     <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.instagram}</p>
+                                   </div>
+                                 )}
+                                 {template === 'X (Twitter)' && selectedPost.x && (
+                                   <div>
+                                     <p className="font-medium text-gray-300">X (Twitter) Content:</p>
+                                     <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.x}</p>
+                                   </div>
+                                 )}
+                                 {template === 'LinkedIn' && selectedPost.linkedin && (
+                                   <div>
+                                     <p className="font-medium text-blue-400">LinkedIn Content:</p>
+                                     <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.linkedin}</p>
+                                   </div>
+                                 )}
+                                 {template === 'Blog Post' && (
+                                   <div>
+                                     <p className="font-medium text-green-400">Blog Content:</p>
+                                     <p className="text-gray-200 whitespace-pre-wrap">{(selectedPost.body || '').substring(0, 200)}...</p>
+                                   </div>
+                                 )}
+                                 {template === 'Custom Post' && (
+                                   <div>
+                                     <p className="font-medium text-purple-400">Custom Content:</p>
+                                     <p className="text-gray-200">Write your own content</p>
+                                   </div>
+                                 )}
+                               </div>
+                             )}
+                          </div>
+                          {form.selectedTemplate === template && (
+                            <CheckCircle className="w-5 h-5 text-blue-400" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
            </div>
          )
 
-             case 3:
-         return (
-           <div className="space-y-4">
-             <h3 className="text-lg font-semibold">Draft Your Content</h3>
-             
-             {/* Template info */}
-             {form.selectedTemplate && (
-               <div className="p-3 bg-blue-50 rounded-lg">
-                 <h4 className="font-medium text-blue-900 mb-2">Selected Template: {form.selectedTemplate}</h4>
-                 {form.selectedPosts.length > 0 && (
-                   <div className="text-sm text-blue-800">
-                     {blogPosts.find(p => p.id === form.selectedPosts[0])?.title}
-                   </div>
-                 )}
-               </div>
-             )}
+                           case 3:
+          return (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Draft Your Content</h3>
+              
+              {/* Template info */}
+              {form.selectedTemplate && (
+                <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
+                  <h4 className="font-medium text-blue-300 mb-2">Selected Template: {form.selectedTemplate}</h4>
+                  {form.selectedPosts.length > 0 && (
+                    <div className="text-sm text-blue-200">
+                      {blogPosts.find(p => p.id === form.selectedPosts[0])?.title}
+                    </div>
+                  )}
+                </div>
+              )}
              
                            <div className="space-y-3">
-                <label className="text-sm font-medium text-gray-700">Content Message</label>
+                                 <label className="text-sm font-medium text-white">Content Message</label>
                 
                                  {/* Show actual database content */}
                  {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                     <h4 className="font-medium text-blue-900 mb-3">📊 Database Content</h4>
+                   <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
+                     <h4 className="font-medium text-blue-300 mb-3">📊 Database Content</h4>
                      <div className="space-y-3">
                        {blogPosts.find(p => p.id === form.selectedPosts[0])?.facebook && (
                          <div className="p-3 bg-white rounded border">
@@ -592,22 +592,22 @@ export default function TimelineAlchemyPreviewWizard() {
                    </div>
                  )}
                 
-                <Textarea
-                  value={form.content}
-                  onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                  placeholder="Write your content message here..."
-                  rows={6}
-                  className="resize-none"
-                />
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>Character count: {form.content.length}</span>
-                  <span>Max: 280 characters</span>
-                </div>
+                                 <Textarea
+                   value={form.content}
+                   onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                   placeholder="Write your content message here..."
+                   rows={6}
+                   className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                 />
+                 <div className="flex items-center justify-between text-sm text-gray-400">
+                   <span>Character count: {form.content.length}</span>
+                   <span>Max: 280 characters</span>
+                 </div>
                
                                {/* Auto-fill buttons for social media templates */}
                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm text-gray-600">Quick fill options:</p>
+                                         <p className="text-sm text-gray-300">Quick fill options:</p>
                     <div className="flex flex-wrap gap-2">
                       <Button
                         type="button"
@@ -847,127 +847,129 @@ export default function TimelineAlchemyPreviewWizard() {
           </div>
         )
 
-      case 4:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Schedule & Review</h3>
-            <div className="grid gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Publish Date</label>
-                <Input
-                  type="date"
-                  value={form.scheduledDate}
-                  onChange={(e) => setForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
-                  min={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Publish Time</label>
-                <Input
-                  type="time"
-                  value={form.scheduledTime}
-                  onChange={(e) => setForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
-                />
-              </div>
-            </div>
+             case 4:
+         return (
+           <div className="space-y-4">
+             <h3 className="text-lg font-semibold text-white">Schedule & Review</h3>
+             <div className="grid gap-4">
+               <div>
+                 <label className="text-sm font-medium text-white">Publish Date</label>
+                 <Input
+                   type="date"
+                   value={form.scheduledDate}
+                   onChange={(e) => setForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                   min={new Date().toISOString().split('T')[0]}
+                   className="bg-gray-700 border-gray-600 text-white"
+                 />
+               </div>
+               <div>
+                 <label className="text-sm font-medium text-white">Publish Time</label>
+                 <Input
+                   type="time"
+                   value={form.scheduledTime}
+                   onChange={(e) => setForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
+                   className="bg-gray-700 border-gray-600 text-white"
+                 />
+               </div>
+             </div>
 
-            {/* Review Summary */}
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-3">Preview Summary</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Client:</span>
-                  <span className="font-medium">
-                    {clients.find(c => c.id === form.selectedClient)?.name || 'Not selected'}
-                  </span>
-                </div>
-
-                                 <div className="flex justify-between">
-                   <span className="text-gray-600">Template:</span>
-                   <span className="font-medium">{form.selectedTemplate || 'Not selected'}</span>
+             {/* Review Summary */}
+             <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
+               <h4 className="font-medium text-white mb-3">Preview Summary</h4>
+               <div className="space-y-2 text-sm">
+                 <div className="flex justify-between">
+                   <span className="text-gray-300">Client:</span>
+                   <span className="font-medium text-white">
+                     {clients.find(c => c.id === form.selectedClient)?.name || 'Not selected'}
+                   </span>
                  </div>
-                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                   <div className="flex justify-between">
-                     <span className="text-gray-600">Post:</span>
-                     <span className="font-medium">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
-                   </div>
-                 )}
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Scheduled:</span>
-                  <span className="font-medium">
-                    {form.scheduledDate && form.scheduledTime 
-                      ? `${form.scheduledDate} at ${form.scheduledTime}`
-                      : 'Not scheduled'
-                    }
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
 
-      case 5:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Save Preview</h3>
-            <div className="text-center py-8">
-              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h4 className="text-xl font-medium text-gray-900 mb-2">Ready to Save!</h4>
-              <p className="text-gray-600 mb-6">
-                Your preview is ready to be saved. Review the details below and click save to create the preview.
-              </p>
-              
-              <div className="max-w-md mx-auto p-4 bg-gray-50 rounded-lg text-left">
-                <h5 className="font-medium text-gray-900 mb-3">Final Review</h5>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Client:</span>
-                    <span className="font-medium">
-                      {clients.find(c => c.id === form.selectedClient)?.name}
-                    </span>
+                                  <div className="flex justify-between">
+                    <span className="text-gray-300">Template:</span>
+                    <span className="font-medium text-white">{form.selectedTemplate || 'Not selected'}</span>
                   </div>
+                  {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Post:</span>
+                      <span className="font-medium text-white">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
+                    </div>
+                  )}
+                 <div className="flex justify-between">
+                   <span className="text-gray-300">Scheduled:</span>
+                   <span className="font-medium text-white">
+                     {form.scheduledDate && form.scheduledTime 
+                       ? `${form.scheduledDate} at ${form.scheduledTime}`
+                       : 'Not scheduled'
+                     }
+                   </span>
+                 </div>
+               </div>
+             </div>
+           </div>
+         )
 
-                                     <div className="flex justify-between">
-                     <span className="text-gray-600">Template:</span>
-                     <span className="font-medium">{form.selectedTemplate}</span>
-                   </div>
+             case 5:
+         return (
+           <div className="space-y-4">
+             <h3 className="text-lg font-semibold text-white">Save Preview</h3>
+             <div className="text-center py-8">
+               <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
+               <h4 className="text-xl font-medium text-white mb-2">Ready to Save!</h4>
+               <p className="text-gray-300 mb-6">
+                 Your preview is ready to be saved. Review the details below and click save to create the preview.
+               </p>
+               
+               <div className="max-w-md mx-auto p-4 bg-gray-700 rounded-lg text-left border border-gray-600">
+                 <h5 className="font-medium text-white mb-3">Final Review</h5>
+                 <div className="space-y-2 text-sm">
                    <div className="flex justify-between">
-                     <span className="text-gray-600">Content:</span>
-                     <span className="font-medium">{form.content.length} characters</span>
+                     <span className="text-gray-300">Client:</span>
+                     <span className="font-medium text-white">
+                       {clients.find(c => c.id === form.selectedClient)?.name}
+                     </span>
                    </div>
-                   {form.selectedPosts.length > 0 && (
-                     <div className="flex justify-between">
-                       <span className="text-gray-600">Post:</span>
-                       <span className="font-medium">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
-                     </div>
-                   )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Scheduled:</span>
-                    <span className="font-medium">
-                      {form.scheduledDate} at {form.scheduledTime}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
+
+                                      <div className="flex justify-between">
+                      <span className="text-gray-300">Template:</span>
+                      <span className="font-medium text-white">{form.selectedTemplate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Content:</span>
+                      <span className="font-medium text-white">{form.content.length} characters</span>
+                    </div>
+                    {form.selectedPosts.length > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-300">Post:</span>
+                        <span className="font-medium text-white">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
+                      </div>
+                    )}
+                   <div className="flex justify-between">
+                     <span className="text-gray-300">Scheduled:</span>
+                     <span className="font-medium text-white">
+                       {form.scheduledDate} at {form.scheduledTime}
+                     </span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         )
 
       default:
         return null
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading preview wizard...</div>
-      </div>
-    )
-  }
+     if (loading) {
+     return (
+       <div className="flex items-center justify-center min-h-screen bg-gray-900">
+         <div className="text-lg text-white">Loading preview wizard...</div>
+       </div>
+     )
+   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">Preview Wizard</h1>
@@ -1001,16 +1003,16 @@ export default function TimelineAlchemyPreviewWizard() {
       </div>
 
       {/* Step Content */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle className="text-center">
+          <CardTitle className="text-center text-white">
             Step {form.step}: {getStepTitle(form.step)}
           </CardTitle>
-          <p className="text-center text-gray-600">
+          <p className="text-center text-gray-300">
             {getStepDescription(form.step)}
           </p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="text-gray-100">
           {renderStepContent()}
         </CardContent>
       </Card>
