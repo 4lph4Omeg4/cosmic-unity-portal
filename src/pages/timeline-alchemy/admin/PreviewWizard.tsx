@@ -143,16 +143,26 @@ export default function TimelineAlchemyPreviewWizard() {
 
       // Load selected posts from sessionStorage if coming from Posts page
       const storedPosts = sessionStorage.getItem('selectedPostIds')
+      console.log('=== SESSION STORAGE CHECK ===')
       console.log('Stored posts from sessionStorage:', storedPosts)
       if (storedPosts) {
         try {
           const postIds = JSON.parse(storedPosts)
           console.log('Parsed post IDs:', postIds)
+          console.log('Post IDs type:', typeof postIds)
+          console.log('Post IDs length:', Array.isArray(postIds) ? postIds.length : 'not an array')
+          
           setForm(prev => ({ ...prev, selectedPosts: postIds }))
           sessionStorage.removeItem('selectedPostIds') // Clean up
+          
+          console.log('About to call loadBlogPosts with IDs:', postIds)
+          // Load blog posts immediately after setting selectedPosts
+          await loadBlogPosts(postIds)
         } catch (error) {
           console.error('Error parsing stored post IDs:', error)
         }
+      } else {
+        console.log('No stored posts found in sessionStorage')
       }
     } catch (error) {
       console.error('Error loading data:', error)
@@ -176,7 +186,17 @@ export default function TimelineAlchemyPreviewWizard() {
       if (error) {
         console.error('Error loading selected posts:', error)
       } else {
-        console.log('Raw data from database:', data)
+        console.log('=== DATABASE QUERY RESULTS ===')
+      console.log('Raw data from database:', data)
+      console.log('Number of posts found:', data?.length || 0)
+      if (data && data.length > 0) {
+        console.log('First post structure:', data[0])
+        console.log('Facebook column value:', data[0].facebook)
+        console.log('Instagram column value:', data[0].instagram)
+        console.log('X column value:', data[0].x)
+        console.log('LinkedIn column value:', data[0].linkedin)
+        console.log('All available columns:', Object.keys(data[0]))
+      }
         // Transform the data to match our interface
         const transformedPosts: BlogPost[] = (data || []).map((post: any) => ({
           id: post.id,
@@ -650,6 +670,26 @@ export default function TimelineAlchemyPreviewWizard() {
                         className="text-orange-600 border-orange-200 hover:bg-orange-50"
                       >
                         Raw Database Content
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                          console.log('=== DEBUG DATA ===')
+                          console.log('Current post data:', post)
+                          console.log('Facebook content:', post?.facebook)
+                          console.log('Instagram content:', post?.instagram)
+                          console.log('X content:', post?.x)
+                          console.log('LinkedIn content:', post?.linkedin)
+                          console.log('Blog posts state:', blogPosts)
+                          console.log('Selected posts:', form.selectedPosts)
+                          console.log('Selected template:', form.selectedTemplate)
+                        }}
+                        className="text-red-600 border-red-200 hover:bg-red-50"
+                      >
+                        Debug Data
                       </Button>
                                            {form.selectedTemplate === 'Facebook' && (
                         <Button
