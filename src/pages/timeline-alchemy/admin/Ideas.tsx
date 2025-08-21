@@ -92,10 +92,10 @@ export default function TimelineAlchemyIdeas() {
     try {
       setLoading(true)
       
-             const { data, error } = (await supabase
-         .from('posts' as any)
-         .select('*')
-         .order('created_at', { ascending: false })) as any
+                     const { data, error } = (await supabase
+          .from('blog_posts' as any)
+          .select('*')
+          .order('created_at', { ascending: false })) as any
 
       if (error) {
         console.error('Error loading blog posts:', error)
@@ -747,7 +747,7 @@ export default function TimelineAlchemyIdeas() {
                            if (imageUrl) {
                              // Update the post's image_url in the database
                              const { error } = await supabase
-                               .from('posts')
+                               .from('blog_posts' as any)
                                .update({ image_url: imageUrl })
                                .eq('id', post.id)
                              

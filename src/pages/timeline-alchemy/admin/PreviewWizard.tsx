@@ -66,7 +66,6 @@ export default function TimelineAlchemyPreviewWizard() {
   const [form, setForm] = useState<PreviewForm>({
     step: 1,
     selectedClient: '',
-    selectedChannel: '',
     selectedTemplate: '',
     content: '',
     scheduledDate: '',
@@ -179,10 +178,10 @@ export default function TimelineAlchemyPreviewWizard() {
     try {
       // First, let's see what columns actually exist in the table
       console.log('=== CHECKING AVAILABLE COLUMNS ===')
-      const { data: columnCheck, error: columnError } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .limit(1)
+             const { data: columnCheck, error: columnError } = await supabase
+         .from('blog_posts')
+         .select('*')
+         .limit(1)
       
       if (columnError) {
         console.error('Error checking columns:', columnError)
@@ -190,11 +189,11 @@ export default function TimelineAlchemyPreviewWizard() {
         console.log('Available columns in blog_posts table:', Object.keys(columnCheck[0]))
       }
 
-      // Now try to select the specific columns we need
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .in('id', postIds)
+             // Now try to select the specific columns we need
+       const { data, error } = await supabase
+         .from('blog_posts')
+         .select('*')
+         .in('id', postIds)
 
       if (error) {
         console.error('Error loading selected posts:', error)
