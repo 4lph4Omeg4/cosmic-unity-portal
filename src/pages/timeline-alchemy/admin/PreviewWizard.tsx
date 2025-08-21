@@ -121,13 +121,13 @@ export default function TimelineAlchemyPreviewWizard() {
           case 'Custom Post':
             content = '' // Leave empty for custom content
             break
-          default:
+                    default:
             content = ''
+          }
+          setForm(prev => ({ ...prev, content }))
         }
-        setForm(prev => ({ ...prev, content }))
       }
-    }
-  }, [form.selectedTemplate, form.selectedPosts, blogPosts])
+    }, [form.selectedTemplate, form.selectedPosts, blogPosts])
 
   const loadData = async () => {
     try {
