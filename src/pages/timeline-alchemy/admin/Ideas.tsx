@@ -23,6 +23,7 @@ interface BlogPost {
   id: string
   title: string
   content: string
+  body?: string
   excerpt?: string
   status: 'draft' | 'published' | 'scheduled' | 'archived'
   author_id: string
@@ -32,6 +33,10 @@ interface BlogPost {
   tags?: string[]
   category?: string
   featured_image?: string
+  facebook?: string
+  instagram?: string
+  x?: string
+  linkedin?: string
   ai_blog?: any // Use any to avoid TypeScript issues with dynamic field names
   imageLoading?: boolean
   imageError?: boolean
@@ -96,6 +101,33 @@ export default function TimelineAlchemyIdeas() {
           console.log(`Column "${col}" value:`, data[0][col])
         })
         
+        // Check for social media columns
+        const socialColumns = Object.keys(data[0]).filter(key => 
+          key.toLowerCase().includes('facebook') || 
+          key.toLowerCase().includes('instagram') || 
+          key.toLowerCase().includes('x') ||
+          key.toLowerCase().includes('linkedin') ||
+          key.toLowerCase().includes('twitter')
+        )
+        console.log('Social media columns found:', socialColumns)
+        
+        // Show values for social media columns
+        socialColumns.forEach(col => {
+          console.log(`Column "${col}" value:`, data[0][col])
+        })
+        
+        // Check for body/content columns
+        const contentColumns = Object.keys(data[0]).filter(key => 
+          key.toLowerCase().includes('body') || 
+          key.toLowerCase().includes('content')
+        )
+        console.log('Content columns found:', contentColumns)
+        
+        // Show values for content columns
+        contentColumns.forEach(col => {
+          console.log(`Column "${col}" value:`, data[0][col])
+        })
+        
         // Specifically check image_url column
         console.log('=== IMAGE_URL COLUMN CHECK ===')
         console.log('image_url value:', data[0].image_url)
@@ -139,7 +171,7 @@ export default function TimelineAlchemyIdeas() {
         
         // Safe extraction with fallbacks for all fields - check multiple possible field names
         const safeTitle = aiBlog?.Title || aiBlog?.title || aiBlog?.Title || post.title || 'Geen titel'
-        const safeBody = aiBlog?.Body || aiBlog?.body || aiBlog?.content || post.content || ''
+        const safeBody = post.body || aiBlog?.Body || aiBlog?.body || aiBlog?.content || post.content || ''
         const safeTags = aiBlog?.Tags || aiBlog?.tags || aiBlog?.tag || post.tags || []
         const safeSources = aiBlog?.Sources || aiBlog?.sources || aiBlog?.source || []
         const safeSocial = aiBlog?.Social || aiBlog?.social || null
@@ -147,6 +179,12 @@ export default function TimelineAlchemyIdeas() {
         
         // Image extraction - use only image_url from blog_posts table
         const safeImage = post.image_url || null
+        
+        // Social media links extraction
+        const facebookLink = post.facebook || null
+        const instagramLink = post.instagram || null
+        const xLink = post.x || null
+        const linkedinLink = post.linkedin || null
         
         // Ensure arrays are always arrays to prevent .length errors
         const normalizedTags = Array.isArray(safeTags) ? safeTags : (safeTags ? [safeTags] : [])
@@ -160,14 +198,22 @@ export default function TimelineAlchemyIdeas() {
           aiBlogKeys: aiBlog ? Object.keys(aiBlog) : 'no aiBlog',
           originalPostTitle: post.title,
           originalPostContent: post.content ? post.content.substring(0, 50) + '...' : 'NO CONTENT',
+          originalPostBody: post.body ? post.body.substring(0, 50) + '...' : 'NO BODY',
           safeImage,
-          imageUrlFromBlogPosts: post.image_url
+          imageUrlFromBlogPosts: post.image_url,
+          socialLinks: {
+            facebook: facebookLink,
+            instagram: instagramLink,
+            x: xLink,
+            linkedin: linkedinLink
+          }
         })
         
         return {
           id: post.id,
           title: safeTitle,
           content: safeBody,
+          body: safeBody,
           excerpt: post.excerpt || (safeBody ? safeBody.substring(0, 150) + '...' : 'Geen content'),
           status: post.status || 'draft',
           author_id: post.author_id || post.user_id || 'Onbekende auteur',
@@ -177,6 +223,10 @@ export default function TimelineAlchemyIdeas() {
           tags: normalizedTags,
           category: post.category || 'Algemeen',
           featured_image: safeImage,
+          facebook: facebookLink,
+          instagram: instagramLink,
+          x: xLink,
+          linkedin: linkedinLink,
           ai_blog: aiBlog
         }
       })
@@ -234,6 +284,7 @@ export default function TimelineAlchemyIdeas() {
     const matchesSearch = 
       post.title.toLowerCase().includes(searchLower) ||
       (post.excerpt && post.excerpt.toLowerCase().includes(searchLower)) ||
+      (post.body && post.body.toLowerCase().includes(searchLower)) ||
       (post.content && post.content.toLowerCase().includes(searchLower)) ||
       (post.author_id && post.author_id.toLowerCase().includes(searchLower)) ||
       (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchLower))) ||
@@ -289,6 +340,24 @@ export default function TimelineAlchemyIdeas() {
       return response.ok
     } catch {
       return false
+    }
+  }
+
+  const copyToClipboard = async (text: string, platform: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      toast({
+        title: "Gekopieerd!",
+        description: `${platform} link gekopieerd naar klembord.`,
+        variant: "default",
+      })
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error)
+      toast({
+        title: "Fout bij kopiëren",
+        description: "Kon link niet kopiëren naar klembord.",
+        variant: "destructive",
+      })
     }
   }
 
@@ -511,17 +580,17 @@ export default function TimelineAlchemyIdeas() {
                     </h3>
                     
                     <p className="text-gray-200 mb-3">
-                      {post.excerpt}
+                      {post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content')}
                     </p>
                    
                    {/* Show full content if available */}
-                   {post.content && post.content.length > 150 && (
+                   {(post.body || post.content) && (post.body || post.content).length > 150 && (
                      <details className="mb-3">
                        <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
                          Toon volledige content
                        </summary>
                        <div className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 whitespace-pre-wrap border border-gray-700">
-                         {post.content}
+                         {post.body || post.content}
                        </div>
                      </details>
                    )}
@@ -542,6 +611,91 @@ export default function TimelineAlchemyIdeas() {
                        </div>
                      </div>
                    )}
+                   
+                   {/* Social Media Links */}
+                   {(post.facebook || post.instagram || post.x || post.linkedin) && (
+                     <div className="mb-3">
+                       <span className="text-sm text-gray-600 font-medium">Social Media Links:</span>
+                       <div className="flex flex-wrap gap-2 mt-1">
+                          {post.facebook && (
+                            <div className="flex items-center gap-1">
+                              <a
+                                href={post.facebook}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
+                              >
+                                📘 Facebook
+                              </a>
+                              <button
+                                onClick={() => copyToClipboard(post.facebook!, 'Facebook')}
+                                className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-full transition-colors duration-200"
+                                title="Kopieer Facebook link"
+                              >
+                                📋
+                              </button>
+                            </div>
+                          )}
+                          {post.instagram && (
+                            <div className="flex items-center gap-1">
+                              <a
+                                href={post.instagram}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1 bg-pink-600 hover:bg-pink-700 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
+                              >
+                                📷 Instagram
+                              </a>
+                              <button
+                                onClick={() => copyToClipboard(post.instagram!, 'Instagram')}
+                                className="px-2 py-1 bg-pink-500 hover:bg-pink-600 text-white text-xs rounded-full transition-colors duration-200"
+                                title="Kopieer Instagram link"
+                              >
+                                📋
+                              </button>
+                            </div>
+                          )}
+                          {post.x && (
+                            <div className="flex items-center gap-1">
+                              <a
+                                href={post.x}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1 bg-black hover:bg-gray-800 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
+                              >
+                                🐦 X (Twitter)
+                              </a>
+                              <button
+                                onClick={() => copyToClipboard(post.x!, 'X (Twitter)')}
+                                className="px-2 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded-full transition-colors duration-200"
+                                title="Kopieer X link"
+                              >
+                                📋
+                              </button>
+                            </div>
+                          )}
+                          {post.linkedin && (
+                            <div className="flex items-center gap-1">
+                              <a
+                                href={post.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
+                              >
+                                💼 LinkedIn
+                              </a>
+                              <button
+                                onClick={() => copyToClipboard(post.linkedin!, 'LinkedIn')}
+                                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors duration-200"
+                                title="Kopieer LinkedIn link"
+                              >
+                                📋
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                  </div>
                   
                   <div className="flex flex-col gap-2 ml-4">
