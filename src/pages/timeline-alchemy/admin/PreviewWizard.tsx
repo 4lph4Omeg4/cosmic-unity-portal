@@ -79,6 +79,14 @@ export default function TimelineAlchemyPreviewWizard() {
     loadData()
   }, [])
 
+  // Load blog posts when selectedPosts changes
+  useEffect(() => {
+    console.log('useEffect triggered - selectedPosts changed:', form.selectedPosts)
+    if (form.selectedPosts.length > 0) {
+      loadBlogPosts(form.selectedPosts)
+    }
+  }, [form.selectedPosts])
+
   // Auto-fill content when template is selected
   useEffect(() => {
     if (form.selectedTemplate && form.selectedPosts.length > 0) {
@@ -135,47 +143,59 @@ export default function TimelineAlchemyPreviewWizard() {
 
       // Load selected posts from sessionStorage if coming from Posts page
       const storedPosts = sessionStorage.getItem('selectedPostIds')
+      console.log('Stored posts from sessionStorage:', storedPosts)
       if (storedPosts) {
         try {
           const postIds = JSON.parse(storedPosts)
+          console.log('Parsed post IDs:', postIds)
           setForm(prev => ({ ...prev, selectedPosts: postIds }))
           sessionStorage.removeItem('selectedPostIds') // Clean up
         } catch (error) {
           console.error('Error parsing stored post IDs:', error)
         }
       }
-
-              // Load the actual selected blog posts from database
-        if (form.selectedPosts.length > 0) {
-          const { data, error } = (await supabase
-            .from('blog_posts' as any)
-            .select('id, title, content, body, excerpt, category, facebook, instagram, x, linkedin, featured_image')
-            .in('id', form.selectedPosts)) as any
-
-        if (error) {
-          console.error('Error loading selected posts:', error)
-        } else {
-          // Transform the data to match our interface
-          const transformedPosts: BlogPost[] = (data || []).map((post: any) => ({
-            id: post.id,
-            title: post.title || 'Geen titel',
-            content: post.content || '',
-            body: post.body || post.content || '',
-            excerpt: post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content'),
-            category: post.category || 'Algemeen',
-            facebook: post.facebook || null,
-            instagram: post.instagram || null,
-            x: post.x || null,
-            linkedin: post.linkedin || null,
-            featured_image: post.featured_image || null
-          }))
-          setBlogPosts(transformedPosts)
-        }
-      }
     } catch (error) {
       console.error('Error loading data:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Load blog posts when selectedPosts changes
+  const loadBlogPosts = async (postIds: string[]) => {
+    if (postIds.length === 0) return
+    
+    console.log('Loading blog posts for IDs:', postIds)
+    
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('id, title, content, body, excerpt, category, facebook, instagram, x, linkedin, featured_image')
+        .in('id', postIds)
+
+      if (error) {
+        console.error('Error loading selected posts:', error)
+      } else {
+        console.log('Raw data from database:', data)
+        // Transform the data to match our interface
+        const transformedPosts: BlogPost[] = (data || []).map((post: any) => ({
+          id: post.id,
+          title: post.title || 'Geen titel',
+          content: post.content || '',
+          body: post.body || post.content || '',
+          excerpt: post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content'),
+          category: post.category || 'Algemeen',
+          facebook: post.facebook || null,
+          instagram: post.instagram || null,
+          x: post.x || null,
+          linkedin: post.linkedin || null,
+          featured_image: post.featured_image || null
+        }))
+        console.log('Transformed posts:', transformedPosts)
+        setBlogPosts(transformedPosts)
+      }
+    } catch (error) {
+      console.error('Error loading blog posts:', error)
     }
   }
 
