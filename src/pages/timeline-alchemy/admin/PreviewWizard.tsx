@@ -29,8 +29,14 @@ interface BlogPost {
   id: string
   title: string
   content: string
+  body?: string
   excerpt?: string
   category?: string
+  facebook?: string
+  instagram?: string
+  x?: string
+  linkedin?: string
+  featured_image?: string
 }
 
 interface PreviewForm {
@@ -96,12 +102,12 @@ export default function TimelineAlchemyPreviewWizard() {
         }
       }
 
-      // Load the actual selected blog posts from database
-      if (form.selectedPosts.length > 0) {
-        const { data, error } = (await supabase
-          .from('blog_posts' as any)
-          .select('id, title, content, excerpt, category')
-          .in('id', form.selectedPosts)) as any
+              // Load the actual selected blog posts from database
+        if (form.selectedPosts.length > 0) {
+          const { data, error } = (await supabase
+            .from('blog_posts' as any)
+            .select('id, title, content, body, excerpt, category, facebook, instagram, x, linkedin, featured_image')
+            .in('id', form.selectedPosts)) as any
 
         if (error) {
           console.error('Error loading selected posts:', error)
@@ -111,8 +117,14 @@ export default function TimelineAlchemyPreviewWizard() {
             id: post.id,
             title: post.title || 'Geen titel',
             content: post.content || '',
-            excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : 'Geen content'),
-            category: post.category || 'Algemeen'
+            body: post.body || post.content || '',
+            excerpt: post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content'),
+            category: post.category || 'Algemeen',
+            facebook: post.facebook || null,
+            instagram: post.instagram || null,
+            x: post.x || null,
+            linkedin: post.linkedin || null,
+            featured_image: post.featured_image || null
           }))
           setBlogPosts(transformedPosts)
         }
@@ -206,71 +218,239 @@ export default function TimelineAlchemyPreviewWizard() {
           </div>
         )
 
-      case 2:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Select Content Template</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Choose a template for your content. The first 4 options are social media shortlinks, 
-              or create a custom blog post.
-            </p>
-            <div className="grid gap-3">
-              {templates.map((template) => (
-                <div
-                  key={template}
-                  onClick={() => setForm(prev => ({ ...prev, selectedTemplate: template }))}
-                  className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                    form.selectedTemplate === template
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-600 hover:border-gray-500'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                      {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                      {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                      {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                      {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                      {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                      <div>
-                        <span className="font-medium">{template}</span>
-                        {template === 'Facebook' && <p className="text-sm text-gray-600">Facebook shortlink template</p>}
-                        {template === 'Instagram' && <p className="text-sm text-gray-600">Instagram shortlink template</p>}
-                        {template === 'X (Twitter)' && <p className="text-sm text-gray-600">X (Twitter) shortlink template</p>}
-                        {template === 'LinkedIn' && <p className="text-sm text-gray-600">LinkedIn shortlink template</p>}
-                        {template === 'Blog Post' && <p className="text-sm text-gray-600">Blog post template</p>}
-                        {template === 'Custom Post' && <p className="text-sm text-gray-600">Custom content template</p>}
-                      </div>
-                    </div>
-                    {form.selectedTemplate === template && (
-                      <CheckCircle className="w-5 h-5 text-blue-500" />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )
+             case 2:
+         return (
+           <div className="space-y-4">
+             <h3 className="text-lg font-semibold">Select Content Template</h3>
+             <p className="text-sm text-gray-600 mb-4">
+               Choose a template for your content. The first 4 options are social media shortlinks, 
+               or create a custom blog post.
+             </p>
+             
+             {/* Show selected posts info */}
+             {form.selectedPosts.length > 0 && (
+               <div className="p-4 bg-blue-50 rounded-lg mb-4">
+                 <h4 className="font-medium text-blue-900 mb-2">Selected Posts:</h4>
+                 <div className="space-y-2">
+                   {form.selectedPosts.map((postId) => {
+                     const post = blogPosts.find(p => p.id === postId)
+                     return post ? (
+                       <div key={post.id} className="flex items-center gap-2">
+                         <Star className="w-4 h-4 text-blue-500" />
+                         <span className="text-sm text-blue-800">{post.title}</span>
+                       </div>
+                     ) : null
+                   })}
+                 </div>
+               </div>
+             )}
+             
+             <div className="grid gap-3">
+               {templates.map((template) => {
+                 // Get the first selected post for template preview
+                 const selectedPost = blogPosts.find(p => p.id === form.selectedPosts[0])
+                 
+                 return (
+                   <div
+                     key={template}
+                     onClick={() => setForm(prev => ({ ...prev, selectedTemplate: template }))}
+                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                       form.selectedTemplate === template
+                         ? 'border-blue-500 bg-blue-50'
+                         : 'border-gray-600 hover:border-gray-500'
+                     }`}
+                   >
+                     <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-3">
+                         {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                         {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                         {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                         {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                         {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                         {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                         <div className="flex-1">
+                           <span className="font-medium">{template}</span>
+                           {template === 'Facebook' && <p className="text-sm text-gray-600">Facebook shortlink template</p>}
+                           {template === 'Instagram' && <p className="text-sm text-gray-600">Instagram shortlink template</p>}
+                           {template === 'X (Twitter)' && <p className="text-sm text-gray-600">X (Twitter) shortlink template</p>}
+                           {template === 'LinkedIn' && <p className="text-sm text-gray-600">LinkedIn shortlink template</p>}
+                           {template === 'Blog Post' && <p className="text-sm text-gray-600">Blog post template</p>}
+                           {template === 'Custom Post' && <p className="text-sm text-gray-600">Custom content template</p>}
+                           
+                           {/* Show template preview if post is selected */}
+                           {selectedPost && (
+                             <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
+                               {template === 'Facebook' && selectedPost.facebook && (
+                                 <div>
+                                   <p className="font-medium">Facebook Link:</p>
+                                   <p className="text-blue-600 break-all">{selectedPost.facebook}</p>
+                                 </div>
+                               )}
+                               {template === 'Instagram' && selectedPost.instagram && (
+                                 <div>
+                                   <p className="font-medium">Instagram Link:</p>
+                                   <p className="text-pink-600 break-all">{selectedPost.instagram}</p>
+                                 </div>
+                               )}
+                               {template === 'X (Twitter)' && selectedPost.x && (
+                                 <div>
+                                   <p className="font-medium">X (Twitter) Link:</p>
+                                   <p className="text-black break-all">{selectedPost.x}</p>
+                                 </div>
+                               )}
+                               {template === 'LinkedIn' && selectedPost.linkedin && (
+                                 <div>
+                                   <p className="font-medium">LinkedIn Link:</p>
+                                   <p className="text-blue-700 break-all">{selectedPost.linkedin}</p>
+                                 </div>
+                               )}
+                               {template === 'Blog Post' && (
+                                 <div>
+                                   <p className="font-medium">Blog Content:</p>
+                                   <p className="text-gray-700 line-clamp-2">{(selectedPost.body || selectedPost.content || '').substring(0, 100)}...</p>
+                                 </div>
+                               )}
+                               {template === 'Custom Post' && (
+                                 <div>
+                                   <p className="font-medium">Custom Content:</p>
+                                   <p className="text-gray-700">Write your own content</p>
+                                 </div>
+                               )}
+                             </div>
+                           )}
+                         </div>
+                         {form.selectedTemplate === template && (
+                           <CheckCircle className="w-5 h-5 text-blue-500" />
+                         )}
+                       </div>
+                     </div>
+                   </div>
+                 )
+               })}
+             </div>
+           </div>
+         )
 
-      case 3:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Draft Your Content</h3>
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-700">Content Message</label>
-              <Textarea
-                value={form.content}
-                onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="Write your content message here..."
-                rows={6}
-                className="resize-none"
-              />
-              <div className="flex items-center justify-between text-sm text-gray-500">
-                <span>Character count: {form.content.length}</span>
-                <span>Max: 280 characters</span>
-              </div>
-            </div>
+             case 3:
+         return (
+           <div className="space-y-4">
+             <h3 className="text-lg font-semibold">Draft Your Content</h3>
+             
+             {/* Template info */}
+             {form.selectedTemplate && (
+               <div className="p-3 bg-blue-50 rounded-lg">
+                 <h4 className="font-medium text-blue-900 mb-2">Selected Template: {form.selectedTemplate}</h4>
+                 {form.selectedPosts.length > 0 && (
+                   <div className="text-sm text-blue-800">
+                     {blogPosts.find(p => p.id === form.selectedPosts[0])?.title}
+                   </div>
+                 )}
+               </div>
+             )}
+             
+             <div className="space-y-3">
+               <label className="text-sm font-medium text-gray-700">Content Message</label>
+               <Textarea
+                 value={form.content}
+                 onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                 placeholder="Write your content message here..."
+                 rows={6}
+                 className="resize-none"
+               />
+               <div className="flex items-center justify-between text-sm text-gray-500">
+                 <span>Character count: {form.content.length}</span>
+                 <span>Max: 280 characters</span>
+               </div>
+               
+               {/* Auto-fill buttons for social media templates */}
+               {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                 <div className="space-y-2">
+                   <p className="text-sm text-gray-600">Quick fill options:</p>
+                   <div className="flex flex-wrap gap-2">
+                     {form.selectedTemplate === 'Facebook' && (
+                       <Button
+                         type="button"
+                         variant="outline"
+                         size="sm"
+                         onClick={() => {
+                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                           if (post?.facebook) {
+                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.facebook}` }))
+                           }
+                         }}
+                         className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                       >
+                         Use Facebook Link
+                       </Button>
+                     )}
+                     {form.selectedTemplate === 'Instagram' && (
+                       <Button
+                         type="button"
+                         variant="outline"
+                         size="sm"
+                         onClick={() => {
+                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                           if (post?.instagram) {
+                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.instagram}` }))
+                           }
+                         }}
+                         className="text-pink-600 border-pink-200 hover:bg-pink-50"
+                       >
+                         Use Instagram Link
+                       </Button>
+                     )}
+                     {form.selectedTemplate === 'X (Twitter)' && (
+                       <Button
+                         type="button"
+                         variant="outline"
+                         size="sm"
+                         onClick={() => {
+                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                           if (post?.x) {
+                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.x}` }))
+                           }
+                         }}
+                         className="text-black border-gray-200 hover:bg-gray-50"
+                       >
+                         Use X (Twitter) Link
+                       </Button>
+                     )}
+                     {form.selectedTemplate === 'LinkedIn' && (
+                       <Button
+                         type="button"
+                         variant="outline"
+                         size="sm"
+                         onClick={() => {
+                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                           if (post?.linkedin) {
+                             setForm(prev => ({ ...prev, content: `Check out this amazing content: ${post.linkedin}` }))
+                           }
+                         }}
+                         className="text-blue-700 border-blue-200 hover:bg-blue-50"
+                       >
+                         Use LinkedIn Link
+                       </Button>
+                     )}
+                     {form.selectedTemplate === 'Blog Post' && (
+                       <Button
+                         type="button"
+                         variant="outline"
+                         size="sm"
+                         onClick={() => {
+                           const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                           if (post?.body || post?.content) {
+                             setForm(prev => ({ ...prev, content: (post.body || post.content || '').substring(0, 280) }))
+                           }
+                         }}
+                         className="text-green-600 border-green-200 hover:bg-green-50"
+                       >
+                         Use Blog Content
+                       </Button>
+                     )}
+                   </div>
+                 </div>
+               )}
+             </div>
             
             {form.selectedPosts.length > 0 && (
               <div className="p-3 bg-blue-50 rounded-lg">
@@ -326,10 +506,16 @@ export default function TimelineAlchemyPreviewWizard() {
                   </span>
                 </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Template:</span>
-                  <span className="font-medium">{form.selectedTemplate || 'Not selected'}</span>
-                </div>
+                                 <div className="flex justify-between">
+                   <span className="text-gray-600">Template:</span>
+                   <span className="font-medium">{form.selectedTemplate || 'Not selected'}</span>
+                 </div>
+                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                   <div className="flex justify-between">
+                     <span className="text-gray-600">Post:</span>
+                     <span className="font-medium">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
+                   </div>
+                 )}
                 <div className="flex justify-between">
                   <span className="text-gray-600">Scheduled:</span>
                   <span className="font-medium">
@@ -365,10 +551,20 @@ export default function TimelineAlchemyPreviewWizard() {
                     </span>
                   </div>
 
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Content:</span>
-                    <span className="font-medium">{form.content.length} characters</span>
-                  </div>
+                                     <div className="flex justify-between">
+                     <span className="text-gray-600">Template:</span>
+                     <span className="font-medium">{form.selectedTemplate}</span>
+                   </div>
+                   <div className="flex justify-between">
+                     <span className="text-gray-600">Content:</span>
+                     <span className="font-medium">{form.content.length} characters</span>
+                   </div>
+                   {form.selectedPosts.length > 0 && (
+                     <div className="flex justify-between">
+                       <span className="text-gray-600">Post:</span>
+                       <span className="font-medium">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
+                     </div>
+                   )}
                   <div className="flex justify-between">
                     <span className="text-gray-600">Scheduled:</span>
                     <span className="font-medium">
