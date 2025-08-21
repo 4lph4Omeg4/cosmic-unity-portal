@@ -32,7 +32,7 @@ interface BlogPost {
   published_at?: string
   tags?: string[]
   category?: string
-  featured_image?: string
+  image_url?: string
   facebook?: string
   instagram?: string
   x?: string
@@ -128,21 +128,21 @@ export default function TimelineAlchemyIdeas() {
           console.log(`Column "${col}" value:`, data[0][col])
         })
         
-        // Specifically check image_url column
-        console.log('=== IMAGE_URL COLUMN CHECK ===')
+        // Check image column
+        console.log('=== IMAGE COLUMN CHECK ===')
         console.log('image_url value:', data[0].image_url)
-        console.log('image_url type:', typeof data[0].image_url)
         console.log('image_url exists:', !!data[0].image_url)
         
-        // Check if image_url is a valid URL
-        if (data[0].image_url) {
+        // Check if image column has a valid URL
+        const imageUrl = data[0].image_url
+        if (imageUrl) {
           try {
-            const url = new URL(data[0].image_url)
-            console.log('image_url is valid URL:', url.href)
-            console.log('image_url protocol:', url.protocol)
-            console.log('image_url hostname:', url.hostname)
+            const url = new URL(imageUrl)
+            console.log('Image URL is valid:', url.href)
+            console.log('Image protocol:', url.protocol)
+            console.log('Image hostname:', url.hostname)
           } catch (urlError) {
-            console.log('image_url is not a valid URL:', data[0].image_url)
+            console.log('Image URL is not valid:', imageUrl)
           }
         }
       }
@@ -177,7 +177,7 @@ export default function TimelineAlchemyIdeas() {
         const safeSocial = aiBlog?.Social || aiBlog?.social || null
         const safeSEO = aiBlog?.SEO || aiBlog?.seo || null
         
-        // Image extraction - use only image_url from blog_posts table
+        // Image extraction - use the correct image column from blog_posts table
         const safeImage = post.image_url || null
         
         // Social media links extraction
@@ -209,26 +209,26 @@ export default function TimelineAlchemyIdeas() {
           }
         })
         
-        return {
-          id: post.id,
-          title: safeTitle,
-          content: safeBody,
-          body: safeBody,
-          excerpt: post.excerpt || (safeBody ? safeBody.substring(0, 150) + '...' : 'Geen content'),
-          status: post.status || 'draft',
-          author_id: post.author_id || post.user_id || 'Onbekende auteur',
-          created_at: post.created_at,
-          updated_at: post.updated_at || post.created_at,
-          published_at: post.published_at || post.created_at,
-          tags: normalizedTags,
-          category: post.category || 'Algemeen',
-          featured_image: safeImage,
-          facebook: facebookLink,
-          instagram: instagramLink,
-          x: xLink,
-          linkedin: linkedinLink,
-          ai_blog: aiBlog
-        }
+                 return {
+           id: post.id,
+           title: safeTitle,
+           content: safeBody,
+           body: safeBody,
+           excerpt: post.excerpt || (safeBody ? safeBody.substring(0, 150) + '...' : 'Geen content'),
+           status: post.status || 'draft',
+           author_id: post.author_id || post.user_id || 'Onbekende auteur',
+           created_at: post.created_at,
+           updated_at: post.updated_at || post.created_at,
+           published_at: post.published_at || post.created_at,
+           tags: normalizedTags,
+           category: post.category || 'Algemeen',
+           image_url: safeImage,
+           facebook: facebookLink,
+           instagram: instagramLink,
+           x: xLink,
+           linkedin: linkedinLink,
+           ai_blog: aiBlog
+         }
       })
 
       console.log('Transformed posts:', transformedPosts) // Debug log
@@ -248,23 +248,23 @@ export default function TimelineAlchemyIdeas() {
       
       setBlogPosts(transformedPosts)
       
-      // Initialize image loading states for posts with images
-      const initialImageStates: Record<string, { loading: boolean; error: boolean }> = {}
-      transformedPosts.forEach(post => {
-        if (post.featured_image) {
-          initialImageStates[post.id] = { loading: true, error: false }
-          
-          // Test image URL validity
-          testImageUrl(post.featured_image).then(isValid => {
-            if (!isValid) {
-              setImageStates(prev => ({
-                ...prev,
-                [post.id]: { loading: false, error: true }
-              }))
-            }
-          })
-        }
-      })
+             // Initialize image loading states for posts with images
+       const initialImageStates: Record<string, { loading: boolean; error: boolean }> = {}
+       transformedPosts.forEach(post => {
+         if (post.image_url) {
+           initialImageStates[post.id] = { loading: true, error: false }
+           
+           // Test image URL validity
+           testImageUrl(post.image_url).then(isValid => {
+             if (!isValid) {
+               setImageStates(prev => ({
+                 ...prev,
+                 [post.id]: { loading: false, error: true }
+               }))
+             }
+           })
+         }
+       })
       setImageStates(initialImageStates)
     } catch (error) {
       console.error('Error loading blog posts:', error)
@@ -393,19 +393,19 @@ export default function TimelineAlchemyIdeas() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading ideas...</div>
-      </div>
-    )
-  }
+     if (loading) {
+     return (
+       <div className="flex items-center justify-center min-h-screen bg-gray-900">
+         <div className="text-lg text-white">Loading ideas...</div>
+       </div>
+     )
+   }
 
   const categories = [...new Set(blogPosts.map(post => post.category))]
   const statuses = [...new Set(blogPosts.map(post => post.status))]
 
-  return (
-    <div className="container mx-auto p-6 space-y-6">
+     return (
+     <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -425,22 +425,22 @@ export default function TimelineAlchemyIdeas() {
         </div>
       </div>
 
-      {/* Search and Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Search & Filters</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+             {/* Search and Filters */}
+       <Card className="bg-gray-800 border-gray-700">
+         <CardHeader>
+           <CardTitle className="text-white">Search & Filters</CardTitle>
+         </CardHeader>
+                 <CardContent className="space-y-4 text-gray-100">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search ideas by title, description, or author..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+                                 <Input
+                   placeholder="Search ideas by title, description, or author..."
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                   className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                 />
               </div>
             </div>
             <select
@@ -467,36 +467,36 @@ export default function TimelineAlchemyIdeas() {
         </CardContent>
       </Card>
 
-      {/* Ideas List */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Blog Posts ({filteredPosts.length})</CardTitle>
+             {/* Ideas List */}
+       <Card className="bg-gray-800 border-gray-700">
+         <CardHeader>
+           <div className="flex items-center justify-between">
+             <CardTitle className="text-white">Blog Posts ({filteredPosts.length})</CardTitle>
             {filteredPosts.length > 0 && (
               <div className="flex items-center gap-2">
                 <Checkbox
                   checked={selectAll}
                   onCheckedChange={handleSelectAll}
                 />
-                <span className="text-sm text-gray-600">
-                  Select All ({selectedPosts.size} selected)
-                </span>
+                                       <span className="text-sm text-gray-300">
+                         Select All ({selectedPosts.size} selected)
+                       </span>
               </div>
             )}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+                 <CardContent className="text-gray-100">
+           <div className="space-y-4">
             {filteredPosts.map((post) => (
-              <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                             <div key={post.id} className="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
                 <div className="flex items-start gap-4">
                   <Checkbox
                     checked={selectedPosts.has(post.id)}
                     onCheckedChange={(checked) => handleSelectPost(post.id, checked as boolean)}
                   />
                   
-                  {/* Featured Image - Prominent position */}
-                  {post.featured_image && (
+                                     {/* Featured Image - Prominent position */}
+                   {post.image_url && (
                     <div className="flex-shrink-0 relative">
                       {/* Loading state */}
                       {imageStates[post.id]?.loading !== false && (
@@ -505,21 +505,21 @@ export default function TimelineAlchemyIdeas() {
                         </div>
                       )}
                       
-                      {/* Image */}
-                      <img 
-                        src={post.featured_image} 
-                        alt={post.title}
-                        className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
-                          imageStates[post.id]?.loading !== false ? 'hidden' : ''
-                        }`}
-                        onLoad={() => handleImageLoad(post.id)}
-                        onError={() => handleImageError(post.id)}
-                        onClick={() => {
-                          // Open image in full size in new tab
-                          window.open(post.featured_image, '_blank')
-                        }}
-                        title="Klik om afbeelding in volledige grootte te bekijken"
-                      />
+                                             {/* Image */}
+                       <img 
+                         src={post.image_url} 
+                         alt={post.title}
+                         className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
+                           imageStates[post.id]?.loading !== false ? 'hidden' : ''
+                         }`}
+                         onLoad={() => handleImageLoad(post.id)}
+                         onError={() => handleImageError(post.id)}
+                         onClick={() => {
+                           // Open image in full size in new tab
+                           window.open(post.image_url, '_blank')
+                         }}
+                         title="Klik om afbeelding in volledige grootte te bekijken"
+                       />
                       
                       {/* Error state */}
                       {imageStates[post.id]?.error && (
@@ -542,8 +542,8 @@ export default function TimelineAlchemyIdeas() {
                     </div>
                   )}
                   
-                  {/* Fallback placeholder when no image */}
-                  {!post.featured_image && (
+                                     {/* Fallback placeholder when no image */}
+                   {!post.image_url && (
                     <div className="flex-shrink-0 w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
                       <div className="text-gray-400 text-xs text-center">
                         <div className="w-8 h-8 mx-auto mb-1">📄</div>
@@ -598,7 +598,7 @@ export default function TimelineAlchemyIdeas() {
                    {/* Sources - Safe rendering with fallback */}
                    {post.ai_blog?.Sources && post.ai_blog.Sources.length > 0 && (
                      <div className="mb-3">
-                       <span className="text-sm text-gray-600 font-medium">Sources:</span>
+                       <span className="text-sm text-gray-300 font-medium">Sources:</span>
                        <div className="flex flex-wrap gap-2 mt-1">
                          {post.ai_blog.Sources.map((source, index) => (
                            <span
@@ -615,7 +615,7 @@ export default function TimelineAlchemyIdeas() {
                    {/* Social Media Links */}
                    {(post.facebook || post.instagram || post.x || post.linkedin) && (
                      <div className="mb-3">
-                       <span className="text-sm text-gray-600 font-medium">Social Media Links:</span>
+                                               <span className="text-sm text-gray-300 font-medium">Social Media Links:</span>
                        <div className="flex flex-wrap gap-2 mt-1">
                           {post.facebook && (
                             <div className="flex items-center gap-1">
@@ -699,26 +699,26 @@ export default function TimelineAlchemyIdeas() {
                  </div>
                   
                   <div className="flex flex-col gap-2 ml-4">
-                    <Button variant="outline" size="sm" className="flex items-center gap-2">
-                      <Edit className="w-4 h-4" />
-                      Edit
-                    </Button>
-                    <Button variant="outline" size="sm" className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50">
-                      <Trash2 className="w-4 h-4" />
-                      Delete
-                    </Button>
+                                         <Button variant="outline" size="sm" className="flex items-center gap-2 bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600">
+                       <Edit className="w-4 h-4" />
+                       Edit
+                     </Button>
+                     <Button variant="outline" size="sm" className="flex items-center gap-2 bg-red-900 border-red-700 text-red-200 hover:bg-red-800">
+                       <Trash2 className="w-4 h-4" />
+                       Delete
+                     </Button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           
-          {filteredPosts.length === 0 && (
-            <div className="text-center py-8">
-              <Star className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No ideas found matching your criteria.</p>
-            </div>
-          )}
+                     {filteredPosts.length === 0 && (
+             <div className="text-center py-8">
+               <Star className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+               <p className="text-gray-300">No ideas found matching your criteria.</p>
+             </div>
+           )}
         </CardContent>
       </Card>
     </div>
