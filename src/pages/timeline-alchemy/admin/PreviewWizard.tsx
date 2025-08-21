@@ -36,7 +36,6 @@ interface BlogPost {
 interface PreviewForm {
   step: number
   selectedClient: string
-  selectedChannel: string
   selectedTemplate: string
   content: string
   scheduledDate: string
@@ -46,11 +45,11 @@ interface PreviewForm {
 
 const channels = ['Instagram', 'LinkedIn', 'Twitter', 'Facebook', 'YouTube']
 const templates = [
-  'Blogpost',
-  'Blogpost Reference AD',
-  'Inspirational Quote',
-  'Seen through the Single-Eye View',
-  'Single-Eye Reference AD',
+  'Facebook',
+  'Instagram', 
+  'X (Twitter)',
+  'LinkedIn',
+  'Blog Post',
   'Custom Post'
 ]
 
@@ -126,7 +125,7 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const nextStep = () => {
-    if (form.step < 6) {
+    if (form.step < 5) {
       setForm(prev => ({ ...prev, step: prev.step + 1 }))
     }
   }
@@ -155,11 +154,10 @@ export default function TimelineAlchemyPreviewWizard() {
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1: return 'Select Client'
-      case 2: return 'Choose Channel'
-      case 3: return 'Select Template'
-      case 4: return 'Draft Content'
-      case 5: return 'Schedule & Review'
-      case 6: return 'Save Preview'
+      case 2: return 'Select Template'
+      case 3: return 'Draft Content'
+      case 4: return 'Schedule & Review'
+      case 5: return 'Save Preview'
       default: return ''
     }
   }
@@ -167,11 +165,10 @@ export default function TimelineAlchemyPreviewWizard() {
   const getStepDescription = (step: number) => {
     switch (step) {
       case 1: return 'Choose which client this preview is for'
-      case 2: return 'Select the social media platform'
-      case 3: return 'Pick a content template or create custom'
-      case 4: return 'Write your content message'
-      case 5: return 'Set the publishing schedule and review details'
-      case 6: return 'Save and create the preview'
+      case 2: return 'Pick a content template or create custom'
+      case 3: return 'Write your content message'
+      case 4: return 'Set the publishing schedule and review details'
+      case 5: return 'Save and create the preview'
       default: return ''
     }
   }
@@ -212,48 +209,42 @@ export default function TimelineAlchemyPreviewWizard() {
       case 2:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Choose Social Media Channel</h3>
-            <Select value={form.selectedChannel} onValueChange={(value) => setForm(prev => ({ ...prev, selectedChannel: value }))}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a channel" />
-              </SelectTrigger>
-              <SelectContent>
-                {channels.map((channel) => (
-                  <SelectItem key={channel} value={channel}>
-                    {channel}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {form.selectedChannel && (
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600">
-                  Selected: <span className="font-medium">{form.selectedChannel}</span>
-                </p>
-              </div>
-            )}
-          </div>
-        )
-
-      case 3:
-        return (
-          <div className="space-y-4">
             <h3 className="text-lg font-semibold">Select Content Template</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Choose a template for your content. The first 4 options are social media shortlinks, 
+              or create a custom blog post.
+            </p>
             <div className="grid gap-3">
               {templates.map((template) => (
                 <div
                   key={template}
                   onClick={() => setForm(prev => ({ ...prev, selectedTemplate: template }))}
-                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                  className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                     form.selectedTemplate === template
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-600 hover:border-gray-500'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium">{template}</span>
+                    <div className="flex items-center gap-3">
+                      {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                      {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                      {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                      {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                      {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                      {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                      <div>
+                        <span className="font-medium">{template}</span>
+                        {template === 'Facebook' && <p className="text-sm text-gray-600">Facebook shortlink template</p>}
+                        {template === 'Instagram' && <p className="text-sm text-gray-600">Instagram shortlink template</p>}
+                        {template === 'X (Twitter)' && <p className="text-sm text-gray-600">X (Twitter) shortlink template</p>}
+                        {template === 'LinkedIn' && <p className="text-sm text-gray-600">LinkedIn shortlink template</p>}
+                        {template === 'Blog Post' && <p className="text-sm text-gray-600">Blog post template</p>}
+                        {template === 'Custom Post' && <p className="text-sm text-gray-600">Custom content template</p>}
+                      </div>
+                    </div>
                     {form.selectedTemplate === template && (
-                      <CheckCircle className="w-4 h-4 text-blue-500" />
+                      <CheckCircle className="w-5 h-5 text-blue-500" />
                     )}
                   </div>
                 </div>
@@ -262,7 +253,7 @@ export default function TimelineAlchemyPreviewWizard() {
           </div>
         )
 
-      case 4:
+      case 3:
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Draft Your Content</h3>
@@ -300,7 +291,7 @@ export default function TimelineAlchemyPreviewWizard() {
           </div>
         )
 
-      case 5:
+      case 4:
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Schedule & Review</h3>
@@ -334,10 +325,7 @@ export default function TimelineAlchemyPreviewWizard() {
                     {clients.find(c => c.id === form.selectedClient)?.name || 'Not selected'}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Channel:</span>
-                  <span className="font-medium">{form.selectedChannel || 'Not selected'}</span>
-                </div>
+
                 <div className="flex justify-between">
                   <span className="text-gray-600">Template:</span>
                   <span className="font-medium">{form.selectedTemplate || 'Not selected'}</span>
@@ -356,7 +344,7 @@ export default function TimelineAlchemyPreviewWizard() {
           </div>
         )
 
-      case 6:
+      case 5:
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Save Preview</h3>
@@ -376,10 +364,7 @@ export default function TimelineAlchemyPreviewWizard() {
                       {clients.find(c => c.id === form.selectedClient)?.name}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Channel:</span>
-                    <span className="font-medium">{form.selectedChannel}</span>
-                  </div>
+
                   <div className="flex justify-between">
                     <span className="text-gray-600">Content:</span>
                     <span className="font-medium">{form.content.length} characters</span>
@@ -414,13 +399,13 @@ export default function TimelineAlchemyPreviewWizard() {
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">Preview Wizard</h1>
-        <p className="mt-2 text-gray-300">Maak previews in 6 eenvoudige stappen</p>
+        <p className="mt-2 text-gray-300">Maak previews in 5 eenvoudige stappen</p>
       </div>
 
       {/* Progress Steps */}
       <div className="flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          {[1, 2, 3, 4, 5, 6].map((step) => (
+          {[1, 2, 3, 4, 5].map((step) => (
             <div key={step} className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -431,7 +416,7 @@ export default function TimelineAlchemyPreviewWizard() {
               >
                 {step < form.step ? <CheckCircle className="w-4 h-4" /> : step}
               </div>
-              {step < 6 && (
+              {step < 5 && (
                 <div
                   className={`w-12 h-1 ${
                     step < form.step ? 'bg-blue-500' : 'bg-gray-200'
@@ -471,15 +456,14 @@ export default function TimelineAlchemyPreviewWizard() {
         </Button>
 
         <div className="flex gap-2">
-          {form.step < 6 ? (
+          {form.step < 5 ? (
             <Button
               onClick={nextStep}
               disabled={
                 (form.step === 1 && !form.selectedClient) ||
-                (form.step === 2 && !form.selectedChannel) ||
-                (form.step === 3 && !form.selectedTemplate) ||
-                (form.step === 4 && !form.content.trim()) ||
-                (form.step === 5 && (!form.scheduledDate || !form.scheduledTime))
+                (form.step === 2 && !form.selectedTemplate) ||
+                (form.step === 3 && !form.content.trim()) ||
+                (form.step === 4 && (!form.scheduledDate || !form.scheduledTime))
               }
               className="flex items-center gap-2"
             >
