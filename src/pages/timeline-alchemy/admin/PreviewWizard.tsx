@@ -115,7 +115,7 @@ export default function TimelineAlchemyPreviewWizard() {
             break
           case 'Blog Post':
             if (post.body) {
-              content = post.body.substring(0, 280)
+                                               content = post.body.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280)
             }
             break
           case 'Custom Post':
@@ -577,7 +577,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                onClick={() => {
                                  const post = blogPosts.find(p => p.id === form.selectedPosts[0])
                                  if (post?.body) {
-                                   setForm(prev => ({ ...prev, content: post.body.substring(0, 280) }))
+                                   setForm(prev => ({ ...prev, content: post.body.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                                  }
                                }}
                                className="text-xs h-6 px-2"
@@ -596,12 +596,13 @@ export default function TimelineAlchemyPreviewWizard() {
                    value={form.content}
                    onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
                    placeholder="Write your content message here..."
-                   rows={6}
+                   rows={form.selectedTemplate === 'Blog Post' ? 12 : 6}
+                   maxLength={form.selectedTemplate === 'Blog Post' ? 2000 : 280}
                    className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                  />
                  <div className="flex items-center justify-between text-sm text-gray-400">
                    <span>Character count: {form.content.length}</span>
-                   <span>Max: 280 characters</span>
+                   <span>Max: {form.selectedTemplate === 'Blog Post' ? '2000 characters' : '280 characters'}</span>
                  </div>
                
                                {/* Auto-fill buttons for social media templates */}
@@ -661,7 +662,7 @@ export default function TimelineAlchemyPreviewWizard() {
                               default:
                                 content = `✨ ${post.title}\n\n${post.excerpt || 'Amazing content to share!'}\n\n#content #socialmedia #sharing`
                             }
-                            setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                            setForm(prev => ({ ...prev, content: content.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                           }
                         }}
                         className="text-purple-600 border-purple-200 hover:bg-purple-50"
@@ -698,7 +699,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                 }
                                 break
                               case 'Blog Post':
-                                content = (post.body || '').substring(0, 280)
+                                content = (post.body || '').substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280)
                                 break
                               default:
                                 content = post.excerpt || 'No content available'
@@ -741,7 +742,7 @@ export default function TimelineAlchemyPreviewWizard() {
                               // Use the actual Facebook content from database if available
                               const facebookContent = post.facebook
                               const content = `🔥 ${post.title}\n\n${post.excerpt || 'Check out this amazing content!'}\n\n${facebookContent}\n\n#content #socialmedia #facebook`
-                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                              setForm(prev => ({ ...prev, content: content.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                             }
                           }}
                           className="text-blue-600 border-blue-200 hover:bg-blue-50"
@@ -760,7 +761,7 @@ export default function TimelineAlchemyPreviewWizard() {
                               // Use the actual Instagram content from database if available
                               const instagramContent = post.instagram
                               const content = `📸 ${post.title}\n\n${post.excerpt || 'Amazing content alert! 🚀'}\n\n${instagramContent}\n\n#instagram #content #socialmedia #trending`
-                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                              setForm(prev => ({ ...prev, content: content.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                             }
                           }}
                           className="text-pink-600 border-pink-200 hover:bg-pink-50"
@@ -779,7 +780,7 @@ export default function TimelineAlchemyPreviewWizard() {
                               // Use the actual X (Twitter) content from database if available
                               const xContent = post.x
                               const content = `🐦 ${post.title}\n\n${post.excerpt || 'Must-read content! 💡'}\n\n${xContent}\n\n#twitter #content #socialmedia #insights`
-                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                              setForm(prev => ({ ...prev, content: content.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                             }
                           }}
                           className="text-black border-gray-200 hover:bg-gray-50"
@@ -798,7 +799,7 @@ export default function TimelineAlchemyPreviewWizard() {
                               // Use the actual LinkedIn content from database if available
                               const linkedinContent = post.linkedin
                               const content = `💼 ${post.title}\n\n${post.excerpt || 'Professional insights worth sharing!'}\n\n${linkedinContent}\n\n#linkedin #professional #content #networking`
-                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                              setForm(prev => ({ ...prev, content: content.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                             }
                           }}
                           className="text-blue-700 border-blue-200 hover:bg-blue-50"
@@ -813,9 +814,9 @@ export default function TimelineAlchemyPreviewWizard() {
                           size="sm"
                           onClick={() => {
                             const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                                          if (post?.body) {
-                                const content = `📝 ${post.title}\n\n${(post.body || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
-                              setForm(prev => ({ ...prev, content: content.substring(0, 280) }))
+                                                                                      if (post?.body) {
+                              const content = `📝 ${post.title}\n\n${(post.body || '').substring(0, 200)}...\n\n#blog #content #writing #insights`
+                              setForm(prev => ({ ...prev, content: content.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
                             }
                           }}
                           className="text-green-600 border-green-200 hover:bg-green-50"

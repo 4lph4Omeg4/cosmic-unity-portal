@@ -92,10 +92,10 @@ export default function TimelineAlchemyIdeas() {
     try {
       setLoading(true)
       
-      const { data, error } = (await supabase
-        .from('blog_posts' as any)
-        .select('*')
-        .order('created_at', { ascending: false })) as any
+             const { data, error } = (await supabase
+         .from('posts' as any)
+         .select('*')
+         .order('created_at', { ascending: false })) as any
 
       if (error) {
         console.error('Error loading blog posts:', error)
@@ -402,26 +402,26 @@ export default function TimelineAlchemyIdeas() {
     navigate('/timeline-alchemy/admin/preview-wizard')
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'published': return 'bg-green-100 text-green-800'
-      case 'scheduled': return 'bg-purple-100 text-purple-800'
-      case 'draft': return 'bg-gray-100 text-gray-800'
-      case 'archived': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
-
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'Technology': return 'bg-blue-100 text-blue-800'
-      case 'Wellness': return 'bg-green-100 text-green-800'
-      case 'Community': return 'bg-purple-100 text-purple-800'
-      case 'Trends': return 'bg-orange-100 text-orange-800'
-      case 'Strategy': return 'bg-indigo-100 text-indigo-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
+     const getStatusColor = (status: string) => {
+     switch (status) {
+       case 'published': return 'bg-green-900 text-green-200 border border-green-700'
+       case 'scheduled': return 'bg-purple-900 text-purple-200 border border-purple-700'
+       case 'draft': return 'bg-gray-700 text-gray-200 border border-gray-600'
+       case 'archived': return 'bg-red-900 text-red-200 border border-red-700'
+       default: return 'bg-gray-700 text-gray-200 border border-gray-600'
+     }
+   }
+ 
+   const getCategoryColor = (category: string) => {
+     switch (category) {
+       case 'Technology': return 'bg-blue-900 text-blue-200 border border-blue-700'
+       case 'Wellness': return 'bg-green-900 text-green-200 border border-green-700'
+       case 'Community': return 'bg-purple-900 text-purple-200 border border-purple-700'
+       case 'Trends': return 'bg-orange-900 text-orange-200 border border-orange-700'
+       case 'Strategy': return 'bg-indigo-900 text-indigo-200 border border-indigo-700'
+       default: return 'bg-gray-700 text-gray-200 border border-gray-600'
+     }
+   }
 
      if (loading) {
      return (
@@ -584,25 +584,25 @@ export default function TimelineAlchemyIdeas() {
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Badge className={getStatusColor(post.status)}>
-                        {post.status}
-                      </Badge>
-                      <Badge className={getCategoryColor(post.category || 'Algemeen')}>
-                        {post.category || 'Algemeen'}
-                      </Badge>
-                      {post.ai_blog && (
-                        <Badge className="bg-purple-100 text-purple-800">
-                          AI Generated
-                        </Badge>
-                      )}
-                      {/* Tags - Display as badges in the top section */}
-                      {post.tags && post.tags.length > 0 && (
-                        post.tags.map((tag, index) => (
-                          <Badge key={index} className="bg-blue-100 text-blue-700">
-                            #{tag}
-                          </Badge>
-                        ))
-                      )}
+                                             <Badge className={getStatusColor(post.status)}>
+                         {post.status}
+                       </Badge>
+                       <Badge className={getCategoryColor(post.category || 'Algemeen')}>
+                         {post.category || 'Algemeen'}
+                       </Badge>
+                       {post.ai_blog && (
+                         <Badge className="bg-purple-900 text-purple-200 border border-purple-700">
+                           AI Generated
+                         </Badge>
+                       )}
+                       {/* Tags - Display as badges in the top section */}
+                       {post.tags && post.tags.length > 0 && (
+                         post.tags.map((tag, index) => (
+                           <Badge key={index} className="bg-blue-900 text-blue-200 border border-blue-700">
+                             #{tag}
+                           </Badge>
+                         ))
+                       )}
                     </div>
                     
                     <h3 className="font-semibold text-lg text-white mb-2">
@@ -631,12 +631,12 @@ export default function TimelineAlchemyIdeas() {
                        <span className="text-sm text-gray-300 font-medium">Sources:</span>
                        <div className="flex flex-wrap gap-2 mt-1">
                          {post.ai_blog.Sources.map((source, index) => (
-                           <span
-                             key={index}
-                             className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-                           >
-                             📚 {source}
-                           </span>
+                                                    <span
+                           key={index}
+                           className="px-2 py-1 bg-gray-700 text-gray-200 text-xs rounded-full border border-gray-600"
+                         >
+                           📚 {source}
+                         </span>
                          ))}
                        </div>
                      </div>
@@ -747,7 +747,7 @@ export default function TimelineAlchemyIdeas() {
                            if (imageUrl) {
                              // Update the post's image_url in the database
                              const { error } = await supabase
-                               .from('blog_posts')
+                               .from('posts')
                                .update({ image_url: imageUrl })
                                .eq('id', post.id)
                              
