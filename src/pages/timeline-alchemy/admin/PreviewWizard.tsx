@@ -79,6 +79,49 @@ export default function TimelineAlchemyPreviewWizard() {
     loadData()
   }, [])
 
+  // Auto-fill content when template is selected
+  useEffect(() => {
+    if (form.selectedTemplate && form.selectedPosts.length > 0) {
+      const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+      if (post) {
+        let content = ''
+        switch (form.selectedTemplate) {
+          case 'Facebook':
+            if (post.facebook) {
+              content = post.facebook
+            }
+            break
+          case 'Instagram':
+            if (post.instagram) {
+              content = post.instagram
+            }
+            break
+          case 'X (Twitter)':
+            if (post.x) {
+              content = post.x
+            }
+            break
+          case 'LinkedIn':
+            if (post.linkedin) {
+              content = post.linkedin
+            }
+            break
+          case 'Blog Post':
+            if (post.body || post.content) {
+              content = (post.body || post.content || '').substring(0, 280)
+            }
+            break
+          case 'Custom Post':
+            content = '' // Leave empty for custom content
+            break
+          default:
+            content = ''
+        }
+        setForm(prev => ({ ...prev, content }))
+      }
+    }
+  }, [form.selectedTemplate, form.selectedPosts, blogPosts])
+
   const loadData = async () => {
     try {
       // TODO: Implement actual API calls for clients
