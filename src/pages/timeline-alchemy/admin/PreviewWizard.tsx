@@ -489,7 +489,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                          <div className="mb-4 p-3 bg-gray-700 rounded border border-gray-600">
                                            <div className="flex items-center gap-2 mb-2">
                                              <span className="text-green-300 font-medium">📷 Featured Image:</span>
-                                             <Badge className="bg-green-900 text-green-200">Included</Badge>
+                                             <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Included</span>
                                            </div>
                                            <div className="flex items-center gap-4">
                                              <img 
@@ -521,7 +521,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                                <div>
                                                  <div className="flex items-center gap-2 mb-2">
                                                    <span className="text-blue-300 font-medium">Facebook Content:</span>
-                                                   <Badge className="bg-blue-900 text-blue-200">Selected</Badge>
+                                                   <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
                                                  </div>
                                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook || 'No Facebook content available'}</p>
                                                </div>
@@ -531,7 +531,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                                <div>
                                                  <div className="flex items-center gap-2 mb-2">
                                                    <span className="text-pink-300 font-medium">Instagram Content:</span>
-                                                   <Badge className="bg-pink-900 text-pink-200">Selected</Badge>
+                                                   <span className="px-2 py-1 bg-pink-900 text-pink-200 text-xs rounded-full">Selected</span>
                                                  </div>
                                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram || 'No Instagram content available'}</p>
                                                </div>
@@ -541,7 +541,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                                <div>
                                                  <div className="flex items-center gap-2 mb-2">
                                                    <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
-                                                   <Badge className="bg-gray-900 text-gray-200">Selected</Badge>
+                                                   <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
                                                  </div>
                                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x || 'No X content available'}</p>
                                                </div>
@@ -551,7 +551,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                                <div>
                                                  <div className="flex items-center gap-2 mb-2">
                                                    <span className="text-blue-300 font-medium">LinkedIn Content:</span>
-                                                   <Badge className="bg-blue-900 text-blue-200">Selected</Badge>
+                                                   <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
                                                  </div>
                                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin || 'No LinkedIn content available'}</p>
                                                </div>
@@ -561,7 +561,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                                <div>
                                                  <div className="flex items-center gap-2 mb-2">
                                                    <span className="text-green-300 font-medium">Blog Content:</span>
-                                                   <Badge className="bg-green-900 text-green-200">Selected</Badge>
+                                                   <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Selected</span>
                                                  </div>
                                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body || 'No blog content available'}</p>
                                                </div>
@@ -571,7 +571,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                                <div>
                                                  <div className="flex items-center gap-2 mb-2">
                                                    <span className="text-purple-300 font-medium">Custom Content:</span>
-                                                   <Badge className="bg-purple-900 text-purple-200">Write Your Own</Badge>
+                                                   <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">Write Your Own</span>
                                                  </div>
                                                  <p className="text-sm text-gray-200">You can write your own custom content below</p>
                                                </div>
@@ -583,116 +583,6 @@ export default function TimelineAlchemyPreviewWizard() {
                                      </div>
                                    </div>
                                  )}
-                                               {blogPosts.find(p => p.id === form.selectedPosts[0])?.facebook && (
-                          <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-blue-300 font-medium">Facebook Content:</span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                  if (post?.facebook) {
-                                    setForm(prev => ({ ...prev, content: post.facebook }))
-                                  }
-                                }}
-                                className="text-xs h-6 px-2 bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500"
-                              >
-                                Use This
-                              </Button>
-                            </div>
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{blogPosts.find(p => p.id === form.selectedPosts[0])?.facebook}</p>
-                          </div>
-                        )}
-                                               {blogPosts.find(p => p.id === form.selectedPosts[0])?.instagram && (
-                          <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-pink-300 font-medium">Instagram Content:</span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                  if (post?.instagram) {
-                                    setForm(prev => ({ ...prev, content: post.instagram }))
-                                  }
-                                }}
-                                className="text-xs h-6 px-2 bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500"
-                              >
-                                Use This
-                              </Button>
-                            </div>
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{blogPosts.find(p => p.id === form.selectedPosts[0])?.instagram}</p>
-                          </div>
-                        )}
-                                               {blogPosts.find(p => p.id === form.selectedPosts[0])?.x && (
-                          <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                  if (post?.x) {
-                                    setForm(prev => ({ ...prev, content: post.x }))
-                                  }
-                                }}
-                                className="text-xs h-6 px-2 bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500"
-                              >
-                                Use This
-                              </Button>
-                            </div>
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{blogPosts.find(p => p.id === form.selectedPosts[0])?.x}</p>
-                          </div>
-                        )}
-                                               {blogPosts.find(p => p.id === form.selectedPosts[0])?.linkedin && (
-                          <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-blue-300 font-medium">LinkedIn Content:</span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                  if (post?.linkedin) {
-                                    setForm(prev => ({ ...prev, content: post.linkedin }))
-                                  }
-                                }}
-                                className="text-xs h-6 px-2 bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500"
-                              >
-                                Use This
-                              </Button>
-                            </div>
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{blogPosts.find(p => p.id === form.selectedPosts[0])?.linkedin}</p>
-                          </div>
-                        )}
-                                               {blogPosts.find(p => p.id === form.selectedPosts[0])?.body && (
-                          <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-green-300 font-medium">Blog Body Content:</span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                  if (post?.body) {
-                                    setForm(prev => ({ ...prev, content: post.body.substring(0, form.selectedTemplate === 'Blog Post' ? 2000 : 280) }))
-                                  }
-                                }}
-                                className="text-xs h-6 px-2 bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500"
-                              >
-                                Use This
-                              </Button>
-                            </div>
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{blogPosts.find(p => p.id === form.selectedPosts[0])?.body}</p>
-                          </div>
-                        )}
                      </div>
                    </div>
                  )}
