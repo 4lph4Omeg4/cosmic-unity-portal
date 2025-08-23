@@ -472,11 +472,117 @@ export default function TimelineAlchemyPreviewWizard() {
                            <div className="space-y-3">
                                  <label className="text-sm font-medium text-white">Content Message</label>
                 
-                                 {/* Show actual database content */}
-                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                   <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
-                     <h4 className="font-medium text-blue-300 mb-3">📊 Database Content</h4>
-                     <div className="space-y-3">
+                                 {/* Show selected content and image based on template */}
+                                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                                   <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
+                                     <h4 className="font-medium text-blue-300 mb-3">📊 Selected Content</h4>
+                                     
+                                     {/* Post Image */}
+                                     {(() => {
+                                       const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                                       if (!post) return null
+                                       
+                                       const imageUrl = post.image_public_url || post.image_url || post.featured_image
+                                       if (!imageUrl) return null
+                                       
+                                       return (
+                                         <div className="mb-4 p-3 bg-gray-700 rounded border border-gray-600">
+                                           <div className="flex items-center gap-2 mb-2">
+                                             <span className="text-green-300 font-medium">📷 Featured Image:</span>
+                                             <Badge className="bg-green-900 text-green-200">Included</Badge>
+                                           </div>
+                                           <div className="flex items-center gap-4">
+                                             <img 
+                                               src={imageUrl} 
+                                               alt={post.title || 'Post image'}
+                                               className="w-24 h-24 object-cover rounded-lg border border-gray-600"
+                                               onError={(e) => {
+                                                 e.currentTarget.style.display = 'none'
+                                               }}
+                                             />
+                                             <div className="flex-1">
+                                               <p className="text-sm text-gray-300 font-medium">{post.title || 'Untitled Post'}</p>
+                                               <p className="text-xs text-gray-400">Image will be included with your post</p>
+                                             </div>
+                                           </div>
+                                         </div>
+                                       )
+                                     })()}
+                                     
+                                     {/* Content Preview */}
+                                     <div className="p-3 bg-gray-700 rounded border border-gray-600">
+                                       {(() => {
+                                         const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                                         if (!post) return <p className="text-gray-400">No post selected</p>
+                                         
+                                         switch (form.selectedTemplate) {
+                                           case 'Facebook':
+                                             return (
+                                               <div>
+                                                 <div className="flex items-center gap-2 mb-2">
+                                                   <span className="text-blue-300 font-medium">Facebook Content:</span>
+                                                   <Badge className="bg-blue-900 text-blue-200">Selected</Badge>
+                                                 </div>
+                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook || 'No Facebook content available'}</p>
+                                               </div>
+                                             )
+                                           case 'Instagram':
+                                             return (
+                                               <div>
+                                                 <div className="flex items-center gap-2 mb-2">
+                                                   <span className="text-pink-300 font-medium">Instagram Content:</span>
+                                                   <Badge className="bg-pink-900 text-pink-200">Selected</Badge>
+                                                 </div>
+                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram || 'No Instagram content available'}</p>
+                                               </div>
+                                             )
+                                           case 'X (Twitter)':
+                                             return (
+                                               <div>
+                                                 <div className="flex items-center gap-2 mb-2">
+                                                   <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
+                                                   <Badge className="bg-gray-900 text-gray-200">Selected</Badge>
+                                                 </div>
+                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x || 'No X content available'}</p>
+                                               </div>
+                                             )
+                                           case 'LinkedIn':
+                                             return (
+                                               <div>
+                                                 <div className="flex items-center gap-2 mb-2">
+                                                   <span className="text-blue-300 font-medium">LinkedIn Content:</span>
+                                                   <Badge className="bg-blue-900 text-blue-200">Selected</Badge>
+                                                 </div>
+                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin || 'No LinkedIn content available'}</p>
+                                               </div>
+                                             )
+                                           case 'Blog Post':
+                                             return (
+                                               <div>
+                                                 <div className="flex items-center gap-2 mb-2">
+                                                   <span className="text-green-300 font-medium">Blog Content:</span>
+                                                   <Badge className="bg-green-900 text-green-200">Selected</Badge>
+                                                 </div>
+                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body || 'No blog content available'}</p>
+                                               </div>
+                                             )
+                                           case 'Custom Post':
+                                             return (
+                                               <div>
+                                                 <div className="flex items-center gap-2 mb-2">
+                                                   <span className="text-purple-300 font-medium">Custom Content:</span>
+                                                   <Badge className="bg-purple-900 text-purple-200">Write Your Own</Badge>
+                                                 </div>
+                                                 <p className="text-sm text-gray-200">You can write your own custom content below</p>
+                                               </div>
+                                             )
+                                           default:
+                                             return <p className="text-gray-400">Please select a template</p>
+                                         }
+                                       })()}
+                                     </div>
+                                   </div>
+                                 )}
                                                {blogPosts.find(p => p.id === form.selectedPosts[0])?.facebook && (
                           <div className="p-3 bg-gray-700 rounded border border-gray-600">
                             <div className="flex items-center gap-2 mb-2">
