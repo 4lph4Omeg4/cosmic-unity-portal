@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -36,6 +35,8 @@ interface BlogPost {
   x?: string
   linkedin?: string
   featured_image?: string
+  image_url?: string
+  image_public_url?: string
 }
 
 interface PreviewForm {
@@ -48,7 +49,6 @@ interface PreviewForm {
   selectedPosts: string[]
 }
 
-const channels = ['Instagram', 'LinkedIn', 'Twitter', 'Facebook', 'YouTube']
 const templates = [
   'Facebook',
   'Instagram', 
@@ -171,89 +171,37 @@ export default function TimelineAlchemyPreviewWizard() {
 
   // Load blog posts when selectedPosts changes
   const loadBlogPosts = async (postIds: string[]) => {
-    if (postIds.length === 0) return
-    
-    console.log('Loading blog posts for IDs:', postIds)
-    
     try {
-      // First, let's see what columns actually exist in the table
-      console.log('=== CHECKING AVAILABLE COLUMNS ===')
-             const { data: columnCheck, error: columnError } = await supabase
-         .from('blog_posts')
-         .select('*')
-         .limit(1)
+      console.log('Loading blog posts for IDs:', postIds)
+      const { data, error } = await (supabase as any).from('blog_posts').select('*').in('id', postIds)
       
-      if (columnError) {
-        console.error('Error checking columns:', columnError)
-      } else if (columnCheck && columnCheck.length > 0) {
-        console.log('Available columns in blog_posts table:', Object.keys(columnCheck[0]))
-      }
-
-             // Now try to select the specific columns we need
-       const { data, error } = await supabase
-         .from('blog_posts')
-         .select('*')
-         .in('id', postIds)
-
       if (error) {
-        console.error('Error loading selected posts:', error)
-      } else {
-        console.log('=== DATABASE QUERY RESULTS ===')
-      console.log('Raw data from database:', data)
-      console.log('Number of posts found:', data?.length || 0)
-      if (data && data.length > 0) {
-        console.log('First post structure:', data[0])
-        console.log('All available columns:', Object.keys(data[0]))
-        
-        // Check if social media columns exist and show their values
-        if ('facebook' in data[0]) {
-          console.log('✅ Facebook column exists, value:', data[0].facebook)
-        } else {
-          console.log('❌ Facebook column does NOT exist')
-        }
-        
-        if ('instagram' in data[0]) {
-          console.log('✅ Instagram column exists, value:', data[0].instagram)
-        } else {
-          console.log('❌ Instagram column does NOT exist')
-        }
-        
-        if ('x' in data[0]) {
-          console.log('✅ X column exists, value:', data[0].x)
-        } else {
-          console.log('❌ X column does NOT exist')
-        }
-        
-        if ('linkedin' in data[0]) {
-          console.log('✅ LinkedIn column exists, value:', data[0].linkedin)
-        } else {
-          console.log('❌ LinkedIn column does NOT exist')
-        }
-        
-        if ('body' in data[0]) {
-          console.log('✅ Body column exists, value:', data[0].body)
-        } else {
-          console.log('❌ Body column does NOT exist')
-        }
+        console.error('Error loading blog posts:', error)
+        return
       }
-        // Transform the data to match our interface
-        const transformedPosts: BlogPost[] = (data || []).map((post: any) => ({
+      
+      console.log('Raw blog posts data:', data)
+      
+      if (data && data.length > 0) {
+        const transformedPosts = data.map((post: any) => ({
           id: post.id,
-          title: post.title || 'Geen titel',
-          body: post.body || '',
-          excerpt: post.excerpt || (post.body ? post.body.substring(0, 150) + '...' : 'Geen content'),
-          category: post.category || 'Algemeen',
-          facebook: 'facebook' in post ? post.facebook : null,
-          instagram: 'instagram' in post ? post.instagram : null,
-          x: 'x' in post ? post.x : null,
-          linkedin: 'linkedin' in post ? post.linkedin : null,
-          featured_image: 'featured_image' in post ? post.featured_image : null
+          title: post.title || 'Untitled',
+          body: post.body || null,
+          excerpt: post.excerpt || null,
+          category: post.category || null,
+          facebook: post.facebook || null,
+          instagram: post.instagram || null,
+          x: post.x || null,
+          linkedin: post.linkedin || null,
+          featured_image: post.featured_image || null,
+          image_url: post.image_url || null,
+          image_public_url: post.image_public_url || null
         }))
         console.log('Transformed posts:', transformedPosts)
         setBlogPosts(transformedPosts)
       }
     } catch (error) {
-      console.error('Error loading blog posts:', error)
+      console.error('Error in loadBlogPosts:', error)
     }
   }
 
@@ -452,7 +400,7 @@ export default function TimelineAlchemyPreviewWizard() {
            </div>
          )
 
-                           case 3:
+        case 3:
           return (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-white">Draft Your Content</h3>
@@ -469,158 +417,153 @@ export default function TimelineAlchemyPreviewWizard() {
                 </div>
               )}
              
-                           <div className="space-y-3">
-                                 <label className="text-sm font-medium text-white">Content Message</label>
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-white">Content Message</label>
                 
-                                 {/* Show selected content and image based on template */}
-                                 {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                                   <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
-                                     <h4 className="font-medium text-blue-300 mb-3">📊 Selected Content</h4>
-                                     
-                                     {/* Post Image */}
-                                     {(() => {
-                                       const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                       if (!post) return null
-                                       
-                                       const imageUrl = post.image_public_url || post.image_url || post.featured_image
-                                       if (!imageUrl) return null
-                                       
-                                       return (
-                                         <div className="mb-4 p-3 bg-gray-700 rounded border border-gray-600">
-                                           <div className="flex items-center gap-2 mb-2">
-                                             <span className="text-green-300 font-medium">📷 Featured Image:</span>
-                                             <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Included</span>
-                                           </div>
-                                           <div className="flex items-center gap-4">
-                                             <img 
-                                               src={imageUrl} 
-                                               alt={post.title || 'Post image'}
-                                               className="w-24 h-24 object-cover rounded-lg border border-gray-600"
-                                               onError={(e) => {
-                                                 e.currentTarget.style.display = 'none'
-                                               }}
-                                             />
-                                             <div className="flex-1">
-                                               <p className="text-sm text-gray-300 font-medium">{post.title || 'Untitled Post'}</p>
-                                               <p className="text-xs text-gray-400">Image will be included with your post</p>
-                                             </div>
-                                           </div>
-                                         </div>
-                                       )
-                                     })()}
-                                     
-                                     {/* Content Preview */}
-                                     <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                                       {(() => {
-                                         const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                                         if (!post) return <p className="text-gray-400">No post selected</p>
-                                         
-                                         switch (form.selectedTemplate) {
-                                           case 'Facebook':
-                                             return (
-                                               <div>
-                                                 <div className="flex items-center gap-2 mb-2">
-                                                   <span className="text-blue-300 font-medium">Facebook Content:</span>
-                                                   <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
-                                                 </div>
-                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook || 'No Facebook content available'}</p>
-                                               </div>
-                                             )
-                                           case 'Instagram':
-                                             return (
-                                               <div>
-                                                 <div className="flex items-center gap-2 mb-2">
-                                                   <span className="text-pink-300 font-medium">Instagram Content:</span>
-                                                   <span className="px-2 py-1 bg-pink-900 text-pink-200 text-xs rounded-full">Selected</span>
-                                                 </div>
-                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram || 'No Instagram content available'}</p>
-                                               </div>
-                                             )
-                                           case 'X (Twitter)':
-                                             return (
-                                               <div>
-                                                 <div className="flex items-center gap-2 mb-2">
-                                                   <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
-                                                   <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
-                                                 </div>
-                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x || 'No X content available'}</p>
-                                               </div>
-                                             )
-                                           case 'LinkedIn':
-                                             return (
-                                               <div>
-                                                 <div className="flex items-center gap-2 mb-2">
-                                                   <span className="text-blue-300 font-medium">LinkedIn Content:</span>
-                                                   <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
-                                                 </div>
-                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin || 'No LinkedIn content available'}</p>
-                                               </div>
-                                             )
-                                           case 'Blog Post':
-                                             return (
-                                               <div>
-                                                 <div className="flex items-center gap-2 mb-2">
-                                                   <span className="text-green-300 font-medium">Blog Content:</span>
-                                                   <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Selected</span>
-                                                 </div>
-                                                 <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body || 'No blog content available'}</p>
-                                               </div>
-                                             )
-                                           case 'Custom Post':
-                                             return (
-                                               <div>
-                                                 <div className="flex items-center gap-2 mb-2">
-                                                   <span className="text-purple-300 font-medium">Custom Content:</span>
-                                                   <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">Write Your Own</span>
-                                                 </div>
-                                                 <p className="text-sm text-gray-200">You can write your own custom content below</p>
-                                               </div>
-                                             )
-                                           default:
-                                             return <p className="text-gray-400">Please select a template</p>
-                                         }
-                                       })()}
-                                     </div>
-                                   </div>
-                                 )}
-                     </div>
-                   </div>
-                 )}
+                {/* Show selected content and image based on template */}
+                {form.selectedTemplate && form.selectedPosts.length > 0 && (
+                  <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
+                    <h4 className="font-medium text-blue-300 mb-3">📊 Selected Content</h4>
+                    
+                    {/* Post Image */}
+                    {(() => {
+                      const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                      if (!post) return null
+                      
+                      const imageUrl = post.image_public_url || post.image_url || post.featured_image
+                      if (!imageUrl) return null
+                      
+                      return (
+                        <div className="mb-4 p-3 bg-gray-700 rounded border border-gray-600">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-green-300 font-medium">📷 Featured Image:</span>
+                            <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Included</span>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <img 
+                              src={imageUrl} 
+                              alt={post.title || 'Post image'}
+                              className="w-24 h-24 object-cover rounded-lg border border-gray-600"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none'
+                              }}
+                            />
+                            <div className="flex-1">
+                              <p className="text-sm text-gray-300 font-medium">{post.title || 'Untitled Post'}</p>
+                              <p className="text-xs text-gray-400">Image will be included with your post</p>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })()}
+                    
+                    {/* Content Preview */}
+                    <div className="p-3 bg-gray-700 rounded border border-gray-600">
+                      {(() => {
+                        const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                        if (!post) return <p className="text-gray-400">No post selected</p>
+                        
+                        switch (form.selectedTemplate) {
+                          case 'Facebook':
+                            return (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-blue-300 font-medium">Facebook Content:</span>
+                                  <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
+                                </div>
+                                <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook || 'No Facebook content available'}</p>
+                              </div>
+                            )
+                          case 'Instagram':
+                            return (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-pink-300 font-medium">Instagram Content:</span>
+                                  <span className="px-2 py-1 bg-pink-900 text-pink-200 text-xs rounded-full">Selected</span>
+                                </div>
+                                <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram || 'No Instagram content available'}</p>
+                              </div>
+                            )
+                          case 'X (Twitter)':
+                            return (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
+                                  <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
+                                </div>
+                                <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x || 'No X content available'}</p>
+                              </div>
+                            )
+                          case 'LinkedIn':
+                            return (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-blue-300 font-medium">LinkedIn Content:</span>
+                                  <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
+                                </div>
+                                <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin || 'No LinkedIn content available'}</p>
+                              </div>
+                            )
+                          case 'Blog Post':
+                            return (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-green-300 font-medium">Blog Content:</span>
+                                  <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Selected</span>
+                                </div>
+                                <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body || 'No blog content available'}</p>
+                              </div>
+                            )
+                          case 'Custom Post':
+                            return (
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-purple-300 font-medium">Custom Content:</span>
+                                  <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">Write Your Own</span>
+                                </div>
+                                <p className="text-sm text-gray-200">You can write your own custom content below</p>
+                              </div>
+                            )
+                          default:
+                            return <p className="text-gray-400">Please select a template</p>
+                        }
+                      })()}
+                    </div>
+                  </div>
+                )}
                 
-                                 <Textarea
-                   value={form.content}
-                   onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                   placeholder="Write your content message here..."
-                   rows={form.selectedTemplate === 'Blog Post' ? 12 : 6}
-                   maxLength={form.selectedTemplate === 'Blog Post' ? 2000 : 280}
-                   className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                 />
-                 <div className="flex items-center justify-between text-sm text-gray-400">
-                   <span>Character count: {form.content.length}</span>
-                   <span>Max: {form.selectedTemplate === 'Blog Post' ? '2000 characters' : '280 characters'}</span>
-                 </div>
-               
-               
-             </div>
-            
-                         {form.selectedPosts.length > 0 && (
-               <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
-                 <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
-                 <div className="space-y-2">
-                   {form.selectedPosts.map((postId) => {
-                     const post = blogPosts.find(p => p.id === postId)
-                     return post ? (
-                       <div key={post.id} className="flex items-center gap-2">
-                         <Star className="w-4 h-4 text-blue-400" />
-                         <span className="text-sm text-blue-200">{post.title}</span>
-                       </div>
-                     ) : null
-                   })}
-                 </div>
-               </div>
-             )}
-          </div>
-        )
+                <Textarea
+                  value={form.content}
+                  onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder="Write your content message here..."
+                  rows={form.selectedTemplate === 'Blog Post' ? 12 : 6}
+                  maxLength={form.selectedTemplate === 'Blog Post' ? 2000 : 280}
+                  className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                />
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span>Character count: {form.content.length}</span>
+                  <span>Max: {form.selectedTemplate === 'Blog Post' ? '2000 characters' : '280 characters'}</span>
+                </div>
+              </div>
+              
+              {form.selectedPosts.length > 0 && (
+                <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
+                  <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
+                  <div className="space-y-2">
+                    {form.selectedPosts.map((postId) => {
+                      const post = blogPosts.find(p => p.id === postId)
+                      return post ? (
+                        <div key={post.id} className="flex items-center gap-2">
+                          <Star className="w-4 h-4 text-blue-400" />
+                          <span className="text-sm text-blue-200">{post.title}</span>
+                        </div>
+                      ) : null
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          )
 
              case 4:
          return (
