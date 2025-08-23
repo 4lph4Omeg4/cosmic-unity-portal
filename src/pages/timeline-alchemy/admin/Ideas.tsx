@@ -159,6 +159,27 @@ export default function TimelineAlchemyIdeas() {
           console.log(`Column "${col}" value:`, data[0][col])
         })
         
+        // Check for tags column
+        const tagsColumns = Object.keys(data[0]).filter(key => 
+          key.toLowerCase().includes('tag')
+        )
+        console.log('Tags columns found:', tagsColumns)
+        
+        // Show values for tags columns
+        tagsColumns.forEach(col => {
+          console.log(`Column "${col}" value:`, data[0][col])
+          console.log(`Column "${col}" type:`, typeof data[0][col])
+          if (Array.isArray(data[0][col])) {
+            console.log(`Column "${col}" is array with length:`, data[0][col].length)
+          }
+        })
+        
+        // Also check if tags column exists directly
+        console.log('Direct check for tags column:')
+        console.log('post.tags exists:', 'tags' in data[0])
+        console.log('post.tags value:', data[0].tags)
+        console.log('post.tags type:', typeof data[0].tags)
+        
         // Check image columns
         console.log('=== IMAGE COLUMN CHECK ===')
         console.log('image_url value:', data[0].image_url)
@@ -218,6 +239,15 @@ export default function TimelineAlchemyIdeas() {
         // Safe extraction with fallbacks for all fields - check multiple possible field names
         const safeTitle = aiBlog?.Title || aiBlog?.title || aiBlog?.Title || post.title || 'Geen titel'
         const safeBody = post.body || aiBlog?.Body || aiBlog?.body || aiBlog?.content || post.content || ''
+        
+        // Debug tags extraction
+        console.log('=== TAGS EXTRACTION DEBUG ===')
+        console.log('post.tags (from blog_posts):', post.tags)
+        console.log('post.tags type:', typeof post.tags)
+        console.log('aiBlog?.Tags:', aiBlog?.Tags)
+        console.log('aiBlog?.tags:', aiBlog?.tags)
+        console.log('aiBlog?.tag:', aiBlog?.tag)
+        
         const safeTags = aiBlog?.Tags || aiBlog?.tags || aiBlog?.tag || post.tags || []
         const safeSources = aiBlog?.Sources || aiBlog?.sources || aiBlog?.source || []
         const safeSocial = aiBlog?.Social || aiBlog?.social || null
@@ -233,7 +263,20 @@ export default function TimelineAlchemyIdeas() {
         const linkedinLink = post.linkedin || null
         
         // Ensure arrays are always arrays to prevent .length errors
-        const normalizedTags = Array.isArray(safeTags) ? safeTags : (safeTags ? [safeTags] : [])
+        // Handle tags - split string if it's a comma-separated string
+        let normalizedTags: string[] = []
+        if (Array.isArray(safeTags)) {
+          normalizedTags = safeTags
+        } else if (typeof safeTags === 'string') {
+          // Split on commas, semicolons, or other common separators
+          normalizedTags = safeTags
+            .split(/[,;|]/)
+            .map(tag => tag.trim())
+            .filter(tag => tag.length > 0)
+        } else if (safeTags) {
+          normalizedTags = [safeTags]
+        }
+        
         const normalizedSources = Array.isArray(safeSources) ? safeSources : (safeSources ? [safeSources] : [])
         const normalizedKeywords = Array.isArray(safeSEO?.keywords) ? safeSEO.keywords : []
         
@@ -241,6 +284,12 @@ export default function TimelineAlchemyIdeas() {
           safeTitle,
           safeBody: safeBody ? (safeBody.substring(0, 100) + '...') : 'NO BODY',
           normalizedTags,
+          tagsParsing: {
+            originalSafeTags: safeTags,
+            safeTagsType: typeof safeTags,
+            isArray: Array.isArray(safeTags),
+            finalNormalizedTags: normalizedTags
+          },
           aiBlogKeys: aiBlog ? Object.keys(aiBlog) : 'no aiBlog',
           originalPostTitle: post.title,
           originalPostContent: post.content ? post.content.substring(0, 50) + '...' : 'NO CONTENT',
@@ -248,6 +297,7 @@ export default function TimelineAlchemyIdeas() {
           safeImage,
           imageUrlFromBlogPosts: post.image_url,
           imagePublicUrlFromBlogPosts: post.image_public_url,
+          tagsFromBlogPosts: post.tags,
           socialLinks: {
             facebook: facebookLink,
             instagram: instagramLink,
@@ -615,7 +665,7 @@ export default function TimelineAlchemyIdeas() {
                        {/* Tags - Display as badges in the top section */}
                        {post.tags && post.tags.length > 0 && (
                          post.tags.map((tag, index) => (
-                           <Badge key={index} className="bg-blue-900 text-blue-200 border border-blue-700">
+                           <Badge key={index} className="bg-indigo-900 text-indigo-200 border border-indigo-700 hover:bg-indigo-800 transition-colors">
                              #{tag}
                            </Badge>
                          ))
