@@ -26,7 +26,7 @@ const uploadImageToSupabase = async (file: File): Promise<string | null> => {
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
     
     const { data, error } = await supabase.storage
-      .from('blog-images') // We'll create this bucket
+      .from('blog_images') // Using the bucket name from your automation
       .upload(fileName, file, {
         cacheControl: '3600',
         upsert: false
@@ -39,7 +39,7 @@ const uploadImageToSupabase = async (file: File): Promise<string | null> => {
     
     // Get the public URL
     const { data: urlData } = supabase.storage
-      .from('blog-images')
+      .from('blog_images')
       .getPublicUrl(fileName)
     
     return urlData.publicUrl
@@ -63,6 +63,7 @@ interface BlogPost {
   tags?: string[]
   category?: string
   image_url?: string
+  image_public_url?: string
   facebook?: string
   instagram?: string
   x?: string
@@ -158,21 +159,36 @@ export default function TimelineAlchemyIdeas() {
           console.log(`Column "${col}" value:`, data[0][col])
         })
         
-        // Check image column
+        // Check image columns
         console.log('=== IMAGE COLUMN CHECK ===')
         console.log('image_url value:', data[0].image_url)
         console.log('image_url exists:', !!data[0].image_url)
+        console.log('image_public_url value:', data[0].image_public_url)
+        console.log('image_public_url exists:', !!data[0].image_public_url)
         
-        // Check if image column has a valid URL
+        // Check if image columns have valid URLs
         const imageUrl = data[0].image_url
+        const imagePublicUrl = data[0].image_public_url
+        
         if (imageUrl) {
           try {
             const url = new URL(imageUrl)
-            console.log('Image URL is valid:', url.href)
-            console.log('Image protocol:', url.protocol)
-            console.log('Image hostname:', url.hostname)
+            console.log('image_url is valid:', url.href)
+            console.log('image_url protocol:', url.protocol)
+            console.log('image_url hostname:', url.hostname)
           } catch (urlError) {
-            console.log('Image URL is not valid:', imageUrl)
+            console.log('image_url is not valid:', imageUrl)
+          }
+        }
+        
+        if (imagePublicUrl) {
+          try {
+            const url = new URL(imagePublicUrl)
+            console.log('image_public_url is valid:', url.href)
+            console.log('image_public_url protocol:', url.protocol)
+            console.log('image_public_url hostname:', url.hostname)
+          } catch (urlError) {
+            console.log('image_public_url is not valid:', imagePublicUrl)
           }
         }
       }
@@ -207,8 +223,8 @@ export default function TimelineAlchemyIdeas() {
         const safeSocial = aiBlog?.Social || aiBlog?.social || null
         const safeSEO = aiBlog?.SEO || aiBlog?.seo || null
         
-        // Image extraction - use the correct image column from blog_posts table
-        const safeImage = post.image_url || null
+        // Image extraction - prioritize image_public_url over image_url
+        const safeImage = post.image_public_url || post.image_url || null
         
         // Social media links extraction
         const facebookLink = post.facebook || null
@@ -231,6 +247,7 @@ export default function TimelineAlchemyIdeas() {
           originalPostBody: post.body ? post.body.substring(0, 50) + '...' : 'NO BODY',
           safeImage,
           imageUrlFromBlogPosts: post.image_url,
+          imagePublicUrlFromBlogPosts: post.image_public_url,
           socialLinks: {
             facebook: facebookLink,
             instagram: instagramLink,
@@ -745,10 +762,13 @@ export default function TimelineAlchemyIdeas() {
                          if (file) {
                            const imageUrl = await uploadImageToSupabase(file)
                            if (imageUrl) {
-                             // Update the post's image_url in the database
+                             // Update both image columns in the database
                              const { error } = await supabase
                                .from('blog_posts' as any)
-                               .update({ image_url: imageUrl })
+                               .update({ 
+                                 image_url: imageUrl,
+                                 image_public_url: imageUrl 
+                               })
                                .eq('id', post.id)
                              
                              if (error) {
@@ -759,13 +779,17 @@ export default function TimelineAlchemyIdeas() {
                                  variant: "destructive",
                                })
                              } else {
-                               // Update local state
+                               // Update local state for both image fields
                                setBlogPosts(prev => prev.map(p => 
-                                 p.id === post.id ? { ...p, image_url: imageUrl } : p
+                                 p.id === post.id ? { 
+                                   ...p, 
+                                   image_url: imageUrl,
+                                   image_public_url: imageUrl 
+                                 } : p
                                ))
                                toast({
                                  title: "Succes!",
-                                 description: "Afbeelding geüpload en bijgewerkt.",
+                                 description: "Afbeelding geüpload en bijgewerkt in beide kolommen.",
                                  variant: "default",
                                })
                              }
