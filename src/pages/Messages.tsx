@@ -463,7 +463,7 @@ const Messages = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder={t('messages.typeMessage')}
                 />
-                <Button type="submit" className="gap-2">
+                <Button type="submit" variant="mystical" className="gap-2 cosmic-hover">
                   <Send className="w-4 h-4" />
                   {t('messages.send')}
                 </Button>

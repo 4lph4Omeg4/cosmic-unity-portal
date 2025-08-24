@@ -188,7 +188,7 @@ export default function TimelineAlchemyDashboard() {
             <Button 
               onClick={() => navigate('/timeline-alchemy/admin/preview-wizard')}
               variant="outline"
-              className="h-20 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-300 hover:border-gray-400"
+              className="h-20 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-600 hover:border-gray-500"
             >
               <MessageSquare className="w-6 h-6" />
               <span>Start Preview Wizard</span>

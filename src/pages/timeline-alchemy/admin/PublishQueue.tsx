@@ -242,23 +242,23 @@ export default function TimelineAlchemyPublishQueue() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 focus:border-blue-400"
             >
-              <option value="all">All Statuses</option>
-              <option value="success">Successful</option>
-              <option value="failed">Failed</option>
-              <option value="pending">Pending</option>
+              <option value="all" className="bg-gray-800 text-gray-200">All Statuses</option>
+              <option value="success" className="bg-gray-800 text-gray-200">Successful</option>
+              <option value="failed" className="bg-gray-800 text-gray-200">Failed</option>
+              <option value="pending" className="bg-gray-800 text-gray-200">Pending</option>
             </select>
             <select
               value={selectedChannel}
               onChange={(e) => setSelectedChannel(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 focus:border-blue-400"
             >
-              <option value="all">All Channels</option>
-              <option value="Instagram">Instagram</option>
-              <option value="LinkedIn">LinkedIn</option>
-              <option value="Twitter">Twitter</option>
-              <option value="Facebook">Facebook</option>
+              <option value="all" className="bg-gray-800 text-gray-200">All Channels</option>
+              <option value="Instagram" className="bg-gray-800 text-gray-200">Instagram</option>
+              <option value="LinkedIn" className="bg-gray-800 text-gray-200">LinkedIn</option>
+              <option value="Twitter" className="bg-gray-800 text-gray-200">Twitter</option>
+              <option value="Facebook" className="bg-gray-800 text-gray-200">Facebook</option>
             </select>
           </div>
         </CardContent>
