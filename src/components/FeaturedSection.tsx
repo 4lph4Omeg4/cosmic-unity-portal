@@ -198,6 +198,33 @@ const FeaturedSection = () => {
                          alt={localizedContent.title}
                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                        />
+                      
+                      {/* Color Variants Overlay */}
+                      {product.images?.edges && product.images.edges.length > 1 && (
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <div className="flex gap-1 justify-center">
+                            {product.images.edges.slice(0, Math.min(6, product.images.edges.length)).map((image, index) => (
+                              <div
+                                key={index}
+                                className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
+                                title={`Kleur variant ${index + 1}`}
+                              >
+                                <img
+                                  src={image.node.url}
+                                  alt={`${localizedContent.title} - Variant ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ))}
+                            {product.images.edges.length > 6 && (
+                              <div className="w-6 h-6 rounded-full bg-cosmic/80 border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold">
+                                +{product.images.edges.length - 6}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
                       <div className="absolute top-3 left-3">
                         <Badge variant="secondary" className="bg-energy-gradient text-white shadow-lg">
                           {t('products.digital')}

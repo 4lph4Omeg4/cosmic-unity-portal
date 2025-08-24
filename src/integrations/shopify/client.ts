@@ -84,7 +84,7 @@ export const GET_COLLECTIONS = `
                     }
                   }
                 }
-                images(first: 1) {
+                images(first: 20) {
                   edges {
                     node {
                       url
@@ -147,7 +147,7 @@ export const GET_COLLECTION_BY_HANDLE = `
                 }
               }
             }
-            images(first: 1) {
+            images(first: 20) {
               edges {
                 node {
                   url
@@ -201,11 +201,11 @@ export const GET_PRODUCTS = `
               }
             }
           }
-          images(first: 10) {
+          images(first: 20) {
             edges {
               node {
                 url
-                altText
+              altText
               }
             }
           }

@@ -1,26 +1,36 @@
 # Mockup Images Directory
 
-This directory contains product mockup images that follow the naming convention:
+**UPDATE**: Dit systeem gebruikt nu Shopify afbeeldingen in plaats van lokale mockup bestanden.
+
+## Hoe het werkt
+
+Het systeem haalt nu automatisch alle beschikbare productafbeeldingen op uit Shopify (maximaal 20 per product) en toont deze correct in de shop sectie.
+
+### Afbeeldingen weergave
+
+1. **Hoofdafbeelding**: De eerste afbeelding wordt als hoofdafbeelding getoond
+2. **Kleur varianten overlay**: Kleine cirkels onderaan tonen alle beschikbare kleuren/varianten
+3. **Thumbnail grid**: In de product pagina wordt een grid van alle afbeeldingen getoond
+4. **Variant matching**: Het systeem probeert automatisch de juiste afbeeldingen te vinden voor elke kleur/variant
+
+### Voordelen van de nieuwe aanpak
+
+- ✅ Alle 20 mockup afbeeldingen worden correct geladen uit Shopify
+- ✅ Automatische kleur/variant matching
+- ✅ Geen handmatige bestandsbeheer nodig
+- ✅ Consistente afbeeldingen in alle shop secties
+- ✅ Betere gebruikerservaring met alle beschikbare kleuren
+
+### Technische details
+
+- Shopify queries zijn bijgewerkt naar `images(first: 20)`
+- Alle shop componenten tonen nu alle beschikbare afbeeldingen
+- Fallback naar originele Shopify afbeeldingen als mockups niet bestaan
+- Responsive grid layout voor thumbnails
+
+## Oude informatie (niet meer relevant)
+
+De oude naming convention was:
 `[product-handle]-[variant-color]-[number].jpg`
 
-For example:
-- `merkaba-tshirt-black-1.jpg` - First mockup for black Merkaba T-shirt
-- `merkaba-tshirt-black-2.jpg` - Second mockup for black Merkaba T-shirt
-- `merkaba-hoodie-navy-1.jpg` - First mockup for navy Merkaba hoodie
-- `merkaba-hoodie-navy-2.jpg` - Second mockup for navy Merkaba hoodie
-
-## Color Mappings:
-- Charcoal → charcoal
-- Navy → navy  
-- Black → black (or zwart)
-- White → white (or wit)
-
-The system will automatically try to load these mockups when a product variant is selected. If the mockups don't exist, it will fallback to the original Shopify product images.
-
-## Image Requirements:
-- Format: JPG or PNG
-- Recommended size: 1000x1000px or larger
-- Square aspect ratio for best display
-- High quality for product presentation
-
-Add your product mockup images to this directory following the naming convention above.
+Dit is vervangen door automatische Shopify integratie.

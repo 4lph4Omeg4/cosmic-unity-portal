@@ -225,8 +225,9 @@ const Collection = () => {
           {collection.products.edges.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {collection.products.edges.map(({ node: product }) => (
-                <Card key={product.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic animate-fade-in">
-                  <div className="aspect-square overflow-hidden rounded-t-lg">
+                <Card key={product.id} className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic animate-fade-in group">
+                  <div className="aspect-square overflow-hidden rounded-t-lg relative">
+                    {/* Main Product Image */}
                     {product.images.edges.length > 0 ? (
                       <img
                         src={product.images.edges[0].node.url}
@@ -236,6 +237,32 @@ const Collection = () => {
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-cosmic/20 to-secondary/20 flex items-center justify-center">
                         <Star className="w-12 h-12 text-cosmic/60" />
+                      </div>
+                    )}
+                    
+                    {/* Color Variants Overlay */}
+                    {product.images.edges.length > 1 && (
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <div className="flex gap-1 justify-center">
+                          {product.images.edges.slice(0, Math.min(6, product.images.edges.length)).map((image, index) => (
+                            <div
+                              key={index}
+                              className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
+                              title={`Kleur variant ${index + 1}`}
+                            >
+                              <img
+                                src={image.node.url}
+                                alt={`${product.title} - Variant ${index + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                          {product.images.edges.length > 6 && (
+                            <div className="w-6 h-6 rounded-full bg-cosmic/80 border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold">
+                              +{product.images.edges.length - 6}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>

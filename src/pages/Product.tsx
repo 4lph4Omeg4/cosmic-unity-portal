@@ -118,6 +118,45 @@ const Product = () => {
     return imageIndex >= 0 ? imageIndex : 0;
   };
 
+  // Functie om alle beschikbare afbeeldingen voor een variant te krijgen
+  const getVariantImages = (variant: any) => {
+    if (!product?.images?.edges?.length) return [];
+    
+    // Als er maar 1 afbeelding is, gebruik die
+    if (product.images.edges.length === 1) {
+      return [product.images.edges[0].node.url];
+    }
+
+    // Probeer afbeeldingen te vinden die bij de variant passen
+    const variantImages = product.images.edges.filter(image => {
+      const altText = image.node.altText?.toLowerCase() || '';
+      const url = image.node.url.toLowerCase();
+      
+      // Check voor kleur matches
+      if (variant.selectedOptions) {
+        const colorOption = variant.selectedOptions.find((option: any) =>
+          option.name.toLowerCase().includes('color') ||
+          option.name.toLowerCase().includes('colour') ||
+          option.name.toLowerCase().includes('kleur')
+        );
+        
+        if (colorOption) {
+          const color = colorOption.value.toLowerCase();
+          return altText.includes(color) || url.includes(color);
+        }
+      }
+      
+      // Check voor variant title matches
+      const variantTitle = variant.title.toLowerCase();
+      return altText.includes(variantTitle) || url.includes(variantTitle);
+    });
+
+    // Als er geen specifieke afbeeldingen zijn gevonden, gebruik alle afbeeldingen
+    return variantImages.length > 0 
+      ? variantImages.map(img => img.node.url)
+      : product.images.edges.map(img => img.node.url);
+  };
+
   useEffect(() => {
     const loadProduct = async () => {
       if (!handle) return;
@@ -148,18 +187,17 @@ const Product = () => {
   }, [handle, toast, language]);
 
   useEffect(() => {
-    // Generate mockup image URLs based on selected variant
+    // Update mockup images when variant changes
     if (product && selectedVariant) {
-      const variantColor = getVariantColor(selectedVariant);
-      if (variantColor) {
-        const mockups = [
-          `/mockups/${product.handle}-${variantColor.toLowerCase()}-1.jpg`,
-          `/mockups/${product.handle}-${variantColor.toLowerCase()}-2.jpg`
-        ];
-        setMockupImages(mockups);
+      const variantImages = getVariantImages(selectedVariant);
+      setMockupImages(variantImages);
+      
+      // Reset selected image index if it's out of bounds
+      if (selectedImageIndex >= variantImages.length) {
+        setSelectedImageIndex(0);
       }
     }
-  }, [product, selectedVariant]);
+  }, [product, selectedVariant, selectedImageIndex]);
 
   const getVariantColor = (variant: any): string | null => {
     // Look for color in selectedOptions
@@ -295,29 +333,35 @@ const Product = () => {
                   product.images.edges.map(edge => edge.node.url);
                 
                 return displayImages.length > 1 && (
-                  <div className="grid grid-cols-4 gap-2">
-                    {displayImages.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`aspect-square overflow-hidden rounded-lg border-2 transition-all ${
-                          selectedImageIndex === index 
-                            ? 'border-cosmic shadow-cosmic' 
-                            : 'border-border/50 hover:border-cosmic/50'
-                        }`}
-                      >
-                        <img
-                          src={image}
-                          alt={`${product.title} - ${index + 1}`}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            if (product.images.edges[index]) {
-                              (e.target as HTMLImageElement).src = product.images.edges[index].node.url;
-                            }
-                          }}
-                        />
-                      </button>
-                    ))}
+                  <div className="space-y-3">
+                    <h3 className="font-mystical text-sm font-medium text-muted-foreground">
+                      Alle beschikbare kleuren en varianten ({displayImages.length})
+                    </h3>
+                    <div className="grid grid-cols-5 gap-2 max-h-80 overflow-y-auto">
+                      {displayImages.map((image, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedImageIndex(index)}
+                          className={`aspect-square overflow-hidden rounded-lg border-2 transition-all hover:scale-105 ${
+                            selectedImageIndex === index 
+                              ? 'border-cosmic shadow-cosmic ring-2 ring-cosmic/20' 
+                              : 'border-border/50 hover:border-cosmic/50'
+                          }`}
+                          title={`Klik om ${index + 1} van ${displayImages.length} afbeeldingen te bekijken`}
+                        >
+                          <img
+                            src={image}
+                            alt={`${product.title} - Variant ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              if (product.images.edges[index]) {
+                                (e.target as HTMLImageElement).src = product.images.edges[index].node.url;
+                              }
+                            }}
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 );
               })()}
@@ -360,6 +404,10 @@ const Product = () => {
                         setSelectedVariant(variant);
                         const imageIndex = findImageForVariant(variant);
                         setSelectedImageIndex(imageIndex);
+                        
+                        // Update mockup images for the new variant
+                        const variantImages = getVariantImages(variant);
+                        setMockupImages(variantImages);
                       }}
                       formatPrice={formatPrice}
                     />
