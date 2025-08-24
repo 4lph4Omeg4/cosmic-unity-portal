@@ -2,7 +2,7 @@ import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 
 const client = createStorefrontApiClient({
   storeDomain: 'rfih5t-ij.myshopify.com',
-  apiVersion: '2025-01',
+  apiVersion: '2024-10',
   publicAccessToken: 'ed47eb085cb7daa4e53db03042cfa29d'
 });
 
@@ -382,7 +382,7 @@ export const fetchCollections = async (language: string = 'en') => {
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' };
+          return { language: 'NL', country: 'NL' };
       }
     };
     
@@ -429,7 +429,7 @@ export const fetchProducts = async (language: string = 'en') => {
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' };
+          return { language: 'NL', country: 'NL' };
       }
     };
     
@@ -461,7 +461,7 @@ export const fetchProductByHandle = async (handle: string, language: string = 'e
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' };
+          return { language: 'NL', country: 'NL' };
       }
     };
     
@@ -495,7 +495,7 @@ export const fetchAllBlogs = async (language: string = 'en') => {
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' };
+          return { language: 'NL', country: 'NL' };
       }
     };
     
@@ -538,7 +538,7 @@ export const fetchBlogArticles = async (blogHandle: string = 'ego-to-eden', lang
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' };
+          return { language: 'NL', country: 'NL' };
       }
     };
     
@@ -600,7 +600,7 @@ export const fetchShopPolicies = async (language: string = 'nl') => {
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' }; // Default to English
+          return { language: 'NL', country: 'NL' }; // Default to English
       }
     };
     
@@ -654,7 +654,7 @@ export const fetchCollectionByHandle = async (handle: string, language: string =
         case 'de':
           return { language: 'DE', country: 'DE' };
         default:
-          return { language: 'EN', country: 'US' };
+          return { language: 'NL', country: 'NL' };
       }
     };
     
