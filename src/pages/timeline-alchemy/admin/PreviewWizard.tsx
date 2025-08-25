@@ -95,48 +95,16 @@ export default function TimelineAlchemyPreviewWizard() {
     }
   }, [form.selectedPosts])
 
-  // Auto-fill content when template is selected
+  // Auto-fill content when blog post is selected
   useEffect(() => {
-    if (form.selectedTemplate && form.selectedPosts.length > 0) {
+    if (form.selectedPosts.length > 0) {
       const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-      if (post) {
-        let content = ''
-        switch (form.selectedTemplate) {
-          case 'Facebook':
-            if (post.facebook) {
-              content = post.facebook
-            }
-            break
-          case 'Instagram':
-            if (post.instagram) {
-              content = post.instagram
-            }
-            break
-          case 'X (Twitter)':
-            if (post.x) {
-              content = post.x
-            }
-            break
-          case 'LinkedIn':
-            if (post.linkedin) {
-              content = post.linkedin
-            }
-            break
-          case 'Blog Post':
-            if (post.body) {
-              content = post.body.substring(0, 2000)
-            }
-            break
-          case 'Custom Post':
-            content = '' // Leave empty for custom content
-            break
-          default:
-            content = ''
-        }
-        setForm(prev => ({ ...prev, content }))
+      if (post && post.body) {
+        // Automatically load the blog post content
+        setForm(prev => ({ ...prev, content: post.body }))
       }
     }
-  }, [form.selectedTemplate, form.selectedPosts, blogPosts])
+  }, [form.selectedPosts, blogPosts])
 
   const loadData = async () => {
     try {
@@ -924,17 +892,38 @@ export default function TimelineAlchemyPreviewWizard() {
                 </div>
               )}
               
-              <Textarea
-                value={form.content}
-                onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="Write your content message here..."
-                rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
-                maxLength={form.selectedTemplates.includes('Blog Post') ? 10000 : 280}
-                className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-              />
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Character count: {form.content.length}</span>
-                <span>Max: {form.selectedTemplates.includes('Blog Post') ? '10,000 characters' : '280 characters'}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-white">Content Message</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                      if (post) {
+                        setForm(prev => ({ ...prev, content: post.body || '' }));
+                      }
+                    }}
+                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                  >
+                    🔄 Reload from Blog Post
+                  </button>
+                </div>
+                
+                <Textarea
+                  value={form.content}
+                  onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder="Blog post content will be automatically loaded here. You can edit it as needed..."
+                  rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
+                  maxLength={form.selectedTemplates.includes('Blog Post') ? 10000 : 280}
+                  className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                />
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span>Character count: {form.content.length}</span>
+                  <span>Max: {form.selectedTemplates.includes('Blog Post') ? '10,000 characters' : '280 characters'}</span>
+                </div>
+                <p className="text-xs text-gray-400">
+                  💡 Edit the content above as needed. This will be used for all selected platforms.
+                </p>
               </div>
             </div>
             
