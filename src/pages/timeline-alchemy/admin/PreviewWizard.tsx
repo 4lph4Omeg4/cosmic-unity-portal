@@ -89,7 +89,6 @@ export default function TimelineAlchemyPreviewWizard() {
 
   // Load blog posts when selectedPosts changes
   useEffect(() => {
-    console.log('useEffect triggered - selectedPosts changed:', form.selectedPosts)
     if (form.selectedPosts.length > 0) {
       loadBlogPosts(form.selectedPosts)
     }
@@ -187,34 +186,25 @@ export default function TimelineAlchemyPreviewWizard() {
           organization: 'Client Account' // These are individual client accounts
         }))
         setClients(transformedClients)
-        console.log('Loaded clients from profiles:', transformedClients)
       } else {
-        console.log('No clients found in profiles')
         setClients([])
       }
 
       // Load selected posts from sessionStorage if coming from Posts page
       const storedPosts = sessionStorage.getItem('selectedPostIds')
-      console.log('=== SESSION STORAGE CHECK ===')
-      console.log('Stored posts from sessionStorage:', storedPosts)
       if (storedPosts) {
         try {
           const postIds = JSON.parse(storedPosts)
-          console.log('Parsed post IDs:', postIds)
-          console.log('Post IDs type:', typeof postIds)
-          console.log('Post IDs length:', Array.isArray(postIds) ? postIds.length : 'not an array')
           
           setForm(prev => ({ ...prev, selectedPosts: postIds }))
           sessionStorage.removeItem('selectedPostIds') // Clean up
           
-          console.log('About to call loadBlogPosts with IDs:', postIds)
           // Load blog posts immediately after setting selectedPosts
           await loadBlogPosts(postIds)
         } catch (error) {
           console.error('Error parsing stored post IDs:', error)
         }
       } else {
-        console.log('No stored posts found in sessionStorage')
         // Load all available blog posts for preview creation
         await loadBlogPosts()
       }
@@ -228,8 +218,6 @@ export default function TimelineAlchemyPreviewWizard() {
   // Load all available blog posts for preview creation
   const loadBlogPosts = async (postIds?: string[]) => {
     try {
-      console.log('Loading blog posts...')
-      
       let query = supabase
         .from('blog_posts')
         .select('*')
@@ -237,7 +225,6 @@ export default function TimelineAlchemyPreviewWizard() {
       
       // If specific post IDs are provided, filter by them
       if (postIds && postIds.length > 0) {
-        console.log('Filtering by specific post IDs:', postIds)
         query = query.in('id', postIds)
       }
       
@@ -248,8 +235,6 @@ export default function TimelineAlchemyPreviewWizard() {
         setBlogPosts([])
         return
       }
-      
-      console.log('Raw blog posts data:', data)
       
       if (data && data.length > 0) {
         const transformedPosts = data.map((post: any) => ({
@@ -266,10 +251,8 @@ export default function TimelineAlchemyPreviewWizard() {
           image_url: post.image_url || null,
           image_public_url: post.image_public_url || null
         }))
-        console.log('Transformed posts:', transformedPosts)
         setBlogPosts(transformedPosts)
       } else {
-        console.log('No blog posts found')
         setBlogPosts([])
       }
     } catch (error) {
@@ -279,10 +262,8 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const nextStep = () => {
-    console.log('nextStep called, current step:', form.step)
     if (form.step < 5) {
       const newStep = form.step + 1
-      console.log('Moving to step:', newStep)
       setForm(prev => ({ ...prev, step: newStep }))
     }
   }
@@ -316,7 +297,6 @@ export default function TimelineAlchemyPreviewWizard() {
       }
 
       // Always create a new idea for the preview
-      console.log('Creating new idea for preview...')
       const { data: ideaData, error: ideaError } = await supabase
         .from('ideas')
         .insert({
@@ -345,7 +325,6 @@ export default function TimelineAlchemyPreviewWizard() {
       }
       
       const ideaId = ideaData.id
-      console.log('Created idea with ID:', ideaId)
 
       // Combine date and time for scheduled_at
       let scheduledAt = null
@@ -355,15 +334,6 @@ export default function TimelineAlchemyPreviewWizard() {
       }
 
       // Create preview
-      console.log('Creating preview with data:', {
-        idea_id: ideaId,
-        client_id: form.selectedClient,
-        channel: form.selectedTemplates.join(', '),
-        template: form.selectedTemplates.join(', '),
-        scheduled_at: scheduledAt,
-        status: 'pending',
-        created_by: user.id
-      })
       
       const { data: previewData, error: previewError } = await supabase
         .from('previews')
@@ -392,8 +362,6 @@ export default function TimelineAlchemyPreviewWizard() {
         return
       }
 
-      console.log('Preview created successfully:', previewData)
-      
       // Show success message and navigate to dashboard
       alert('Preview saved successfully! Redirecting to dashboard...')
       navigate('/timeline-alchemy/admin/dashboard')
@@ -428,9 +396,6 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const renderStepContent = () => {
-    console.log('renderStepContent called with step:', form.step)
-    console.log('Current form state:', form)
-    
     switch (form.step) {
       case 1:
         return (
@@ -755,7 +720,6 @@ export default function TimelineAlchemyPreviewWizard() {
                       const newTemplates = isSelected 
                         ? form.selectedTemplates.filter(t => t !== template)
                         : [...form.selectedTemplates, template]
-                      console.log('Template selection:', template, 'New templates:', newTemplates)
                       setForm(prev => ({ ...prev, selectedTemplates: newTemplates }))
                     }}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
