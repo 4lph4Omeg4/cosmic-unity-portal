@@ -229,7 +229,7 @@ export default function TimelineAlchemyPreviewWizard() {
           title: post.title || 'Untitled',
           body: post.body || null,
           excerpt: post.excerpt || null,
-          tags: post.tags || [],
+          tags: Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []),
           facebook: post.facebook || null,
           instagram: post.instagram || null,
           x: post.x || null,
@@ -486,7 +486,7 @@ export default function TimelineAlchemyPreviewWizard() {
                             {/* Post Metadata & Badges */}
                             <div className="flex flex-wrap items-center gap-3">
                               {/* Tags Badges */}
-                              {post.tags && post.tags.length > 0 && (
+                              {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
                                 <>
                                   {post.tags.map((tag: string, index: number) => (
                                     <span 
@@ -497,6 +497,13 @@ export default function TimelineAlchemyPreviewWizard() {
                                     </span>
                                   ))}
                                 </>
+                              )}
+                              
+                              {/* Fallback for non-array tags */}
+                              {post.tags && !Array.isArray(post.tags) && (
+                                <span className="px-3 py-1 bg-orange-600 text-white text-xs font-medium rounded-full">
+                                  {String(post.tags)}
+                                </span>
                               )}
                               
                               {/* Image Badge */}
