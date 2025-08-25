@@ -251,7 +251,7 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const nextStep = () => {
-    if (form.step < 5) {
+    if (form.step < 6) {
       setForm(prev => ({ ...prev, step: prev.step + 1 }))
     }
   }
@@ -267,7 +267,7 @@ export default function TimelineAlchemyPreviewWizard() {
       setSaving(true)
       
       if (!form.selectedClient || !form.selectedTemplate || !form.content.trim()) {
-        alert('Please fill in all required fields')
+        alert('Please fill in all required fields: Client, Template, and Content')
         return
       }
 
@@ -415,6 +415,101 @@ export default function TimelineAlchemyPreviewWizard() {
       case 2:
         return (
           <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Select Content</h3>
+            <p className="text-sm text-gray-300 mb-4">
+              Choose existing blog posts to use as content, or create custom content from scratch.
+            </p>
+            
+            {/* Blog Posts Selection */}
+            <div className="space-y-4">
+              <h4 className="font-medium text-white">Available Blog Posts:</h4>
+              {blogPosts.length > 0 ? (
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {blogPosts.map((post) => (
+                    <div
+                      key={post.id}
+                      onClick={() => {
+                        const isSelected = form.selectedPosts.includes(post.id)
+                        if (isSelected) {
+                          setForm(prev => ({
+                            ...prev,
+                            selectedPosts: prev.selectedPosts.filter(id => id !== post.id)
+                          }))
+                        } else {
+                          setForm(prev => ({
+                            ...prev,
+                            selectedPosts: [...prev.selectedPosts, post.id]
+                          }))
+                        }
+                      }}
+                      className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                        form.selectedPosts.includes(post.id)
+                          ? 'border-blue-500 bg-blue-900/20'
+                          : 'border-gray-600 hover:border-gray-500 bg-gray-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={form.selectedPosts.includes(post.id)}
+                          onChange={() => {}} // Handled by onClick
+                          className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                        />
+                        <div className="flex-1">
+                          <h5 className="font-medium text-white">{post.title}</h5>
+                          <p className="text-sm text-gray-300">
+                            {post.excerpt || post.body?.substring(0, 100) || 'No content preview'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
+                  <p className="text-gray-300">No blog posts available. You can create custom content in the next step.</p>
+                </div>
+              )}
+              
+              {/* Custom Content Option */}
+              <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-gray-600">
+                <h5 className="font-medium text-white mb-2">Or Create Custom Content:</h5>
+                <p className="text-sm text-gray-300">
+                  If you don't want to use existing posts, you can create custom content from scratch.
+                </p>
+              </div>
+            </div>
+            
+            {/* Show selected posts info */}
+            {form.selectedPosts.length > 0 && (
+              <div className="p-4 bg-blue-900/20 rounded-lg mb-4 border border-blue-700">
+                <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
+                <div className="space-y-2">
+                  {form.selectedPosts.map((postId) => {
+                    const post = blogPosts.find(p => p.id === postId)
+                    return post ? (
+                      <div key={post.id} className="flex items-center gap-2">
+                        <Star className="w-4 h-4 text-blue-400" />
+                        <span className="text-sm text-blue-200">{post.title}</span>
+                      </div>
+                    ) : null
+                  })}
+                </div>
+              </div>
+            )}
+            
+            {/* Navigation hint */}
+            <div className="p-3 bg-gray-700 rounded-lg border border-gray-600">
+              <p className="text-sm text-gray-300">
+                <span className="text-blue-400">Next:</span> Choose a template for your content in the next step.
+              </p>
+            </div>
+          </div>
+        )
+
+      case 3:
+        return (
+          <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Select Content Template</h3>
             <p className="text-sm text-gray-300 mb-4">
               Choose a template for your content. The first 4 options are social media shortlinks, 
@@ -522,13 +617,6 @@ export default function TimelineAlchemyPreviewWizard() {
                 )
               })}
             </div>
-          </div>
-        )
-
-      case 3:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Draft Your Content</h3>
             
             {/* Template info */}
             {form.selectedTemplate && (
@@ -691,6 +779,127 @@ export default function TimelineAlchemyPreviewWizard() {
         )
 
       case 4:
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Draft Your Content</h3>
+            
+            {/* Template info */}
+            {form.selectedTemplate && (
+              <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
+                <h4 className="font-medium text-blue-300 mb-2">Selected Template: {form.selectedTemplate}</h4>
+                {form.selectedPosts.length > 0 && (
+                  <div className="text-sm text-blue-200">
+                    {blogPosts.find(p => p.id === form.selectedPosts[0])?.title}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {/* Content from selected posts */}
+            {form.selectedPosts.length > 0 && form.selectedTemplate && (
+              <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
+                <h4 className="font-medium text-white mb-3">Content from Selected Posts:</h4>
+                <div className="space-y-3">
+                  {form.selectedPosts.map((postId) => {
+                    const post = blogPosts.find(p => p.id === postId)
+                    if (!post) return null
+                    
+                    return (
+                      <div key={post.id} className="p-3 bg-gray-600 rounded border border-gray-500">
+                        <h5 className="font-medium text-blue-300 mb-2">{post.title}</h5>
+                        {(() => {
+                          switch (form.selectedTemplate) {
+                            case 'Facebook':
+                              return (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-gray-300 font-medium">Facebook Content:</span>
+                                    <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
+                                  </div>
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook || 'No Facebook content available'}</p>
+                                </div>
+                              )
+                            case 'Instagram':
+                              return (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-pink-300 font-medium">Instagram Content:</span>
+                                    <span className="px-2 py-1 bg-pink-900 text-pink-200 text-xs rounded-full">Selected</span>
+                                  </div>
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram || 'No Instagram content available'}</p>
+                                </div>
+                              )
+                            case 'X (Twitter)':
+                              return (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
+                                    <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
+                                  </div>
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x || 'No X content available'}</p>
+                                </div>
+                              )
+                            case 'LinkedIn':
+                              return (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-blue-300 font-medium">LinkedIn Content:</span>
+                                    <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
+                                  </div>
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin || 'No LinkedIn content available'}</p>
+                                </div>
+                              )
+                            case 'Blog Post':
+                              return (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-green-300 font-medium">Blog Content:</span>
+                                    <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Selected</span>
+                                  </div>
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body || 'No blog content available'}</p>
+                                </div>
+                              )
+                            case 'Custom Post':
+                              return (
+                                <div>
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-purple-300 font-medium">Custom Content:</span>
+                                    <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">Write Your Own</span>
+                                  </div>
+                                  <p className="text-sm text-gray-200">You can write your own custom content below</p>
+                                </div>
+                              )
+                            default:
+                              return <p className="text-gray-400">Please select a template</p>
+                          }
+                        })()}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+            
+            {/* Content editor */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-white">Content Message</label>
+              <Textarea
+                value={form.content}
+                onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                placeholder="Write your content message here..."
+                rows={form.selectedTemplate === 'Blog Post' ? 12 : 6}
+                maxLength={form.selectedTemplate === 'Blog Post' ? 2000 : 280}
+                className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+              />
+              <div className="flex items-center justify-between text-sm text-gray-400">
+                <span>Character count: {form.content.length}</span>
+                <span>Max: {form.selectedTemplate === 'Blog Post' ? '2000 characters' : '280 characters'}</span>
+              </div>
+            </div>
+          </div>
+        )
+
+      case 5:
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Schedule & Review</h3>
