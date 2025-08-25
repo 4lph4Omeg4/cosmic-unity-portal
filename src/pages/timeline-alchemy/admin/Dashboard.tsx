@@ -360,9 +360,40 @@ export default function TimelineAlchemyAdminDashboard() {
                         {preview.ideas?.title || 'Untitled Preview'}
                       </h3>
                       
-                      <p className="text-gray-600 mb-3">
-                        {preview.draft_content?.content || 'No content available'}
-                      </p>
+                      {/* Main Content */}
+                      <div className="mb-3">
+                        <h4 className="font-medium text-gray-700 mb-2">Main Content:</h4>
+                        <p className="text-gray-600 whitespace-pre-wrap">
+                          {preview.draft_content?.content || 'No content available'}
+                        </p>
+                      </div>
+                      
+                      {/* Platform-Specific Content */}
+                      {preview.draft_content?.selectedPosts && preview.draft_content?.template && (
+                        <div className="mb-3">
+                          <h4 className="font-medium text-gray-700 mb-2">Platform Content:</h4>
+                          <div className="space-y-2">
+                            {preview.draft_content.template.split(', ').map((template, index) => (
+                              <div key={index} className="flex items-start gap-2 p-2 bg-gray-50 rounded border">
+                                <div className="flex-shrink-0">
+                                  {template === 'Facebook' && <span className="text-blue-500">📘</span>}
+                                  {template === 'Instagram' && <span className="text-pink-500">📷</span>}
+                                  {template === 'X (Twitter)' && <span className="text-blue-400">🐦</span>}
+                                  {template === 'LinkedIn' && <span className="text-blue-600">💼</span>}
+                                  {template === 'Blog Post' && <span className="text-green-500">📝</span>}
+                                  {template === 'Custom Post' && <span className="text-purple-500">✨</span>}
+                                </div>
+                                <div className="flex-1">
+                                  <span className="font-medium text-gray-700 text-sm">{template}</span>
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    {template === 'Blog Post' ? 'Full blog post content' : 'Social media promotional content'}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         {preview.scheduled_at && (
