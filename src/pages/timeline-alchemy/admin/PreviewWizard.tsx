@@ -1324,67 +1324,7 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             </div>
 
-            {/* Content Summary */}
-            {form.selectedPosts.length > 0 && (
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-green-400" />
-                  Content Summary
-                </h4>
-                
-                {form.selectedPosts.map((postId) => {
-                  const post = blogPosts.find(p => p.id === postId);
-                  if (!post) return null;
-                  
-                  const hasModifications = form.content !== post.body;
-                  const originalLength = post.body?.length || 0;
-                  const modifiedLength = form.content.length;
-                  
-                  return (
-                    <div key={postId} className="space-y-4">
-                      {/* Post Header */}
-                      <div className="flex items-start gap-4 bg-gray-700 rounded-lg p-4 border border-gray-600">
-                        {post.image_url && (
-                          <img 
-                            src={post.image_url} 
-                            alt={post.title}
-                            className="w-20 h-20 object-cover rounded-lg border border-gray-600"
-                          />
-                        )}
-                        <div className="flex-1">
-                          <h5 className="text-lg font-semibold text-white mb-2">{post.title}</h5>
-                          <p className="text-gray-300 text-sm mb-3">{post.excerpt}</p>
-                          <div className="flex items-center gap-4 text-sm">
-                            <span className="text-gray-400">Content length: {modifiedLength} characters</span>
-                            {hasModifications && (
-                              <span className="px-2 py-1 bg-yellow-600 text-yellow-100 text-xs rounded-full">
-                                ✏️ Modified from original ({originalLength} chars)
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
 
-                      {/* Content Preview */}
-                      <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                        <h6 className="font-medium text-white mb-3 flex items-center">
-                          <span className="text-blue-400 mr-2">📝</span>
-                          Content Preview
-                        </h6>
-                        <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
-                          <p className="text-gray-200 text-sm whitespace-pre-wrap">
-                            {form.content || post.body || 'No content available'}
-                          </p>
-                        </div>
-                        <p className="text-xs text-gray-400 mt-2">
-                          Character count: {modifiedLength}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
 
 
 
