@@ -738,6 +738,7 @@ export default function TimelineAlchemyPreviewWizard() {
                       const newTemplates = isSelected 
                         ? form.selectedTemplates.filter(t => t !== template)
                         : [...form.selectedTemplates, template]
+                      console.log('Template selection:', template, 'New templates:', newTemplates)
                       setForm(prev => ({ ...prev, selectedTemplates: newTemplates }))
                     }}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
@@ -1308,6 +1309,17 @@ export default function TimelineAlchemyPreviewWizard() {
               </p>
             </div>
 
+            {/* Debug Info */}
+            <div className="bg-red-900/20 rounded-lg p-4 border border-red-700">
+              <h4 className="text-lg font-medium text-red-300 mb-2">Debug Info</h4>
+              <div className="text-sm text-red-200">
+                <p>Selected Templates: {form.selectedTemplates.join(', ') || 'None'}</p>
+                <p>Template Count: {form.selectedTemplates.length}</p>
+                <p>Form Step: {form.step}</p>
+                <p>Selected Posts: {form.selectedPosts.join(', ') || 'None'}</p>
+              </div>
+            </div>
+
             {/* Client & Scheduling Info */}
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
               <h4 className="text-lg font-medium text-white mb-4 flex items-center">
@@ -1445,12 +1457,14 @@ export default function TimelineAlchemyPreviewWizard() {
             )}
 
             {/* Platform Distribution Plan */}
-            {form.selectedTemplates.length > 0 && (
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
-                  <Share2 className="w-5 h-5 mr-2 text-purple-400" />
-                  Where Content Will Be Posted
-                </h4>
+            {(() => {
+              console.log('Step 5 - selectedTemplates:', form.selectedTemplates, 'Length:', form.selectedTemplates.length)
+              return form.selectedTemplates.length > 0 ? (
+                <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                  <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                    <Share2 className="w-5 h-5 mr-2 text-purple-400" />
+                    Where Content Will Be Posted
+                  </h4>
                 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {form.selectedTemplates.map((template) => (
