@@ -251,8 +251,11 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const nextStep = () => {
+    console.log('nextStep called, current step:', form.step)
     if (form.step < 5) {
-      setForm(prev => ({ ...prev, step: prev.step + 1 }))
+      const newStep = form.step + 1
+      console.log('Moving to step:', newStep)
+      setForm(prev => ({ ...prev, step: newStep }))
     }
   }
 
@@ -380,6 +383,9 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const renderStepContent = () => {
+    console.log('renderStepContent called with step:', form.step)
+    console.log('Current form state:', form)
+    
     switch (form.step) {
       case 1:
         return (
@@ -653,10 +659,9 @@ export default function TimelineAlchemyPreviewWizard() {
       case 3:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Select Content Template</h3>
+            <h3 className="text-lg font-semibold text-white">Select Social Platform</h3>
             <p className="text-sm text-gray-300 mb-4">
-              Choose a template for your content. The first 4 options are social media shortlinks, 
-              or create a custom blog post.
+              Choose which social platform you want to post to. Each platform will reference your main blog post.
             </p>
             
             {/* Show selected posts info */}
