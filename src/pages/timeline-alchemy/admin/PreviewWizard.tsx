@@ -106,6 +106,60 @@ export default function TimelineAlchemyPreviewWizard() {
     }
   }, [form.selectedPosts, blogPosts])
 
+  // Auto-fill content when platforms are selected
+  useEffect(() => {
+    if (form.selectedPosts.length > 0 && form.selectedTemplates.length > 0) {
+      const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+      if (post) {
+        // If only one platform is selected, load its specific content
+        if (form.selectedTemplates.length === 1) {
+          const template = form.selectedTemplates[0]
+          let content = ''
+          
+          switch (template) {
+            case 'Facebook':
+              content = post.facebook || post.body || ''
+              break
+            case 'Instagram':
+              content = post.instagram || post.body || ''
+              break
+            case 'LinkedIn':
+              content = post.linkedin || post.body || ''
+              break
+            case 'Twitter':
+              content = post.x || post.body || ''
+              break
+            case 'Blog Post':
+              content = post.body || ''
+              break
+            case 'Shopify':
+              content = post.body || '' // Use blog post content for Shopify
+              break
+            default:
+              content = post.body || ''
+          }
+          
+          setForm(prev => ({ ...prev, content }))
+        } else {
+          // If multiple platforms, use blog post content as base
+          setForm(prev => ({ ...prev, content: post.body || '' }))
+        }
+      }
+    }
+  }, [form.selectedTemplates, form.selectedPosts, blogPosts])
+
+  // Helper function to get max characters based on selected platforms
+  const getMaxCharacters = () => {
+    if (form.selectedTemplates.includes('Blog Post')) {
+      return 10000
+    }
+    if (form.selectedTemplates.includes('Shopify')) {
+      return 10000
+    }
+    // Social media platforms
+    return 280
+  }
+
   const loadData = async () => {
     try {
       setLoading(true)
@@ -901,17 +955,17 @@ export default function TimelineAlchemyPreviewWizard() {
                 <Textarea
                   value={form.content}
                   onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                  placeholder="Blog post content will be automatically loaded here. You can edit it as needed..."
+                  placeholder="Content will be automatically loaded based on selected platforms. You can edit it as needed..."
                   rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
-                  maxLength={form.selectedTemplates.includes('Blog Post') ? 10000 : 280}
+                  maxLength={getMaxCharacters()}
                   className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
                 <div className="flex items-center justify-between text-sm text-gray-400">
                   <span>Character count: {form.content.length}</span>
-                  <span>Max: {form.selectedTemplates.includes('Blog Post') ? '10,000 characters' : '280 characters'}</span>
+                  <span>Max: {getMaxCharacters()} characters</span>
                 </div>
                 <p className="text-xs text-gray-400">
-                  💡 Edit the content above as needed. This will be used for all selected platforms.
+                  💡 Content is automatically loaded based on selected platforms. Edit as needed for customization.
                 </p>
               </div>
             </div>
