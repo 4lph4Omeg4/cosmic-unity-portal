@@ -1457,14 +1457,13 @@ export default function TimelineAlchemyPreviewWizard() {
             )}
 
             {/* Platform Distribution Plan */}
-            {(() => {
-              console.log('Step 5 - selectedTemplates:', form.selectedTemplates, 'Length:', form.selectedTemplates.length)
-              return form.selectedTemplates.length > 0 ? (
-                <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                  <h4 className="text-lg font-medium text-white mb-4 flex items-center">
-                    <Share2 className="w-5 h-5 mr-2 text-purple-400" />
-                    Where Content Will Be Posted
-                  </h4>
+            {/* Platform Distribution Plan */}
+            {form.selectedTemplates.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <Share2 className="w-5 h-5 mr-2 text-purple-400" />
+                  Where Content Will Be Posted ({form.selectedTemplates.length} selected)
+                </h4>
                 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {form.selectedTemplates.map((template) => (
