@@ -60,9 +60,6 @@ export default function TimelineAlchemyMyPreviews() {
         return
       }
 
-      console.log('=== CLIENT PREVIEWS DEBUG ===')
-      console.log('Loading previews for user:', user.id)
-
       // First, check if user has client role in profiles
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
@@ -70,16 +67,11 @@ export default function TimelineAlchemyMyPreviews() {
         .eq('user_id', user.id)
         .single()
 
-      console.log('Profile data:', profileData)
-      console.log('Profile error:', profileError)
-
       if (profileError || profileData?.role !== 'client') {
         console.log('User is not a client or profile not found')
         setPreviews([])
         return
       }
-
-      console.log('User confirmed as client:', profileData.display_name)
 
       // Try to load previews for this user
       const { data, error } = await supabase
@@ -91,59 +83,11 @@ export default function TimelineAlchemyMyPreviews() {
         .eq('client_id', user.id)
         .order('created_at', { ascending: false })
 
-      console.log('Previews query result:', { data, error })
-
       if (error) {
         console.error('Error fetching previews:', error)
-        
-        // Try alternative approach - maybe client_id is stored differently
-        console.log('Trying alternative approach...')
-        
-        // Check if there are any previews at all
-        const { data: allPreviews, error: allError } = await supabase
-          .from('previews')
-          .select('*')
-          .limit(5)
-        
-        console.log('All previews sample:', allPreviews)
-        console.log('All previews error:', allError)
-        
-        // Try to find previews by looking at the structure
-        if (allPreviews && allPreviews.length > 0) {
-          console.log('Sample preview structure:', allPreviews[0])
-          console.log('Available client_ids in sample:', allPreviews.map(p => p.client_id))
-          
-          // Try to find previews by user email or other identifiers
-          const { data: { user: currentUser } } = await supabase.auth.getUser()
-          if (currentUser?.email) {
-            console.log('Trying to find previews by user email:', currentUser.email)
-            
-            // Check if there are any previews that might belong to this user
-            // This is a fallback for when client_id doesn't match user.id
-            const { data: fallbackPreviews, error: fallbackError } = await supabase
-              .from('previews')
-              .select(`
-                *,
-                ideas(title, description)
-              `)
-              .or(`client_id.eq.${user.id},client_id.eq.${currentUser.email}`)
-              .order('created_at', { ascending: false })
-            
-            console.log('Fallback previews result:', { fallbackPreviews, fallbackError })
-            
-            if (!fallbackError && fallbackPreviews && fallbackPreviews.length > 0) {
-              console.log('Found previews via fallback method:', fallbackPreviews.length)
-              setPreviews(fallbackPreviews)
-              return
-            }
-          }
-        }
-        
         setPreviews([])
         return
       }
-
-      console.log('Successfully loaded previews:', data?.length || 0)
 
       // Load blog posts for platform-specific content
       if (data && data.length > 0) {
@@ -152,16 +96,11 @@ export default function TimelineAlchemyMyPreviews() {
           .flat()
           .filter(Boolean)
         
-        console.log('Post IDs to load:', postIds)
-        
         if (postIds.length > 0) {
           const { data: blogPostsData, error: blogPostsError } = await supabase
             .from('blog_posts')
             .select('id, title, body, facebook, instagram, x, linkedin')
             .in('id', postIds)
-          
-          console.log('Blog posts loaded:', blogPostsData?.length || 0)
-          console.log('Blog posts error:', blogPostsError)
           
           if (!blogPostsError && blogPostsData) {
             // Attach blog posts data to previews
@@ -176,7 +115,6 @@ export default function TimelineAlchemyMyPreviews() {
         }
       }
 
-      console.log('Final previews data:', data)
       setPreviews(data || [])
     } catch (error) {
       console.error('Error loading previews:', error)
@@ -198,20 +136,7 @@ export default function TimelineAlchemyMyPreviews() {
     const matchesChannel = selectedChannel === 'all' || preview.channel === selectedChannel
     const matchesTab = preview.status === activeTab
     
-    // Debug logging for filtering
-    if (preview.id === previews[0]?.id) {
-      console.log('=== FILTERING DEBUG ===')
-      console.log('Preview status:', preview.status)
-      console.log('Active tab:', activeTab)
-      console.log('Selected status:', selectedStatus)
-      console.log('Selected channel:', selectedChannel)
-      console.log('Search term:', searchTerm)
-      console.log('Matches tab:', matchesTab)
-      console.log('Matches status:', matchesStatus)
-      console.log('Matches channel:', matchesChannel)
-      console.log('Matches search:', matchesSearch)
-      console.log('Final result:', matchesSearch && matchesStatus && matchesChannel && matchesTab)
-    }
+
     
     return matchesSearch && matchesStatus && matchesChannel && matchesTab
   })
@@ -432,43 +357,7 @@ export default function TimelineAlchemyMyPreviews() {
         ))}
       </div>
 
-      {/* Debug Info */}
-      <Card className="border-orange-500">
-        <CardHeader>
-          <CardTitle className="text-orange-500">Debug Info</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="text-sm">
-            <p><strong>Total Previews:</strong> {previews.length}</p>
-            <p><strong>Loading:</strong> {loading ? 'Yes' : 'No'}</p>
-            <p><strong>Active Tab:</strong> {activeTab}</p>
-            <p><strong>Filtered Count:</strong> {filteredPreviews.length}</p>
-            <p><strong>Status Breakdown:</strong></p>
-            <ul className="ml-4 text-xs">
-              {['pending', 'approved', 'published', 'rejected'].map(status => (
-                <li key={status}>
-                  {status}: {previews.filter(p => p.status === status).length}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <details className="text-xs">
-            <summary className="cursor-pointer text-orange-400">Raw Data</summary>
-            <pre className="mt-2 p-2 bg-gray-800 rounded overflow-auto max-h-32">
-              {JSON.stringify(previews.slice(0, 2), null, 2)}
-            </pre>
-          </details>
-          <details className="text-xs">
-            <summary className="cursor-pointer text-orange-400">Filtering Debug</summary>
-            <div className="mt-2 p-2 bg-gray-800 rounded">
-              <p><strong>Active Tab:</strong> {activeTab}</p>
-              <p><strong>Selected Status:</strong> {selectedStatus}</p>
-              <p><strong>Selected Channel:</strong> {selectedChannel}</p>
-              <p><strong>Search Term:</strong> "{searchTerm}"</p>
-            </div>
-          </details>
-        </CardContent>
-      </Card>
+
 
       {/* Search and Filters */}
       <Card>
