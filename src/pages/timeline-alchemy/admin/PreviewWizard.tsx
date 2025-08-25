@@ -1226,77 +1226,7 @@ export default function TimelineAlchemyPreviewWizard() {
           </div>
         )
 
-      case 5:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Schedule & Review</h3>
-            <div className="grid gap-4">
-              <div>
-                <label className="text-sm font-medium text-white">Publish Date</label>
-                <Input
-                  type="date"
-                  value={form.scheduledDate}
-                  onChange={(e) => setForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-white">Publish Time</label>
-                <Input
-                  type="time"
-                  value={form.scheduledTime}
-                  onChange={(e) => setForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
-              
-              <div>
-                <label className="text-sm font-medium text-white">Admin Notes (Optional)</label>
-                <Textarea
-                  value={form.adminNotes}
-                  onChange={(e) => setForm(prev => ({ ...prev, adminNotes: e.target.value }))}
-                  placeholder="Add any notes for the client..."
-                  rows={3}
-                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                />
-              </div>
-            </div>
-
-            {/* Review Summary */}
-            <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
-              <h4 className="font-medium text-white mb-3">Preview Summary</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Client:</span>
-                  <span className="font-medium text-white">
-                    {clients.find(c => c.id === form.selectedClient)?.name || 'Not selected'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Template:</span>
-                  <span className="font-medium text-white">{form.selectedTemplate || 'Not selected'}</span>
-                </div>
-                {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Post:</span>
-                    <span className="font-medium text-white">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Scheduled:</span>
-                  <span className="font-medium text-white">
-                    {form.scheduledDate && form.scheduledTime 
-                      ? `${form.scheduledDate} at ${form.scheduledTime}`
-                      : 'Not scheduled'
-                    }
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
+      // OLD CASE 5 - REMOVED - Using new version below
 
       case 5:
         return (
