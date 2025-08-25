@@ -187,6 +187,8 @@ export default function TimelineAlchemyPreviewWizard() {
         }
       } else {
         console.log('No stored posts found in sessionStorage')
+        // Load all available blog posts for preview creation
+        await loadBlogPosts()
       }
     } catch (error) {
       console.error('Error loading data:', error)
@@ -195,26 +197,26 @@ export default function TimelineAlchemyPreviewWizard() {
     }
   }
 
-  // Load blog posts when selectedPosts changes
-  const loadBlogPosts = async (postIds: string[]) => {
+  // Load all available blog posts for preview creation
+  const loadBlogPosts = async (postIds?: string[]) => {
     try {
-      console.log('Loading blog posts for IDs:', postIds)
+      console.log('Loading blog posts...')
       
-      // If no post IDs, just return (this allows creating previews without existing posts)
-      if (!postIds || postIds.length === 0) {
-        console.log('No post IDs provided, allowing custom preview creation')
-        setBlogPosts([])
-        return
-      }
-      
-      const { data, error } = await supabase
+      let query = supabase
         .from('blog_posts')
         .select('*')
-        .in('id', postIds)
+        .order('created_at', { ascending: false })
+      
+      // If specific post IDs are provided, filter by them
+      if (postIds && postIds.length > 0) {
+        console.log('Filtering by specific post IDs:', postIds)
+        query = query.in('id', postIds)
+      }
+      
+      const { data, error } = await query
       
       if (error) {
         console.error('Error loading blog posts:', error)
-        // Fallback to empty array to allow custom preview creation
         setBlogPosts([])
         return
       }
@@ -239,12 +241,11 @@ export default function TimelineAlchemyPreviewWizard() {
         console.log('Transformed posts:', transformedPosts)
         setBlogPosts(transformedPosts)
       } else {
-        // No posts found, set empty array to allow custom preview creation
+        console.log('No blog posts found')
         setBlogPosts([])
       }
     } catch (error) {
       console.error('Error in loadBlogPosts:', error)
-      // Fallback to empty array to allow custom preview creation
       setBlogPosts([])
     }
   }
