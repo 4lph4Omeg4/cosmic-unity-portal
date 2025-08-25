@@ -1277,6 +1277,36 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             </div>
 
+            {/* Schedule Inputs */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-green-400" />
+                Set Publishing Schedule
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-white">Publish Date</label>
+                  <Input
+                    type="date"
+                    value={form.scheduledDate}
+                    onChange={(e) => setForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-white">Publish Time</label>
+                  <Input
+                    type="time"
+                    value={form.scheduledTime}
+                    onChange={(e) => setForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Content Overview with Original vs Modified */}
             {form.selectedPosts.length > 0 && (
               <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
