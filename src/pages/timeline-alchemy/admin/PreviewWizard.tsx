@@ -818,18 +818,7 @@ export default function TimelineAlchemyPreviewWizard() {
                     )
                   })()}
                   
-                  {/* Blog Post Content - Always Show */}
-                  <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                    <h5 className="font-medium text-blue-300 mb-2">📖 Blog Post Content:</h5>
-                    <div className="max-h-96 overflow-y-auto border border-gray-600 rounded p-3 bg-gray-800">
-                      <p className="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed">
-                        {blogPosts.find(p => p.id === form.selectedPosts[0])?.body || 'No content available'}
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-2">
-                      📜 Scroll om alle content te zien • Content wordt automatisch geladen uit je blog post
-                    </p>
-                  </div>
+
                   
                   {/* Platform-Specific Content Preview */}
                   {form.selectedTemplates.length > 0 && (
