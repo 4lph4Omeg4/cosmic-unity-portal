@@ -23,9 +23,6 @@ interface Preview {
     title: string
     description: string
   }
-  clients?: {
-    name: string
-  }
 }
 
 export default function TimelineAlchemyMyPreviews() {
@@ -54,65 +51,54 @@ export default function TimelineAlchemyMyPreviews() {
         return
       }
 
-      // Get client IDs for this user
-      const { data: clientIds, error: clientError } = await supabase
-        .rpc('client_ids_for_user')
+      console.log('Loading previews for user:', user.id)
 
-      if (clientError) {
-        console.error('Error getting client IDs:', clientError)
-        // Fallback to mock data for testing
-        const mockData: Preview[] = [
-          {
-            id: '1',
-            idea_id: '1',
-            client_id: '1',
-            channel: 'Instagram',
-            template: 'Instagram',
-            draft_content: { content: 'Discover how AI can transform your content creation workflow with intelligent scheduling and optimization.' },
-            scheduled_at: '2025-01-20T09:00:00Z',
-            status: 'pending',
-            admin_notes: 'Content looks great! Ready for your review.',
-            created_at: '2025-01-15T00:00:00Z',
-            ideas: { title: 'AI-Powered Content Calendar', description: 'AI content creation workflow' },
-            clients: { name: 'TechCorp' }
-          },
-          {
-            id: '2',
-            idea_id: '2',
-            client_id: '2',
-            channel: 'LinkedIn',
-            template: 'LinkedIn',
-            draft_content: { content: 'Mindfulness isn\'t just about meditation—it\'s about presence in everything you do.' },
-            scheduled_at: '2025-01-22T14:00:00Z',
-            status: 'approved',
-            created_at: '2025-01-14T00:00:00Z',
-            ideas: { title: 'Mindfulness Integration', description: 'Mindfulness in daily life' },
-            clients: { name: 'Wellness Inc' }
-          }
-        ]
-        setPreviews(mockData)
-        return
-      }
-
-      if (!clientIds || clientIds.length === 0) {
-        console.log('No client access found for user')
-        setPreviews([])
-        return
-      }
-
-      // Get previews for these clients
+      // Load previews directly for this user (since clients are now profiles with role='client')
       const { data, error } = await supabase
         .from('previews')
         .select(`
           *,
-          ideas(title, description),
-          clients(name)
+          ideas(title, description)
         `)
-        .in('client_id', clientIds)
+        .eq('client_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) {
         console.error('Error fetching previews:', error)
+        // Try fallback approach
+        console.log('Trying fallback approach...')
+        
+        // Check if user has client role in profiles
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single()
+
+        if (profileError || profileData?.role !== 'client') {
+          console.log('User is not a client or profile not found')
+          setPreviews([])
+          return
+        }
+
+        // Try to load previews again
+        const { data: retryData, error: retryError } = await supabase
+          .from('previews')
+          .select(`
+            *,
+            ideas(title, description)
+          `)
+          .eq('client_id', user.id)
+          .order('created_at', { ascending: false })
+
+        if (retryError) {
+          console.error('Retry failed:', retryError)
+          setPreviews([])
+          return
+        }
+
+        console.log('Loaded previews (retry):', retryData)
+        setPreviews(retryData || [])
         return
       }
 
@@ -120,6 +106,7 @@ export default function TimelineAlchemyMyPreviews() {
       setPreviews(data || [])
     } catch (error) {
       console.error('Error loading previews:', error)
+      setPreviews([])
     } finally {
       setLoading(false)
     }
@@ -413,13 +400,39 @@ export default function TimelineAlchemyMyPreviews() {
                         </Badge>
                       </div>
                       
-                      <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                      <h3 className="font-semibold text-lg text-white mb-2">
                         {preview.ideas?.title || 'Untitled Preview'}
                       </h3>
                       
-                      <p className="text-gray-600 mb-3">
-                        {preview.draft_content?.content || 'No content available'}
-                      </p>
+                      {/* Content Preview */}
+                      <div className="mb-3">
+                        <h4 className="font-medium text-gray-300 mb-2">Content Preview:</h4>
+                        <div className="bg-gray-800 rounded p-3 border border-gray-600">
+                          <p className="text-gray-200 whitespace-pre-wrap">
+                            {preview.draft_content?.content || 'No content available'}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Platform Information */}
+                      {preview.draft_content?.template && (
+                        <div className="mb-3">
+                          <h4 className="font-medium text-gray-300 mb-2">Platforms:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {preview.draft_content.template.split(', ').map((template, index) => (
+                              <Badge key={index} className="bg-gray-700 text-gray-200 border-gray-600">
+                                {template === 'Facebook' && '📘'}
+                                {template === 'Instagram' && '📷'}
+                                {template === 'X (Twitter)' && '🐦'}
+                                {template === 'LinkedIn' && '💼'}
+                                {template === 'Blog Post' && '📝'}
+                                {template === 'Custom Post' && '✨'}
+                                {' '}{template}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         {preview.scheduled_at && (
@@ -444,23 +457,23 @@ export default function TimelineAlchemyMyPreviews() {
 
                   {/* Admin Notes */}
                   {preview.admin_notes && (
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="p-3 bg-blue-900/20 border border-blue-700 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <User className="w-4 h-4 text-blue-600" />
-                        <span className="font-medium text-blue-900">Admin Notes</span>
+                        <User className="w-4 h-4 text-blue-400" />
+                        <span className="font-medium text-blue-300">Admin Notes</span>
                       </div>
-                      <p className="text-sm text-blue-700">{preview.admin_notes}</p>
+                      <p className="text-sm text-blue-200">{preview.admin_notes}</p>
                     </div>
                   )}
 
                   {/* Client Feedback */}
                   {preview.client_feedback && (
-                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="p-3 bg-green-900/20 border border-green-700 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <MessageSquare className="w-4 h-4 text-green-600" />
-                        <span className="font-medium text-green-900">Your Feedback</span>
+                        <MessageSquare className="w-4 h-4 text-green-400" />
+                        <span className="font-medium text-green-300">Your Feedback</span>
                       </div>
-                      <p className="text-sm text-green-700">{preview.client_feedback}</p>
+                      <p className="text-sm text-green-200">{preview.client_feedback}</p>
                     </div>
                   )}
 
