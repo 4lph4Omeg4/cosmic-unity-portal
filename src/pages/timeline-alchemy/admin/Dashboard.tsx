@@ -57,17 +57,44 @@ export default function TimelineAlchemyAdminDashboard() {
 
       if (!clientsError && clientsData) {
         setClients(clientsData.map(c => ({ id: c.user_id, name: c.display_name })))
+        console.log('Clients loaded:', clientsData)
+      } else {
+        console.error('Error loading clients:', clientsError)
       }
 
       // Load all previews with proper joins
+      console.log('Loading previews from database...')
+      
+      // First, try to load previews without joins to see if basic data loads
+      const { data: basicData, error: basicError } = await supabase
+        .from('previews')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (basicError) {
+        console.error('Error loading basic previews:', basicError)
+        return
+      }
+
+      console.log('Basic previews loaded:', basicData)
+
+      // Now try with joins
       const { data, error } = await supabase
         .from('previews')
         .select(`
           *,
-          ideas(title, description),
-          profiles!previews_client_id_fkey(display_name, role)
+          ideas(title, description)
         `)
         .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error loading previews with joins:', error)
+        // Fall back to basic data
+        setPreviews(basicData || [])
+        return
+      }
+
+      console.log('Previews with joins loaded:', data)
 
       if (error) {
         console.error('Error fetching previews:', error)
@@ -322,9 +349,9 @@ export default function TimelineAlchemyAdminDashboard() {
                         <Badge className={getChannelColor(preview.channel)}>
                           {preview.channel}
                         </Badge>
-                        {preview.profiles?.display_name && (
+                        {preview.client_id && (
                           <Badge variant="outline" className="text-gray-600 border-gray-400">
-                            Client: {preview.profiles.display_name}
+                            Client ID: {preview.client_id.substring(0, 8)}...
                           </Badge>
                         )}
                       </div>
@@ -348,10 +375,10 @@ export default function TimelineAlchemyAdminDashboard() {
                           <Calendar className="w-4 h-4" />
                           Created: {new Date(preview.created_at).toLocaleDateString()}
                         </div>
-                        {preview.profiles?.display_name && (
+                        {preview.client_id && (
                           <div className="flex items-center gap-1">
                             <User className="w-4 h-4" />
-                            {preview.profiles.display_name}
+                            Client: {preview.client_id.substring(0, 8)}...
                           </div>
                         )}
                       </div>
