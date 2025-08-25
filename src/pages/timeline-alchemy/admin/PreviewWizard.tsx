@@ -1333,21 +1333,26 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             </div>
 
-            {/* Content Overview */}
+            {/* Content Overview with Original vs Modified */}
             {form.selectedPosts.length > 0 && (
               <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                 <h4 className="text-lg font-medium text-white mb-4 flex items-center">
                   <FileText className="w-5 h-5 mr-2 text-green-400" />
-                  Content to be Published
+                  Content Overview: Original vs Modified
                 </h4>
                 
                 {form.selectedPosts.map((postId) => {
                   const post = blogPosts.find(p => p.id === postId);
                   if (!post) return null;
                   
+                  const hasModifications = form.content !== post.body;
+                  const originalLength = post.body?.length || 0;
+                  const modifiedLength = form.content.length;
+                  
                   return (
-                    <div key={postId} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                      <div className="flex items-start gap-4">
+                    <div key={postId} className="space-y-4">
+                      {/* Post Header */}
+                      <div className="flex items-start gap-4 bg-gray-700 rounded-lg p-4 border border-gray-600">
                         {post.image_url && (
                           <img 
                             src={post.image_url} 
@@ -1358,13 +1363,79 @@ export default function TimelineAlchemyPreviewWizard() {
                         <div className="flex-1">
                           <h5 className="text-lg font-semibold text-white mb-2">{post.title}</h5>
                           <p className="text-gray-300 text-sm mb-3">{post.excerpt}</p>
-                          <div className="bg-gray-800 rounded p-3 max-h-32 overflow-y-auto">
-                            <p className="text-gray-200 text-sm whitespace-pre-wrap">
-                              {(post.body || '').substring(0, 300)}...
-                            </p>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="text-gray-400">Original: {originalLength} characters</span>
+                            <span className="text-gray-400">Modified: {modifiedLength} characters</span>
+                            {hasModifications && (
+                              <span className="px-2 py-1 bg-yellow-600 text-yellow-100 text-xs rounded-full">
+                                ✏️ Modified
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
+
+                      {/* Content Comparison */}
+                      <div className="grid gap-4 md:grid-cols-2">
+                        {/* Original Content */}
+                        <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                          <h6 className="font-medium text-white mb-3 flex items-center">
+                            <span className="text-gray-400 mr-2">📖</span>
+                            Original Blog Post Content
+                          </h6>
+                          <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">
+                              {post.body || 'No content available'}
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-2">
+                            Character count: {originalLength}
+                          </p>
+                        </div>
+
+                        {/* Modified Content */}
+                        <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                          <h6 className="font-medium text-white mb-3 flex items-center">
+                            <span className="text-blue-400 mr-2">✏️</span>
+                            Your Modified Content
+                          </h6>
+                          <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">
+                              {form.content || 'No content available'}
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-2">
+                            Character count: {modifiedLength}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Modification Summary */}
+                      {hasModifications && (
+                        <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-700">
+                          <h6 className="font-medium text-blue-300 mb-2 flex items-center">
+                            <span className="mr-2">📊</span>
+                            Content Modification Summary
+                          </h6>
+                          <div className="grid gap-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-blue-200">Characters added/removed:</span>
+                              <span className="text-blue-100 font-medium">
+                                {modifiedLength > originalLength ? '+' : ''}{modifiedLength - originalLength}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-blue-200">Content changed:</span>
+                              <span className="text-blue-100 font-medium">
+                                {Math.round(((Math.abs(modifiedLength - originalLength) / originalLength) * 100) || 0)}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-blue-300 mt-2">
+                              💡 Your modifications will be used for all selected platforms
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
