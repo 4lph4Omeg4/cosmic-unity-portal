@@ -190,6 +190,7 @@ export default function TimelineAlchemyAdminDashboard() {
       case 'approved': return 'bg-green-100 text-green-800'
       case 'rejected': return 'bg-red-100 text-red-800'
       case 'pending': return 'bg-yellow-100 text-yellow-800'
+      case 'published': return 'bg-purple-100 text-purple-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -199,6 +200,7 @@ export default function TimelineAlchemyAdminDashboard() {
       case 'approved': return <CheckCircle className="w-4 h-4" />
       case 'rejected': return <XCircle className="w-4 h-4" />
       case 'pending': return <Clock className="w-4 h-4" />
+      case 'published': return <CheckCircle className="w-4 h-4" />
       default: return <Clock className="w-4 h-4" />
     }
   }
@@ -230,7 +232,8 @@ export default function TimelineAlchemyAdminDashboard() {
     total: previews.length,
     pending: previews.filter(p => p.status === 'pending').length,
     approved: previews.filter(p => p.status === 'approved').length,
-    rejected: previews.filter(p => p.status === 'rejected').length
+    rejected: previews.filter(p => p.status === 'rejected').length,
+    published: previews.filter(p => p.status === 'published').length
   }
 
   return (
@@ -254,7 +257,7 @@ export default function TimelineAlchemyAdminDashboard() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -299,6 +302,18 @@ export default function TimelineAlchemyAdminDashboard() {
                 <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
               </div>
               <XCircle className="w-8 h-8 text-red-500" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Published</p>
+                <p className="text-2xl font-bold text-purple-600">{stats.published}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-purple-500" />
             </div>
           </CardContent>
         </Card>

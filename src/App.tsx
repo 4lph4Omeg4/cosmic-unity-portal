@@ -39,7 +39,7 @@ import { Analytics } from "@vercel/analytics/next";
 import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
-import TimelineAlchemyPublishQueue from "./pages/timeline-alchemy/admin/PublishQueue";
+
 
 // Timeline Alchemy Client Pages
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
@@ -97,7 +97,7 @@ const App = () => (
               <Route path="/timeline-alchemy/admin/dashboard" element={<TimelineAlchemyDashboard />} />
               <Route path="/timeline-alchemy/admin/ideas" element={<TimelineAlchemyIdeas />} />
               <Route path="/timeline-alchemy/admin/preview-wizard" element={<TimelineAlchemyPreviewWizard />} />
-              <Route path="/timeline-alchemy/admin/publish-queue" element={<TimelineAlchemyPublishQueue />} />
+      
               
               {/* Timeline Alchemy Client Routes */}
               <Route path="/timeline-alchemy/client/my-previews" element={<TimelineAlchemyMyPreviews />} />

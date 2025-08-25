@@ -23,6 +23,15 @@ interface Preview {
     title: string
     description: string
   }
+  blogPosts?: Array<{
+    id: string
+    title: string
+    body: string
+    facebook?: string
+    instagram?: string
+    x?: string
+    linkedin?: string
+  }>
 }
 
 export default function TimelineAlchemyMyPreviews() {
@@ -100,6 +109,32 @@ export default function TimelineAlchemyMyPreviews() {
         console.log('Loaded previews (retry):', retryData)
         setPreviews(retryData || [])
         return
+      }
+
+      // Load blog posts for platform-specific content
+      if (data && data.length > 0) {
+        const postIds = data
+          .map(preview => preview.draft_content?.selectedPosts)
+          .flat()
+          .filter(Boolean)
+        
+        if (postIds.length > 0) {
+          const { data: blogPostsData, error: blogPostsError } = await supabase
+            .from('blog_posts')
+            .select('id, title, body, facebook, instagram, x, linkedin')
+            .in('id', postIds)
+          
+          if (!blogPostsError && blogPostsData) {
+            // Attach blog posts data to previews
+            data.forEach(preview => {
+              if (preview.draft_content?.selectedPosts) {
+                preview.blogPosts = blogPostsData.filter(post => 
+                  preview.draft_content.selectedPosts.includes(post.id)
+                )
+              }
+            })
+          }
+        }
       }
 
       console.log('Loaded previews:', data)
@@ -430,6 +465,76 @@ export default function TimelineAlchemyMyPreviews() {
                                 {' '}{template}
                               </Badge>
                             ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Platform-Specific Content */}
+                      {preview.draft_content?.template && preview.blogPosts && (
+                        <div className="mb-3">
+                          <h4 className="font-medium text-gray-300 mb-2">Platform Content:</h4>
+                          <div className="space-y-2">
+                            {preview.draft_content.template.split(', ').map((template, index) => {
+                              const blogPost = preview.blogPosts?.[0]; // Get first blog post
+                              if (!blogPost) return null;
+                              
+                              let content = '';
+                              let contentType = '';
+                              
+                              switch (template) {
+                                case 'Facebook':
+                                  content = blogPost.facebook || blogPost.body;
+                                  contentType = 'Facebook promotional content';
+                                  break;
+                                case 'Instagram':
+                                  content = blogPost.instagram || blogPost.body;
+                                  contentType = 'Instagram promotional content';
+                                  break;
+                                case 'X (Twitter)':
+                                  content = blogPost.x || blogPost.body;
+                                  contentType = 'X (Twitter) promotional content';
+                                  break;
+                                case 'LinkedIn':
+                                  content = blogPost.linkedin || blogPost.body;
+                                  contentType = 'LinkedIn promotional content';
+                                  break;
+                                case 'Blog Post':
+                                  content = blogPost.body;
+                                  contentType = 'Full blog post content';
+                                  break;
+                                case 'Custom Post':
+                                  content = preview.draft_content?.content || blogPost.body;
+                                  contentType = 'Custom content';
+                                  break;
+                                default:
+                                  content = blogPost.body;
+                                  contentType = 'Content';
+                              }
+                              
+                              return (
+                                <div key={index} className="bg-gray-700 rounded border border-gray-600">
+                                  <div className="flex items-center gap-2 p-2 border-b border-gray-600">
+                                    <div className="flex-shrink-0">
+                                      {template === 'Facebook' && <span className="text-blue-400">📘</span>}
+                                      {template === 'Instagram' && <span className="text-pink-400">📷</span>}
+                                      {template === 'X (Twitter)' && <span className="text-blue-300">🐦</span>}
+                                      {template === 'LinkedIn' && <span className="text-blue-500">💼</span>}
+                                      {template === 'Blog Post' && <span className="text-green-400">📝</span>}
+                                      {template === 'Custom Post' && <span className="text-purple-400">✨</span>}
+                                    </div>
+                                    <span className="font-medium text-gray-200 text-sm">{template}</span>
+                                  </div>
+                                  <div className="p-2">
+                                    <p className="text-xs text-gray-400 mb-2">{contentType}</p>
+                                    <div className="bg-gray-800 rounded p-2 max-h-24 overflow-y-auto">
+                                      <p className="text-xs text-gray-200 whitespace-pre-wrap">
+                                        {content ? content.substring(0, 200) + (content.length > 200 ? '...' : '') : 'No content available'}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
