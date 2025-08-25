@@ -90,6 +90,7 @@ export default function TimelineAlchemyMyPreviews() {
       }
 
       console.log('Successfully loaded previews:', data?.length || 0)
+      console.log('Preview statuses:', data?.map(p => ({ id: p.id, status: p.status, title: p.ideas?.title })))
 
       // Load blog posts for platform-specific content
       if (data && data.length > 0) {
