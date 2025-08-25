@@ -24,11 +24,8 @@ interface Preview {
     title: string
     description: string
   }
-  clients?: {
-    name: string
-    contact_email: string
-  }
-  user_profiles?: {
+  profiles?: {
+    display_name: string
     role: string
   }
 }
@@ -51,23 +48,24 @@ export default function TimelineAlchemyAdminDashboard() {
     try {
       setLoading(true)
       
-      // Load clients for filter
+      // Load clients from profiles where role = 'client'
       const { data: clientsData, error: clientsError } = await supabase
-        .from('clients')
-        .select('id, name')
-        .order('name')
+        .from('profiles')
+        .select('user_id, display_name')
+        .eq('role', 'client')
+        .order('display_name')
 
       if (!clientsError && clientsData) {
-        setClients(clientsData)
+        setClients(clientsData.map(c => ({ id: c.user_id, name: c.display_name })))
       }
 
-      // Load all previews
+      // Load all previews with proper joins
       const { data, error } = await supabase
         .from('previews')
         .select(`
           *,
           ideas(title, description),
-          clients(name, contact_email)
+          profiles!previews_client_id_fkey(display_name, role)
         `)
         .order('created_at', { ascending: false })
 
@@ -324,9 +322,9 @@ export default function TimelineAlchemyAdminDashboard() {
                         <Badge className={getChannelColor(preview.channel)}>
                           {preview.channel}
                         </Badge>
-                        {preview.clients?.name && (
+                        {preview.profiles?.display_name && (
                           <Badge variant="outline" className="text-gray-600 border-gray-400">
-                            Client: {preview.clients.name}
+                            Client: {preview.profiles.display_name}
                           </Badge>
                         )}
                       </div>
@@ -350,10 +348,10 @@ export default function TimelineAlchemyAdminDashboard() {
                           <Calendar className="w-4 h-4" />
                           Created: {new Date(preview.created_at).toLocaleDateString()}
                         </div>
-                        {preview.clients?.contact_email && (
+                        {preview.profiles?.display_name && (
                           <div className="flex items-center gap-1">
                             <User className="w-4 h-4" />
-                            {preview.clients.contact_email}
+                            {preview.profiles.display_name}
                           </div>
                         )}
                       </div>
