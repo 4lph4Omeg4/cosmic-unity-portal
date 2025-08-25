@@ -922,13 +922,13 @@ export default function TimelineAlchemyPreviewWizard() {
                 value={form.content}
                 onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
                 placeholder="Write your content message here..."
-                rows={form.selectedTemplates.includes('Blog Post') ? 12 : 6}
-                maxLength={form.selectedTemplates.includes('Blog Post') ? 2000 : 280}
+                rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
+                maxLength={form.selectedTemplates.includes('Blog Post') ? 10000 : 280}
                 className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
               />
               <div className="flex items-center justify-between text-sm text-gray-400">
                 <span>Character count: {form.content.length}</span>
-                <span>Max: {form.selectedTemplates.includes('Blog Post') ? '2000 characters' : '280 characters'}</span>
+                <span>Max: {form.selectedTemplates.includes('Blog Post') ? '10,000 characters' : '280 characters'}</span>
               </div>
             </div>
             
