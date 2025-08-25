@@ -807,8 +807,8 @@ export default function TimelineAlchemyPreviewWizard() {
             <div className="space-y-3">
               <label className="text-sm font-medium text-white">Content Message</label>
               
-              {/* Show selected content and image based on templates */}
-              {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
+              {/* Show selected content and image - always load if post is selected */}
+              {form.selectedPosts.length > 0 && (
                 <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
                   <h4 className="font-medium text-blue-300 mb-3">📊 Selected Content</h4>
                   
@@ -844,62 +844,74 @@ export default function TimelineAlchemyPreviewWizard() {
                     )
                   })()}
                   
-                  {/* Content Preview for Multiple Platforms */}
-                  <div className="space-y-3">
-                    <h5 className="font-medium text-blue-300 mb-2">Content for Selected Platforms:</h5>
-                    {form.selectedTemplates.map((template, index) => {
-                      const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                      if (!post) return null
-                      
-                      return (
-                        <div key={index} className="p-3 bg-gray-700 rounded border border-gray-600">
-                          <div className="flex items-center gap-2 mb-2">
-                            {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                            {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                            {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                            {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                            {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                            {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                            <span className="font-medium text-white">{template}</span>
-                          </div>
-                          
-                          {/* Show platform-specific content */}
-                          {template === 'Facebook' && post.facebook && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
-                          )}
-                          {template === 'Instagram' && post.instagram && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
-                          )}
-                          {template === 'X (Twitter)' && post.x && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
-                          )}
-                          {template === 'LinkedIn' && post.linkedin && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
-                          )}
-                          {template === 'Blog Post' && post.body && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{(post.body || '').substring(0, 200)}...</p>
-                          )}
-                          {template === 'Custom Post' && (
-                            <p className="text-sm text-gray-200">Write your own custom content below</p>
-                          )}
-                          
-                          {/* Show if no content available */}
-                          {!post.facebook && template === 'Facebook' && (
-                            <p className="text-sm text-gray-400 italic">No Facebook content available</p>
-                          )}
-                          {!post.instagram && template === 'Instagram' && (
-                            <p className="text-sm text-gray-400 italic">No Instagram content available</p>
-                          )}
-                          {!post.x && template === 'X (Twitter)' && (
-                            <p className="text-sm text-gray-400 italic">No X (Twitter) content available</p>
-                          )}
-                          {!post.linkedin && template === 'LinkedIn' && (
-                            <p className="text-sm text-gray-400 italic">No LinkedIn content available</p>
-                          )}
-                        </div>
-                      )
-                    })}
+                  {/* Blog Post Content - Always Show */}
+                  <div className="p-3 bg-gray-700 rounded border border-gray-600">
+                    <h5 className="font-medium text-blue-300 mb-2">📖 Blog Post Content:</h5>
+                    <div className="max-h-40 overflow-y-auto">
+                      <p className="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed">
+                        {blogPosts.find(p => p.id === form.selectedPosts[0])?.body || 'No content available'}
+                      </p>
+                    </div>
                   </div>
+                  
+                  {/* Platform-Specific Content Preview */}
+                  {form.selectedTemplates.length > 0 && (
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-blue-300 mb-2">Platform-Specific Content:</h5>
+                      {form.selectedTemplates.map((template, index) => {
+                        const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+                        if (!post) return null
+                        
+                        return (
+                          <div key={index} className="p-3 bg-gray-700 rounded border border-gray-600">
+                            <div className="flex items-center gap-2 mb-2">
+                              {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                              {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                              {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                              {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                              {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                              {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                              <span className="font-medium text-white">{template}</span>
+                            </div>
+                            
+                            {/* Show platform-specific content */}
+                            {template === 'Facebook' && post.facebook && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
+                            )}
+                            {template === 'Instagram' && post.instagram && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
+                            )}
+                            {template === 'X (Twitter)' && post.x && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
+                            )}
+                            {template === 'LinkedIn' && post.linkedin && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
+                            )}
+                            {template === 'Blog Post' && post.body && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{(post.body || '').substring(0, 200)}...</p>
+                            )}
+                            {template === 'Custom Post' && (
+                              <p className="text-sm text-gray-200">Write your own custom content below</p>
+                            )}
+                            
+                            {/* Show if no content available */}
+                            {!post.facebook && template === 'Facebook' && (
+                              <p className="text-sm text-gray-400 italic">No Facebook content available</p>
+                            )}
+                            {!post.instagram && template === 'Instagram' && (
+                              <p className="text-sm text-gray-400 italic">No Instagram content available</p>
+                            )}
+                            {!post.x && template === 'X (Twitter)' && (
+                              <p className="text-sm text-gray-400 italic">No X (Twitter) content available</p>
+                            )}
+                            {!post.linkedin && template === 'LinkedIn' && (
+                              <p className="text-sm text-gray-400 italic">No LinkedIn content available</p>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
               
