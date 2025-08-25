@@ -251,7 +251,7 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const nextStep = () => {
-    if (form.step < 6) {
+    if (form.step < 5) {
       setForm(prev => ({ ...prev, step: prev.step + 1 }))
     }
   }
@@ -360,10 +360,10 @@ export default function TimelineAlchemyPreviewWizard() {
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1: return 'Select Client'
-      case 2: return 'Select Template'
-      case 3: return 'Draft Content'
-      case 4: return 'Schedule & Review'
-      case 5: return 'Save Preview'
+      case 2: return 'Select Blog Post'
+      case 3: return 'Select Platform'
+      case 4: return 'Draft Content'
+      case 5: return 'Schedule & Review'
       default: return ''
     }
   }
@@ -371,10 +371,10 @@ export default function TimelineAlchemyPreviewWizard() {
   const getStepDescription = (step: number) => {
     switch (step) {
       case 1: return 'Choose which client this preview is for'
-      case 2: return 'Pick a content template or create custom'
-      case 3: return 'Write your content message'
-      case 4: return 'Set the publishing schedule and review details'
-      case 5: return 'Save and create the preview'
+      case 2: return 'Select the main blog post to promote'
+      case 3: return 'Choose which social platform to post to'
+      case 4: return 'Write and edit your content message'
+      case 5: return 'Set the publishing schedule and review details'
       default: return ''
     }
   }
@@ -1241,9 +1241,9 @@ export default function TimelineAlchemyPreviewWizard() {
               onClick={nextStep}
               disabled={
                 (form.step === 1 && !form.selectedClient) ||
-                (form.step === 2 && !form.selectedTemplate) ||
-                (form.step === 3 && !form.content.trim()) ||
-                (form.step === 4 && (!form.scheduledDate || !form.scheduledTime))
+                (form.step === 2 && form.selectedPosts.length === 0) ||
+                (form.step === 3 && !form.selectedTemplate) ||
+                (form.step === 4 && !form.content.trim())
               }
               className="flex items-center gap-2"
             >
