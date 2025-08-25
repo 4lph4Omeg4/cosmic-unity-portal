@@ -198,6 +198,21 @@ export default function TimelineAlchemyMyPreviews() {
     const matchesChannel = selectedChannel === 'all' || preview.channel === selectedChannel
     const matchesTab = preview.status === activeTab
     
+    // Debug logging for filtering
+    if (preview.id === previews[0]?.id) {
+      console.log('=== FILTERING DEBUG ===')
+      console.log('Preview status:', preview.status)
+      console.log('Active tab:', activeTab)
+      console.log('Selected status:', selectedStatus)
+      console.log('Selected channel:', selectedChannel)
+      console.log('Search term:', searchTerm)
+      console.log('Matches tab:', matchesTab)
+      console.log('Matches status:', matchesStatus)
+      console.log('Matches channel:', matchesChannel)
+      console.log('Matches search:', matchesSearch)
+      console.log('Final result:', matchesSearch && matchesStatus && matchesChannel && matchesTab)
+    }
+    
     return matchesSearch && matchesStatus && matchesChannel && matchesTab
   })
 
@@ -428,12 +443,29 @@ export default function TimelineAlchemyMyPreviews() {
             <p><strong>Loading:</strong> {loading ? 'Yes' : 'No'}</p>
             <p><strong>Active Tab:</strong> {activeTab}</p>
             <p><strong>Filtered Count:</strong> {filteredPreviews.length}</p>
+            <p><strong>Status Breakdown:</strong></p>
+            <ul className="ml-4 text-xs">
+              {['pending', 'approved', 'published', 'rejected'].map(status => (
+                <li key={status}>
+                  {status}: {previews.filter(p => p.status === status).length}
+                </li>
+              ))}
+            </ul>
           </div>
           <details className="text-xs">
             <summary className="cursor-pointer text-orange-400">Raw Data</summary>
             <pre className="mt-2 p-2 bg-gray-800 rounded overflow-auto max-h-32">
               {JSON.stringify(previews.slice(0, 2), null, 2)}
             </pre>
+          </details>
+          <details className="text-xs">
+            <summary className="cursor-pointer text-orange-400">Filtering Debug</summary>
+            <div className="mt-2 p-2 bg-gray-800 rounded">
+              <p><strong>Active Tab:</strong> {activeTab}</p>
+              <p><strong>Selected Status:</strong> {selectedStatus}</p>
+              <p><strong>Selected Channel:</strong> {selectedChannel}</p>
+              <p><strong>Search Term:</strong> "{searchTerm}"</p>
+            </div>
           </details>
         </CardContent>
       </Card>
