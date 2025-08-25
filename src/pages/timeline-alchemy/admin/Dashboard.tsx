@@ -391,7 +391,7 @@ export default function TimelineAlchemyAdminDashboard() {
                         )}
                       </div>
                       
-                      <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                      <h3 className="font-semibold text-lg text-white mb-2">
                         {preview.ideas?.title || 'Untitled Preview'}
                       </h3>
                       
