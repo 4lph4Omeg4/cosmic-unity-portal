@@ -89,6 +89,8 @@ export default function TimelineAlchemyMyPreviews() {
         return
       }
 
+      console.log('Successfully loaded previews:', data?.length || 0)
+
       // Load blog posts for platform-specific content
       if (data && data.length > 0) {
         const postIds = data
@@ -115,6 +117,7 @@ export default function TimelineAlchemyMyPreviews() {
         }
       }
 
+      console.log('Final data being set:', data)
       setPreviews(data || [])
     } catch (error) {
       console.error('Error loading previews:', error)
