@@ -1089,7 +1089,7 @@ export default function TimelineAlchemyPreviewWizard() {
             )}
 
             {/* Platform-Specific Content Previews */}
-            {form.selectedTemplates.length > 0 && (
+            {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
               <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                 <h4 className="text-lg font-medium text-white mb-4 flex items-center">
                   <Share2 className="w-5 h-5 mr-2 text-green-400" />
@@ -1097,28 +1097,58 @@ export default function TimelineAlchemyPreviewWizard() {
                 </h4>
                 
                 <div className="grid gap-4 md:grid-cols-2">
-                  {form.selectedTemplates.map((template) => (
-                    <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-medium text-white">{template}</h5>
-                        <div className="flex items-center space-x-2">
-                          {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
-                          {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
-                          {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
-                          {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
-                          {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
+                  {form.selectedTemplates.map((template) => {
+                    const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                    if (!post) return null;
+                    
+                    return (
+                      <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center justify-between mb-3">
+                          <h5 className="font-medium text-white">{template}</h5>
+                          <div className="flex items-center space-x-2">
+                            {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
+                            {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
+                            {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
+                            {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
+                            {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {template === 'Blog Post' ? (
+                            <div>
+                              <p className="text-sm text-gray-300 mb-2">Full blog post content will be displayed</p>
+                              <div className="bg-gray-800 rounded p-3 max-h-32 overflow-y-auto">
+                                <p className="text-gray-200 text-sm whitespace-pre-wrap">
+                                  {(post.body || '').substring(0, 200)}...
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <p className="text-sm text-gray-300 mb-2">Platform-specific content:</p>
+                              <div className="bg-gray-800 rounded p-3">
+                                {template === 'Facebook' && post.facebook ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.facebook}</p>
+                                ) : template === 'Instagram' && post.instagram ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.instagram}</p>
+                                ) : template === 'LinkedIn' && post.linkedin ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.linkedin}</p>
+                                ) : template === 'Twitter' && post.x ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.x}</p>
+                                ) : (
+                                  <p className="text-gray-400 text-sm italic">
+                                    No {template} content available for this post. 
+                                    Will use default promotional message linking to the blog.
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      
-                      <div className="text-sm text-gray-300">
-                        {template === 'Blog Post' ? (
-                          <p>Full blog post content will be displayed</p>
-                        ) : (
-                          <p>Short promotional message linking to the main blog</p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
