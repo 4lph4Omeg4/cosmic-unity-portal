@@ -1469,6 +1469,72 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             )}
 
+            {/* Platform-Specific Content Preview */}
+            {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                  Platform-Specific Content Preview
+                </h4>
+                
+                <div className="space-y-4">
+                  {form.selectedTemplates.map((template) => {
+                    const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                    if (!post) return null;
+                    
+                    return (
+                      <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center gap-3 mb-3">
+                          {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                          {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                          {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                          {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                          {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                          {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                          <h5 className="font-medium text-white">{template}</h5>
+                        </div>
+                        
+                        <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
+                          {template === 'Facebook' && post.facebook && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
+                          )}
+                          {template === 'Instagram' && post.instagram && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
+                          )}
+                          {template === 'X (Twitter)' && post.x && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
+                          )}
+                          {template === 'LinkedIn' && post.linkedin && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
+                          )}
+                          {template === 'Blog Post' && post.body && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body}</p>
+                          )}
+                          {template === 'Custom Post' && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{form.content}</p>
+                          )}
+                          
+                          {/* Show if no content available */}
+                          {!post.facebook && template === 'Facebook' && (
+                            <p className="text-sm text-gray-400 italic">No Facebook content available - will use main blog content</p>
+                          )}
+                          {!post.instagram && template === 'Instagram' && (
+                            <p className="text-sm text-gray-400 italic">No Instagram content available - will use main blog content</p>
+                          )}
+                          {!post.x && template === 'X (Twitter)' && (
+                            <p className="text-sm text-gray-400 italic">No X (Twitter) content available - will use main blog content</p>
+                          )}
+                          {!post.linkedin && template === 'LinkedIn' && (
+                            <p className="text-sm text-gray-400 italic">No LinkedIn content available - will use main blog content</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Final Summary */}
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
               <h4 className="text-lg font-medium text-white mb-4 flex items-center">
