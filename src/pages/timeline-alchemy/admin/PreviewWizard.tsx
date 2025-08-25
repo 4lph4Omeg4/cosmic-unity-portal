@@ -13,7 +13,13 @@ import {
   Users,
   Star,
   Save,
-  Loader2
+  Loader2,
+  FileText,
+  Share2,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
@@ -953,11 +959,11 @@ export default function TimelineAlchemyPreviewWizard() {
 
       case 4:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Content Overview & Preview</h3>
-            <p className="text-sm text-gray-300 mb-6">
-              Hier zie je een overzicht van wat er gepost gaat worden. Je kunt de content bewerken in stap 3.
-            </p>
+          <div className="space-y-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-white mb-2">Content Overview & Preview</h3>
+              <p className="text-gray-400">Review your selected content and platforms before scheduling</p>
+            </div>
             
             {/* Content from selected posts */}
             {form.selectedPosts.length > 0 && form.selectedTemplate && (
@@ -1044,20 +1050,112 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             )}
             
-            {/* Content editor */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-white">Content Message</label>
-              <Textarea
-                value={form.content}
-                onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="Write your content message here..."
-                rows={form.selectedTemplate === 'Blog Post' ? 12 : 6}
-                maxLength={form.selectedTemplate === 'Blog Post' ? 2000 : 280}
-                className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-              />
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Character count: {form.content.length}</span>
-                <span>Max: {form.selectedTemplate === 'Blog Post' ? '2000 characters' : '280 characters'}</span>
+            {/* Main Blog Post Content */}
+            {form.selectedPosts.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                  Main Blog Post Content
+                </h4>
+                
+                {form.selectedPosts.map((postId) => {
+                  const post = blogPosts.find(p => p.id === postId);
+                  if (!post) return null;
+                  
+                  return (
+                    <div key={postId} className="space-y-4">
+                      {post.image_url && (
+                        <div className="flex justify-center">
+                          <img 
+                            src={post.image_url} 
+                            alt={post.title}
+                            className="max-w-full h-auto max-h-96 rounded-lg shadow-lg"
+                          />
+                        </div>
+                      )}
+                      
+                      <div className="space-y-3">
+                        <h5 className="text-xl font-semibold text-white">{post.title}</h5>
+                        <p className="text-gray-300 text-sm">{post.excerpt}</p>
+                        
+                        <div className="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                          <p className="text-gray-200 whitespace-pre-wrap">{post.body}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Platform-Specific Content Previews */}
+            {form.selectedTemplates.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <Share2 className="w-5 h-5 mr-2 text-green-400" />
+                  Platform Content Previews
+                </h4>
+                
+                <div className="grid gap-4 md:grid-cols-2">
+                  {form.selectedTemplates.map((template) => (
+                    <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-medium text-white">{template}</h5>
+                        <div className="flex items-center space-x-2">
+                          {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
+                          {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
+                          {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
+                          {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
+                          {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
+                        </div>
+                      </div>
+                      
+                      <div className="text-sm text-gray-300">
+                        {template === 'Blog Post' ? (
+                          <p>Full blog post content will be displayed</p>
+                        ) : (
+                          <p>Short promotional message linking to the main blog</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Summary Section */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
+                Preview Summary
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Selected Client</h5>
+                  <p className="text-gray-300 text-sm">
+                    {clients.find(c => c.id === form.selectedClient)?.name || 'No client selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Content Type</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedPosts.length > 0 ? 'Blog Post' : 'No content selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Platforms</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedTemplates.length > 0 ? form.selectedTemplates.join(', ') : 'No platforms selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Preview Status</h5>
+                  <p className="text-green-400 text-sm font-medium">Ready for Scheduling</p>
+                </div>
               </div>
             </div>
           </div>
@@ -1137,46 +1235,167 @@ export default function TimelineAlchemyPreviewWizard() {
 
       case 5:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Save Preview</h3>
-            <div className="text-center py-8">
+          <div className="space-y-6">
+            <div className="text-center">
               <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-              <h4 className="text-xl font-medium text-white mb-2">Ready to Save!</h4>
-              <p className="text-gray-300 mb-6">
-                Your preview is ready to be saved. Review the details below and click save to create the preview.
+              <h3 className="text-2xl font-semibold text-white mb-2">Ready to Save Preview!</h3>
+              <p className="text-gray-400 mb-6">
+                Review all details below before saving. This preview will be sent to the client for approval.
               </p>
-              
-              <div className="max-w-md mx-auto p-4 bg-gray-700 rounded-lg text-left border border-gray-600">
-                <h5 className="font-medium text-white mb-3">Final Review</h5>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Client:</span>
-                    <span className="font-medium text-white">
-                      {clients.find(c => c.id === form.selectedClient)?.name}
-                    </span>
-                  </div>
+            </div>
 
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Template:</span>
-                    <span className="font-medium text-white">{form.selectedTemplate}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Content:</span>
-                    <span className="font-medium text-white">{form.content.length} characters</span>
-                  </div>
-                  {form.selectedPosts.length > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Post:</span>
-                      <span className="font-medium text-white">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Scheduled:</span>
-                    <span className="font-medium text-white">
-                      {form.scheduledDate} at {form.scheduledTime}
-                    </span>
-                  </div>
+            {/* Client & Scheduling Info */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <Users className="w-5 h-5 mr-2 text-blue-400" />
+                Client & Scheduling Details
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Selected Client</h5>
+                  <p className="text-gray-300 text-sm">
+                    {clients.find(c => c.id === form.selectedClient)?.name || 'No client selected'}
+                  </p>
                 </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Publish Schedule</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.scheduledDate && form.scheduledTime 
+                      ? `${form.scheduledDate} at ${form.scheduledTime}`
+                      : 'Not scheduled yet'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Overview */}
+            {form.selectedPosts.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-green-400" />
+                  Content to be Published
+                </h4>
+                
+                {form.selectedPosts.map((postId) => {
+                  const post = blogPosts.find(p => p.id === postId);
+                  if (!post) return null;
+                  
+                  return (
+                    <div key={postId} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                      <div className="flex items-start gap-4">
+                        {post.image_url && (
+                          <img 
+                            src={post.image_url} 
+                            alt={post.title}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-600"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <h5 className="text-lg font-semibold text-white mb-2">{post.title}</h5>
+                          <p className="text-gray-300 text-sm mb-3">{post.excerpt}</p>
+                          <div className="bg-gray-800 rounded p-3 max-h-32 overflow-y-auto">
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">
+                              {(post.body || '').substring(0, 300)}...
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Platform Distribution Plan */}
+            {form.selectedTemplates.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <Share2 className="w-5 h-5 mr-2 text-purple-400" />
+                  Where Content Will Be Posted
+                </h4>
+                
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {form.selectedTemplates.map((template) => (
+                    <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-medium text-white">{template}</h5>
+                        <div className="flex items-center space-x-2">
+                          {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
+                          {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
+                          {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
+                          {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
+                          {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
+                        </div>
+                      </div>
+                      
+                      <div className="text-sm text-gray-300">
+                        {template === 'Blog Post' ? (
+                          <p>Full blog post will be published</p>
+                        ) : (
+                          <p>Promotional message linking to main blog</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Final Summary */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
+                Preview Summary for Client Approval
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Total Platforms</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedTemplates.length} platform{form.selectedTemplates.length !== 1 ? 's' : ''} selected
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Content Type</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedPosts.length > 0 ? 'Blog Post with Social Promotion' : 'Social Media Only'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Approval Status</h5>
+                  <p className="text-yellow-400 text-sm font-medium">Pending Client Review</p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Next Step</h5>
+                  <p className="text-green-400 text-sm font-medium">Save & Send for Approval</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Admin Notes Section */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <MessageSquare className="w-5 h-5 mr-2 text-yellow-400" />
+                Admin Notes (Optional)
+              </h4>
+              
+              <div className="space-y-3">
+                <p className="text-sm text-gray-400">
+                  Add any notes or instructions for the client about this preview.
+                </p>
+                <Textarea
+                  value={form.adminNotes}
+                  onChange={(e) => setForm(prev => ({ ...prev, adminNotes: e.target.value }))}
+                  placeholder="Add notes for the client (optional)..."
+                  rows={3}
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                />
               </div>
             </div>
           </div>
