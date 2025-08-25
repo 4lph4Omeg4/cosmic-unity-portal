@@ -295,9 +295,15 @@ export default function TimelineAlchemyPreviewWizard() {
 
   const handleSave = async () => {
     try {
+      console.log('handleSave called with form data:', form)
       setSaving(true)
       
       if (!form.selectedClient || form.selectedTemplates.length === 0 || !form.content.trim()) {
+        console.log('Validation failed:', {
+          selectedClient: form.selectedClient,
+          selectedTemplates: form.selectedTemplates,
+          contentLength: form.content.trim().length
+        })
         alert('Please fill in all required fields: Client, Templates, and Content')
         return
       }
@@ -349,6 +355,16 @@ export default function TimelineAlchemyPreviewWizard() {
       }
 
       // Create preview
+      console.log('Creating preview with data:', {
+        idea_id: ideaId,
+        client_id: form.selectedClient,
+        channel: form.selectedTemplates.join(', '),
+        template: form.selectedTemplates.join(', '),
+        scheduled_at: scheduledAt,
+        status: 'pending',
+        created_by: user.id
+      })
+      
       const { data: previewData, error: previewError } = await supabase
         .from('previews')
         .insert({
