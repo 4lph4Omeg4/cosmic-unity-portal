@@ -41,7 +41,7 @@ export default function TimelineAlchemyMyPreviews() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedChannel, setSelectedChannel] = useState('all')
-  const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'published' | 'rejected'>('pending')
+  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved' | 'published' | 'rejected'>('all')
   const [feedbackText, setFeedbackText] = useState('')
   const [selectedPreview, setSelectedPreview] = useState<string | null>(null)
 
@@ -138,9 +138,9 @@ export default function TimelineAlchemyMyPreviews() {
                          (preview.draft_content?.content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
     const matchesChannel = selectedChannel === 'all' || preview.channel === selectedChannel
-    const matchesTab = preview.status === activeTab
     
-
+    // Only apply tab filtering if we're not on 'all' tab
+    const matchesTab = activeTab === 'all' || preview.status === activeTab
     
     return matchesSearch && matchesStatus && matchesChannel && matchesTab
   })
@@ -346,7 +346,7 @@ export default function TimelineAlchemyMyPreviews() {
 
       {/* Tabs */}
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
-        {(['pending', 'approved', 'published', 'rejected'] as const).map((tab) => (
+        {(['all', 'pending', 'approved', 'published', 'rejected'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -356,7 +356,8 @@ export default function TimelineAlchemyMyPreviews() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)} ({previews.filter(p => p.status === tab).length})
+            {tab === 'all' ? 'All' : tab.charAt(0).toUpperCase() + tab.slice(1)} 
+            {tab === 'all' ? ` (${previews.length})` : ` (${previews.filter(p => p.status === tab).length})`}
           </button>
         ))}
       </div>
