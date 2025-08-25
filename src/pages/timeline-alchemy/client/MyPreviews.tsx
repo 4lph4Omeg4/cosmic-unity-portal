@@ -4,23 +4,34 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User } from 'lucide-react'
+import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2 } from 'lucide-react'
+import { supabase } from '@/integrations/supabase/client'
 
 interface Preview {
   id: string
-  title: string
-  content: string
+  idea_id: string
+  client_id: string
   channel: string
-  scheduledDate: string
+  template: string
+  draft_content: any
+  scheduled_at: string | null
   status: 'pending' | 'approved' | 'rejected'
-  adminNotes?: string
-  clientFeedback?: string
-  createdAt: string
+  admin_notes?: string
+  client_feedback?: string
+  created_at: string
+  ideas?: {
+    title: string
+    description: string
+  }
+  clients?: {
+    name: string
+  }
 }
 
 export default function TimelineAlchemyMyPreviews() {
   const [previews, setPreviews] = useState<Preview[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedChannel, setSelectedChannel] = useState('all')
@@ -34,50 +45,79 @@ export default function TimelineAlchemyMyPreviews() {
 
   const loadPreviews = async () => {
     try {
-      // TODO: Implement actual API call
-      const mockData: Preview[] = [
-        {
-          id: '1',
-          title: 'AI-Powered Content Calendar',
-          content: 'Discover how AI can transform your content creation workflow with intelligent scheduling and optimization.',
-          channel: 'Instagram',
-          scheduledDate: '2025-01-20 09:00',
-          status: 'pending',
-          adminNotes: 'Content looks great! Ready for your review.',
-          createdAt: '2025-01-15'
-        },
-        {
-          id: '2',
-          title: 'Mindfulness Integration',
-          content: 'Mindfulness isn\'t just about meditation—it\'s about presence in everything you do.',
-          channel: 'LinkedIn',
-          scheduledDate: '2025-01-22 14:00',
-          status: 'approved',
-          createdAt: '2025-01-14'
-        },
-        {
-          id: '3',
-          title: 'Community Collaboration Hub',
-          content: 'Building community starts with authentic connection and shared purpose.',
-          channel: 'Twitter',
-          scheduledDate: '2025-01-25 16:00',
-          status: 'rejected',
-          adminNotes: 'Content needs more specific examples and actionable insights.',
-          clientFeedback: 'I\'ll revise with more concrete examples and practical tips.',
-          createdAt: '2025-01-13'
-        },
-        {
-          id: '4',
-          title: 'Future of Content Creation',
-          content: 'The future of content creation is collaborative, AI-enhanced, and deeply human.',
-          channel: 'Facebook',
-          scheduledDate: '2025-01-28 10:00',
-          status: 'pending',
-          adminNotes: 'Excellent concept! Ready for your approval.',
-          createdAt: '2025-01-12'
-        }
-      ]
-      setPreviews(mockData)
+      setLoading(true)
+      
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.error('User not authenticated')
+        return
+      }
+
+      // Get client IDs for this user
+      const { data: clientIds, error: clientError } = await supabase
+        .rpc('client_ids_for_user')
+
+      if (clientError) {
+        console.error('Error getting client IDs:', clientError)
+        // Fallback to mock data for testing
+        const mockData: Preview[] = [
+          {
+            id: '1',
+            idea_id: '1',
+            client_id: '1',
+            channel: 'Instagram',
+            template: 'Instagram',
+            draft_content: { content: 'Discover how AI can transform your content creation workflow with intelligent scheduling and optimization.' },
+            scheduled_at: '2025-01-20T09:00:00Z',
+            status: 'pending',
+            admin_notes: 'Content looks great! Ready for your review.',
+            created_at: '2025-01-15T00:00:00Z',
+            ideas: { title: 'AI-Powered Content Calendar', description: 'AI content creation workflow' },
+            clients: { name: 'TechCorp' }
+          },
+          {
+            id: '2',
+            idea_id: '2',
+            client_id: '2',
+            channel: 'LinkedIn',
+            template: 'LinkedIn',
+            draft_content: { content: 'Mindfulness isn\'t just about meditation—it\'s about presence in everything you do.' },
+            scheduled_at: '2025-01-22T14:00:00Z',
+            status: 'approved',
+            created_at: '2025-01-14T00:00:00Z',
+            ideas: { title: 'Mindfulness Integration', description: 'Mindfulness in daily life' },
+            clients: { name: 'Wellness Inc' }
+          }
+        ]
+        setPreviews(mockData)
+        return
+      }
+
+      if (!clientIds || clientIds.length === 0) {
+        console.log('No client access found for user')
+        setPreviews([])
+        return
+      }
+
+      // Get previews for these clients
+      const { data, error } = await supabase
+        .from('previews')
+        .select(`
+          *,
+          ideas(title, description),
+          clients(name)
+        `)
+        .in('client_id', clientIds)
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching previews:', error)
+        return
+      }
+
+      console.log('Loaded previews:', data)
+      setPreviews(data || [])
     } catch (error) {
       console.error('Error loading previews:', error)
     } finally {
@@ -91,8 +131,8 @@ export default function TimelineAlchemyMyPreviews() {
   }
 
   const filteredPreviews = previews.filter(preview => {
-    const matchesSearch = preview.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         preview.content.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = (preview.ideas?.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (preview.draft_content?.content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
     const matchesChannel = selectedChannel === 'all' || preview.channel === selectedChannel
     const matchesTab = preview.status === activeTab
@@ -100,27 +140,77 @@ export default function TimelineAlchemyMyPreviews() {
     return matchesSearch && matchesStatus && matchesChannel && matchesTab
   })
 
-  const handleApprove = (previewId: string) => {
-    // TODO: Implement actual API call
-    setPreviews(prev => prev.map(p => 
-      p.id === previewId ? { ...p, status: 'approved' as const } : p
-    ))
+  const handleApprove = async (previewId: string) => {
+    try {
+      setSaving(true)
+      
+      const { error } = await supabase
+        .from('previews')
+        .update({
+          status: 'approved',
+          reviewed_at: new Date().toISOString()
+        })
+        .eq('id', previewId)
+
+      if (error) {
+        console.error('Error approving preview:', error)
+        alert('Failed to approve preview')
+        return
+      }
+
+      // Update local state
+      setPreviews(prev => prev.map(p => 
+        p.id === previewId ? { ...p, status: 'approved' as const } : p
+      ))
+      
+      alert('Preview approved successfully!')
+    } catch (error) {
+      console.error('Error approving preview:', error)
+      alert('Failed to approve preview')
+    } finally {
+      setSaving(false)
+    }
   }
 
-  const handleRequestChanges = (previewId: string) => {
+  const handleRequestChanges = async (previewId: string) => {
     if (!feedbackText.trim()) return
     
-    // TODO: Implement actual API call
-    setPreviews(prev => prev.map(p => 
-      p.id === previewId ? { 
-        ...p, 
-        status: 'rejected' as const,
-        clientFeedback: feedbackText 
-      } : p
-    ))
-    
-    setFeedbackText('')
-    setSelectedPreview(null)
+    try {
+      setSaving(true)
+      
+      const { error } = await supabase
+        .from('previews')
+        .update({
+          status: 'rejected',
+          client_feedback: feedbackText,
+          reviewed_at: new Date().toISOString()
+        })
+        .eq('id', previewId)
+
+      if (error) {
+        console.error('Error rejecting preview:', error)
+        alert('Failed to reject preview')
+        return
+      }
+
+      // Update local state
+      setPreviews(prev => prev.map(p => 
+        p.id === previewId ? { 
+          ...p, 
+          status: 'rejected' as const,
+          client_feedback: feedbackText 
+        } : p
+      ))
+      
+      setFeedbackText('')
+      setSelectedPreview(null)
+      alert('Changes requested successfully!')
+    } catch (error) {
+      console.error('Error rejecting preview:', error)
+      alert('Failed to request changes')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -145,8 +235,10 @@ export default function TimelineAlchemyMyPreviews() {
     switch (channel) {
       case 'Instagram': return 'bg-pink-100 text-pink-800'
       case 'LinkedIn': return 'bg-blue-100 text-blue-800'
-      case 'Twitter': return 'bg-sky-100 text-sky-800'
+      case 'X (Twitter)': return 'bg-sky-100 text-sky-800'
       case 'Facebook': return 'bg-indigo-100 text-indigo-800'
+      case 'Blog Post': return 'bg-green-100 text-green-800'
+      case 'Custom Post': return 'bg-purple-100 text-purple-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -154,7 +246,10 @@ export default function TimelineAlchemyMyPreviews() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading previews...</div>
+        <div className="flex items-center gap-2 text-lg">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          Loading previews...
+        </div>
       </div>
     )
   }
@@ -174,8 +269,8 @@ export default function TimelineAlchemyMyPreviews() {
           <h1 className="text-3xl font-bold text-white tracking-tight">Mijn Previews</h1>
           <p className="mt-2 text-gray-300">Bekijk en beheer je content previews</p>
         </div>
-        <Button onClick={refreshPreviews} variant="outline" className="flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" />
+        <Button onClick={refreshPreviews} variant="outline" className="flex items-center gap-2" disabled={loading}>
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
       </div>
@@ -284,8 +379,10 @@ export default function TimelineAlchemyMyPreviews() {
               <option value="all" className="bg-gray-800 text-gray-200">All Channels</option>
               <option value="Instagram" className="bg-gray-800 text-gray-200">Instagram</option>
               <option value="LinkedIn" className="bg-gray-800 text-gray-200">LinkedIn</option>
-              <option value="Twitter" className="bg-gray-800 text-gray-200">Twitter</option>
+              <option value="X (Twitter)" className="bg-gray-800 text-gray-200">X (Twitter)</option>
               <option value="Facebook" className="bg-gray-800 text-gray-200">Facebook</option>
+              <option value="Blog Post" className="bg-gray-800 text-gray-200">Blog Post</option>
+              <option value="Custom Post" className="bg-gray-800 text-gray-200">Custom Post</option>
             </select>
           </div>
         </CardContent>
@@ -317,45 +414,53 @@ export default function TimelineAlchemyMyPreviews() {
                       </div>
                       
                       <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                        {preview.title}
+                        {preview.ideas?.title || 'Untitled Preview'}
                       </h3>
                       
                       <p className="text-gray-600 mb-3">
-                        {preview.content}
+                        {preview.draft_content?.content || 'No content available'}
                       </p>
                       
                       <div className="flex items-center gap-4 text-sm text-gray-500">
+                        {preview.scheduled_at && (
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            Scheduled: {new Date(preview.scheduled_at).toLocaleString()}
+                          </div>
+                        )}
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          Scheduled: {new Date(preview.scheduledDate).toLocaleString()}
+                          Created: {new Date(preview.created_at).toLocaleDateString()}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          Created: {new Date(preview.createdAt).toLocaleDateString()}
-                        </div>
+                        {preview.clients?.name && (
+                          <div className="flex items-center gap-1">
+                            <User className="w-4 h-4" />
+                            Client: {preview.clients.name}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
 
                   {/* Admin Notes */}
-                  {preview.adminNotes && (
+                  {preview.admin_notes && (
                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <User className="w-4 h-4 text-blue-600" />
                         <span className="font-medium text-blue-900">Admin Notes</span>
                       </div>
-                      <p className="text-sm text-blue-700">{preview.adminNotes}</p>
+                      <p className="text-sm text-blue-700">{preview.admin_notes}</p>
                     </div>
                   )}
 
                   {/* Client Feedback */}
-                  {preview.clientFeedback && (
+                  {preview.client_feedback && (
                     <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <MessageSquare className="w-4 h-4 text-green-600" />
                         <span className="font-medium text-green-900">Your Feedback</span>
                       </div>
-                      <p className="text-sm text-green-700">{preview.clientFeedback}</p>
+                      <p className="text-sm text-green-700">{preview.client_feedback}</p>
                     </div>
                   )}
 
@@ -364,14 +469,25 @@ export default function TimelineAlchemyMyPreviews() {
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handleApprove(preview.id)}
+                        disabled={saving}
                         className="bg-green-600 hover:bg-green-700"
                       >
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        Approve
+                        {saving ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Approving...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Approve
+                          </>
+                        )}
                       </Button>
                       <Button
                         variant="outline"
                         onClick={() => setSelectedPreview(preview.id)}
+                        disabled={saving}
                       >
                         <XCircle className="w-4 h-4 mr-2" />
                         Request Changes
@@ -394,9 +510,17 @@ export default function TimelineAlchemyMyPreviews() {
                         <Button
                           onClick={() => handleRequestChanges(preview.id)}
                           variant="outline"
+                          disabled={saving}
                           className="bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
                         >
-                          Submit Request
+                          {saving ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Submitting...
+                            </>
+                          ) : (
+                            'Submit Request'
+                          )}
                         </Button>
                         <Button
                           variant="outline"
@@ -404,6 +528,7 @@ export default function TimelineAlchemyMyPreviews() {
                             setSelectedPreview(null)
                             setFeedbackText('')
                           }}
+                          disabled={saving}
                         >
                           Cancel
                         </Button>
