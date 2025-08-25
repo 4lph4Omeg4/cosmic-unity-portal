@@ -429,60 +429,176 @@ export default function TimelineAlchemyPreviewWizard() {
                   {blogPosts.map((post) => (
                     <div
                       key={post.id}
-                      onClick={() => {
-                        // Only allow selecting one main post
-                        setForm(prev => ({
-                          ...prev,
-                          selectedPosts: [post.id]
-                        }))
-                      }}
-                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                      className={`border rounded-lg transition-all duration-200 ${
                         form.selectedPosts.includes(post.id)
-                          ? 'border-blue-500 bg-blue-900/20'
-                          : 'border-gray-600 hover:border-gray-500 bg-gray-700'
+                          ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/20'
+                          : 'border-gray-600 hover:border-gray-500 bg-gray-700 hover:bg-gray-650'
                       }`}
                     >
-                      <div className="flex gap-4">
-                        {/* Post Image */}
-                        {post.image_public_url && (
-                          <div className="flex-shrink-0">
-                            <img 
-                              src={post.image_public_url} 
-                              alt={post.title}
-                              className="w-20 h-20 object-cover rounded border border-gray-600"
-                            />
-                          </div>
-                        )}
-                        
-                        {/* Post Content */}
-                        <div className="flex-1">
-                          <h5 className="font-medium text-white text-lg mb-2">{post.title}</h5>
-                          <p className="text-sm text-gray-300 mb-3">
-                            {post.excerpt || post.body?.substring(0, 150) || 'No content preview'}
-                          </p>
+                      {/* Post Header */}
+                      <div 
+                        className="p-4 cursor-pointer"
+                        onClick={() => {
+                          const isSelected = form.selectedPosts.includes(post.id)
+                          if (isSelected) {
+                            setForm(prev => ({ ...prev, selectedPosts: [] }))
+                          } else {
+                            setForm(prev => ({ ...prev, selectedPosts: [post.id] }))
+                          }
+                        }}
+                      >
+                        <div className="flex gap-4">
+                          {/* Post Image */}
+                          {post.image_public_url && (
+                            <div className="flex-shrink-0">
+                              <img 
+                                src={post.image_public_url} 
+                                alt={post.title}
+                                className="w-24 h-24 object-cover rounded-lg border border-gray-600 shadow-md"
+                              />
+                            </div>
+                          )}
                           
-                          {/* Post Metadata */}
-                          <div className="flex flex-wrap gap-2 text-xs">
-                            {post.category && (
-                              <span className="px-2 py-1 bg-gray-600 text-gray-200 rounded">
-                                {post.category}
-                              </span>
-                            )}
-                            {post.featured_image && (
-                              <span className="px-2 py-1 bg-green-600 text-white rounded">
-                                Has Image
-                              </span>
-                            )}
+                          {/* Post Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between mb-3">
+                              <h5 className="font-semibold text-white text-xl leading-tight">{post.title}</h5>
+                              {/* Selection Indicator */}
+                              {form.selectedPosts.includes(post.id) ? (
+                                <CheckCircle className="w-6 h-6 text-blue-400 flex-shrink-0 ml-2" />
+                              ) : (
+                                <div className="w-6 h-6 border-2 border-gray-500 rounded-full flex-shrink-0 ml-2"></div>
+                              )}
+                            </div>
+                            
+                            {/* Excerpt */}
+                            <p className="text-gray-300 mb-4 leading-relaxed">
+                              {post.excerpt || post.body?.substring(0, 200) || 'No content preview available'}
+                              {post.body && post.body.length > 200 && '...'}
+                            </p>
+                            
+                            {/* Post Metadata & Badges */}
+                            <div className="flex flex-wrap items-center gap-3">
+                              {/* Category Badge */}
+                              {post.category && (
+                                <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
+                                  {post.category}
+                                </span>
+                              )}
+                              
+                              {/* Image Badge */}
+                              {post.image_public_url && (
+                                <span className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-full flex items-center gap-1">
+                                  <span>📷</span>
+                                  <span>Image</span>
+                                </span>
+                              )}
+                              
+                              {/* Featured Badge */}
+                              {post.featured_image && (
+                                <span className="px-3 py-1 bg-purple-600 text-white text-xs font-medium rounded-full flex items-center gap-1">
+                                  <span>⭐</span>
+                                  <span>Featured</span>
+                                </span>
+                              )}
+                              
+                              {/* Content Type Badge */}
+                              {post.body && (
+                                <span className="px-3 py-1 bg-gray-600 text-white text-xs font-medium rounded-full">
+                                  {post.body.length > 1000 ? 'Long Form' : 'Standard'}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        
-                        {/* Selection Indicator */}
-                        {form.selectedPosts.includes(post.id) && (
-                          <div className="flex-shrink-0">
-                            <CheckCircle className="w-6 h-6 text-blue-400" />
-                          </div>
-                        )}
                       </div>
+                      
+                      {/* Expandable Content Section */}
+                      {form.selectedPosts.includes(post.id) && (
+                        <div className="border-t border-gray-600 bg-gray-800/50">
+                          <div className="p-4 space-y-4">
+                            {/* Full Content Preview */}
+                            <div>
+                              <h6 className="font-medium text-blue-300 mb-2 flex items-center gap-2">
+                                <span>📖</span>
+                                <span>Volledige Content</span>
+                              </h6>
+                              <div className="bg-gray-700 rounded-lg p-3 max-h-40 overflow-y-auto">
+                                <p className="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed">
+                                  {post.body || 'Geen content beschikbaar'}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            {/* Social Media Content Previews */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {/* Facebook Content */}
+                              {post.facebook && (
+                                <div className="bg-blue-900/20 rounded-lg p-3 border border-blue-700">
+                                  <h6 className="font-medium text-blue-300 mb-2 flex items-center gap-2">
+                                    <span>📘</span>
+                                    <span>Facebook</span>
+                                  </h6>
+                                  <p className="text-sm text-blue-200 whitespace-pre-wrap">
+                                    {post.facebook}
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {/* Instagram Content */}
+                              {post.instagram && (
+                                <div className="bg-pink-900/20 rounded-lg p-3 border border-pink-700">
+                                  <h6 className="font-medium text-pink-300 mb-2 flex items-center gap-2">
+                                    <span>📷</span>
+                                    <span>Instagram</span>
+                                  </h6>
+                                  <p className="text-sm text-pink-200 whitespace-pre-wrap">
+                                    {post.instagram}
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {/* X (Twitter) Content */}
+                              {post.x && (
+                                <div className="bg-gray-900/20 rounded-lg p-3 border border-gray-700">
+                                  <h6 className="font-medium text-gray-300 mb-2 flex items-center gap-2">
+                                    <span>🐦</span>
+                                    <span>X (Twitter)</span>
+                                  </h6>
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">
+                                    {post.x}
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {/* LinkedIn Content */}
+                              {post.linkedin && (
+                                <div className="bg-blue-900/20 rounded-lg p-3 border border-blue-700">
+                                  <h6 className="font-medium text-blue-300 mb-2 flex items-center gap-2">
+                                    <span>💼</span>
+                                    <span>LinkedIn</span>
+                                  </h6>
+                                  <p className="text-sm text-blue-200 whitespace-pre-wrap">
+                                    {post.linkedin}
+                                  </p>
+                                </div>
+                                )}
+                            </div>
+                            
+                            {/* Action Buttons */}
+                            <div className="flex items-center justify-between pt-2">
+                              <span className="text-sm text-gray-400">
+                                Klik nogmaals om te deselecteren
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
+                                  Geselecteerd
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
