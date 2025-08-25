@@ -229,7 +229,7 @@ export default function TimelineAlchemyPreviewWizard() {
           title: post.title || 'Untitled',
           body: post.body || null,
           excerpt: post.excerpt || null,
-          category: post.category || null,
+          tags: post.tags || [],
           facebook: post.facebook || null,
           instagram: post.instagram || null,
           x: post.x || null,
@@ -479,11 +479,18 @@ export default function TimelineAlchemyPreviewWizard() {
                             
                             {/* Post Metadata & Badges */}
                             <div className="flex flex-wrap items-center gap-3">
-                              {/* Category Badge */}
-                              {post.category && (
-                                <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
-                                  {post.category}
-                                </span>
+                              {/* Tags Badges */}
+                              {post.tags && post.tags.length > 0 && (
+                                <>
+                                  {post.tags.map((tag: string, index: number) => (
+                                    <span 
+                                      key={index}
+                                      className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full"
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </>
                               )}
                               
                               {/* Image Badge */}
