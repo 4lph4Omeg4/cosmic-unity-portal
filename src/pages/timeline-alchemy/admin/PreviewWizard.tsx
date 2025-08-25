@@ -471,12 +471,14 @@ export default function TimelineAlchemyPreviewWizard() {
                     >
                       {/* Post Header */}
                       <div 
-                        className="p-4 cursor-pointer"
+                        className="p-4 cursor-pointer hover:bg-gray-700/50 transition-colors"
                         onClick={() => {
                           const isSelected = form.selectedPosts.includes(post.id)
                           if (isSelected) {
+                            // Deselect the post
                             setForm(prev => ({ ...prev, selectedPosts: [] }))
                           } else {
+                            // Select the post (replace any existing selection)
                             setForm(prev => ({ ...prev, selectedPosts: [post.id] }))
                           }
                         }}
