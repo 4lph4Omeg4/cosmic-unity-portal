@@ -315,37 +315,37 @@ export default function TimelineAlchemyPreviewWizard() {
         return
       }
 
-      // Create idea if it doesn't exist
-      let ideaId = null
-      
-      // If posts are selected, use the first one as idea
-      if (form.selectedPosts.length > 0) {
-        ideaId = form.selectedPosts[0]
-      } else {
-        // Create a new idea for this preview
-        const { data: ideaData, error: ideaError } = await supabase
-          .from('ideas')
-          .insert({
-            title: `Preview: ${form.selectedTemplates.join(', ')}`,
-            description: form.content.substring(0, 200),
-            status: 'draft',
-            created_by: user.id,
-            metadata: {
-              template: form.selectedTemplates.join(', '),
-              channel: form.selectedTemplates.join(', ')
-            }
-          })
-          .select()
-          .single()
+      // Always create a new idea for the preview
+      console.log('Creating new idea for preview...')
+      const { data: ideaData, error: ideaError } = await supabase
+        .from('ideas')
+        .insert({
+          title: form.selectedPosts.length > 0 
+            ? `Preview: ${blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Blog Post'}`
+            : `Preview: ${form.selectedTemplates.join(', ')}`,
+          description: form.content.substring(0, 200),
+          status: 'draft',
+          created_by: user.id,
+          metadata: {
+            template: form.selectedTemplates.join(', '),
+            channel: form.selectedTemplates.join(', '),
+            selectedPosts: form.selectedPosts,
+            originalPostTitle: form.selectedPosts.length > 0 
+              ? blogPosts.find(p => p.id === form.selectedPosts[0])?.title 
+              : null
+          }
+        })
+        .select()
+        .single()
 
-        if (ideaError) {
-          console.error('Error creating idea:', ideaError)
-          alert('Failed to create idea')
-          return
-        }
-        
-        ideaId = ideaData.id
+      if (ideaError) {
+        console.error('Error creating idea:', ideaError)
+        alert('Failed to create idea')
+        return
       }
+      
+      const ideaId = ideaData.id
+      console.log('Created idea with ID:', ideaId)
 
       // Combine date and time for scheduled_at
       let scheduledAt = null
