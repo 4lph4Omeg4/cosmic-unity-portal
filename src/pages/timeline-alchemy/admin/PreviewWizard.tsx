@@ -13,7 +13,13 @@ import {
   Users,
   Star,
   Save,
-  Loader2
+  Loader2,
+  FileText,
+  Share2,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
@@ -89,48 +95,70 @@ export default function TimelineAlchemyPreviewWizard() {
     }
   }, [form.selectedPosts])
 
-  // Auto-fill content when template is selected
+  // Auto-fill content when blog post is selected
   useEffect(() => {
-    if (form.selectedTemplate && form.selectedPosts.length > 0) {
+    if (form.selectedPosts.length > 0) {
       const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-      if (post) {
-        let content = ''
-        switch (form.selectedTemplate) {
-          case 'Facebook':
-            if (post.facebook) {
-              content = post.facebook
-            }
-            break
-          case 'Instagram':
-            if (post.instagram) {
-              content = post.instagram
-            }
-            break
-          case 'X (Twitter)':
-            if (post.x) {
-              content = post.x
-            }
-            break
-          case 'LinkedIn':
-            if (post.linkedin) {
-              content = post.linkedin
-            }
-            break
-          case 'Blog Post':
-            if (post.body) {
-              content = post.body.substring(0, 2000)
-            }
-            break
-          case 'Custom Post':
-            content = '' // Leave empty for custom content
-            break
-          default:
-            content = ''
-        }
-        setForm(prev => ({ ...prev, content }))
+      if (post && post.body) {
+        // Automatically load the blog post content
+        setForm(prev => ({ ...prev, content: post.body }))
       }
     }
-  }, [form.selectedTemplate, form.selectedPosts, blogPosts])
+  }, [form.selectedPosts, blogPosts])
+
+  // Auto-fill content when platforms are selected
+  useEffect(() => {
+    if (form.selectedPosts.length > 0 && form.selectedTemplates.length > 0) {
+      const post = blogPosts.find(p => p.id === form.selectedPosts[0])
+      if (post) {
+        // If only one platform is selected, load its specific content
+        if (form.selectedTemplates.length === 1) {
+          const template = form.selectedTemplates[0]
+          let content = ''
+          
+          switch (template) {
+            case 'Facebook':
+              content = post.facebook || post.body || ''
+              break
+            case 'Instagram':
+              content = post.instagram || post.body || ''
+              break
+            case 'LinkedIn':
+              content = post.linkedin || post.body || ''
+              break
+            case 'Twitter':
+              content = post.x || post.body || ''
+              break
+            case 'Blog Post':
+              content = post.body || ''
+              break
+            case 'Shopify':
+              content = post.body || '' // Use blog post content for Shopify
+              break
+            default:
+              content = post.body || ''
+          }
+          
+          setForm(prev => ({ ...prev, content }))
+        } else {
+          // If multiple platforms, use blog post content as base
+          setForm(prev => ({ ...prev, content: post.body || '' }))
+        }
+      }
+    }
+  }, [form.selectedTemplates, form.selectedPosts, blogPosts])
+
+  // Helper function to get max characters based on selected platforms
+  const getMaxCharacters = () => {
+    if (form.selectedTemplates.includes('Blog Post')) {
+      return 10000
+    }
+    if (form.selectedTemplates.includes('Shopify')) {
+      return 10000
+    }
+    // Social media platforms
+    return 280
+  }
 
   const loadData = async () => {
     try {
@@ -267,10 +295,16 @@ export default function TimelineAlchemyPreviewWizard() {
 
   const handleSave = async () => {
     try {
+      console.log('handleSave called with form data:', form)
       setSaving(true)
       
-      if (!form.selectedClient || !form.selectedTemplate || !form.content.trim()) {
-        alert('Please fill in all required fields: Client, Template, and Content')
+      if (!form.selectedClient || form.selectedTemplates.length === 0 || !form.content.trim()) {
+        console.log('Validation failed:', {
+          selectedClient: form.selectedClient,
+          selectedTemplates: form.selectedTemplates,
+          contentLength: form.content.trim().length
+        })
+        alert('Please fill in all required fields: Client, Templates, and Content')
         return
       }
 
@@ -281,37 +315,37 @@ export default function TimelineAlchemyPreviewWizard() {
         return
       }
 
-      // Create idea if it doesn't exist
-      let ideaId = null
-      
-      // If posts are selected, use the first one as idea
-      if (form.selectedPosts.length > 0) {
-        ideaId = form.selectedPosts[0]
-      } else {
-        // Create a new idea for this preview
-        const { data: ideaData, error: ideaError } = await supabase
-          .from('ideas')
-          .insert({
-            title: `Preview: ${form.selectedTemplate}`,
-            description: form.content.substring(0, 200),
-            status: 'draft',
-            created_by: user.id,
-            metadata: {
-              template: form.selectedTemplate,
-              channel: form.selectedTemplate
-            }
-          })
-          .select()
-          .single()
+      // Always create a new idea for the preview
+      console.log('Creating new idea for preview...')
+      const { data: ideaData, error: ideaError } = await supabase
+        .from('ideas')
+        .insert({
+          title: form.selectedPosts.length > 0 
+            ? `Preview: ${blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Blog Post'}`
+            : `Preview: ${form.selectedTemplates.join(', ')}`,
+          description: form.content.substring(0, 200),
+          status: 'draft',
+          created_by: user.id,
+          metadata: {
+            template: form.selectedTemplates.join(', '),
+            channel: form.selectedTemplates.join(', '),
+            selectedPosts: form.selectedPosts,
+            originalPostTitle: form.selectedPosts.length > 0 
+              ? blogPosts.find(p => p.id === form.selectedPosts[0])?.title 
+              : null
+          }
+        })
+        .select()
+        .single()
 
-        if (ideaError) {
-          console.error('Error creating idea:', ideaError)
-          alert('Failed to create idea')
-          return
-        }
-        
-        ideaId = ideaData.id
+      if (ideaError) {
+        console.error('Error creating idea:', ideaError)
+        alert('Failed to create idea')
+        return
       }
+      
+      const ideaId = ideaData.id
+      console.log('Created idea with ID:', ideaId)
 
       // Combine date and time for scheduled_at
       let scheduledAt = null
@@ -321,16 +355,26 @@ export default function TimelineAlchemyPreviewWizard() {
       }
 
       // Create preview
+      console.log('Creating preview with data:', {
+        idea_id: ideaId,
+        client_id: form.selectedClient,
+        channel: form.selectedTemplates.join(', '),
+        template: form.selectedTemplates.join(', '),
+        scheduled_at: scheduledAt,
+        status: 'pending',
+        created_by: user.id
+      })
+      
       const { data: previewData, error: previewError } = await supabase
         .from('previews')
         .insert({
           idea_id: ideaId,
           client_id: form.selectedClient,
-          channel: form.selectedTemplate,
-          template: form.selectedTemplate,
+          channel: form.selectedTemplates.join(', '),
+          template: form.selectedTemplates.join(', '),
           draft_content: {
             content: form.content,
-            template: form.selectedTemplate,
+            template: form.selectedTemplates.join(', '),
             selectedPosts: form.selectedPosts,
             image: blogPosts.find(p => p.id === form.selectedPosts[0])?.image_public_url || null
           },
@@ -350,8 +394,9 @@ export default function TimelineAlchemyPreviewWizard() {
 
       console.log('Preview created successfully:', previewData)
       
-      // Navigate back to Posts page
-      navigate('/timeline-alchemy/admin/ideas')
+      // Show success message and navigate to dashboard
+      alert('Preview saved successfully! Redirecting to dashboard...')
+      navigate('/timeline-alchemy/admin/dashboard')
     } catch (error) {
       console.error('Error saving preview:', error)
       alert('Failed to save preview')
@@ -443,12 +488,14 @@ export default function TimelineAlchemyPreviewWizard() {
                     >
                       {/* Post Header */}
                       <div 
-                        className="p-4 cursor-pointer"
+                        className="p-4 cursor-pointer hover:bg-gray-700/50 transition-colors"
                         onClick={() => {
                           const isSelected = form.selectedPosts.includes(post.id)
                           if (isSelected) {
+                            // Deselect the post
                             setForm(prev => ({ ...prev, selectedPosts: [] }))
                           } else {
+                            // Select the post (replace any existing selection)
                             setForm(prev => ({ ...prev, selectedPosts: [post.id] }))
                           }
                         }}
@@ -708,6 +755,7 @@ export default function TimelineAlchemyPreviewWizard() {
                       const newTemplates = isSelected 
                         ? form.selectedTemplates.filter(t => t !== template)
                         : [...form.selectedTemplates, template]
+                      console.log('Template selection:', template, 'New templates:', newTemplates)
                       setForm(prev => ({ ...prev, selectedTemplates: newTemplates }))
                     }}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
@@ -844,18 +892,7 @@ export default function TimelineAlchemyPreviewWizard() {
                     )
                   })()}
                   
-                  {/* Blog Post Content - Always Show */}
-                  <div className="p-3 bg-gray-700 rounded border border-gray-600">
-                    <h5 className="font-medium text-blue-300 mb-2">📖 Blog Post Content:</h5>
-                    <div className="max-h-96 overflow-y-auto border border-gray-600 rounded p-3 bg-gray-800">
-                      <p className="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed">
-                        {blogPosts.find(p => p.id === form.selectedPosts[0])?.body || 'No content available'}
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-2">
-                      📜 Scroll om alle content te zien • Content wordt automatisch geladen uit je blog post
-                    </p>
-                  </div>
+
                   
                   {/* Platform-Specific Content Preview */}
                   {form.selectedTemplates.length > 0 && (
@@ -918,17 +955,38 @@ export default function TimelineAlchemyPreviewWizard() {
                 </div>
               )}
               
-              <Textarea
-                value={form.content}
-                onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="Write your content message here..."
-                rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
-                maxLength={form.selectedTemplates.includes('Blog Post') ? 10000 : 280}
-                className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-              />
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Character count: {form.content.length}</span>
-                <span>Max: {form.selectedTemplates.includes('Blog Post') ? '10,000 characters' : '280 characters'}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-white">Content Message</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                      if (post) {
+                        setForm(prev => ({ ...prev, content: post.body || '' }));
+                      }
+                    }}
+                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                  >
+                    🔄 Reload from Blog Post
+                  </button>
+                </div>
+                
+                <Textarea
+                  value={form.content}
+                  onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder="Content will be automatically loaded based on selected platforms. You can edit it as needed..."
+                  rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
+                  maxLength={getMaxCharacters()}
+                  className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                />
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span>Character count: {form.content.length}</span>
+                  <span>Max: {getMaxCharacters()} characters</span>
+                </div>
+                <p className="text-xs text-gray-400">
+                  💡 Content is automatically loaded based on selected platforms. Edit as needed for customization.
+                </p>
               </div>
             </div>
             
@@ -953,11 +1011,11 @@ export default function TimelineAlchemyPreviewWizard() {
 
       case 4:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Content Overview & Preview</h3>
-            <p className="text-sm text-gray-300 mb-6">
-              Hier zie je een overzicht van wat er gepost gaat worden. Je kunt de content bewerken in stap 3.
-            </p>
+          <div className="space-y-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-white mb-2">Content Overview & Preview</h3>
+              <p className="text-gray-400">Review your selected content and platforms before scheduling</p>
+            </div>
             
             {/* Content from selected posts */}
             {form.selectedPosts.length > 0 && form.selectedTemplate && (
@@ -1044,139 +1102,348 @@ export default function TimelineAlchemyPreviewWizard() {
               </div>
             )}
             
-            {/* Content editor */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-white">Content Message</label>
-              <Textarea
-                value={form.content}
-                onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="Write your content message here..."
-                rows={form.selectedTemplate === 'Blog Post' ? 12 : 6}
-                maxLength={form.selectedTemplate === 'Blog Post' ? 2000 : 280}
-                className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-              />
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Character count: {form.content.length}</span>
-                <span>Max: {form.selectedTemplate === 'Blog Post' ? '2000 characters' : '280 characters'}</span>
+            {/* Main Blog Post Content */}
+            {form.selectedPosts.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                  Main Blog Post Content
+                </h4>
+                
+                {form.selectedPosts.map((postId) => {
+                  const post = blogPosts.find(p => p.id === postId);
+                  if (!post) return null;
+                  
+                  return (
+                    <div key={postId} className="space-y-4">
+                      {post.image_url && (
+                        <div className="flex justify-center">
+                          <img 
+                            src={post.image_url} 
+                            alt={post.title}
+                            className="max-w-full h-auto max-h-96 rounded-lg shadow-lg"
+                          />
+                        </div>
+                      )}
+                      
+                      <div className="space-y-3">
+                        <h5 className="text-xl font-semibold text-white">{post.title}</h5>
+                        <p className="text-gray-300 text-sm">{post.excerpt}</p>
+                        
+                        <div className="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                          <p className="text-gray-200 whitespace-pre-wrap">{post.body}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Platform-Specific Content Previews */}
+            {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <Share2 className="w-5 h-5 mr-2 text-green-400" />
+                  Platform Content Previews
+                </h4>
+                
+                <div className="grid gap-4 md:grid-cols-2">
+                  {form.selectedTemplates.map((template) => {
+                    const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                    if (!post) return null;
+                    
+                    return (
+                      <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center justify-between mb-3">
+                          <h5 className="font-medium text-white">{template}</h5>
+                          <div className="flex items-center space-x-2">
+                            {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
+                            {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
+                            {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
+                            {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
+                            {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {template === 'Blog Post' ? (
+                            <div>
+                              <p className="text-sm text-gray-300 mb-2">Full blog post content will be displayed</p>
+                              <div className="bg-gray-800 rounded p-3 max-h-32 overflow-y-auto">
+                                <p className="text-gray-200 text-sm whitespace-pre-wrap">
+                                  {(post.body || '').substring(0, 200)}...
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <p className="text-sm text-gray-300 mb-2">Platform-specific content:</p>
+                              <div className="bg-gray-800 rounded p-3">
+                                {template === 'Facebook' && post.facebook ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.facebook}</p>
+                                ) : template === 'Instagram' && post.instagram ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.instagram}</p>
+                                ) : template === 'LinkedIn' && post.linkedin ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.linkedin}</p>
+                                ) : template === 'Twitter' && post.x ? (
+                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.x}</p>
+                                ) : (
+                                  <p className="text-gray-400 text-sm italic">
+                                    No {template} content available for this post. 
+                                    Will use default promotional message linking to the blog.
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Summary Section */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
+                Preview Summary
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Selected Client</h5>
+                  <p className="text-gray-300 text-sm">
+                    {clients.find(c => c.id === form.selectedClient)?.name || 'No client selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Content Type</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedPosts.length > 0 ? 'Blog Post' : 'No content selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Platforms</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedTemplates.length > 0 ? form.selectedTemplates.join(', ') : 'No platforms selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Preview Status</h5>
+                  <p className="text-green-400 text-sm font-medium">Ready for Scheduling</p>
+                </div>
               </div>
             </div>
           </div>
         )
 
+      // OLD CASE 5 - REMOVED - Using new version below
+
       case 5:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Schedule & Review</h3>
-            <div className="grid gap-4">
-              <div>
-                <label className="text-sm font-medium text-white">Publish Date</label>
-                <Input
-                  type="date"
-                  value={form.scheduledDate}
-                  onChange={(e) => setForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
+          <div className="space-y-6">
+            <div className="text-center">
+              <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-semibold text-white mb-2">Ready to Save Preview!</h3>
+              <p className="text-gray-400 mb-6">
+                Review all details below before saving. This preview will be sent to the client for approval.
+              </p>
+            </div>
+
+            {/* Debug Info */}
+            <div className="bg-red-900/20 rounded-lg p-4 border border-red-700">
+              <h4 className="text-lg font-medium text-red-300 mb-2">Debug Info</h4>
+              <div className="text-sm text-red-200">
+                <p>Selected Templates: {form.selectedTemplates.join(', ') || 'None'}</p>
+                <p>Template Count: {form.selectedTemplates.length}</p>
+                <p>Form Step: {form.step}</p>
+                <p>Selected Posts: {form.selectedPosts.join(', ') || 'None'}</p>
               </div>
-              <div>
-                <label className="text-sm font-medium text-white">Publish Time</label>
-                <Input
-                  type="time"
-                  value={form.scheduledTime}
-                  onChange={(e) => setForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
+            </div>
+
+            {/* Client & Scheduling Info */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <Users className="w-5 h-5 mr-2 text-blue-400" />
+                Client & Scheduling Details
+              </h4>
               
-              <div>
-                <label className="text-sm font-medium text-white">Admin Notes (Optional)</label>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Selected Client</h5>
+                  <p className="text-gray-300 text-sm">
+                    {clients.find(c => c.id === form.selectedClient)?.name || 'No client selected'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Publish Schedule</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.scheduledDate && form.scheduledTime 
+                      ? `${form.scheduledDate} at ${form.scheduledTime}`
+                      : 'Not scheduled yet'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Schedule Inputs */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-green-400" />
+                Set Publishing Schedule
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-white">Publish Date</label>
+                  <Input
+                    type="date"
+                    value={form.scheduledDate}
+                    onChange={(e) => setForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-white">Publish Time</label>
+                  <Input
+                    type="time"
+                    value={form.scheduledTime}
+                    onChange={(e) => setForm(prev => ({ ...prev, scheduledTime: e.target.value }))}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+              </div>
+            </div>
+
+
+
+            {/* Platform-Specific Content Preview */}
+            {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                  Platform-Specific Content Preview
+                </h4>
+                
+                <div className="space-y-4">
+                  {form.selectedTemplates.map((template) => {
+                    const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                    if (!post) return null;
+                    
+                    return (
+                      <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center gap-3 mb-3">
+                          {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                          {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                          {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                          {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                          {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                          {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                          <h5 className="font-medium text-white">{template}</h5>
+                        </div>
+                        
+                        <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
+                          {template === 'Facebook' && post.facebook && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
+                          )}
+                          {template === 'Instagram' && post.instagram && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
+                          )}
+                          {template === 'X (Twitter)' && post.x && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
+                          )}
+                          {template === 'LinkedIn' && post.linkedin && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
+                          )}
+                          {template === 'Blog Post' && post.body && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body}</p>
+                          )}
+                          {template === 'Custom Post' && (
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{form.content}</p>
+                          )}
+                          
+                          {/* Show if no content available */}
+                          {!post.facebook && template === 'Facebook' && (
+                            <p className="text-sm text-gray-400 italic">No Facebook content available - will use main blog content</p>
+                          )}
+                          {!post.instagram && template === 'Instagram' && (
+                            <p className="text-sm text-gray-400 italic">No Instagram content available - will use main blog content</p>
+                          )}
+                          {!post.x && template === 'X (Twitter)' && (
+                            <p className="text-sm text-gray-400 italic">No X (Twitter) content available - will use main blog content</p>
+                          )}
+                          {!post.linkedin && template === 'LinkedIn' && (
+                            <p className="text-sm text-gray-400 italic">No LinkedIn content available - will use main blog content</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Final Summary */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
+                Preview Summary for Client Approval
+              </h4>
+              
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Total Platforms</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedTemplates.length} platform{form.selectedTemplates.length !== 1 ? 's' : ''} selected
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Content Type</h5>
+                  <p className="text-gray-300 text-sm">
+                    {form.selectedPosts.length > 0 ? 'Blog Post with Social Promotion' : 'Social Media Only'}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Approval Status</h5>
+                  <p className="text-yellow-400 text-sm font-medium">Pending Client Review</p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                  <h5 className="font-medium text-white mb-2">Next Step</h5>
+                  <p className="text-green-400 text-sm font-medium">Save & Send for Approval</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Admin Notes Section */}
+            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+              <h4 className="text-lg font-medium text-white mb-4 flex items-center">
+                <MessageSquare className="w-5 h-5 mr-2 text-yellow-400" />
+                Admin Notes (Optional)
+              </h4>
+              
+              <div className="space-y-3">
+                <p className="text-sm text-gray-400">
+                  Add any notes or instructions for the client about this preview.
+                </p>
                 <Textarea
                   value={form.adminNotes}
                   onChange={(e) => setForm(prev => ({ ...prev, adminNotes: e.target.value }))}
-                  placeholder="Add any notes for the client..."
+                  placeholder="Add notes for the client (optional)..."
                   rows={3}
                   className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
-              </div>
-            </div>
-
-            {/* Review Summary */}
-            <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
-              <h4 className="font-medium text-white mb-3">Preview Summary</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Client:</span>
-                  <span className="font-medium text-white">
-                    {clients.find(c => c.id === form.selectedClient)?.name || 'Not selected'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Template:</span>
-                  <span className="font-medium text-white">{form.selectedTemplate || 'Not selected'}</span>
-                </div>
-                {form.selectedTemplate && form.selectedPosts.length > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Post:</span>
-                    <span className="font-medium text-white">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Scheduled:</span>
-                  <span className="font-medium text-white">
-                    {form.scheduledDate && form.scheduledTime 
-                      ? `${form.scheduledDate} at ${form.scheduledTime}`
-                      : 'Not scheduled'
-                    }
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 5:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Save Preview</h3>
-            <div className="text-center py-8">
-              <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-              <h4 className="text-xl font-medium text-white mb-2">Ready to Save!</h4>
-              <p className="text-gray-300 mb-6">
-                Your preview is ready to be saved. Review the details below and click save to create the preview.
-              </p>
-              
-              <div className="max-w-md mx-auto p-4 bg-gray-700 rounded-lg text-left border border-gray-600">
-                <h5 className="font-medium text-white mb-3">Final Review</h5>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Client:</span>
-                    <span className="font-medium text-white">
-                      {clients.find(c => c.id === form.selectedClient)?.name}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Template:</span>
-                    <span className="font-medium text-white">{form.selectedTemplate}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Content:</span>
-                    <span className="font-medium text-white">{form.content.length} characters</span>
-                  </div>
-                  {form.selectedPosts.length > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Post:</span>
-                      <span className="font-medium text-white">{blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Unknown'}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Scheduled:</span>
-                    <span className="font-medium text-white">
-                      {form.scheduledDate} at {form.scheduledTime}
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

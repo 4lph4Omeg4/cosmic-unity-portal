@@ -122,10 +122,10 @@ export default function Dashboard() {
       color: 'bg-green-500 hover:bg-green-600'
     },
     {
-      title: 'View Queue',
-      description: 'Check publish queue and results',
-      icon: Users,
-      action: () => router.push('/admin/publish-queue'),
+      title: 'View Ideas',
+      description: 'Browse and manage content ideas',
+      icon: Lightbulb,
+      action: () => router.push('/admin/ideas'),
       color: 'bg-purple-500 hover:bg-purple-600'
     }
   ]

@@ -23,9 +23,15 @@ interface Preview {
     title: string
     description: string
   }
-  clients?: {
-    name: string
-  }
+  blogPosts?: Array<{
+    id: string
+    title: string
+    body: string
+    facebook?: string
+    instagram?: string
+    x?: string
+    linkedin?: string
+  }>
 }
 
 export default function TimelineAlchemyMyPreviews() {
@@ -35,7 +41,7 @@ export default function TimelineAlchemyMyPreviews() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedChannel, setSelectedChannel] = useState('all')
-  const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'rejected'>('pending')
+  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved' | 'published' | 'rejected'>('all')
   const [feedbackText, setFeedbackText] = useState('')
   const [selectedPreview, setSelectedPreview] = useState<string | null>(null)
 
@@ -54,72 +60,69 @@ export default function TimelineAlchemyMyPreviews() {
         return
       }
 
-      // Get client IDs for this user
-      const { data: clientIds, error: clientError } = await supabase
-        .rpc('client_ids_for_user')
+      // First, check if user has client role in profiles
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('role, display_name')
+        .eq('user_id', user.id)
+        .single()
 
-      if (clientError) {
-        console.error('Error getting client IDs:', clientError)
-        // Fallback to mock data for testing
-        const mockData: Preview[] = [
-          {
-            id: '1',
-            idea_id: '1',
-            client_id: '1',
-            channel: 'Instagram',
-            template: 'Instagram',
-            draft_content: { content: 'Discover how AI can transform your content creation workflow with intelligent scheduling and optimization.' },
-            scheduled_at: '2025-01-20T09:00:00Z',
-            status: 'pending',
-            admin_notes: 'Content looks great! Ready for your review.',
-            created_at: '2025-01-15T00:00:00Z',
-            ideas: { title: 'AI-Powered Content Calendar', description: 'AI content creation workflow' },
-            clients: { name: 'TechCorp' }
-          },
-          {
-            id: '2',
-            idea_id: '2',
-            client_id: '2',
-            channel: 'LinkedIn',
-            template: 'LinkedIn',
-            draft_content: { content: 'Mindfulness isn\'t just about meditation—it\'s about presence in everything you do.' },
-            scheduled_at: '2025-01-22T14:00:00Z',
-            status: 'approved',
-            created_at: '2025-01-14T00:00:00Z',
-            ideas: { title: 'Mindfulness Integration', description: 'Mindfulness in daily life' },
-            clients: { name: 'Wellness Inc' }
-          }
-        ]
-        setPreviews(mockData)
-        return
-      }
-
-      if (!clientIds || clientIds.length === 0) {
-        console.log('No client access found for user')
+      if (profileError || profileData?.role !== 'client') {
+        console.log('User is not a client or profile not found')
         setPreviews([])
         return
       }
 
-      // Get previews for these clients
+      // Try to load previews for this user
       const { data, error } = await supabase
         .from('previews')
         .select(`
           *,
-          ideas(title, description),
-          clients(name)
+          ideas(title, description)
         `)
-        .in('client_id', clientIds)
+        .eq('client_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) {
         console.error('Error fetching previews:', error)
+        setPreviews([])
         return
       }
 
-      console.log('Loaded previews:', data)
+      console.log('Successfully loaded previews:', data?.length || 0)
+      console.log('Preview statuses:', data?.map(p => ({ id: p.id, status: p.status, title: p.ideas?.title })))
+
+      // Load blog posts for platform-specific content
+      if (data && data.length > 0) {
+        const postIds = data
+          .map(preview => preview.draft_content?.selectedPosts)
+          .flat()
+          .filter(Boolean)
+        
+        if (postIds.length > 0) {
+          const { data: blogPostsData, error: blogPostsError } = await supabase
+            .from('blog_posts')
+            .select('id, title, body, facebook, instagram, x, linkedin')
+            .in('id', postIds)
+          
+          if (!blogPostsError && blogPostsData) {
+            // Attach blog posts data to previews
+            data.forEach(preview => {
+              if (preview.draft_content?.selectedPosts) {
+                preview.blogPosts = blogPostsData.filter(post => 
+                  preview.draft_content.selectedPosts.includes(post.id)
+                )
+              }
+            })
+          }
+        }
+      }
+
+      console.log('Final data being set:', data)
       setPreviews(data || [])
     } catch (error) {
       console.error('Error loading previews:', error)
+      setPreviews([])
     } finally {
       setLoading(false)
     }
@@ -135,7 +138,9 @@ export default function TimelineAlchemyMyPreviews() {
                          (preview.draft_content?.content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
     const matchesChannel = selectedChannel === 'all' || preview.channel === selectedChannel
-    const matchesTab = preview.status === activeTab
+    
+    // Only apply tab filtering if we're not on 'all' tab
+    const matchesTab = activeTab === 'all' || preview.status === activeTab
     
     return matchesSearch && matchesStatus && matchesChannel && matchesTab
   })
@@ -258,6 +263,7 @@ export default function TimelineAlchemyMyPreviews() {
     total: previews.length,
     pending: previews.filter(p => p.status === 'pending').length,
     approved: previews.filter(p => p.status === 'approved').length,
+    published: previews.filter(p => p.status === 'published').length,
     rejected: previews.filter(p => p.status === 'rejected').length
   }
 
@@ -276,7 +282,7 @@ export default function TimelineAlchemyMyPreviews() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -317,6 +323,18 @@ export default function TimelineAlchemyMyPreviews() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
+                <p className="text-sm font-medium text-gray-600">Published</p>
+                <p className="text-2xl font-bold text-purple-600">{stats.published}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-purple-500" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
                 <p className="text-sm font-medium text-gray-600">Rejected</p>
                 <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
               </div>
@@ -328,7 +346,7 @@ export default function TimelineAlchemyMyPreviews() {
 
       {/* Tabs */}
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
-        {(['pending', 'approved', 'rejected'] as const).map((tab) => (
+        {(['all', 'pending', 'approved', 'published', 'rejected'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -338,10 +356,13 @@ export default function TimelineAlchemyMyPreviews() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)} ({previews.filter(p => p.status === tab).length})
+            {tab === 'all' ? 'All' : tab.charAt(0).toUpperCase() + tab.slice(1)} 
+            {tab === 'all' ? ` (${previews.length})` : ` (${previews.filter(p => p.status === tab).length})`}
           </button>
         ))}
       </div>
+
+
 
       {/* Search and Filters */}
       <Card>
@@ -369,6 +390,7 @@ export default function TimelineAlchemyMyPreviews() {
               <option value="all" className="bg-gray-800 text-gray-200">All Statuses</option>
               <option value="pending" className="bg-gray-800 text-gray-200">Pending</option>
               <option value="approved" className="bg-gray-800 text-gray-200">Approved</option>
+              <option value="published" className="bg-gray-800 text-gray-200">Published</option>
               <option value="rejected" className="bg-gray-800 text-gray-200">Rejected</option>
             </select>
             <select
@@ -413,13 +435,109 @@ export default function TimelineAlchemyMyPreviews() {
                         </Badge>
                       </div>
                       
-                      <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                      <h3 className="font-semibold text-lg text-white mb-2">
                         {preview.ideas?.title || 'Untitled Preview'}
                       </h3>
                       
-                      <p className="text-gray-600 mb-3">
-                        {preview.draft_content?.content || 'No content available'}
-                      </p>
+                      {/* Content Preview */}
+                      <div className="mb-3">
+                        <h4 className="font-medium text-gray-300 mb-2">Content Preview:</h4>
+                        <div className="bg-gray-800 rounded p-3 border border-gray-600">
+                          <p className="text-gray-200 whitespace-pre-wrap">
+                            {preview.draft_content?.content || 'No content available'}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Platform Information */}
+                      {preview.draft_content?.template && (
+                        <div className="mb-3">
+                          <h4 className="font-medium text-gray-300 mb-2">Platforms:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {preview.draft_content.template.split(', ').map((template, index) => (
+                              <Badge key={index} className="bg-gray-700 text-gray-200 border-gray-600">
+                                {template === 'Facebook' && '📘'}
+                                {template === 'Instagram' && '📷'}
+                                {template === 'X (Twitter)' && '🐦'}
+                                {template === 'LinkedIn' && '💼'}
+                                {template === 'Blog Post' && '📝'}
+                                {template === 'Custom Post' && '✨'}
+                                {' '}{template}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Platform-Specific Content */}
+                      {preview.draft_content?.template && preview.blogPosts && (
+                        <div className="mb-3">
+                          <h4 className="font-medium text-gray-300 mb-2">Platform Content:</h4>
+                          <div className="space-y-2">
+                            {preview.draft_content.template.split(', ').map((template, index) => {
+                              const blogPost = preview.blogPosts?.[0]; // Get first blog post
+                              if (!blogPost) return null;
+                              
+                              let content = '';
+                              let contentType = '';
+                              
+                              switch (template) {
+                                case 'Facebook':
+                                  content = blogPost.facebook || blogPost.body;
+                                  contentType = 'Facebook promotional content';
+                                  break;
+                                case 'Instagram':
+                                  content = blogPost.instagram || blogPost.body;
+                                  contentType = 'Instagram promotional content';
+                                  break;
+                                case 'X (Twitter)':
+                                  content = blogPost.x || blogPost.body;
+                                  contentType = 'X (Twitter) promotional content';
+                                  break;
+                                case 'LinkedIn':
+                                  content = blogPost.linkedin || blogPost.body;
+                                  contentType = 'LinkedIn promotional content';
+                                  break;
+                                case 'Blog Post':
+                                  content = blogPost.body;
+                                  contentType = 'Full blog post content';
+                                  break;
+                                case 'Custom Post':
+                                  content = preview.draft_content?.content || blogPost.body;
+                                  contentType = 'Custom content';
+                                  break;
+                                default:
+                                  content = blogPost.body;
+                                  contentType = 'Content';
+                              }
+                              
+                              return (
+                                <div key={index} className="bg-gray-700 rounded border border-gray-600">
+                                  <div className="flex items-center gap-2 p-2 border-b border-gray-600">
+                                    <div className="flex-shrink-0">
+                                      {template === 'Facebook' && <span className="text-blue-400">📘</span>}
+                                      {template === 'Instagram' && <span className="text-pink-400">📷</span>}
+                                      {template === 'X (Twitter)' && <span className="text-blue-300">🐦</span>}
+                                      {template === 'LinkedIn' && <span className="text-blue-500">💼</span>}
+                                      {template === 'Blog Post' && <span className="text-green-400">📝</span>}
+                                      {template === 'Custom Post' && <span className="text-purple-400">✨</span>}
+                                    </div>
+                                    <span className="font-medium text-gray-200 text-sm">{template}</span>
+                                  </div>
+                                  <div className="p-2">
+                                    <p className="text-xs text-gray-400 mb-2">{contentType}</p>
+                                    <div className="bg-gray-800 rounded p-2 max-h-24 overflow-y-auto">
+                                      <p className="text-xs text-gray-200 whitespace-pre-wrap">
+                                        {content ? content.substring(0, 200) + (content.length > 200 ? '...' : '') : 'No content available'}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         {preview.scheduled_at && (
@@ -444,23 +562,23 @@ export default function TimelineAlchemyMyPreviews() {
 
                   {/* Admin Notes */}
                   {preview.admin_notes && (
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="p-3 bg-blue-900/20 border border-blue-700 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <User className="w-4 h-4 text-blue-600" />
-                        <span className="font-medium text-blue-900">Admin Notes</span>
+                        <User className="w-4 h-4 text-blue-400" />
+                        <span className="font-medium text-blue-300">Admin Notes</span>
                       </div>
-                      <p className="text-sm text-blue-700">{preview.admin_notes}</p>
+                      <p className="text-sm text-blue-200">{preview.admin_notes}</p>
                     </div>
                   )}
 
                   {/* Client Feedback */}
                   {preview.client_feedback && (
-                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="p-3 bg-green-900/20 border border-green-700 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <MessageSquare className="w-4 h-4 text-green-600" />
-                        <span className="font-medium text-green-900">Your Feedback</span>
+                        <MessageSquare className="w-4 h-4 text-green-400" />
+                        <span className="font-medium text-green-300">Your Feedback</span>
                       </div>
-                      <p className="text-sm text-green-700">{preview.client_feedback}</p>
+                      <p className="text-sm text-green-200">{preview.client_feedback}</p>
                     </div>
                   )}
 
@@ -495,15 +613,34 @@ export default function TimelineAlchemyMyPreviews() {
                     </div>
                   )}
 
+                  {/* Actions for Approved/Published Items */}
+                  {(preview.status === 'approved' || preview.status === 'published') && (
+                    <div className="flex gap-2">
+                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                        <CheckCircle className="w-4 h-4 text-green-400" />
+                        {preview.status === 'approved' ? 'Approved and ready for publishing' : 'Published'}
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => setSelectedPreview(preview.id)}
+                        disabled={saving}
+                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white"
+                      >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Request Changes
+                      </Button>
+                    </div>
+                  )}
+
                   {/* Feedback Modal */}
                   {selectedPreview === preview.id && (
-                    <div className="p-4 bg-gray-50 border rounded-lg">
-                      <h4 className="font-medium mb-2">Request Changes</h4>
+                    <div className="p-4 bg-gray-800 border border-gray-600 rounded-lg">
+                      <h4 className="font-medium text-white mb-2">Request Changes</h4>
                       <Textarea
                         placeholder="Explain what changes you'd like..."
                         value={feedbackText}
                         onChange={(e) => setFeedbackText(e.target.value)}
-                        className="mb-3"
+                        className="mb-3 bg-gray-700 border-gray-600 text-white"
                         rows={3}
                       />
                       <div className="flex gap-2">
@@ -511,7 +648,7 @@ export default function TimelineAlchemyMyPreviews() {
                           onClick={() => handleRequestChanges(preview.id)}
                           variant="outline"
                           disabled={saving}
-                          className="bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                          className="bg-red-900/20 text-red-300 border-red-600 hover:bg-red-800/30"
                         >
                           {saving ? (
                             <>
@@ -529,6 +666,7 @@ export default function TimelineAlchemyMyPreviews() {
                             setFeedbackText('')
                           }}
                           disabled={saving}
+                          className="border-gray-600 text-gray-300 hover:bg-gray-700"
                         >
                           Cancel
                         </Button>
