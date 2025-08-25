@@ -41,7 +41,7 @@ export default function TimelineAlchemyMyPreviews() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedChannel, setSelectedChannel] = useState('all')
-  const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'rejected'>('pending')
+  const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'published' | 'rejected'>('pending')
   const [feedbackText, setFeedbackText] = useState('')
   const [selectedPreview, setSelectedPreview] = useState<string | null>(null)
 
@@ -280,6 +280,7 @@ export default function TimelineAlchemyMyPreviews() {
     total: previews.length,
     pending: previews.filter(p => p.status === 'pending').length,
     approved: previews.filter(p => p.status === 'approved').length,
+    published: previews.filter(p => p.status === 'published').length,
     rejected: previews.filter(p => p.status === 'rejected').length
   }
 
@@ -298,7 +299,7 @@ export default function TimelineAlchemyMyPreviews() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -339,6 +340,18 @@ export default function TimelineAlchemyMyPreviews() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
+                <p className="text-sm font-medium text-gray-600">Published</p>
+                <p className="text-2xl font-bold text-purple-600">{stats.published}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-purple-500" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
                 <p className="text-sm font-medium text-gray-600">Rejected</p>
                 <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
               </div>
@@ -350,7 +363,7 @@ export default function TimelineAlchemyMyPreviews() {
 
       {/* Tabs */}
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
-        {(['pending', 'approved', 'rejected'] as const).map((tab) => (
+        {(['pending', 'approved', 'published', 'rejected'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -391,6 +404,7 @@ export default function TimelineAlchemyMyPreviews() {
               <option value="all" className="bg-gray-800 text-gray-200">All Statuses</option>
               <option value="pending" className="bg-gray-800 text-gray-200">Pending</option>
               <option value="approved" className="bg-gray-800 text-gray-200">Approved</option>
+              <option value="published" className="bg-gray-800 text-gray-200">Published</option>
               <option value="rejected" className="bg-gray-800 text-gray-200">Rejected</option>
             </select>
             <select
@@ -613,15 +627,34 @@ export default function TimelineAlchemyMyPreviews() {
                     </div>
                   )}
 
+                  {/* Actions for Approved/Published Items */}
+                  {(preview.status === 'approved' || preview.status === 'published') && (
+                    <div className="flex gap-2">
+                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                        <CheckCircle className="w-4 h-4 text-green-400" />
+                        {preview.status === 'approved' ? 'Approved and ready for publishing' : 'Published'}
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => setSelectedPreview(preview.id)}
+                        disabled={saving}
+                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white"
+                      >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Request Changes
+                      </Button>
+                    </div>
+                  )}
+
                   {/* Feedback Modal */}
                   {selectedPreview === preview.id && (
-                    <div className="p-4 bg-gray-50 border rounded-lg">
-                      <h4 className="font-medium mb-2">Request Changes</h4>
+                    <div className="p-4 bg-gray-800 border border-gray-600 rounded-lg">
+                      <h4 className="font-medium text-white mb-2">Request Changes</h4>
                       <Textarea
                         placeholder="Explain what changes you'd like..."
                         value={feedbackText}
                         onChange={(e) => setFeedbackText(e.target.value)}
-                        className="mb-3"
+                        className="mb-3 bg-gray-700 border-gray-600 text-white"
                         rows={3}
                       />
                       <div className="flex gap-2">
@@ -629,7 +662,7 @@ export default function TimelineAlchemyMyPreviews() {
                           onClick={() => handleRequestChanges(preview.id)}
                           variant="outline"
                           disabled={saving}
-                          className="bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                          className="bg-red-900/20 text-red-300 border-red-600 hover:bg-red-800/30"
                         >
                           {saving ? (
                             <>
@@ -647,6 +680,7 @@ export default function TimelineAlchemyMyPreviews() {
                             setFeedbackText('')
                           }}
                           disabled={saving}
+                          className="border-gray-600 text-gray-300 hover:bg-gray-700"
                         >
                           Cancel
                         </Button>
