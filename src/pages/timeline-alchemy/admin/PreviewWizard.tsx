@@ -954,19 +954,10 @@ export default function TimelineAlchemyPreviewWizard() {
       case 4:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Draft Your Content</h3>
-            
-            {/* Template info */}
-            {form.selectedTemplate && (
-              <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Selected Template: {form.selectedTemplate}</h4>
-                {form.selectedPosts.length > 0 && (
-                  <div className="text-sm text-blue-200">
-                    {blogPosts.find(p => p.id === form.selectedPosts[0])?.title}
-                  </div>
-                )}
-              </div>
-            )}
+            <h3 className="text-lg font-semibold text-white">Content Overview & Preview</h3>
+            <p className="text-sm text-gray-300 mb-6">
+              Hier zie je een overzicht van wat er gepost gaat worden. Je kunt de content bewerken in stap 3.
+            </p>
             
             {/* Content from selected posts */}
             {form.selectedPosts.length > 0 && form.selectedTemplate && (
