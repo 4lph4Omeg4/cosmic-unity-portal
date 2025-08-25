@@ -297,8 +297,8 @@ export default function TimelineAlchemyPreviewWizard() {
     try {
       setSaving(true)
       
-      if (!form.selectedClient || !form.selectedTemplate || !form.content.trim()) {
-        alert('Please fill in all required fields: Client, Template, and Content')
+      if (!form.selectedClient || form.selectedTemplates.length === 0 || !form.content.trim()) {
+        alert('Please fill in all required fields: Client, Templates, and Content')
         return
       }
 
@@ -320,13 +320,13 @@ export default function TimelineAlchemyPreviewWizard() {
         const { data: ideaData, error: ideaError } = await supabase
           .from('ideas')
           .insert({
-            title: `Preview: ${form.selectedTemplate}`,
+            title: `Preview: ${form.selectedTemplates.join(', ')}`,
             description: form.content.substring(0, 200),
             status: 'draft',
             created_by: user.id,
             metadata: {
-              template: form.selectedTemplate,
-              channel: form.selectedTemplate
+              template: form.selectedTemplates.join(', '),
+              channel: form.selectedTemplates.join(', ')
             }
           })
           .select()
@@ -354,11 +354,11 @@ export default function TimelineAlchemyPreviewWizard() {
         .insert({
           idea_id: ideaId,
           client_id: form.selectedClient,
-          channel: form.selectedTemplate,
-          template: form.selectedTemplate,
+          channel: form.selectedTemplates.join(', '),
+          template: form.selectedTemplates.join(', '),
           draft_content: {
             content: form.content,
-            template: form.selectedTemplate,
+            template: form.selectedTemplates.join(', '),
             selectedPosts: form.selectedPosts,
             image: blogPosts.find(p => p.id === form.selectedPosts[0])?.image_public_url || null
           },
