@@ -394,8 +394,9 @@ export default function TimelineAlchemyPreviewWizard() {
 
       console.log('Preview created successfully:', previewData)
       
-      // Navigate back to Posts page
-      navigate('/timeline-alchemy/admin/ideas')
+      // Show success message and navigate to dashboard
+      alert('Preview saved successfully! Redirecting to dashboard...')
+      navigate('/timeline-alchemy/admin/dashboard')
     } catch (error) {
       console.error('Error saving preview:', error)
       alert('Failed to save preview')
