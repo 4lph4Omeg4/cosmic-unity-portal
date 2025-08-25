@@ -415,52 +415,73 @@ export default function TimelineAlchemyPreviewWizard() {
       case 2:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Select Content</h3>
+            <h3 className="text-lg font-semibold text-white">Select Blog Post</h3>
             <p className="text-sm text-gray-300 mb-4">
-              Choose existing blog posts to use as content, or create custom content from scratch.
+              Choose the main blog post you want to promote across social platforms. 
+              This will be your primary content, and other platforms will reference it.
             </p>
             
             {/* Blog Posts Selection */}
             <div className="space-y-4">
               <h4 className="font-medium text-white">Available Blog Posts:</h4>
               {blogPosts.length > 0 ? (
-                <div className="space-y-2 max-h-60 overflow-y-auto">
+                <div className="space-y-3 max-h-80 overflow-y-auto">
                   {blogPosts.map((post) => (
                     <div
                       key={post.id}
                       onClick={() => {
-                        const isSelected = form.selectedPosts.includes(post.id)
-                        if (isSelected) {
-                          setForm(prev => ({
-                            ...prev,
-                            selectedPosts: prev.selectedPosts.filter(id => id !== post.id)
-                          }))
-                        } else {
-                          setForm(prev => ({
-                            ...prev,
-                            selectedPosts: [...prev.selectedPosts, post.id]
-                          }))
-                        }
+                        // Only allow selecting one main post
+                        setForm(prev => ({
+                          ...prev,
+                          selectedPosts: [post.id]
+                        }))
                       }}
-                      className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                         form.selectedPosts.includes(post.id)
                           ? 'border-blue-500 bg-blue-900/20'
                           : 'border-gray-600 hover:border-gray-500 bg-gray-700'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={form.selectedPosts.includes(post.id)}
-                          onChange={() => {}} // Handled by onClick
-                          className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
-                        />
+                      <div className="flex gap-4">
+                        {/* Post Image */}
+                        {post.image_public_url && (
+                          <div className="flex-shrink-0">
+                            <img 
+                              src={post.image_public_url} 
+                              alt={post.title}
+                              className="w-20 h-20 object-cover rounded border border-gray-600"
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Post Content */}
                         <div className="flex-1">
-                          <h5 className="font-medium text-white">{post.title}</h5>
-                          <p className="text-sm text-gray-300">
-                            {post.excerpt || post.body?.substring(0, 100) || 'No content preview'}
+                          <h5 className="font-medium text-white text-lg mb-2">{post.title}</h5>
+                          <p className="text-sm text-gray-300 mb-3">
+                            {post.excerpt || post.body?.substring(0, 150) || 'No content preview'}
                           </p>
+                          
+                          {/* Post Metadata */}
+                          <div className="flex flex-wrap gap-2 text-xs">
+                            {post.category && (
+                              <span className="px-2 py-1 bg-gray-600 text-gray-200 rounded">
+                                {post.category}
+                              </span>
+                            )}
+                            {post.featured_image && (
+                              <span className="px-2 py-1 bg-green-600 text-white rounded">
+                                Has Image
+                              </span>
+                            )}
+                          </div>
                         </div>
+                        
+                        {/* Selection Indicator */}
+                        {form.selectedPosts.includes(post.id) && (
+                          <div className="flex-shrink-0">
+                            <CheckCircle className="w-6 h-6 text-blue-400" />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -470,40 +491,39 @@ export default function TimelineAlchemyPreviewWizard() {
                   <p className="text-gray-300">No blog posts available. You can create custom content in the next step.</p>
                 </div>
               )}
-              
-              {/* Custom Content Option */}
-              <div className="mt-4 p-4 bg-gray-700 rounded-lg border border-gray-600">
-                <h5 className="font-medium text-white mb-2">Or Create Custom Content:</h5>
-                <p className="text-sm text-gray-300">
-                  If you don't want to use existing posts, you can create custom content from scratch.
-                </p>
-              </div>
             </div>
             
-            {/* Show selected posts info */}
+            {/* Show selected post info */}
             {form.selectedPosts.length > 0 && (
-              <div className="p-4 bg-blue-900/20 rounded-lg mb-4 border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
+              <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
+                <h4 className="font-medium text-blue-300 mb-2">Selected Main Post:</h4>
                 <div className="space-y-2">
                   {form.selectedPosts.map((postId) => {
                     const post = blogPosts.find(p => p.id === postId)
                     return post ? (
-                      <div key={post.id} className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-blue-400" />
-                        <span className="text-sm text-blue-200">{post.title}</span>
+                      <div key={post.id} className="flex items-center gap-3">
+                        {post.image_public_url && (
+                          <img 
+                            src={post.image_public_url} 
+                            alt={post.title}
+                            className="w-12 h-12 object-cover rounded border border-blue-600"
+                          />
+                        )}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <Star className="w-4 h-4 text-blue-400" />
+                            <span className="text-sm font-medium text-blue-200">{post.title}</span>
+                          </div>
+                          <p className="text-xs text-blue-300">
+                            This post will be your main content across all platforms
+                          </p>
+                        </div>
                       </div>
                     ) : null
                   })}
                 </div>
               </div>
             )}
-            
-            {/* Navigation hint */}
-            <div className="p-3 bg-gray-700 rounded-lg border border-gray-600">
-              <p className="text-sm text-gray-300">
-                <span className="text-blue-400">Next:</span> Choose a template for your content in the next step.
-              </p>
-            </div>
           </div>
         )
 
