@@ -441,10 +441,10 @@ export default function TimelineAlchemyPreviewWizard() {
             <div className="space-y-4">
               <h4 className="font-medium text-white">Available Blog Posts:</h4>
               {blogPosts.length > 0 ? (
-                <div className="space-y-3 max-h-80 overflow-y-auto">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
                   {blogPosts.map((post) => (
-                    <div
-                      key={post.id}
+                                        <div 
+                      key={post.id} 
                       className={`border rounded-lg transition-all duration-200 ${
                         form.selectedPosts.includes(post.id)
                           ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/20'
@@ -453,7 +453,7 @@ export default function TimelineAlchemyPreviewWizard() {
                     >
                       {/* Post Header */}
                       <div 
-                        className="p-4 cursor-pointer hover:bg-gray-700/50 transition-colors"
+                        className="p-6 cursor-pointer hover:bg-gray-700/50 transition-colors"
                         onClick={() => {
                           const isSelected = form.selectedPosts.includes(post.id)
                           if (isSelected) {
@@ -465,17 +465,47 @@ export default function TimelineAlchemyPreviewWizard() {
                           }
                         }}
                       >
-                        <div className="flex gap-4">
-                          {/* Post Image */}
-                          {post.image_public_url && (
-                            <div className="flex-shrink-0">
-                              <img 
-                                src={post.image_public_url} 
-                                alt={post.title}
-                                className="w-24 h-24 object-cover rounded-lg border border-gray-600 shadow-md"
-                              />
-                            </div>
-                          )}
+                        <div className="flex gap-6">
+                          {/* Post Images - Support for multiple images */}
+                          <div className="flex-shrink-0">
+                            {post.image_public_url && (
+                              <div className="grid grid-cols-2 gap-2">
+                                <img 
+                                  src={post.image_public_url} 
+                                  alt={post.title}
+                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
+                                />
+                                {/* Additional style variations - you can add more here */}
+                                {post.featured_image && (
+                                  <img 
+                                    src={post.featured_image} 
+                                    alt={`${post.title} - Style 2`}
+                                    className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
+                                  />
+                                )}
+                                {/* Placeholder for additional styles */}
+                                {!post.featured_image && (
+                                  <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                                    <span className="text-white text-xs font-medium text-center px-2">
+                                      Style 2<br/>Available
+                                    </span>
+                                  </div>
+                                )}
+                                {/* Placeholder for style 3 */}
+                                <div className="w-32 h-32 bg-gradient-to-br from-green-600 to-teal-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                                  <span className="text-white text-xs font-medium text-center px-2">
+                                    Style 3<br/>Available
+                                  </span>
+                                </div>
+                                {/* Placeholder for style 4 */}
+                                <div className="w-32 h-32 bg-gradient-to-br from-orange-600 to-red-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                                  <span className="text-white text-xs font-medium text-center px-2">
+                                    Style 4<br/>Available
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           
                           {/* Post Content */}
                           <div className="flex-1 min-w-0">
@@ -490,13 +520,13 @@ export default function TimelineAlchemyPreviewWizard() {
                             </div>
                             
                             {/* Excerpt */}
-                            <p className="text-gray-300 mb-4 leading-relaxed">
-                              {post.excerpt || post.body?.substring(0, 200) || 'No content preview available'}
-                              {post.body && post.body.length > 200 && '...'}
+                            <p className="text-gray-300 mb-4 leading-relaxed text-base">
+                              {post.excerpt || post.body?.substring(0, 300) || 'No content preview available'}
+                              {post.body && post.body.length > 300 && '...'}
                             </p>
                             
                             {/* Post Metadata & Badges */}
-                            <div className="flex flex-wrap items-center gap-3">
+                            <div className="flex flex-wrap items-center gap-3 mb-3">
                               {/* Tags Badges */}
                               {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
                                 <>
