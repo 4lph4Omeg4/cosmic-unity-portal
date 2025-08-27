@@ -152,45 +152,100 @@ const Passport = () => {
 
       {/* Pricing Section */}
       <section className="py-24 bg-black/20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-mono text-3xl md:text-4xl font-bold mb-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-mono text-3xl md:text-4xl font-bold mb-8">
             Symbolische bijdrage
           </h2>
           
-          <div className="mb-8">
-            <span className="font-mono text-6xl md:text-7xl font-bold text-cosmic">
-              € 3,69
-            </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {/* Standard Edition */}
+            <div className="bg-black/30 border border-neutral-700 rounded-2xl p-8">
+              <h3 className="font-mono text-2xl font-semibold mb-4 text-cosmic">
+                Standard Edition
+              </h3>
+              
+              <div className="mb-6">
+                <span className="font-mono text-5xl md:text-6xl font-bold text-cosmic">
+                  € 3,69
+                </span>
+              </div>
+              
+              <p className="text-neutral-300 mb-6">
+                Het originele paspoort
+                <br />
+                voor je reis naar het Zelf
+              </p>
+              
+              <ul className="text-neutral-400 space-y-2 mb-8 text-sm">
+                <li>• 32 A6 pagina's met stempels</li>
+                <li>• QR-stempel voor onward travel</li>
+                <li>• Valid nowhere — 'Now' · 'Here'</li>
+              </ul>
+              
+              <Button 
+                size="lg" 
+                className="w-full bg-cosmic hover:bg-cosmic/90 text-white px-6 py-3 text-lg font-semibold group"
+                asChild
+              >
+                <Link to="/checkout/passport">
+                  Reserveer Standard
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Signed Edition */}
+            <div className="bg-cosmic/10 border border-cosmic/50 rounded-2xl p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-cosmic/20 rounded-bl-full" />
+              <div className="absolute top-4 right-4">
+                <div className="inline-block font-mono text-xs border border-cosmic/50 text-cosmic bg-cosmic/20 px-3 py-1 rounded-full">
+                  SIGNED
+                </div>
+              </div>
+              
+              <h3 className="font-mono text-2xl font-semibold mb-4 text-cosmic">
+                Gesigneerde Editie
+              </h3>
+              
+              <div className="mb-6">
+                <span className="font-mono text-5xl md:text-6xl font-bold text-cosmic">
+                  € 7,77
+                </span>
+              </div>
+              
+              <p className="text-neutral-300 mb-6">
+                Persoonlijk gesigneerd
+                <br />
+                door SH4M4NI4K zelf
+              </p>
+              
+              <ul className="text-neutral-400 space-y-2 mb-8 text-sm">
+                <li>• Alles uit Standard Edition</li>
+                <li>• Persoonlijke handtekening</li>
+                <li>• Unieke collector's item</li>
+                <li>• Kosmische energie versterkt</li>
+              </ul>
+              
+              <Button 
+                size="lg" 
+                className="w-full bg-cosmic hover:bg-cosmic/90 text-white px-6 py-3 text-lg font-semibold group"
+                asChild
+              >
+                <Link to="/checkout/passport-signed">
+                  Reserveer Gesigneerd
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
           </div>
           
-          <p className="text-xl text-neutral-300 mb-8">
-            Niet als prijs, maar als sleutel.
-          </p>
-          
-          <div className="text-neutral-400 space-y-2 mb-12 max-w-2xl mx-auto">
+          <div className="text-neutral-400 space-y-2 max-w-2xl mx-auto">
             <p>
-              Een bedrag klein genoeg om te vergeten,
+              Niet als prijzen, maar als sleutels.
               <br />
-              en groot genoeg om een oneindige stroom op gang te brengen.
-            </p>
-            
-            <p>
               Iedere bijdrage voedt de volgende oplage.
-              <br />
-              Iedere oplage opent nieuwe deuren.
             </p>
           </div>
-          
-          <Button 
-            size="lg" 
-            className="bg-cosmic hover:bg-cosmic/90 text-white px-8 py-4 text-lg font-semibold group"
-            asChild
-          >
-            <Link to="/checkout/passport">
-              Reserveer nu je paspoort
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
         </div>
       </section>
 
@@ -293,24 +348,38 @@ const Passport = () => {
 
       {/* Final CTA Section */}
       <section className="py-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-mono text-3xl md:text-4xl font-bold mb-8">
             Klaar voor de reis?
           </h2>
           
-          <Button 
-            size="lg" 
-            className="bg-cosmic hover:bg-cosmic/90 text-white px-12 py-6 text-xl font-semibold group"
-            asChild
-          >
-            <Link to="/checkout/passport">
-              Reserveer je Galactic Passport
-              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-cosmic/50 text-cosmic hover:bg-cosmic/20 px-8 py-4 text-lg font-semibold group"
+              asChild
+            >
+              <Link to="/checkout/passport">
+                Standard Edition
+                <span className="ml-2 text-sm text-neutral-400">€ 3,69</span>
+              </Link>
+            </Button>
+            
+            <Button 
+              size="lg" 
+              className="bg-cosmic hover:bg-cosmic/90 text-white px-8 py-4 text-lg font-semibold group"
+              asChild
+            >
+              <Link to="/checkout/passport-signed">
+                Gesigneerde Editie
+                <span className="ml-2 text-sm text-neutral-300">€ 7,77</span>
+              </Link>
+            </Button>
+          </div>
           
-          <p className="text-neutral-400 mt-6">
-            € 3,69 · 32 pagina's · Valid nowhere — 'Now' · 'Here'
+          <p className="text-neutral-400">
+            32 pagina's · Valid nowhere — 'Now' · 'Here'
           </p>
         </div>
       </section>
