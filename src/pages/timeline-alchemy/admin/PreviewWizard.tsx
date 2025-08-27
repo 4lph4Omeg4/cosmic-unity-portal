@@ -475,34 +475,30 @@ export default function TimelineAlchemyPreviewWizard() {
                                   alt={post.title}
                                   className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
                                 />
-                                {/* Additional style variations - you can add more here */}
-                                {post.featured_image && (
-                                  <img 
-                                    src={post.featured_image} 
-                                    alt={`${post.title} - Style 2`}
-                                    className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
-                                  />
-                                )}
-                                {/* Placeholder for additional styles */}
-                                {!post.featured_image && (
-                                  <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
-                                    <span className="text-white text-xs font-medium text-center px-2">
-                                      Style 2<br/>Available
-                                    </span>
-                                  </div>
-                                )}
-                                {/* Placeholder for style 3 */}
-                                <div className="w-32 h-32 bg-gradient-to-br from-green-600 to-teal-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
-                                  <span className="text-white text-xs font-medium text-center px-2">
-                                    Style 3<br/>Available
-                                  </span>
-                                </div>
-                                {/* Placeholder for style 4 */}
-                                <div className="w-32 h-32 bg-gradient-to-br from-orange-600 to-red-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
-                                  <span className="text-white text-xs font-medium text-center px-2">
-                                    Style 4<br/>Available
-                                  </span>
-                                </div>
+                                {/* Cosmic Theme Variation */}
+                                <img 
+                                  src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png"
+                                  alt={`${post.title} - Cosmic Theme`}
+                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                  onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png", '_blank')}
+                                  title="Cosmic Theme - Klik om te bekijken"
+                                />
+                                {/* Cyberpunk Theme Variation */}
+                                <img 
+                                  src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png"
+                                  alt={`${post.title} - Cyberpunk Theme`}
+                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                  onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png", '_blank')}
+                                  title="Cyberpunk Theme - Klik om te bekijken"
+                                />
+                                {/* Dystopia Theme Variation */}
+                                <img 
+                                  src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png"
+                                  alt={`${post.title} - Dystopia Theme`}
+                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                  onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png", '_blank')}
+                                  title="Dystopia Theme - Klik om te bekijken"
+                                />
                               </div>
                             )}
                           </div>
