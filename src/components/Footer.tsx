@@ -167,16 +167,7 @@ const Footer = () => {
                     </Link>
                   </li>
                 ))}
-                <li>
-                  <a
-                    href="https://g.co/gemini/share/6d4720253bb2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                  >
-                    The Direct Path
-                  </a>
-                </li>
+
                 <li>
                   <Link
                     to={timelineAlchemyEntryHref}
