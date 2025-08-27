@@ -19,7 +19,8 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Twitter
+  Twitter,
+  XCircle
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
@@ -468,39 +469,58 @@ export default function TimelineAlchemyPreviewWizard() {
                         <div className="flex gap-6">
                           {/* Post Images - Support for multiple images */}
                           <div className="flex-shrink-0">
-                            {post.image_public_url && (
-                              <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              {/* Main Image or Placeholder */}
+                              {post.image_public_url ? (
                                 <img 
                                   src={post.image_public_url} 
                                   alt={post.title}
                                   className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
                                 />
-                                {/* Cosmic Theme Variation */}
-                                <img 
-                                  src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png"
-                                  alt={`${post.title} - Cosmic Theme`}
-                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
-                                  onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png", '_blank')}
-                                  title="Cosmic Theme - Klik om te bekijken"
-                                />
-                                {/* Cyberpunk Theme Variation */}
-                                <img 
-                                  src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png"
-                                  alt={`${post.title} - Cyberpunk Theme`}
-                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
-                                  onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png", '_blank')}
-                                  title="Cyberpunk Theme - Klik om te bekijken"
-                                />
-                                {/* Dystopia Theme Variation */}
-                                <img 
-                                  src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png"
-                                  alt={`${post.title} - Dystopia Theme`}
-                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
-                                  onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png", '_blank')}
-                                  title="Dystopia Theme - Klik om te bekijken"
-                                />
-                              </div>
-                            )}
+                              ) : (
+                                <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                                  <span className="text-white text-xs font-medium text-center px-2">
+                                    Hoofdafbeelding<br/>Niet beschikbaar
+                                  </span>
+                                </div>
+                              )}
+                              
+                              {/* Cosmic Theme Variation */}
+                              <img 
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png"
+                                alt={`${post.title} - Cosmic Theme`}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent post selection when clicking image
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png", '_blank');
+                                }}
+                                title="Cosmic Theme - Klik om te bekijken"
+                              />
+                              
+                              {/* Cyberpunk Theme Variation */}
+                              <img 
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png"
+                                alt={`${post.title} - Cyberpunk Theme`}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent post selection when clicking image
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png", '_blank');
+                                }}
+                                title="Cyberpunk Theme - Klik om te bekijken"
+                              />
+                              
+                              {/* Dystopia Theme Variation */}
+                              <img 
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png"
+                                alt={`${post.title} - Dystopia Theme`}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent post selection when clicking image
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png", '_blank');
+                                }}
+                                title="Dystopia Theme - Klik om te bekijken"
+                              />
+                            </div>
                           </div>
                           
                           {/* Post Content */}
@@ -520,6 +540,43 @@ export default function TimelineAlchemyPreviewWizard() {
                               {post.excerpt || post.body?.substring(0, 300) || 'No content preview available'}
                               {post.body && post.body.length > 300 && '...'}
                             </p>
+                            
+                            {/* Selection Button */}
+                            <div className="mb-4">
+                              {form.selectedPosts.includes(post.id) ? (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="bg-red-600 hover:bg-red-700 border-red-500 text-white"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setForm(prev => ({ 
+                                      ...prev, 
+                                      selectedPosts: prev.selectedPosts.filter(id => id !== post.id) 
+                                    }));
+                                  }}
+                                >
+                                  <XCircle className="w-4 h-4 mr-2" />
+                                  Deselect Post
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="bg-blue-600 hover:bg-blue-700 border-blue-500 text-white"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setForm(prev => ({ 
+                                      ...prev, 
+                                      selectedPosts: [post.id] // Replace any existing selection
+                                    }));
+                                  }}
+                                >
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Select Post
+                                </Button>
+                              )}
+                            </div>
                             
                             {/* Post Metadata & Badges */}
                             <div className="flex flex-wrap items-center gap-3 mb-3">
