@@ -487,36 +487,36 @@ export default function TimelineAlchemyPreviewWizard() {
                               
                               {/* Cosmic Theme Variation */}
                               <img 
-                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png"
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
                                 alt={`${post.title} - Cosmic Theme`}
                                 className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation(); // Prevent post selection when clicking image
-                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png", '_blank');
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank');
                                 }}
                                 title="Cosmic Theme - Klik om te bekijken"
                               />
                               
                               {/* Cyberpunk Theme Variation */}
                               <img 
-                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png"
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
                                 alt={`${post.title} - Cyberpunk Theme`}
                                 className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation(); // Prevent post selection when clicking image
-                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png", '_blank');
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank');
                                 }}
                                 title="Cyberpunk Theme - Klik om te bekijken"
                               />
                               
                               {/* Dystopia Theme Variation */}
                               <img 
-                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png"
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
                                 alt={`${post.title} - Dystopia Theme`}
                                 className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation(); // Prevent post selection when clicking image
-                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png", '_blank');
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank');
                                 }}
                                 title="Dystopia Theme - Klik om te bekijken"
                               />

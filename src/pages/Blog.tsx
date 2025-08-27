@@ -140,7 +140,7 @@ const Blog = () => {
               <div className="aspect-video overflow-hidden">
                 <StorageImage
                   bucket="blog-images"
-                  path="header-cosmic.png"
+                  path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
                   alt="Ego to Eden - Cosmic Journey"
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
@@ -171,7 +171,7 @@ const Blog = () => {
               <div className="aspect-video overflow-hidden">
                 <StorageImage
                   bucket="blog-images"
-                  path="header-utopia.png"
+                  path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
                   alt="Unity - Seen Through the Single Eye"
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />

@@ -663,10 +663,10 @@ export default function TimelineAlchemyIdeas() {
                       {/* Cosmic Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png"
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
                           alt="Cosmic Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cosmic.png", '_blank')}
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank')}
                           title="Cosmic Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -679,10 +679,10 @@ export default function TimelineAlchemyIdeas() {
                       {/* Cyberpunk Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png"
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-cyberpunk.png", '_blank')}
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank')}
                           title="Cyberpunk Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -695,10 +695,10 @@ export default function TimelineAlchemyIdeas() {
                       {/* Dystopia Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png"
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-dystopia.png", '_blank')}
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank')}
                           title="Dystopia Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -711,10 +711,10 @@ export default function TimelineAlchemyIdeas() {
                       {/* Utopia Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-utopia.png"
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/header-utopia.png", '_blank')}
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png", '_blank')}
                           title="Utopia Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
