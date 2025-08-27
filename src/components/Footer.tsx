@@ -137,6 +137,17 @@ const Footer = () => {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link 
+                    to="/passport" 
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm flex items-center gap-2"
+                  >
+                    Galactic Passport (€3,69)
+                    <span className="px-2 py-1 bg-cosmic/20 text-cosmic text-xs font-mono rounded-full border border-cosmic/30">
+                      NEW
+                    </span>
+                  </Link>
+                </li>
               </ul>
             </div>
 
