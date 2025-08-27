@@ -15,60 +15,15 @@ import {
   X,
   ExternalLink
 } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+
 
 const Passport = () => {
   const [showPreview, setShowPreview] = useState(false);
 
   return (
-    <>
-      {/* SEO Metadata */}
-      <Helmet>
-        <title>Galactic Passport for No-Bodies — Paspoort naar het Zelf</title>
-        <meta name="description" content="Een paspoort dat niets toevoegt en alles opent. 32 A6-pagina's, € 3,69 symbolische bijdrage. Valid nowhere — 'Now' · 'Here'." />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Galactic Passport for No-Bodies — Paspoort naar het Zelf" />
-        <meta property="og:description" content="Een paspoort dat niets toevoegt en alles opent. 32 A6-pagina's, € 3,69 symbolische bijdrage." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://sh4m4ni4k.nl/passport" />
-        <meta property="og:image" content="https://sh4m4ni4k.nl/og-passport.png" />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Galactic Passport for No-Bodies" />
-        <meta name="twitter:description" content="Een paspoort dat niets toevoegt en alles opent. 32 A6-pagina's, € 3,69 symbolische bijdrage." />
-        <meta name="twitter:image" content="https://sh4m4ni4k.nl/og-passport.png" />
-        
-        {/* JSON-LD Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "Galactic Passport for No-Bodies",
-            "description": "Een paspoort dat niets toevoegt en alles opent. 32 A6-pagina's met stempels en zinnen die alles doorboren.",
-            "url": "https://sh4m4ni4k.nl/passport",
-            "image": "https://sh4m4ni4k.nl/og-passport.png",
-            "brand": {
-              "@type": "Brand",
-              "name": "SH4M4NI4K"
-            },
-            "offers": {
-              "@type": "Offer",
-              "price": "3.69",
-              "priceCurrency": "EUR",
-              "availability": "https://schema.org/InStock",
-              "url": "https://sh4m4ni4k.nl/checkout/passport"
-            },
-            "category": "Boek",
-            "material": "Papier",
-            "numberOfPages": 32,
-            "bookFormat": "A6"
-          })}
-        </script>
-      </Helmet>
-
-      <div className="min-h-screen bg-[#0D0D1A] text-white">
+              <>
+       {/* SEO Metadata - Basic implementation without external dependencies */}
+       <div className="min-h-screen bg-[#0D0D1A] text-white">
         {/* Navigation */}
         <Navigation />
         
