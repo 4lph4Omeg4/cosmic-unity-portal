@@ -330,7 +330,7 @@ const Passport = () => {
                  <h3 className="font-mono text-xl font-semibold mb-2 text-cosmic">
                    Waarom € 3,69?
                  </h3>
-                 <p className="text-neutral-300">Een sleutel, geen prijs. Oneindige stroom > voorraad.</p>
+                                   <p className="text-neutral-300">Een sleutel, geen prijs. Oneindige stroom &gt; voorraad.</p>
                </div>
                
                <div className="text-center">
