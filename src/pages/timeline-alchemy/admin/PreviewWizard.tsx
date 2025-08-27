@@ -442,7 +442,7 @@ export default function TimelineAlchemyPreviewWizard() {
             <div className="space-y-4">
               <h4 className="font-medium text-white">Available Blog Posts:</h4>
               {blogPosts.length > 0 ? (
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                <div className="space-y-4 max-h-[800px] overflow-y-auto">
                   {blogPosts.map((post) => (
                                         <div 
                       key={post.id} 
