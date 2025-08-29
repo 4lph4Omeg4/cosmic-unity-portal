@@ -41,6 +41,20 @@ import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import TimelineAlchemy from "./pages/TimelineAlchemy";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<div>Home</div>} />
+        <Route path="/tla" element={<TimelineAlchemy />} />
+        <Route path="*" element={<div>404 not found</div>} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
 // Timeline Alchemy Client Pages
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
