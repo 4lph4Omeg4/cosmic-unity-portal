@@ -1,6 +1,18 @@
 import React from 'react';
 import { TlaSubscribeButton } from '@/components/TlaSubscribeButton';
 import { useSearchParams } from "react-router-dom";
+import { startCheckout } from "@/services/checkout";
+
+<button
+  onClick={() => startCheckout({
+    org_id: "<JOUW_ORG_ID>",
+    price_id: "price_1S1VMWFlYXjX03EzHKNwtkWW"
+  })}
+  className="rounded-md px-4 py-2 bg-black text-white"
+>
+  Subscribe
+</button>
+
 
 const TimelineAlchemy: React.FC = () => {
   return (
