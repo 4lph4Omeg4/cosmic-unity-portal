@@ -84,12 +84,22 @@ export default function IdeasPage() {
     setSelectedIdeas(newSelected)
   }
 
+  const deselectIdea = (ideaId: string) => {
+    const newSelected = new Set(selectedIdeas)
+    newSelected.delete(ideaId)
+    setSelectedIdeas(newSelected)
+  }
+
   const selectAll = () => {
     if (selectedIdeas.size === filteredIdeas.length) {
       setSelectedIdeas(new Set())
     } else {
       setSelectedIdeas(new Set(filteredIdeas.map(idea => idea.id)))
     }
+  }
+
+  const clearSelection = () => {
+    setSelectedIdeas(new Set())
   }
 
   const createPreview = () => {
@@ -174,9 +184,14 @@ export default function IdeasPage() {
               <span>Select All ({filteredIdeas.length})</span>
             </div>
             {selectedIdeas.size > 0 && (
-              <Button onClick={createPreview} variant="default">
-                Create Preview from {selectedIdeas.size} Selected
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={clearSelection} variant="outline" size="sm">
+                  Clear Selection
+                </Button>
+                <Button onClick={createPreview} variant="default">
+                  Create Preview from {selectedIdeas.size} Selected
+                </Button>
+              </div>
             )}
           </div>
         </CardContent>
@@ -192,7 +207,9 @@ export default function IdeasPage() {
             {filteredIdeas.map((idea) => (
               <div
                 key={idea.id}
-                className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50"
+                className={`flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors ${
+                  selectedIdeas.has(idea.id) ? 'bg-blue-50 border-blue-200' : ''
+                }`}
               >
                 <Checkbox
                   checked={selectedIdeas.has(idea.id)}
@@ -203,6 +220,11 @@ export default function IdeasPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-semibold text-lg">{idea.title}</h3>
                     {getStatusBadge(idea.status)}
+                    {selectedIdeas.has(idea.id) && (
+                      <Badge variant="default" className="bg-blue-600">
+                        Selected
+                      </Badge>
+                    )}
                   </div>
                   
                   {idea.description && (
@@ -215,6 +237,17 @@ export default function IdeasPage() {
                     <span>Created: {new Date(idea.created_at).toLocaleDateString()}</span>
                   </div>
                 </div>
+                
+                {selectedIdeas.has(idea.id) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => deselectIdea(idea.id)}
+                    className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  >
+                    Deselect
+                  </Button>
+                )}
               </div>
             ))}
             

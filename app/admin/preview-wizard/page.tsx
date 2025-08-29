@@ -8,14 +8,30 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, ArrowRight, Check, Calendar } from 'lucide-react'
-import { getClients, createPreview } from '@/app/actions/admin'
+import { ArrowLeft, ArrowRight, Check, Calendar, X, Eye, EyeOff } from 'lucide-react'
+import { getClients, createPreview, getIdeas } from '@/app/actions/admin'
 import { useRouter } from 'next/navigation'
 
 interface Client {
   id: string
   name: string
   contact_email: string | null
+  organizations: {
+    name: string
+  }
+}
+
+interface Idea {
+  id: string
+  title: string
+  description: string | null
+  status: 'draft' | 'approved' | 'rejected'
+  created_at: string
+  created_by: string
+  clients: {
+    name: string
+    org_id: string
+  }
   organizations: {
     name: string
   }
@@ -53,6 +69,7 @@ const templates = [
 export default function PreviewWizard() {
   const [currentStep, setCurrentStep] = useState(0)
   const [clients, setClients] = useState<Client[]>([])
+  const [ideas, setIdeas] = useState<Idea[]>([])
   const [selectedIdeas, setSelectedIdeas] = useState<string[]>([])
   const [formData, setFormData] = useState({
     client_id: '',
@@ -62,11 +79,13 @@ export default function PreviewWizard() {
     scheduled_at: ''
   })
   const [loading, setLoading] = useState(false)
+  const [showFullContent, setShowFullContent] = useState<{ [key: string]: boolean }>({})
   const router = useRouter()
 
   useEffect(() => {
     loadClients()
     loadSelectedIdeas()
+    loadIdeas()
   }, [])
 
   const loadClients = async () => {
@@ -78,11 +97,33 @@ export default function PreviewWizard() {
     }
   }
 
+  const loadIdeas = async () => {
+    try {
+      const data = await getIdeas()
+      setIdeas(data)
+    } catch (error) {
+      console.error('Error loading ideas:', error)
+    }
+  }
+
   const loadSelectedIdeas = () => {
     const stored = sessionStorage.getItem('selectedIdeas')
     if (stored) {
       setSelectedIdeas(JSON.parse(stored))
     }
+  }
+
+  const deselectIdea = (ideaId: string) => {
+    const newSelected = selectedIdeas.filter(id => id !== ideaId)
+    setSelectedIdeas(newSelected)
+    sessionStorage.setItem('selectedIdeas', JSON.stringify(newSelected))
+  }
+
+  const toggleFullContent = (ideaId: string) => {
+    setShowFullContent(prev => ({
+      ...prev,
+      [ideaId]: !prev[ideaId]
+    }))
   }
 
   const nextStep = () => {
@@ -254,6 +295,74 @@ export default function PreviewWizard() {
                 )}
               </div>
             </div>
+            
+            {/* Selected Ideas with Deselect Option */}
+            <div className="space-y-3">
+              <h4 className="font-medium">Selected Ideas:</h4>
+              {selectedIdeas.map((ideaId) => {
+                const idea = ideas.find(i => i.id === ideaId)
+                if (!idea) return null
+                
+                return (
+                  <div key={ideaId} className="border rounded-lg p-3 bg-white">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h5 className="font-medium">{idea.title}</h5>
+                          <Badge variant="secondary">{idea.status}</Badge>
+                        </div>
+                        
+                        {idea.description && (
+                          <div>
+                            {showFullContent[ideaId] ? (
+                              <p className="text-gray-600 text-sm">{idea.description}</p>
+                            ) : (
+                              <p className="text-gray-600 text-sm">
+                                {idea.description.length > 100 
+                                  ? `${idea.description.substring(0, 100)}...` 
+                                  : idea.description
+                                }
+                              </p>
+                            )}
+                            
+                            <button
+                              onClick={() => toggleFullContent(ideaId)}
+                              className="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1 mt-1"
+                            >
+                              {showFullContent[ideaId] ? (
+                                <>
+                                  <EyeOff className="w-3 h-3" />
+                                  Verberg content
+                                </>
+                              ) : (
+                                <>
+                                  <Eye className="w-3 h-3" />
+                                  Toon volledige content
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        )}
+                        
+                        <div className="text-xs text-gray-500 mt-2">
+                          Client: {idea.clients.name} • Created: {new Date(idea.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => deselectIdea(ideaId)}
+                        className="ml-3 text-red-600 hover:text-red-800 hover:bg-red-50"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            
             <div className="text-sm text-gray-600">
               Click Save to create previews for all selected ideas. They will be sent to the client for approval.
             </div>
@@ -330,7 +439,7 @@ export default function PreviewWizard() {
         </Button>
 
         {currentStep === steps.length - 1 ? (
-          <Button onClick={handleSave} disabled={loading}>
+          <Button onClick={handleSave} disabled={loading || selectedIdeas.length === 0}>
             {loading ? 'Saving...' : 'Save Preview'}
           </Button>
         ) : (
