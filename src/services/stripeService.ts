@@ -1,45 +1,38 @@
-// FRONTEND-VEILIGE VERSIE — GEEN Stripe secret in de browser
-// Vervangt je oude server-side implementatie.
+// src/services/stripeService.ts
+import { createClient } from '@supabase/supabase-js';
 
-// Optioneel: zet VITE_CHECKOUT_FUNCTION_URL in .env voor makkelijke swaps.
-// Valt anders terug op je huidige function-URL.
-const FUNCTION_URL =
-  import.meta.env.VITE_CHECKOUT_FUNCTION_URL ||
-  'https://wdclgadjetxhcududipz.supabase.co/functions/v1/swift-task';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  // Harde, duidelijke fout in dev
+  console.error('Supabase env mist. Check VITE_SUPABASE_URL en VITE_SUPABASE_ANON_KEY.');
+}
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export interface CheckoutRequest {
   org_id: string;
-  price_id?: string; // mag leeg; je function heeft een fallback
+  price_id?: string;
 }
-
 export interface CheckoutResponse {
   url: string;
 }
 
 export class StripeService {
-  static async createCheckoutSession(data: CheckoutRequest): Promise<CheckoutResponse> {
-    if (!data?.org_id) throw new Error('org_id ontbreekt');
+  static async createCheckoutSession({ org_id, price_id }: CheckoutRequest): Promise<CheckoutResponse> {
+    if (!org_id) throw new Error('org_id ontbreekt');
 
-    const res = await fetch(FUNCTION_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+    const { data, error } = await supabase.functions.invoke('swift-task', {
+      body: { org_id, price_id },
     });
 
-    const json = await res.json();
-    if (!res.ok) throw new Error(json?.error || 'Checkout mislukt');
-    if (!json?.url) throw new Error('Geen checkout URL ontvangen van server');
+    if (error) {
+      // Geeft nette fout door aan UI
+      throw new Error(error.message || 'Checkout mislukt');
+    }
+    if (!data?.url) throw new Error('Geen checkout URL ontvangen');
 
-    return { url: json.url };
-  }
-
-  // Deze twee zijn front-end niet veilig/zinvol zonder backend.
-  // We geven een duidelijke fout terug totdat we een server endpoint/webhook hebben.
-  static async getSubscription(_subscriptionId: string) {
-    throw new Error('Niet beschikbaar in frontend. Gebruik een server/edge function of webhook.');
-  }
-
-  static async cancelSubscription(_subscriptionId: string) {
-    throw new Error('Niet beschikbaar in frontend. Gebruik een server/edge function.');
+    return data as CheckoutResponse;
   }
 }
