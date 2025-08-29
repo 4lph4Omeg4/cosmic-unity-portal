@@ -23,6 +23,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import EgoToEden from "./pages/EgoToEden";
 import Unity from "./pages/Unity";
+import Passport from "./pages/Passport";
 import BlogArticle from "./pages/BlogArticle";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="/ego-to-eden" element={<EgoToEden />} />
               <Route path="/unity" element={<Unity />} />
               <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
+              <Route path="/passport" element={<Passport />} />
               <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />

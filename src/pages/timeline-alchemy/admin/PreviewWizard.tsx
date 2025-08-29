@@ -19,7 +19,8 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Twitter
+  Twitter,
+  XCircle
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
@@ -441,10 +442,10 @@ export default function TimelineAlchemyPreviewWizard() {
             <div className="space-y-4">
               <h4 className="font-medium text-white">Available Blog Posts:</h4>
               {blogPosts.length > 0 ? (
-                <div className="space-y-3 max-h-80 overflow-y-auto">
+                <div className="space-y-4 max-h-[800px] overflow-y-auto">
                   {blogPosts.map((post) => (
-                    <div
-                      key={post.id}
+                                        <div 
+                      key={post.id} 
                       className={`border rounded-lg transition-all duration-200 ${
                         form.selectedPosts.includes(post.id)
                           ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/20'
@@ -453,7 +454,7 @@ export default function TimelineAlchemyPreviewWizard() {
                     >
                       {/* Post Header */}
                       <div 
-                        className="p-4 cursor-pointer hover:bg-gray-700/50 transition-colors"
+                        className="p-6 cursor-pointer hover:bg-gray-700/50 transition-colors"
                         onClick={() => {
                           const isSelected = form.selectedPosts.includes(post.id)
                           if (isSelected) {
@@ -465,17 +466,62 @@ export default function TimelineAlchemyPreviewWizard() {
                           }
                         }}
                       >
-                        <div className="flex gap-4">
-                          {/* Post Image */}
-                          {post.image_public_url && (
-                            <div className="flex-shrink-0">
+                        <div className="flex gap-6">
+                          {/* Post Images - Support for multiple images */}
+                          <div className="flex-shrink-0">
+                            <div className="grid grid-cols-2 gap-2">
+                              {/* Main Image or Placeholder */}
+                              {post.image_public_url ? (
+                                <img 
+                                  src={post.image_public_url} 
+                                  alt={post.title}
+                                  className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
+                                />
+                              ) : (
+                                <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                                  <span className="text-white text-xs font-medium text-center px-2">
+                                    Hoofdafbeelding<br/>Niet beschikbaar
+                                  </span>
+                                </div>
+                              )}
+                              
+                              {/* Cosmic Theme Variation */}
                               <img 
-                                src={post.image_public_url} 
-                                alt={post.title}
-                                className="w-24 h-24 object-cover rounded-lg border border-gray-600 shadow-md"
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                                alt={`${post.title} - Cosmic Theme`}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent post selection when clicking image
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank');
+                                }}
+                                title="Cosmic Theme - Klik om te bekijken"
+                              />
+                              
+                              {/* Cyberpunk Theme Variation */}
+                              <img 
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                                alt={`${post.title} - Cyberpunk Theme`}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent post selection when clicking image
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank');
+                                }}
+                                title="Cyberpunk Theme - Klik om te bekijken"
+                              />
+                              
+                              {/* Dystopia Theme Variation */}
+                              <img 
+                                src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                                alt={`${post.title} - Dystopia Theme`}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent post selection when clicking image
+                                  window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank');
+                                }}
+                                title="Dystopia Theme - Klik om te bekijken"
                               />
                             </div>
-                          )}
+                          </div>
                           
                           {/* Post Content */}
                           <div className="flex-1 min-w-0">
@@ -490,13 +536,50 @@ export default function TimelineAlchemyPreviewWizard() {
                             </div>
                             
                             {/* Excerpt */}
-                            <p className="text-gray-300 mb-4 leading-relaxed">
-                              {post.excerpt || post.body?.substring(0, 200) || 'No content preview available'}
-                              {post.body && post.body.length > 200 && '...'}
+                            <p className="text-gray-300 mb-4 leading-relaxed text-base">
+                              {post.excerpt || post.body?.substring(0, 300) || 'No content preview available'}
+                              {post.body && post.body.length > 300 && '...'}
                             </p>
                             
+                            {/* Selection Button */}
+                            <div className="mb-4">
+                              {form.selectedPosts.includes(post.id) ? (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="bg-red-600 hover:bg-red-700 border-red-500 text-white"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setForm(prev => ({ 
+                                      ...prev, 
+                                      selectedPosts: prev.selectedPosts.filter(id => id !== post.id) 
+                                    }));
+                                  }}
+                                >
+                                  <XCircle className="w-4 h-4 mr-2" />
+                                  Deselect Post
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="bg-blue-600 hover:bg-blue-700 border-blue-500 text-white"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setForm(prev => ({ 
+                                      ...prev, 
+                                      selectedPosts: [post.id] // Replace any existing selection
+                                    }));
+                                  }}
+                                >
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Select Post
+                                </Button>
+                              )}
+                            </div>
+                            
                             {/* Post Metadata & Badges */}
-                            <div className="flex flex-wrap items-center gap-3">
+                            <div className="flex flex-wrap items-center gap-3 mb-3">
                               {/* Tags Badges */}
                               {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
                                 <>

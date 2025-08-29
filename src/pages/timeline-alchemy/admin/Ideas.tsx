@@ -71,6 +71,13 @@ interface BlogPost {
   ai_blog?: any // Use any to avoid TypeScript issues with dynamic field names
   imageLoading?: boolean
   imageError?: boolean
+  // Add variation images for different themes
+  variationImages?: {
+    cosmic: string
+    cyberpunk: string
+    dystopia: string
+    utopia: string
+  }
 }
 
 export default function TimelineAlchemyIdeas() {
@@ -639,8 +646,8 @@ export default function TimelineAlchemyIdeas() {
                     </div>
                   )}
                   
-                                     {/* Fallback placeholder when no image */}
-                   {!post.image_url && (
+                  {/* Fallback placeholder when no image */}
+                  {!post.image_url && (
                     <div className="flex-shrink-0 w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
                       <div className="text-gray-400 text-xs text-center">
                         <div className="w-8 h-8 mx-auto mb-1">📄</div>
@@ -648,6 +655,76 @@ export default function TimelineAlchemyIdeas() {
                       </div>
                     </div>
                   )}
+
+                  {/* Variation Images Section */}
+                  <div className="flex-shrink-0">
+                    <div className="text-xs text-gray-400 mb-2 font-medium">Variatie Afbeeldingen:</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* Cosmic Theme */}
+                      <div className="relative group">
+                        <img
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                          alt="Cosmic Theme"
+                          className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank')}
+                          title="Cosmic Theme - Klik om te bekijken"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                            Cosmic
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Cyberpunk Theme */}
+                      <div className="relative group">
+                        <img
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                          alt="Cyberpunk Theme"
+                          className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank')}
+                          title="Cyberpunk Theme - Klik om te bekijken"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                            Cyberpunk
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Dystopia Theme */}
+                      <div className="relative group">
+                        <img
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                          alt="Dystopia Theme"
+                          className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank')}
+                          title="Dystopia Theme - Klik om te bekijken"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                            Dystopia
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Utopia Theme */}
+                      <div className="relative group">
+                        <img
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
+                          alt="Utopia Theme"
+                          className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png", '_blank')}
+                          title="Utopia Theme - Klik om te bekijken"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                            Utopia
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">

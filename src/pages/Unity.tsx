@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, User, ArrowRight, Eye } from 'lucide-react';
 import { fetchBlogArticles } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
+import StorageImage from '@/components/StorageImage';
 
 interface BlogArticle {
   id: string;
@@ -92,24 +93,21 @@ const Unity = () => {
       
       <main className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Page Header */}
+          {/* Page Header with Image */}
           <div className="text-center mb-16">
-            <div className="flex justify-center mb-6">
-              <div className="w-12 h-12 bg-mystical-gradient rounded-full flex items-center justify-center shadow-mystical animate-cosmic-pulse">
-                <Eye className="w-6 h-6 text-white" />
-              </div>
+            <div className="aspect-video overflow-hidden rounded-lg mb-8 shadow-cosmic">
+              <StorageImage
+                bucket="blog-images"
+                path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
+                alt="Unity - Seen Through the Single Eye"
+                className="w-full h-full object-cover"
+              />
             </div>
-            
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
-              <span className="text-mystical-gradient">{t('unity.title')}</span>
+              <span className="text-cosmic-gradient">{t('blog.unity.title')}</span>
             </h1>
-            
-            <h2 className="font-cosmic text-2xl md:text-3xl mb-6 text-cosmic-gradient">
-              {t('unity.subtitle')}
-            </h2>
-            
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('unity.description')}
+              {t('blog.unity.description')}
             </p>
           </div>
 

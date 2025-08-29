@@ -9,6 +9,7 @@ import { Calendar, User, ArrowRight } from 'lucide-react';
 import { fetchBlogArticles, fetchAllBlogs, testConnection } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
 import { getLocalizedBlogContent } from '@/utils/contentLocalization';
+import StorageImage from '@/components/StorageImage';
 
 interface BlogArticle {
   id: string;
@@ -135,7 +136,15 @@ const Blog = () => {
 
           {/* Blog Categories */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
+              <div className="aspect-video overflow-hidden">
+                <StorageImage
+                  bucket="blog-images"
+                  path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                  alt="Ego to Eden - Cosmic Journey"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
                   {t('blog.egoToEden.title')}
@@ -158,7 +167,15 @@ const Blog = () => {
               </CardContent>
             </Card>
 
-            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic">
+            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
+              <div className="aspect-video overflow-hidden">
+                <StorageImage
+                  bucket="blog-images"
+                  path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
+                  alt="Unity - Seen Through the Single Eye"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
                   {t('blog.unity.title')}
