@@ -1,18 +1,23 @@
-// src/services/checkout.ts
+// Minimal fetch: géén Authorization/geén apikey -> veel minder CORS gedoe
+const CHECKOUT_URL =
+  "https://wdclgadjetxhcududipz.supabase.co/functions/v1/checkout";
+
 export async function startCheckout(params: { org_id: string; price_id: string }) {
-  const url = import.meta.env.VITE_CHECKOUT_FUNCTION_URL!;
-  const anon = import.meta.env.VITE_SUPABASE_ANON_KEY!;
-  const res = await fetch(url, {
+  const res = await fetch(CHECKOUT_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: anon,
-      Authorization: `Bearer ${anon}`,
-    },
+    headers: { "Content-Type": "application/json" }, // that's it
     body: JSON.stringify(params),
   });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(typeof data === "object" ? (data.error || "failed") : "failed");
+
+  // Log wat er gebeurt (helpt zóveel bij foutzoeken)
+  const text = await res.text();
+  let data: any = {};
+  try { data = JSON.parse(text); } catch { /* ignore */ }
+
+  if (!res.ok) {
+    console.error("Checkout failed (status, body):", res.status, text);
+    throw new Error(data?.error || `Checkout failed (${res.status})`);
+  }
   if (!data?.url) throw new Error("No checkout url");
   window.location.href = data.url;
 }
