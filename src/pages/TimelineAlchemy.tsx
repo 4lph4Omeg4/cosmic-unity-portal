@@ -1,42 +1,57 @@
-import React from 'react';
-import { TlaSubscribeButton } from '@/components/TlaSubscribeButton';
+import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { startCheckout } from "@/services/checkout";
-import { TlaPostsList } from "@/components/TlaPostsList";
 
-  return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Timeline Alchemy Posts</h1>
-      <TlaPostsList />
-    </div>
-  );
-
-
-<button
-  onClick={() => startCheckout({
-    org_id: "b02de5d1-382c-4c8a-b1c4-0c9abdd1b6f8", // jouw org_id
-    price_id: "price_1S1VMWFlYXjX03EzHKNwtkWW"      // jouw Stripe price
-  })}
-  className="rounded-md px-4 py-2 bg-black text-white"
->
-  Subscribe
-</button>
-
+/**
+ * Minimal TimelineAlchemy page
+ * - Toont een simpele banner bij ?session=success|cancel
+ * - Geen externe services/imports (dus geen build-conflicts)
+ * - Eén default export
+ */
 const TimelineAlchemy: React.FC = () => {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Timeline Alchemy
-      </h1>
-      <p className="text-gray-600 mb-8 text-center max-w-md">
-        Ontgrendel premium features van Timeline Alchemy en automatiseer je
-        spirituele content journey met één druk op de knop.
-      </p>
+  const [params] = useSearchParams();
+  const session = params.get("session"); // 'success' | 'cancel' | null
 
-      <TlaSubscribeButton
-        orgId="b02de5d1-382c-4c8a-b1c4-0c9abdd1b6f8"
-        priceId="price_1S1VMWFlYXjX03EzHKNwtkWW"
-      />
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Top banner voor Stripe redirect status (optioneel) */}
+      {session && (
+        <div
+          className={`w-full text-white text-sm md:text-base py-3 px-4 ${
+            session === "success" ? "bg-green-600" : "bg-yellow-600"
+          }`}
+        >
+          {session === "success"
+            ? "✅ Betaling gelukt. Je abonnement is geactiveerd (of wordt zo verwerkt)."
+            : "⚠️ Betaling geannuleerd. Je kunt het later opnieuw proberen."}
+        </div>
+      )}
+
+      <main className="max-w-3xl mx-auto px-6 py-10">
+        <h1 className="text-3xl font-bold tracking-tight">Timeline Alchemy</h1>
+        <p className="mt-2 text-gray-600">
+          Welkom bij TLA. Dit is een minimal werkende pagina zonder extra
+          dependencies, zodat je build gewoon groen blijft.
+        </p>
+
+        <section className="mt-8 space-y-4">
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
+            <h2 className="text-xl font-semibold">Status</h2>
+            <p className="mt-1 text-gray-600">
+              Alles staat: router werkt, pagina rendert, en we hebben één
+              duidelijke export.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
+            <h2 className="text-xl font-semibold">Volgende stap (optioneel)</h2>
+            <p className="mt-1 text-gray-600">
+              Wil je hier later een “Subscribe” knop? Dan kun je een functie{" "}
+              <code>startCheckout()</code> aanroepen vanuit je services. Voor nu
+              hebben we dat bewust weggelaten om conflicten te voorkomen.
+            </p>
+          </div>
+        </section>
+      </main>
     </div>
   );
 };
