@@ -47,6 +47,7 @@ export default function MyPreviews() {
   const [feedback, setFeedback] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
   const [showFullContent, setShowFullContent] = useState<{ [key: string]: boolean }>({})
+  const [debugInfo, setDebugInfo] = useState<string>('')
 
   useEffect(() => {
     loadPreviews()
@@ -56,12 +57,32 @@ export default function MyPreviews() {
     try {
       // In a real app, get userId from auth context
       const userId = 'current-user-id'
+      console.log('Loading previews for user:', userId)
+      
       const data = await getClientPreviews(userId)
+      console.log('Previews loaded:', data)
+      
       setPreviews(data)
+      setDebugInfo(`Loaded ${data.length} previews`)
     } catch (error) {
       console.error('Error loading previews:', error)
+      setDebugInfo(`Error: ${error}`)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const testDatabase = async () => {
+    try {
+      setDebugInfo('Testing database connection...')
+      
+      // Simple test - try to fetch basic data
+      const response = await fetch('/api/test-db')
+      const result = await response.json()
+      
+      setDebugInfo(`Test result: ${JSON.stringify(result, null, 2)}`)
+    } catch (error) {
+      setDebugInfo(`Test failed: ${error}`)
     }
   }
 
@@ -141,10 +162,22 @@ export default function MyPreviews() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">My Previews</h1>
-        <Button onClick={loadPreviews} variant="outline">
-          Refresh
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={testDatabase} variant="outline" size="sm">
+            Test DB
+          </Button>
+          <Button onClick={loadPreviews} variant="outline">
+            Refresh
+          </Button>
+        </div>
       </div>
+      
+      {/* Debug Info */}
+      {debugInfo && (
+        <div className="bg-gray-100 p-3 rounded-lg text-sm">
+          <strong>Debug:</strong> {debugInfo}
+        </div>
+      )}
 
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
