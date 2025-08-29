@@ -1,3 +1,4 @@
+// src/services/checkout.ts
 export async function startCheckout(params: { org_id: string; price_id: string }) {
   const url = import.meta.env.VITE_CHECKOUT_FUNCTION_URL!;
   const anon = import.meta.env.VITE_SUPABASE_ANON_KEY!;
@@ -10,8 +11,8 @@ export async function startCheckout(params: { org_id: string; price_id: string }
     },
     body: JSON.stringify(params),
   });
-  if (!res.ok) throw new Error(await res.text());
-  const data = await res.json();
-  if (!data.url) throw new Error("No checkout url");
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(typeof data === "object" ? (data.error || "failed") : "failed");
+  if (!data?.url) throw new Error("No checkout url");
   window.location.href = data.url;
 }
