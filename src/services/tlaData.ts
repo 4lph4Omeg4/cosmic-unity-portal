@@ -1,6 +1,9 @@
+// src/services/tlaData.ts
 import { supabase } from "@/lib/supabaseClient";
 
-export async function fetchTlaPosts({ search = "", limit = 20, offset = 0 } = {}) {
+/** Haal posts op via de view die RLS-safe is. */
+export async function fetchTlaPosts(opts?: { search?: string; limit?: number; offset?: number }) {
+  const { search = "", limit = 20, offset = 0 } = opts ?? {};
   let q = supabase
     .from("tla_posts_visible")
     .select("*", { count: "exact" })
@@ -8,10 +11,13 @@ export async function fetchTlaPosts({ search = "", limit = 20, offset = 0 } = {}
     .range(offset, offset + limit - 1);
 
   if (search) q = q.ilike("title", `%${search}%`);
-  return q; // { data, error, count }
+  const { data, error, count } = await q;
+  return { data: data ?? [], error, count: count ?? 0 };
 }
 
-export async function fetchTlaIdeas({ status, limit = 20, offset = 0 }: { status?: string; limit?: number; offset?: number } = {}) {
+/** Haal ideas op via de view die RLS-safe is. */
+export async function fetchTlaIdeas(opts?: { status?: string; limit?: number; offset?: number }) {
+  const { status, limit = 20, offset = 0 } = opts ?? {};
   let q = supabase
     .from("tla_ideas_visible")
     .select("*", { count: "exact" })
@@ -19,5 +25,6 @@ export async function fetchTlaIdeas({ status, limit = 20, offset = 0 }: { status
     .range(offset, offset + limit - 1);
 
   if (status) q = q.eq("status", status);
-  return q; // { data, error, count }
+  const { data, error, count } = await q;
+  return { data: data ?? [], error, count: count ?? 0 };
 }
