@@ -135,11 +135,32 @@ export default function IdeasPage() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Ideas Management</h1>
-        <Button onClick={() => router.push('/admin/preview-wizard')}>
-          <Plus className="w-4 h-4 mr-2" />
-          Create Preview
-        </Button>
+        <div>
+          <h1 className="text-3xl font-bold">Ideas Management</h1>
+          {selectedIdeas.size > 0 && (
+            <p className="text-gray-600 mt-1">
+              {selectedIdeas.size} idee{selectedIdeas.size !== 1 ? 'ën' : ''} geselecteerd voor preview
+            </p>
+          )}
+        </div>
+        <div className="flex gap-2">
+          {selectedIdeas.size > 0 && (
+            <Button 
+              onClick={() => router.push('/admin/preview-wizard')}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Preview ({selectedIdeas.size})
+            </Button>
+          )}
+          <Button 
+            onClick={() => router.push('/admin/preview-wizard')}
+            variant="outline"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Preview
+          </Button>
+        </div>
       </div>
 
       {/* Filters and Search */}

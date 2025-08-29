@@ -117,6 +117,18 @@ export default function PreviewWizard() {
     const newSelected = selectedIdeas.filter(id => id !== ideaId)
     setSelectedIdeas(newSelected)
     sessionStorage.setItem('selectedIdeas', JSON.stringify(newSelected))
+    
+    // If no ideas are left, show a message and option to go back
+    if (newSelected.length === 0) {
+      // You could show a toast or alert here
+      console.log('No ideas selected. Consider going back to select more ideas.')
+    }
+  }
+
+  const goBackToIdeas = () => {
+    // Clear the current selection and go back to ideas page
+    sessionStorage.removeItem('selectedIdeas')
+    router.push('/admin/ideas')
   }
 
   const toggleFullContent = (ideaId: string) => {
@@ -298,69 +310,89 @@ export default function PreviewWizard() {
             
             {/* Selected Ideas with Deselect Option */}
             <div className="space-y-3">
-              <h4 className="font-medium">Selected Ideas:</h4>
-              {selectedIdeas.map((ideaId) => {
-                const idea = ideas.find(i => i.id === ideaId)
-                if (!idea) return null
-                
-                return (
-                  <div key={ideaId} className="border rounded-lg p-3 bg-white">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h5 className="font-medium">{idea.title}</h5>
-                          <Badge variant="secondary">{idea.status}</Badge>
-                        </div>
-                        
-                        {idea.description && (
-                          <div>
-                            {showFullContent[ideaId] ? (
-                              <p className="text-gray-600 text-sm">{idea.description}</p>
-                            ) : (
-                              <p className="text-gray-600 text-sm">
-                                {idea.description.length > 100 
-                                  ? `${idea.description.substring(0, 100)}...` 
-                                  : idea.description
-                                }
-                              </p>
-                            )}
-                            
-                            <button
-                              onClick={() => toggleFullContent(ideaId)}
-                              className="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1 mt-1"
-                            >
-                              {showFullContent[ideaId] ? (
-                                <>
-                                  <EyeOff className="w-3 h-3" />
-                                  Verberg content
-                                </>
-                              ) : (
-                                <>
-                                  <Eye className="w-3 h-3" />
-                                  Toon volledige content
-                                </>
-                              )}
-                            </button>
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium">Selected Ideas:</h4>
+                {selectedIdeas.length === 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={goBackToIdeas}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Terug naar ideeën
+                  </Button>
+                )}
+              </div>
+              
+              {selectedIdeas.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                  <p className="mb-2">Geen ideeën geselecteerd</p>
+                  <p className="text-sm">Ga terug naar de ideeën pagina om nieuwe posts te selecteren</p>
+                </div>
+              ) : (
+                selectedIdeas.map((ideaId) => {
+                  const idea = ideas.find(i => i.id === ideaId)
+                  if (!idea) return null
+                  
+                  return (
+                    <div key={ideaId} className="border rounded-lg p-3 bg-white">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h5 className="font-medium">{idea.title}</h5>
+                            <Badge variant="secondary">{idea.status}</Badge>
                           </div>
-                        )}
-                        
-                        <div className="text-xs text-gray-500 mt-2">
-                          Client: {idea.clients.name} • Created: {new Date(idea.created_at).toLocaleDateString()}
+                          
+                          {idea.description && (
+                            <div>
+                              {showFullContent[ideaId] ? (
+                                <p className="text-gray-600 text-sm">{idea.description}</p>
+                              ) : (
+                                <p className="text-gray-600 text-sm">
+                                  {idea.description.length > 100 
+                                    ? `${idea.description.substring(0, 100)}...` 
+                                    : idea.description
+                                  }
+                                </p>
+                              )}
+                              
+                              <button
+                                onClick={() => toggleFullContent(ideaId)}
+                                className="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1 mt-1"
+                              >
+                                {showFullContent[ideaId] ? (
+                                  <>
+                                    <EyeOff className="w-3 h-3" />
+                                    Verberg content
+                                  </>
+                                ) : (
+                                  <>
+                                    <Eye className="w-3 h-3" />
+                                    Toon volledige content
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          )}
+                          
+                          <div className="text-xs text-gray-500 mt-2">
+                            Client: {idea.clients.name} • Created: {new Date(idea.created_at).toLocaleDateString()}
+                          </div>
                         </div>
+                        
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => deselectIdea(ideaId)}
+                          className="ml-3 text-red-600 hover:text-red-800 hover:bg-red-50"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
                       </div>
-                      
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => deselectIdea(ideaId)}
-                        className="ml-3 text-red-600 hover:text-red-800 hover:bg-red-50"
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              )}
             </div>
             
             <div className="text-sm text-gray-600">
@@ -423,6 +455,27 @@ export default function PreviewWizard() {
           <p className="text-gray-600">{steps[currentStep].description}</p>
         </CardHeader>
         <CardContent>
+          {selectedIdeas.length === 0 && currentStep < 5 ? (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-2 text-yellow-800">
+                <span className="text-lg">⚠️</span>
+                <div>
+                  <p className="font-medium">Geen ideeën geselecteerd</p>
+                  <p className="text-sm">Ga terug naar de ideeën pagina om posts te selecteren voordat je verder gaat.</p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <Button
+                  variant="outline"
+                  onClick={goBackToIdeas}
+                  className="text-yellow-800 border-yellow-300 hover:bg-yellow-100"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Terug naar ideeën
+                </Button>
+              </div>
+            </div>
+          ) : null}
           {renderStepContent()}
         </CardContent>
       </Card>
@@ -443,7 +496,7 @@ export default function PreviewWizard() {
             {loading ? 'Saving...' : 'Save Preview'}
           </Button>
         ) : (
-          <Button onClick={nextStep}>
+          <Button onClick={nextStep} disabled={selectedIdeas.length === 0}>
             Next
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
