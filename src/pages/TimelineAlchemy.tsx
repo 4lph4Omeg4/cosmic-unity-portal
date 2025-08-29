@@ -10,7 +10,7 @@ import { TlaPostsList } from "@/components/TlaPostsList";
       <TlaPostsList />
     </div>
   );
-}
+
 
 <button
   onClick={() => startCheckout({
