@@ -1,15 +1,15 @@
 // src/App.tsx
 import React from "react";
 
-// UI / Providers
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NewsletterPopup from "@/components/NewsletterPopup";
+// Providers & UI
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { CartProvider } from "@/hooks/useCart";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import NewsletterPopup from "@/components/NewsletterPopup";
 
 // Router
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -27,12 +27,12 @@ import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 import Messages from "./pages/Messages";
 import Blog from "./pages/Blog";
+import BlogArticle from "./pages/BlogArticle";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import EgoToEden from "./pages/EgoToEden";
 import Unity from "./pages/Unity";
 import Passport from "./pages/Passport";
-import BlogArticle from "./pages/BlogArticle";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import ShippingPolicy from "./pages/ShippingPolicy";
@@ -41,19 +41,15 @@ import UnderConstruction from "./pages/UnderConstruction";
 import Friends from "./pages/Friends";
 import NotFound from "./pages/NotFound";
 
-// Timeline Alchemy hoofdscherm (client-entry)
+// Timeline Alchemy
 import TimelineAlchemy from "./pages/TimelineAlchemy";
-
-// Timeline Alchemy Admin Pages
 import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
-
-// Timeline Alchemy Client Pages
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
 
-// Analytics (optioneel gebruiken in je layout)
+// Analytics (optioneel)
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -107,9 +103,8 @@ const App: React.FC = () => (
                 <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
                 <Route path="/digitempel" element={<UnderConstruction />} />
 
-                {/* Timeline Alchemy entry routes */}
+                {/* Timeline Alchemy entry (Stripe redirect-friendly) */}
                 <Route path="/timeline-alchemy" element={<TimelineAlchemy />} />
-                {/* Extra alias voor Stripe success/cancel: */}
                 <Route path="/tla" element={<TimelineAlchemy />} />
 
                 {/* Timeline Alchemy Admin */}
@@ -126,7 +121,7 @@ const App: React.FC = () => (
               </Routes>
             </BrowserRouter>
 
-            {/* Optioneel tonen in je layout */}
+            {/* Optioneel visueel/analytics */}
             <SpeedInsights />
             <Analytics />
           </TooltipProvider>
