@@ -1,12 +1,15 @@
-import Stripe from 'stripe';
+// FRONTEND-VEILIGE VERSIE — GEEN Stripe secret in de browser
+// Vervangt je oude server-side implementatie.
 
-const stripe = new Stripe(process.env.VITE_STRIPE_SECRET_KEY!, { 
-  apiVersion: '2024-06-20' 
-});
+// Optioneel: zet VITE_CHECKOUT_FUNCTION_URL in .env voor makkelijke swaps.
+// Valt anders terug op je huidige function-URL.
+const FUNCTION_URL =
+  import.meta.env.VITE_CHECKOUT_FUNCTION_URL ||
+  'https://wdclgadjetxhcududipz.supabase.co/functions/v1/swift-task';
 
 export interface CheckoutRequest {
   org_id: string;
-  price_id: string;
+  price_id?: string; // mag leeg; je function heeft een fallback
 }
 
 export interface CheckoutResponse {
@@ -15,42 +18,28 @@ export interface CheckoutResponse {
 
 export class StripeService {
   static async createCheckoutSession(data: CheckoutRequest): Promise<CheckoutResponse> {
-    try {
-      if (!data.org_id || !data.price_id) {
-        throw new Error('Missing org_id or price_id');
-      }
+    if (!data?.org_id) throw new Error('org_id ontbreekt');
 
-      const session = await stripe.checkout.sessions.create({
-        mode: 'subscription',
-        payment_method_types: ['card'],
-        line_items: [{ price: data.price_id, quantity: 1 }],
-        success_url: `${process.env.VITE_APP_URL || 'http://localhost:8080'}/tla?session=success`,
-        cancel_url: `${process.env.VITE_APP_URL || 'http://localhost:8080'}/tla?session=cancel`,
-        client_reference_id: data.org_id, // 🔗 koppelen aan jouw org
-      });
+    const res = await fetch(FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
 
-      return { url: session.url! };
-    } catch (error: any) {
-      console.error('checkout error', error);
-      throw new Error(error.message || 'Failed to create checkout session');
-    }
+    const json = await res.json();
+    if (!res.ok) throw new Error(json?.error || 'Checkout mislukt');
+    if (!json?.url) throw new Error('Geen checkout URL ontvangen van server');
+
+    return { url: json.url };
   }
 
-  static async getSubscription(subscriptionId: string) {
-    try {
-      return await stripe.subscriptions.retrieve(subscriptionId);
-    } catch (error: any) {
-      console.error('Error retrieving subscription:', error);
-      throw new Error(error.message || 'Failed to retrieve subscription');
-    }
+  // Deze twee zijn front-end niet veilig/zinvol zonder backend.
+  // We geven een duidelijke fout terug totdat we een server endpoint/webhook hebben.
+  static async getSubscription(_subscriptionId: string) {
+    throw new Error('Niet beschikbaar in frontend. Gebruik een server/edge function of webhook.');
   }
 
-  static async cancelSubscription(subscriptionId: string) {
-    try {
-      return await stripe.subscriptions.cancel(subscriptionId);
-    } catch (error: any) {
-      console.error('Error canceling subscription:', error);
-      throw new Error(error.message || 'Failed to cancel subscription');
-    }
+  static async cancelSubscription(_subscriptionId: string) {
+    throw new Error('Niet beschikbaar in frontend. Gebruik een server/edge function.');
   }
 }
