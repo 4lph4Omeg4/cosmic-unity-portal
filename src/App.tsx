@@ -50,8 +50,9 @@ import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreview
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
 
 // Analytics (optioneel)
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
+// Vite/React versies:
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 const queryClient = new QueryClient();
 
