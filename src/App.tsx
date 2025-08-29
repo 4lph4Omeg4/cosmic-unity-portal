@@ -44,7 +44,12 @@ import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/Preview
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TimelineAlchemy from "./pages/TimelineAlchemy";
 
-export default function App() {
+// src/App.tsx
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import TimelineAlchemy from "./pages/TimelineAlchemy";
+
+function App() {
   return (
     <BrowserRouter>
       <Routes>
