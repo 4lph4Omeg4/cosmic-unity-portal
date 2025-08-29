@@ -1,71 +1,46 @@
-// supabase/functions/checkout/index.ts
+// supabase/functions/swift-task/index.ts
+
+import Stripe from "https://esm.sh/stripe@15.4.0";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import Stripe from "npm:stripe@14.24.0";
-
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
-  apiVersion: "2024-06-20",
-});
-
-// ——— CORS helpers ———
-function corsHeaders(req: Request) {
-  const origin = req.headers.get("origin") ?? "*"; // wil je strakker? zet hier je domein
-  return {
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "POST,OPTIONS",
-    "Access-Control-Allow-Headers": "content-type,authorization",
-    "Vary": "Origin",
-    "Content-Type": "application/json",
-  };
-}
-
-type Payload = { org_id?: string; price_id?: string };
-
-const DEFAULT_PRICE_ID = "price_1S1VMWFlYXjX03EzHKNwtkWW"; // jouw prijs fallback
 
 Deno.serve(async (req: Request) => {
-  const headers = corsHeaders(req);
-
-  // Preflight
+  // Preflight check voor CORS
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers });
-  }
-
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const { org_id, price_id }: Payload = await req.json().catch(() => ({}));
+    const { org_id, price_id } = await req.json();
 
-    if (!org_id) {
-      return new Response(JSON.stringify({ error: "Missing org_id" }), { status: 400, headers });
+    if (!org_id || !price_id) {
+      throw new Error("Missing org_id or price_id");
     }
 
-    // Gebruik body.price_id of val terug op je default price
-    const price = (price_id && price_id.trim()) || DEFAULT_PRICE_ID;
-
-    const appUrl = Deno.env.get("NEXT_PUBLIC_APP_URL");
-    if (!appUrl) {
-      return new Response(JSON.stringify({ error: "NEXT_PUBLIC_APP_URL not set" }), { status: 500, headers });
-    }
+    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
+      apiVersion: "2024-06-20",
+    });
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      line_items: [{ price, quantity: 1 }],
-      success_url: `${appUrl}/tla?session=success`,
-      cancel_url: `${appUrl}/tla?session=cancel`,
-      client_reference_id: org_id,                       // koppelt sessie aan jouw org
-      subscription_data: { metadata: { org_id } },       // org_id ook in subscription voor webhooks
+      payment_method_types: ["card"],
+      line_items: [{ price: price_id, quantity: 1 }],
+      success_url: `${Deno.env.get("APP_URL")}/tla?session=success`,
+      cancel_url: `${Deno.env.get("APP_URL")}/tla?session=cancel`,
+      client_reference_id: org_id,
     });
 
-    return new Response(JSON.stringify({ url: session.url }), { status: 200, headers });
-  } catch (err: any) {
-    console.error("checkout error:", err);
-    return new Response(JSON.stringify({ error: err?.message ?? "Unknown error" }), { status: 500, headers });
+    return new Response(JSON.stringify({ url: session.url }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (e: any) {
+    return new Response(JSON.stringify({ error: e.message }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 });
