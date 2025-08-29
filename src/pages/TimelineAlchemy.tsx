@@ -11,6 +11,23 @@ const TimelineAlchemy: React.FC = () => {
   const [params] = useSearchParams();
   const session = params.get("session"); // 'success' | 'cancel' | null
 
+  import React from "react";
+import { fetchTlaPosts } from "@/services/tlaData";
+// als je ook ideas wil tonen: import { fetchTlaIdeas } ...
+
+const [items, setItems] = React.useState<any[]>([]);
+const [err, setErr] = React.useState<string | null>(null);
+const [ready, setReady] = React.useState(false);
+
+React.useEffect(() => {
+  (async () => {
+    const { data, error } = await fetchTlaPosts();
+    if (error) setErr(error.message);
+    else setItems(data);
+    setReady(true);
+  })();
+}, []);
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top banner voor Stripe redirect status (optioneel) */}
