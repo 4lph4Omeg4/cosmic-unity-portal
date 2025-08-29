@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import { startCheckout } from "@/services/checkout";
 import { TlaPostsList } from "@/components/TlaPostsList";
 
-export default function TimelineAlchemy() {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Timeline Alchemy Posts</h1>
