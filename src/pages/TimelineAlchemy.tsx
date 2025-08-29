@@ -1,4 +1,17 @@
 import React from 'react';
+import { TlaSubscribeButton } from '@/components/TlaSubscribeButton';
+
+export default function TlaPage() {
+  return (
+    <div>
+      <h1>Timeline Alchemy</h1>
+      <TlaSubscribeButton 
+        orgId="b02de5d1-382c-4c8a-b1c4-0c9abdd1b6f8"
+        priceId="price_1S1VMWFlYXjX03EzHKNwtkWW"
+      />
+    </div>
+  );
+}
 
 const TimelineAlchemy: React.FC = () => {
   return (
