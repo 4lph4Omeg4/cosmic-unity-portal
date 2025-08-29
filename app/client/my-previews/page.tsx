@@ -260,6 +260,9 @@ export default function MyPreviews() {
                                 <DialogContent>
                                   <DialogHeader>
                                     <DialogTitle>Approve Preview</DialogTitle>
+                                    <p className="text-sm text-gray-600">
+                                      Review the preview details and optionally add feedback before approving.
+                                    </p>
                                   </DialogHeader>
                                   <div className="space-y-4">
                                     <div>
@@ -315,6 +318,9 @@ export default function MyPreviews() {
                                 <DialogContent>
                                   <DialogHeader>
                                     <DialogTitle>Request Changes</DialogTitle>
+                                    <p className="text-sm text-gray-600">
+                                      Provide feedback on what changes are needed for this preview.
+                                    </p>
                                   </DialogHeader>
                                   <div className="space-y-4">
                                     <div>

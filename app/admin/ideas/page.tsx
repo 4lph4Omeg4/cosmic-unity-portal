@@ -75,41 +75,26 @@ export default function IdeasPage() {
   }
 
   const toggleIdeaSelection = (ideaId: string) => {
-    console.log('Toggle idea selection:', ideaId)
-    console.log('Current selected ideas before:', Array.from(selectedIdeas))
-    
     const newSelected = new Set(selectedIdeas)
     if (newSelected.has(ideaId)) {
       newSelected.delete(ideaId)
-      console.log('Removed idea from selection')
     } else {
       newSelected.add(ideaId)
-      console.log('Added idea to selection')
     }
-    
-    console.log('New selected ideas after:', Array.from(newSelected))
     setSelectedIdeas(newSelected)
   }
 
   const deselectIdea = (ideaId: string) => {
-    console.log('Deselect idea:', ideaId)
     const newSelected = new Set(selectedIdeas)
     newSelected.delete(ideaId)
     setSelectedIdeas(newSelected)
   }
 
   const selectAll = () => {
-    console.log('Select all clicked')
-    console.log('Current filtered ideas:', filteredIdeas.length)
-    console.log('Current selected ideas:', selectedIdeas.size)
-    
     if (selectedIdeas.size === filteredIdeas.length) {
       setSelectedIdeas(new Set())
-      console.log('Cleared all selections')
     } else {
-      const allIds = filteredIdeas.map(idea => idea.id)
-      console.log('Selecting all IDs:', allIds)
-      setSelectedIdeas(new Set(allIds))
+      setSelectedIdeas(new Set(filteredIdeas.map(idea => idea.id)))
     }
   }
 
@@ -215,32 +200,12 @@ export default function IdeasPage() {
             <div className="flex items-center gap-2">
               <Checkbox
                 checked={selectedIdeas.size === filteredIdeas.length && filteredIdeas.length > 0}
-                onCheckedChange={(checked) => {
-                  console.log('Select all checkbox changed:', checked)
-                  if (checked) {
-                    // Select all
-                    const allIds = filteredIdeas.map(idea => idea.id)
-                    console.log('Selecting all IDs:', allIds)
-                    setSelectedIdeas(new Set(allIds))
-                  } else {
-                    // Clear all
-                    console.log('Clearing all selections')
-                    setSelectedIdeas(new Set())
-                  }
-                }}
+                onCheckedChange={selectAll}
               />
               <span>Select All ({filteredIdeas.length})</span>
             </div>
             
-            {/* Debug Info */}
-            <div className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded">
-              Selected: {selectedIdeas.size} | Total: {filteredIdeas.length}
-              {selectedIdeas.size > 0 && (
-                <div className="text-xs mt-1">
-                  IDs: {Array.from(selectedIdeas).join(', ')}
-                </div>
-              )}
-            </div>
+
             
             {selectedIdeas.size > 0 && (
               <div className="flex gap-2">
@@ -253,30 +218,7 @@ export default function IdeasPage() {
               </div>
             )}
             
-            {/* Test Buttons */}
-            <div className="flex gap-2">
-              <Button 
-                onClick={() => {
-                  const firstTwo = filteredIdeas.slice(0, 2).map(idea => idea.id)
-                  console.log('Manually selecting first two:', firstTwo)
-                  setSelectedIdeas(new Set(firstTwo))
-                }}
-                variant="outline"
-                size="sm"
-              >
-                Test: Select First 2
-              </Button>
-              <Button 
-                onClick={() => {
-                  console.log('Current selected ideas:', Array.from(selectedIdeas))
-                  console.log('Current filtered ideas:', filteredIdeas.map(idea => idea.id))
-                }}
-                variant="outline"
-                size="sm"
-              >
-                Debug: Log State
-              </Button>
-            </div>
+
           </div>
         </CardContent>
       </Card>
@@ -297,14 +239,7 @@ export default function IdeasPage() {
               >
                 <Checkbox
                   checked={selectedIdeas.has(idea.id)}
-                  onCheckedChange={(checked) => {
-                    console.log('Checkbox changed for idea:', idea.id, 'checked:', checked)
-                    if (checked) {
-                      toggleIdeaSelection(idea.id)
-                    } else {
-                      deselectIdea(idea.id)
-                    }
-                  }}
+                  onCheckedChange={() => toggleIdeaSelection(idea.id)}
                 />
                 
                 <div className="flex-1">
