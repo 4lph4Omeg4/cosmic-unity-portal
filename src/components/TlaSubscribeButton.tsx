@@ -1,40 +1,32 @@
-import { useState } from 'react'
+import React from 'react';
+import { StripeService } from '@/services/stripeService';
 
-export function TlaSubscribeButton({
-  orgId,
-  priceId, // bv. 'price_12345' uit Stripe dashboard → Products → Price
-}: { 
-  orgId: string; 
-  priceId: string 
-}) {
-  const [loading, setLoading] = useState(false)
+interface Props {
+  orgId: string;
+  priceId: string;
+}
 
-  async function startCheckout() {
+export const TlaSubscribeButton: React.FC<Props> = ({ orgId, priceId }) => {
+  const handleClick = async () => {
     try {
-      setLoading(true)
-      const res = await fetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ org_id: orgId, price_id: priceId }),
-      })
-      if (!res.ok) throw new Error('Checkout request failed')
-      const { url } = await res.json()
-      window.location.href = url
+      const session = await StripeService.createCheckoutSession({
+        org_id: orgId,
+        price_id: priceId,
+      });
+      // 🔀 Redirect naar Stripe
+      window.location.href = session.url;
     } catch (err) {
-      alert('Kon checkout niet starten.')
-      console.error(err)
-    } finally {
-      setLoading(false)
+      console.error('Checkout failed:', err);
+      alert('Kon checkout niet starten. Check console voor details.');
     }
-  }
+  };
 
   return (
-    <button 
-      onClick={startCheckout} 
-      disabled={loading}
-      className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+    <button
+      onClick={handleClick}
+      className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
     >
-      {loading ? 'Even geduld…' : 'Abonneer op Timeline Alchemy'}
+      Abonneer op Timeline Alchemy
     </button>
-  )
-}
+  );
+};
