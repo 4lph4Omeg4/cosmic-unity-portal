@@ -5,10 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Star, Zap, Clock, MessageSquare, Share2, Shield, ArrowRight, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
+import { TlaSubscribeButton } from '@/components/TlaSubscribeButton';
 
 const TimelineAlchemy: React.FC = () => {
+  // ⚠️ CONFIGURATIE: Vervang 'price_timeline_alchemy_monthly' door je echte Stripe price ID
+  // Je kunt dit vinden in je Stripe dashboard onder Products > Pricing
   const [selectedStyle, setSelectedStyle] = useState<'krachtig' | 'mystiek' | 'creator'>('krachtig');
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const styles = {
@@ -49,32 +51,8 @@ const TimelineAlchemy: React.FC = () => {
 
   const currentStyle = styles[selectedStyle];
 
-  const handleSubscribe = async () => {
-    setIsLoading(true);
-    
-    try {
-      // Hier zou de Stripe checkout logica komen
-      // Voor nu simuleren we een succesvolle checkout
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Success toast
-      toast({
-        title: "Welkom in de stroom ⚡",
-        description: "Je ontvangt zo een bevestiging per e-mail. We plannen je eerste publicatie-week in.",
-        variant: "default",
-      });
-      
-    } catch (error) {
-      // Error toast
-      toast({
-        title: "Hmm, de kosmos hikt even",
-        description: "Probeer het opnieuw of mail ons — we fixen het meteen.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Deze functie is vervangen door TlaSubscribeButton component
+  // De checkout wordt nu afgehandeld door de edge function /api/billing/checkout
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 relative overflow-hidden">
@@ -102,79 +80,12 @@ const TimelineAlchemy: React.FC = () => {
           {/* Logo */}
           <div className="mb-8">
             <div className="w-32 h-32 mx-auto mb-6 relative group cursor-pointer transition-transform duration-300 hover:scale-110">
-              {/* Timeline Alchemy Logo */}
-              <svg 
-                viewBox="0 0 200 200" 
+              {/* Timeline Alchemy Logo - Exact zoals bij Stripe */}
+              <img 
+                src="/src/assets/timeline-alchemy-logo.png" 
+                alt="Timeline Alchemy — sigil-logo met kosmische geometrie"
                 className="w-full h-full transition-all duration-300 group-hover:drop-shadow-2xl"
-                aria-label="Timeline Alchemy — sigil-logo met kosmische geometrie"
-              >
-                {/* Radiating rays from top and sides */}
-                <g>
-                  {/* Top rays with staggered animation */}
-                  <line x1="100" y1="20" x2="100" y2="35" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0s'}}/>
-                  <line x1="100" y1="25" x2="100" y2="40" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.5s'}}/>
-                  
-                  {/* Side rays - left with staggered animation */}
-                  <line x1="20" y1="100" x2="35" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
-                  <line x1="25" y1="100" x2="40" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.7s'}}/>
-                  <line x1="30" y1="95" x2="45" y2="85" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.3s'}}/>
-                  <line x1="35" y1="105" x2="50" y2="115" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.8s'}}/>
-                  
-                  {/* Side rays - right with staggered animation */}
-                  <line x1="180" y1="100" x2="165" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.1s'}}/>
-                  <line x1="175" y1="100" x2="160" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.6s'}}/>
-                  <line x1="170" y1="95" x2="155" y2="85" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
-                  <line x1="165" y1="105" x2="150" y2="115" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.9s'}}/>
-                  
-                  {/* Bottom rays with staggered animation */}
-                  <line x1="100" y1="180" x2="100" y2="165" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
-                  <line x1="100" y1="175" x2="100" y2="160" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.7s'}}/>
-                </g>
-                
-                {/* Hourglass outline */}
-                <path 
-                  d="M 70 40 L 130 40 L 130 60 L 100 80 L 130 100 L 130 120 L 70 120 L 70 100 L 100 80 L 70 60 Z" 
-                  fill="none" 
-                  stroke="#F59E0B" 
-                  strokeWidth="3"
-                  className="drop-shadow-lg"
-                />
-                
-                {/* Top bulb content - South America shape */}
-                <path 
-                  d="M 75 45 L 85 50 L 90 55 L 88 60 L 85 65 L 80 68 L 75 65 L 72 60 L 75 55 Z" 
-                  fill="#F59E0B" 
-                  opacity="0.9"
-                />
-                
-                {/* Stars in top bulb */}
-                <g fill="#F59E0B">
-                  <path d="M 78 48 L 80 50 L 82 48 L 80 46 Z" opacity="0.8"/>
-                  <path d="M 88 58 L 90 60 L 92 58 L 90 56 Z" opacity="0.8"/>
-                  <path d="M 82 62 L 84 64 L 86 62 L 84 60 Z" opacity="0.8"/>
-                </g>
-                
-                {/* Sand flowing through neck */}
-                <path 
-                  d="M 98 78 L 102 78 L 102 82 L 98 82 Z" 
-                  fill="#F59E0B" 
-                  opacity="0.7"
-                />
-                
-                {/* Bottom bulb content - sand pile */}
-                <path 
-                  d="M 75 110 L 100 115 L 125 110 L 125 118 L 75 118 Z" 
-                  fill="#F59E0B" 
-                  opacity="0.9"
-                />
-                
-                {/* Stars in bottom bulb */}
-                <g fill="#F59E0B">
-                  <path d="M 80 112 L 82 114 L 84 112 L 82 110 Z" opacity="0.8"/>
-                  <path d="M 95 113 L 97 115 L 99 113 L 97 111 Z" opacity="0.8"/>
-                  <path d="M 110 112 L 112 114 L 114 112 L 112 110 Z" opacity="0.8"/>
-                </g>
-              </svg>
+              />
               
               {/* Subtle glow effect */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-transparent rounded-full blur-xl"></div>
@@ -235,24 +146,15 @@ const TimelineAlchemy: React.FC = () => {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <Button
-            onClick={handleSubscribe}
-            disabled={isLoading}
-            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50"
+          {/* CTA Button - Gebruikt TlaSubscribeButton met edge function */}
+          <TlaSubscribeButton
+            orgId="timeline-alchemy"
+            priceId="price_timeline_alchemy_monthly" // ⚠️ Vervang door je echte Stripe price ID
+            variant="hero"
           >
-            {isLoading ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
-                Even de stroom openen…
-              </>
-            ) : (
-              <>
-                {currentStyle.cta}
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </>
-            )}
-          </Button>
+            {currentStyle.cta}
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </TlaSubscribeButton>
 
           {/* CTA Microcopy */}
           <p className="text-slate-400 text-sm mt-4 max-w-md mx-auto">
@@ -380,23 +282,14 @@ const TimelineAlchemy: React.FC = () => {
             <p className="text-slate-300 mb-8 text-lg">
               Join de creators die al hun content stress hebben vervangen door Timeline Alchemy
             </p>
-            <Button
-              onClick={handleSubscribe}
-              disabled={isLoading}
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50"
+            <TlaSubscribeButton
+              orgId="timeline-alchemy"
+              priceId="price_timeline_alchemy_monthly" // ⚠️ Vervang door je echte Stripe price ID
+              variant="trust"
             >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
-                  Even de stroom openen…
-                </>
-              ) : (
-                <>
-                  {currentStyle.cta}
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </>
-              )}
-            </Button>
+              {currentStyle.cta}
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </TlaSubscribeButton>
             
             {/* Trust cues */}
             <div className="mt-8 pt-8 border-t border-slate-600/30">
