@@ -602,13 +602,16 @@ export default function TimelineAlchemyIdeas() {
             {filteredPosts.map((post) => (
                              <div key={post.id} className="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
                 <div className="flex items-start gap-4">
-                  <Checkbox
-                    checked={selectedPosts.has(post.id)}
-                    onCheckedChange={(checked) => handleSelectPost(post.id, checked as boolean)}
-                  />
+                  {/* Checkbox - Separate from image to prevent interference */}
+                  <div className="flex-shrink-0 pt-2">
+                    <Checkbox
+                      checked={selectedPosts.has(post.id)}
+                      onCheckedChange={(checked) => handleSelectPost(post.id, checked as boolean)}
+                    />
+                  </div>
                   
-                                     {/* Featured Image - Prominent position */}
-                   {post.image_url && (
+                  {/* Featured Image - Prominent position */}
+                  {post.image_url && (
                     <div className="flex-shrink-0 relative">
                       {/* Loading state */}
                       {imageStates[post.id]?.loading !== false && (
@@ -617,21 +620,22 @@ export default function TimelineAlchemyIdeas() {
                         </div>
                       )}
                       
-                                             {/* Image */}
-                       <img 
-                         src={post.image_url} 
-                         alt={post.title}
-                         className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
-                           imageStates[post.id]?.loading !== false ? 'hidden' : ''
-                         }`}
-                         onLoad={() => handleImageLoad(post.id)}
-                         onError={() => handleImageError(post.id)}
-                         onClick={() => {
-                           setSelectedImageUrl(post.image_url)
-                           setIsImageDialogOpen(true)
-                         }}
-                         title="Klik om afbeelding in volledige grootte te bekijken"
-                       />
+                      {/* Image */}
+                      <img 
+                        src={post.image_url} 
+                        alt={post.title}
+                        className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
+                          imageStates[post.id]?.loading !== false ? 'hidden' : ''
+                        }`}
+                        onLoad={() => handleImageLoad(post.id)}
+                        onError={() => handleImageError(post.id)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent event bubbling
+                          setSelectedImageUrl(post.image_url);
+                          setIsImageDialogOpen(true);
+                        }}
+                        title="Klik om afbeelding in volledige grootte te bekijken"
+                      />
                       
                       {/* Error state */}
                       {imageStates[post.id]?.error && (
@@ -674,9 +678,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
                           alt="Cosmic Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => {
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png")
-                            setIsImageDialogOpen(true)
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent event bubbling
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png");
+                            setIsImageDialogOpen(true);
                           }}
                           title="Cosmic Theme - Klik om te bekijken"
                         />
@@ -693,9 +698,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => {
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png")
-                            setIsImageDialogOpen(true)
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent event bubbling
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png");
+                            setIsImageDialogOpen(true);
                           }}
                           title="Cyberpunk Theme - Klik om te bekijken"
                         />
@@ -712,9 +718,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => {
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png")
-                            setIsImageDialogOpen(true)
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent event bubbling
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png");
+                            setIsImageDialogOpen(true);
                           }}
                           title="Dystopia Theme - Klik om te bekijken"
                         />
@@ -731,9 +738,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => {
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png")
-                            setIsImageDialogOpen(true)
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent event bubbling
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png");
+                            setIsImageDialogOpen(true);
                           }}
                           title="Utopia Theme - Klik om te bekijken"
                         />

@@ -322,7 +322,8 @@ const Product = () => {
                       src={displayImages[selectedImageIndex] || '/placeholder.svg'}
                       alt={product.title}
                       className="w-full h-full object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent event bubbling
                         const currentImage = displayImages[selectedImageIndex];
                         if (currentImage) {
                           setSelectedImageUrl(currentImage);

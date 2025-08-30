@@ -206,7 +206,8 @@ const FeaturedSection = () => {
                          src={productImage}
                          alt={localizedContent.title}
                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                         onClick={() => {
+                         onClick={(e) => {
+                           e.stopPropagation(); // Prevent event bubbling
                            setSelectedImageUrl(productImage);
                            setSelectedImageTitle(localizedContent.title);
                            setIsImageDialogOpen(true);
@@ -223,7 +224,8 @@ const FeaturedSection = () => {
                                 key={index}
                                 className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
                                 title={`Kleur variant ${index + 1} - Klik om te bekijken`}
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent event bubbling
                                   setSelectedImageUrl(image.node.url);
                                   setSelectedImageTitle(`${localizedContent.title} - Variant ${index + 1}`);
                                   setIsImageDialogOpen(true);

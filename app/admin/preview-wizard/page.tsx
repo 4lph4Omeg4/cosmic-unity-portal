@@ -128,6 +128,8 @@ export default function PreviewWizard() {
   const goBackToIdeas = () => {
     // Clear the current selection and go back to ideas page
     sessionStorage.removeItem('selectedIdeas')
+    setSelectedIdeas([]) // Clear local state as well
+    setCurrentStep(0) // Reset to first step
     router.push('/admin/ideas')
   }
 
@@ -147,6 +149,8 @@ export default function PreviewWizard() {
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1)
+      // Reload selected ideas when going back to ensure they're still available
+      loadSelectedIdeas()
     }
   }
 
@@ -482,14 +486,25 @@ export default function PreviewWizard() {
 
       {/* Navigation */}
       <div className="flex justify-between">
-        <Button
-          variant="outline"
-          onClick={prevStep}
-          disabled={currentStep === 0}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Previous
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={prevStep}
+            disabled={currentStep === 0}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Previous
+          </Button>
+          
+          <Button
+            variant="outline"
+            onClick={goBackToIdeas}
+            className="text-blue-600 border-blue-300 hover:bg-blue-50"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Terug naar ideeën
+          </Button>
+        </div>
 
         {currentStep === steps.length - 1 ? (
           <Button onClick={handleSave} disabled={loading || selectedIdeas.length === 0}>

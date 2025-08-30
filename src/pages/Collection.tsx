@@ -242,7 +242,8 @@ const Collection = () => {
                         src={product.images.edges[0].node.url}
                         alt={product.images.edges[0].node.altText || product.title}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent event bubbling
                           setSelectedImageUrl(product.images.edges[0].node.url);
                           setSelectedImageTitle(product.title);
                           setIsImageDialogOpen(true);
@@ -264,7 +265,8 @@ const Collection = () => {
                               key={index}
                               className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
                               title={`Kleur variant ${index + 1} - Klik om te bekijken`}
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevent event bubbling
                                 setSelectedImageUrl(image.node.url);
                                 setSelectedImageTitle(`${product.title} - Variant ${index + 1}`);
                                 setIsImageDialogOpen(true);
