@@ -1,38 +1,77 @@
-import { useState } from 'react'
+import React from 'react';
+import { StripeService } from '@/services/stripeService';
+
+import * as React from 'react';
+import { useState } from 'react';
+
+interface Props {
+  orgId: string;
+  priceId: string; // bv. 'price_12345'
+}
+
+type TlaSubscribeButtonVariant = 'default' | 'hero' | 'trust';
+
+type TlaSubscribeButtonProps = Props & {
+  children?: React.ReactNode;
+  className?: string;
+  variant?: TlaSubscribeButtonVariant;
+};
 
 export function TlaSubscribeButton({
   orgId,
-  priceId, // bv. 'price_12345' uit Stripe dashboard → Products → Price
+  priceId,
   children,
   className,
-  variant = 'default'
-}: { 
-  orgId: string; 
-  priceId: string;
-  children?: React.ReactNode;
-  className?: string;
-  variant?: 'default' | 'hero' | 'trust';
-}) {
-  const [loading, setLoading] = useState(false)
+  variant = 'default',
+}: TlaSubscribeButtonProps) {
+  const [loading, setLoading] = useState(false);
 
-  async function startCheckout() {
+  async function handleClick() {
     try {
-      setLoading(true)
-      const res = await fetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ org_id: orgId, price_id: priceId }),
-      })
-      if (!res.ok) throw new Error('Checkout request failed')
-      const { url } = await res.json()
-      window.location.href = url
-    } catch (err) {
-      alert('Kon checkout niet starten.')
-      console.error(err)
+      setLoading(true);
+      // TODO: call your edge function here
+      // await startCheckout({ orgId, priceId })
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
+
+  const base =
+    'inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-medium transition';
+  const styles: Record<TlaSubscribeButtonVariant, string> = {
+    default: `${base} bg-black text-white hover:opacity-90`,
+    hero: `${base} bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg hover:brightness-110`,
+    trust: `${base} border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50`,
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className={[styles[variant], className].filter(Boolean).join(' ')}
+      disabled={loading}
+      data-org={orgId}
+      data-price={priceId}
+    >
+      {loading ? 'Even de stroom openen…' : children ?? 'Activeer Timeline Alchemy'}
+    </button>
+  );
+}
+
+export const TlaSubscribeButton: React.FC<Props> = ({ orgId, priceId }) => {
+  const handleClick = async () => {
+    try {
+      const session = await StripeService.createCheckoutSession({
+        org_id: orgId,
+        price_id: priceId,
+      });
+      // 🔀 Redirect naar Stripe
+      window.location.href = session.url;
+    } catch (err) {
+      console.error('Checkout failed:', err);
+      alert('Kon checkout niet starten. Check console voor details.');
+    }
+  };
 
   // Default styling per variant
   const getDefaultClassName = () => {
@@ -48,13 +87,29 @@ export function TlaSubscribeButton({
 
   const buttonClassName = className || getDefaultClassName();
 
-  return (
-    <button 
-      onClick={startCheckout} 
-      disabled={loading}
-      className={buttonClassName}
-    >
-      {loading ? 'Even geduld…' : children || 'Abonneer op Timeline Alchemy'}
-    </button>
-  )
+// bovenin in je component:
+const baseBtn =
+  "px-4 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-60 disabled:cursor-not-allowed";
+
+// als je al een startCheckout() had, koppel 'm dan:
+async function handleClick() {
+  if (typeof startCheckout === "function") {
+    await startCheckout();
+  } else {
+    // fallback: voeg hier je fetch naar de edge function toe
+    // await startCheckout({ orgId, priceId })
+  }
 }
+
+return (
+  <button
+    onClick={handleClick}
+    disabled={loading}
+    className={[baseBtn, buttonClassName, className].filter(Boolean).join(" ")}
+  >
+    {loading ? "Even geduld…" : (children ?? "Abonneer op Timeline Alchemy")}
+  </button>
+);
+    </button>
+  );
+};
