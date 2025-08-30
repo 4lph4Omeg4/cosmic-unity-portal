@@ -26,15 +26,19 @@ export function TlaSubscribeButton({
 }: TlaSubscribeButtonProps) {
   const [loading, setLoading] = useState(false);
 
-  async function handleClick() {
-    try {
-      setLoading(true);
-      // TODO: call your edge function here
-      // await startCheckout({ orgId, priceId })
-    } finally {
-      setLoading(false);
-    }
-  }
+async function startCheckout(priceId: string) {
+  const res = await fetch('/api/billing/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      price_id: priceId,
+      mode: 'subscription',
+    }),
+  });
+  if (!res.ok) throw new Error('Checkout request failed');
+  const { url } = await res.json();
+  if (url) window.location.href = url;
+}
 
   const base =
     'inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-medium transition';
