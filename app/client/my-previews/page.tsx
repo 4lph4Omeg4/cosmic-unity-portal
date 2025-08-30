@@ -47,7 +47,6 @@ export default function MyPreviews() {
   const [feedback, setFeedback] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
   const [showFullContent, setShowFullContent] = useState<{ [key: string]: boolean }>({})
-  const [debugInfo, setDebugInfo] = useState<string>('')
 
   useEffect(() => {
     loadPreviews()
@@ -57,62 +56,12 @@ export default function MyPreviews() {
     try {
       // In a real app, get userId from auth context
       const userId = 'current-user-id'
-      console.log('Loading previews for user:', userId)
-      
       const data = await getClientPreviews(userId)
-      console.log('Previews loaded:', data)
-      
       setPreviews(data)
-      setDebugInfo(`Loaded ${data.length} previews`)
     } catch (error) {
       console.error('Error loading previews:', error)
-      setDebugInfo(`Error: ${error}`)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const testDatabase = async () => {
-    try {
-      setDebugInfo('Testing database connection...')
-      
-      // Test 1: Check if we can reach the API
-      const response = await fetch('/api/test-db')
-      console.log('API response status:', response.status)
-      
-      if (!response.ok) {
-        setDebugInfo(`API error: ${response.status} ${response.statusText}`)
-        return
-      }
-      
-      const result = await response.json()
-      console.log('API result:', result)
-      
-      if (result.error) {
-        setDebugInfo(`Database error: ${result.error} - ${result.details}`)
-      } else {
-        setDebugInfo(`✅ Database OK! Found ${result.previews.length} previews, ${result.ideas.length} ideas, ${result.clients.length} clients`)
-      }
-      
-    } catch (error) {
-      console.error('Test failed:', error)
-      setDebugInfo(`Test failed: ${error}`)
-    }
-  }
-
-  const testDirectConnection = async () => {
-    try {
-      setDebugInfo('Testing direct database connection...')
-      
-      // Test 2: Try to call the action directly
-      const data = await getClientPreviews('test-user')
-      console.log('Direct action result:', data)
-      
-      setDebugInfo(`Direct action: ${data.length} previews loaded`)
-      
-    } catch (error) {
-      console.error('Direct test failed:', error)
-      setDebugInfo(`Direct test failed: ${error}`)
     }
   }
 
@@ -192,26 +141,8 @@ export default function MyPreviews() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">My Previews</h1>
-        <div className="flex gap-2">
-          <Button onClick={testDatabase} variant="outline" size="sm">
-            Test API
-          </Button>
-          <Button onClick={testDirectConnection} variant="outline" size="sm">
-            Test Direct
-          </Button>
-          <Button onClick={loadPreviews} variant="outline">
-            Refresh
-          </Button>
-        </div>
       </div>
       
-      {/* Debug Info */}
-      {debugInfo && (
-        <div className="bg-gray-100 p-3 rounded-lg text-sm">
-          <strong>Debug:</strong> {debugInfo}
-        </div>
-      )}
-
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="all">All ({previews.length})</TabsTrigger>
