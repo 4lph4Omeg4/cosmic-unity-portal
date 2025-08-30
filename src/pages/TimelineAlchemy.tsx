@@ -101,27 +101,96 @@ const TimelineAlchemy: React.FC = () => {
         <div className="max-w-6xl mx-auto text-center">
           {/* Logo */}
           <div className="mb-8">
-            <div className="w-24 h-24 mx-auto mb-6 relative">
-              <div className="w-full h-full bg-gradient-to-br from-amber-400 to-yellow-600 rounded-full flex items-center justify-center shadow-2xl shadow-amber-500/30">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-300 to-yellow-500 rounded-full flex items-center justify-center">
-                  <Star className="w-8 h-8 text-amber-800" />
-                </div>
-              </div>
-              {/* Radiating rays */}
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-1 h-8 bg-gradient-to-b from-amber-400 to-transparent rounded-full"
-                  style={{
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-40px)`,
-                    animation: `pulse 2s ease-in-out infinite ${i * 0.2}s`
-                  }}
+            <div className="w-32 h-32 mx-auto mb-6 relative group cursor-pointer transition-transform duration-300 hover:scale-110">
+              {/* Timeline Alchemy Logo */}
+              <svg 
+                viewBox="0 0 200 200" 
+                className="w-full h-full transition-all duration-300 group-hover:drop-shadow-2xl"
+                aria-label="Timeline Alchemy — sigil-logo met kosmische geometrie"
+              >
+                {/* Radiating rays from top and sides */}
+                <g>
+                  {/* Top rays with staggered animation */}
+                  <line x1="100" y1="20" x2="100" y2="35" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0s'}}/>
+                  <line x1="100" y1="25" x2="100" y2="40" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.5s'}}/>
+                  
+                  {/* Side rays - left with staggered animation */}
+                  <line x1="20" y1="100" x2="35" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
+                  <line x1="25" y1="100" x2="40" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.7s'}}/>
+                  <line x1="30" y1="95" x2="45" y2="85" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.3s'}}/>
+                  <line x1="35" y1="105" x2="50" y2="115" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.8s'}}/>
+                  
+                  {/* Side rays - right with staggered animation */}
+                  <line x1="180" y1="100" x2="165" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.1s'}}/>
+                  <line x1="175" y1="100" x2="160" y2="100" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.6s'}}/>
+                  <line x1="170" y1="95" x2="155" y2="85" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
+                  <line x1="165" y1="105" x2="150" y2="115" stroke="#F59E0B" strokeWidth="2" opacity="0.7" className="animate-pulse" style={{animationDelay: '0.9s'}}/>
+                  
+                  {/* Bottom rays with staggered animation */}
+                  <line x1="100" y1="180" x2="100" y2="165" stroke="#F59E0B" strokeWidth="2" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
+                  <line x1="100" y1="175" x2="100" y2="160" stroke="#F59E0B" strokeWidth="2" opacity="0.6" className="animate-pulse" style={{animationDelay: '0.7s'}}/>
+                </g>
+                
+                {/* Hourglass outline */}
+                <path 
+                  d="M 70 40 L 130 40 L 130 60 L 100 80 L 130 100 L 130 120 L 70 120 L 70 100 L 100 80 L 70 60 Z" 
+                  fill="none" 
+                  stroke="#F59E0B" 
+                  strokeWidth="3"
+                  className="drop-shadow-lg"
                 />
-              ))}
+                
+                {/* Top bulb content - South America shape */}
+                <path 
+                  d="M 75 45 L 85 50 L 90 55 L 88 60 L 85 65 L 80 68 L 75 65 L 72 60 L 75 55 Z" 
+                  fill="#F59E0B" 
+                  opacity="0.9"
+                />
+                
+                {/* Stars in top bulb */}
+                <g fill="#F59E0B">
+                  <path d="M 78 48 L 80 50 L 82 48 L 80 46 Z" opacity="0.8"/>
+                  <path d="M 88 58 L 90 60 L 92 58 L 90 56 Z" opacity="0.8"/>
+                  <path d="M 82 62 L 84 64 L 86 62 L 84 60 Z" opacity="0.8"/>
+                </g>
+                
+                {/* Sand flowing through neck */}
+                <path 
+                  d="M 98 78 L 102 78 L 102 82 L 98 82 Z" 
+                  fill="#F59E0B" 
+                  opacity="0.7"
+                />
+                
+                {/* Bottom bulb content - sand pile */}
+                <path 
+                  d="M 75 110 L 100 115 L 125 110 L 125 118 L 75 118 Z" 
+                  fill="#F59E0B" 
+                  opacity="0.9"
+                />
+                
+                {/* Stars in bottom bulb */}
+                <g fill="#F59E0B">
+                  <path d="M 80 112 L 82 114 L 84 112 L 82 110 Z" opacity="0.8"/>
+                  <path d="M 95 113 L 97 115 L 99 113 L 97 111 Z" opacity="0.8"/>
+                  <path d="M 110 112 L 112 114 L 114 112 L 112 110 Z" opacity="0.8"/>
+                </g>
+              </svg>
+              
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-transparent rounded-full blur-xl"></div>
             </div>
-            <p className="text-amber-400 text-sm font-medium">
+            
+            {/* Logo text */}
+            <div className="text-center mb-4">
+              <h2 className="text-2xl font-serif font-bold text-amber-400 tracking-wider">
+                TIMELINE
+              </h2>
+              <h3 className="text-xl font-serif font-bold text-amber-400 tracking-wider">
+                ALCHEMY
+              </h3>
+            </div>
+            
+            <p className="text-amber-400 text-sm font-medium text-center">
               Van intentie naar impact, in ritme met jouw tijdlijn
             </p>
           </div>
