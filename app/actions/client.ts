@@ -53,48 +53,30 @@ export async function testDatabaseConnection() {
 
 export async function getClientPreviews(userId: string) {
   try {
-    // First, let's see what's actually in the database
-    const testResult = await testDatabaseConnection()
-    console.log('Database test result:', testResult)
-
-    if (testResult.error) {
-      console.error('Database test failed:', testResult.error)
-      return []
-    }
-
-    // Try to get previews with a simple query first
+    console.log('getClientPreviews called with userId:', userId)
+    
+    // Just try to get basic previews data first
     const { data, error } = await supabaseAdmin
       .from('previews')
       .select('*')
       .limit(10)
+
+    console.log('Basic query result:', { data, error })
 
     if (error) {
       console.error('Error fetching previews:', error)
       return []
     }
 
-    console.log('Raw previews data:', data)
-
-    // If we have data, try the full query
+    // If we have data, return it
     if (data && data.length > 0) {
-      const { data: fullData, error: fullError } = await supabaseAdmin
-        .from('previews')
-        .select(`
-          *,
-          ideas(title, description),
-          clients(name)
-        `)
-        .limit(10)
-
-      if (fullError) {
-        console.error('Error with full query:', fullError)
-        return data // Return basic data if full query fails
-      }
-
-      return fullData || []
+      console.log('Found previews:', data.length)
+      return data
+    } else {
+      console.log('No previews found in database')
+      return []
     }
 
-    return data || []
   } catch (error) {
     console.error('Unexpected error in getClientPreviews:', error)
     return []

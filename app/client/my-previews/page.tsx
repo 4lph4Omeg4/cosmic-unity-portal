@@ -76,13 +76,43 @@ export default function MyPreviews() {
     try {
       setDebugInfo('Testing database connection...')
       
-      // Simple test - try to fetch basic data
+      // Test 1: Check if we can reach the API
       const response = await fetch('/api/test-db')
-      const result = await response.json()
+      console.log('API response status:', response.status)
       
-      setDebugInfo(`Test result: ${JSON.stringify(result, null, 2)}`)
+      if (!response.ok) {
+        setDebugInfo(`API error: ${response.status} ${response.statusText}`)
+        return
+      }
+      
+      const result = await response.json()
+      console.log('API result:', result)
+      
+      if (result.error) {
+        setDebugInfo(`Database error: ${result.error} - ${result.details}`)
+      } else {
+        setDebugInfo(`✅ Database OK! Found ${result.previews.length} previews, ${result.ideas.length} ideas, ${result.clients.length} clients`)
+      }
+      
     } catch (error) {
+      console.error('Test failed:', error)
       setDebugInfo(`Test failed: ${error}`)
+    }
+  }
+
+  const testDirectConnection = async () => {
+    try {
+      setDebugInfo('Testing direct database connection...')
+      
+      // Test 2: Try to call the action directly
+      const data = await getClientPreviews('test-user')
+      console.log('Direct action result:', data)
+      
+      setDebugInfo(`Direct action: ${data.length} previews loaded`)
+      
+    } catch (error) {
+      console.error('Direct test failed:', error)
+      setDebugInfo(`Direct test failed: ${error}`)
     }
   }
 
@@ -164,7 +194,10 @@ export default function MyPreviews() {
         <h1 className="text-3xl font-bold">My Previews</h1>
         <div className="flex gap-2">
           <Button onClick={testDatabase} variant="outline" size="sm">
-            Test DB
+            Test API
+          </Button>
+          <Button onClick={testDirectConnection} variant="outline" size="sm">
+            Test Direct
           </Button>
           <Button onClick={loadPreviews} variant="outline">
             Refresh
