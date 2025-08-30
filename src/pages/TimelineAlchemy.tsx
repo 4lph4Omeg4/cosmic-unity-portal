@@ -82,7 +82,7 @@ const TimelineAlchemy: React.FC = () => {
             <div className="w-32 h-32 mx-auto mb-6 relative group cursor-pointer transition-transform duration-300 hover:scale-110">
               {/* Timeline Alchemy Logo - Exact zoals bij Stripe */}
               <img 
-                src="/src/assets/timeline-alchemy-logo.png" 
+                src="/timeline-alchemy-logo.svg" 
                 alt="Timeline Alchemy — sigil-logo met kosmische geometrie"
                 className="w-full h-full transition-all duration-300 group-hover:drop-shadow-2xl"
               />
@@ -152,8 +152,10 @@ const TimelineAlchemy: React.FC = () => {
             priceId="price_timeline_alchemy_monthly" // ⚠️ Vervang door je echte Stripe price ID
             variant="hero"
           >
-            {currentStyle.cta}
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <span className="flex items-center justify-center">
+              {currentStyle.cta}
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </span>
           </TlaSubscribeButton>
 
           {/* CTA Microcopy */}
@@ -287,8 +289,10 @@ const TimelineAlchemy: React.FC = () => {
               priceId="price_timeline_alchemy_monthly" // ⚠️ Vervang door je echte Stripe price ID
               variant="trust"
             >
-              {currentStyle.cta}
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <span className="flex items-center justify-center">
+                {currentStyle.cta}
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </span>
             </TlaSubscribeButton>
             
             {/* Trust cues */}
