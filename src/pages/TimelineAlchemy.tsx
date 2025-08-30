@@ -36,9 +36,9 @@ import { TlaSubscribeButton } from "@/components/TlaSubscribeButton";
 const TimelineAlchemy: React.FC = () => {
   // ========= Config =========
   // Vervang dit door je echte Stripe Price ID (Stripe → Products → Prices)
-  const PRICE_ID = "price_timeline_alchemy_monthly";
+  const PRICE_ID = "price_1S1VMWFlYXjX03EzHKNwtkWW";
   // Haal je orgId op uit je context/store waar jij ‘m bewaart (placeholder hieronder):
-  const ORG_ID = "org_placeholder"; // TODO: injecteer uit context/store/props
+  const ORG_ID = "timeline-alchemy"; // TODO: injecteer uit context/store/props
 
   // ========= Vine: stijlkeuze + toasts =========
   const [selectedStyle, setSelectedStyle] = useState<"krachtig" | "mystiek" | "creator">("krachtig");
