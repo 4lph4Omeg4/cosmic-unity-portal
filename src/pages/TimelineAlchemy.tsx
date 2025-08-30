@@ -269,7 +269,8 @@ return (
       </section>
     </main>
   </>
-));
+))
+      );
           </div>
 {/* Volgende stap (optioneel) – uit main, qua stijl gematcht met je dark theme */}
 <section className="relative z-10 py-12 px-4 sm:px-6 lg:px-8">
