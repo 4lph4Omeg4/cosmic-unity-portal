@@ -1,50 +1,40 @@
 // supabase/functions/checkout/index.ts
-// Stripe Checkout (subscription) met strakke CORS + OPTIONS
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import Stripe from "https://esm.sh/stripe@14.19.0?target=deno";
 
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import Stripe from "https://esm.sh/stripe@15.4.0";
-
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-Deno.serve(async (req: Request) => {
-  // Preflight
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-
-  // Alleen POST
-  if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405, headers: CORS });
-  }
-
+serve(async (req) => {
   try {
-    const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
-    const APP_URL = Deno.env.get("APP_URL") || "http://localhost:8080";
-    if (!STRIPE_SECRET_KEY) throw new Error("Missing STRIPE_SECRET_KEY");
+    const key = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!key) {
+      return new Response(JSON.stringify({ error: "Missing STRIPE_SECRET_KEY" }), { status: 500 });
+    }
 
-    const { org_id, price_id } = await req.json();
-    if (!org_id || !price_id) throw new Error("org_id and price_id are required");
+    const stripe = new Stripe(key, { apiVersion: "2024-06-20" });
+    const { price_id, org_id } = await req.json();
 
-    const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2024-06-20" });
+    if (!price_id) {
+      return new Response(JSON.stringify({ error: "Missing price_id" }), { status: 400 });
+    }
+
+    const origin = req.headers.get("origin")
+      || Deno.env.get("PUBLIC_SITE_URL")
+      || "http://localhost:5173";
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      payment_method_types: ["card"],
       line_items: [{ price: price_id, quantity: 1 }],
-      success_url: `${APP_URL}/timeline-alchemy?session=success`,
-      cancel_url: `${APP_URL}/timeline-alchemy?session=cancel`,
-      client_reference_id: org_id,
+      success_url: `${origin}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/billing/cancel`,
+      allow_promotion_codes: true,
+      metadata: { org_id: org_id ?? "unknown" }, // << belangrijk
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...CORS, "Content-Type": "application/json" },
+      status: 200,
+      headers: { "Content-Type": "application/json" },
     });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message || "failed" }), {
-      status: 400,
-      headers: { ...CORS, "Content-Type": "application/json" },
-    });
+  } catch (err) {
+    console.error("[checkout] error", err);
+    return new Response(JSON.stringify({ error: "Checkout failed" }), { status: 500 });
   }
 });
