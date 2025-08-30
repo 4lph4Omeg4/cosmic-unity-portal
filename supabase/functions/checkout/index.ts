@@ -20,14 +20,18 @@ serve(async (req) => {
       || Deno.env.get("PUBLIC_SITE_URL")
       || "http://localhost:5173";
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      line_items: [{ price: price_id, quantity: 1 }],
-      success_url: `${origin}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/billing/cancel`,
-      allow_promotion_codes: true,
-      metadata: { org_id: org_id ?? "unknown" }, // << belangrijk
-    });
+const session = await stripe.checkout.sessions.create({
+  mode: "subscription",
+  payment_method_types: ["card"],
+  line_items: [{ price: price_id, quantity: 1 }],
+  success_url: `${APP_URL}/timeline-alchemy?session=success`,
+  cancel_url: `${APP_URL}/timeline-alchemy?session=cancel`,
+
+  // belangrijk:
+  client_reference_id: org_id,
+  metadata: { org_id },
+});
+console.log("[checkout] created session", { id: session.id, org_id, price_id });
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
