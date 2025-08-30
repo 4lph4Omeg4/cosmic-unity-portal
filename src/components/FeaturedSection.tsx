@@ -215,38 +215,6 @@ const FeaturedSection = () => {
                          title="Klik om afbeelding in volledige grootte te bekijken"
                        />
                       
-                      {/* Color Variants Overlay */}
-                      {product.images?.edges && product.images.edges.length > 1 && (
-                        <div className="absolute bottom-2 left-2 right-2">
-                          <div className="flex gap-1 justify-center">
-                            {product.images.edges.slice(0, Math.min(6, product.images.edges.length)).map((image, index) => (
-                              <div
-                                key={index}
-                                className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
-                                title={`Kleur variant ${index + 1} - Klik om te bekijken`}
-                                onClick={(e) => {
-                                  e.stopPropagation(); // Prevent event bubbling
-                                  setSelectedImageUrl(image.node.url);
-                                  setSelectedImageTitle(`${localizedContent.title} - Variant ${index + 1}`);
-                                  setIsImageDialogOpen(true);
-                                }}
-                              >
-                                <img
-                                  src={image.node.url}
-                                  alt={`${localizedContent.title} - Variant ${index + 1}`}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            ))}
-                            {product.images.edges.length > 6 && (
-                              <div className="w-6 h-6 rounded-full bg-cosmic/80 border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold">
-                                +{product.images.edges.length - 6}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
                       <div className="absolute top-3 left-3">
                         <Badge variant="secondary" className="bg-energy-gradient text-white shadow-lg">
                           {t('products.digital')}
@@ -256,6 +224,41 @@ const FeaturedSection = () => {
                         <Download className="w-4 h-4 text-cosmic" />
                       </div>
                     </div>
+                    
+                    {/* Color Variants - Now below the image */}
+                    {product.images?.edges && product.images.edges.length > 1 && (
+                      <div className="p-3 bg-card/50 backdrop-blur-sm border-t border-border/30">
+                        <div className="text-xs text-muted-foreground mb-2 font-medium text-center">
+                          Kleur varianten ({product.images.edges.length})
+                        </div>
+                        <div className="flex gap-2 justify-center">
+                          {product.images.edges.slice(0, Math.min(6, product.images.edges.length)).map((image, index) => (
+                            <div
+                              key={index}
+                              className="w-8 h-8 rounded-lg border-2 border-border/50 hover:border-cosmic/50 shadow-sm overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
+                              title={`Kleur variant ${index + 1} - Klik om te bekijken`}
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevent event bubbling
+                                setSelectedImageUrl(image.node.url);
+                                setSelectedImageTitle(`${localizedContent.title} - Variant ${index + 1}`);
+                                setIsImageDialogOpen(true);
+                              }}
+                            >
+                              <img
+                                src={image.node.url}
+                                alt={`${localizedContent.title} - Variant ${index + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                          {product.images.edges.length > 6 && (
+                            <div className="w-8 h-8 rounded-lg bg-cosmic/80 border-2 border-border/50 flex items-center justify-center text-white text-xs font-bold">
+                              +{product.images.edges.length - 6}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </CardHeader>
                   
                   <CardContent className="flex-1 p-6">
