@@ -14,7 +14,9 @@ import {
   MessageSquare,
   Calendar,
   User,
-  FileText
+  FileText,
+  Eye,
+  EyeOff
 } from 'lucide-react'
 import { getClientPreviews, updatePreviewStatus } from '@/app/actions/client'
 
@@ -44,6 +46,7 @@ export default function MyPreviews() {
   const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null)
   const [feedback, setFeedback] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
+  const [showFullContent, setShowFullContent] = useState<{ [key: string]: boolean }>({})
 
   useEffect(() => {
     loadPreviews()
@@ -77,6 +80,13 @@ export default function MyPreviews() {
     }
   }
 
+  const toggleFullContent = (previewId: string) => {
+    setShowFullContent(prev => ({
+      ...prev,
+      [previewId]: !prev[previewId]
+    }))
+  }
+
   const getStatusBadge = (status: string) => {
     const variants = {
       pending: 'bg-yellow-100 text-yellow-800',
@@ -93,7 +103,7 @@ export default function MyPreviews() {
     const Icon = icons[status as keyof typeof icons]
 
     return (
-      <Badge className={`${variants[status as keyof typeof variants]} flex items-center gap-1`}>
+      <Badge className={`${variants[status as keyof typeof icons]} flex items-center gap-1`}>
         <Icon className="w-3 h-3" />
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
@@ -131,11 +141,8 @@ export default function MyPreviews() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">My Previews</h1>
-        <Button onClick={loadPreviews} variant="outline">
-          Refresh
-        </Button>
       </div>
-
+      
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="all">All ({previews.length})</TabsTrigger>
@@ -185,7 +192,37 @@ export default function MyPreviews() {
                           </div>
 
                           {preview.ideas.description && (
-                            <p className="text-gray-600 mb-3">{preview.ideas.description}</p>
+                            <div className="mb-3">
+                              {showFullContent[preview.id] ? (
+                                <p className="text-gray-600">{preview.ideas.description}</p>
+                              ) : (
+                                <p className="text-gray-600">
+                                  {preview.ideas.description.length > 150 
+                                    ? `${preview.ideas.description.substring(0, 150)}...` 
+                                    : preview.ideas.description
+                                  }
+                                </p>
+                              )}
+                              
+                              {preview.ideas.description.length > 150 && (
+                                <button
+                                  onClick={() => toggleFullContent(preview.id)}
+                                  className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1 mt-1"
+                                >
+                                  {showFullContent[preview.id] ? (
+                                    <>
+                                      <EyeOff className="w-4 h-4" />
+                                      Verberg content
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Eye className="w-4 h-4" />
+                                      Toon volledige content
+                                    </>
+                                  )}
+                                </button>
+                              )}
+                            </div>
                           )}
 
                           {preview.scheduled_at && (
@@ -220,6 +257,9 @@ export default function MyPreviews() {
                                 <DialogContent>
                                   <DialogHeader>
                                     <DialogTitle>Approve Preview</DialogTitle>
+                                    <p className="text-sm text-gray-600">
+                                      Review the preview details and optionally add feedback before approving.
+                                    </p>
                                   </DialogHeader>
                                   <div className="space-y-4">
                                     <div>
@@ -275,6 +315,9 @@ export default function MyPreviews() {
                                 <DialogContent>
                                   <DialogHeader>
                                     <DialogTitle>Request Changes</DialogTitle>
+                                    <p className="text-sm text-gray-600">
+                                      Provide feedback on what changes are needed for this preview.
+                                    </p>
                                   </DialogHeader>
                                   <div className="space-y-4">
                                     <div>

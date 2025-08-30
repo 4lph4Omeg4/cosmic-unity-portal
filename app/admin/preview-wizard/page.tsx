@@ -8,14 +8,30 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, ArrowRight, Check, Calendar } from 'lucide-react'
-import { getClients, createPreview } from '@/app/actions/admin'
+import { ArrowLeft, ArrowRight, Check, Calendar, X, Eye, EyeOff } from 'lucide-react'
+import { getClients, createPreview, getIdeas } from '@/app/actions/admin'
 import { useRouter } from 'next/navigation'
 
 interface Client {
   id: string
   name: string
   contact_email: string | null
+  organizations: {
+    name: string
+  }
+}
+
+interface Idea {
+  id: string
+  title: string
+  description: string | null
+  status: 'draft' | 'approved' | 'rejected'
+  created_at: string
+  created_by: string
+  clients: {
+    name: string
+    org_id: string
+  }
   organizations: {
     name: string
   }
@@ -53,6 +69,7 @@ const templates = [
 export default function PreviewWizard() {
   const [currentStep, setCurrentStep] = useState(0)
   const [clients, setClients] = useState<Client[]>([])
+  const [ideas, setIdeas] = useState<Idea[]>([])
   const [selectedIdeas, setSelectedIdeas] = useState<string[]>([])
   const [formData, setFormData] = useState({
     client_id: '',
@@ -62,11 +79,13 @@ export default function PreviewWizard() {
     scheduled_at: ''
   })
   const [loading, setLoading] = useState(false)
+  const [showFullContent, setShowFullContent] = useState<{ [key: string]: boolean }>({})
   const router = useRouter()
 
   useEffect(() => {
     loadClients()
     loadSelectedIdeas()
+    loadIdeas()
   }, [])
 
   const loadClients = async () => {
@@ -78,11 +97,47 @@ export default function PreviewWizard() {
     }
   }
 
+  const loadIdeas = async () => {
+    try {
+      const data = await getIdeas()
+      setIdeas(data)
+    } catch (error) {
+      console.error('Error loading ideas:', error)
+    }
+  }
+
   const loadSelectedIdeas = () => {
     const stored = sessionStorage.getItem('selectedIdeas')
     if (stored) {
       setSelectedIdeas(JSON.parse(stored))
     }
+  }
+
+  const deselectIdea = (ideaId: string) => {
+    const newSelected = selectedIdeas.filter(id => id !== ideaId)
+    setSelectedIdeas(newSelected)
+    sessionStorage.setItem('selectedIdeas', JSON.stringify(newSelected))
+    
+    // If no ideas are left, show a message and option to go back
+    if (newSelected.length === 0) {
+      // You could show a toast or alert here
+      console.log('No ideas selected. Consider going back to select more ideas.')
+    }
+  }
+
+  const goBackToIdeas = () => {
+    // Clear the current selection and go back to ideas page
+    sessionStorage.removeItem('selectedIdeas')
+    setSelectedIdeas([]) // Clear local state as well
+    setCurrentStep(0) // Reset to first step
+    router.push('/admin/ideas')
+  }
+
+  const toggleFullContent = (ideaId: string) => {
+    setShowFullContent(prev => ({
+      ...prev,
+      [ideaId]: !prev[ideaId]
+    }))
   }
 
   const nextStep = () => {
@@ -94,6 +149,8 @@ export default function PreviewWizard() {
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1)
+      // Reload selected ideas when going back to ensure they're still available
+      loadSelectedIdeas()
     }
   }
 
@@ -254,6 +311,94 @@ export default function PreviewWizard() {
                 )}
               </div>
             </div>
+            
+            {/* Selected Ideas with Deselect Option */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium">Selected Ideas:</h4>
+                {selectedIdeas.length === 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={goBackToIdeas}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Terug naar ideeën
+                  </Button>
+                )}
+              </div>
+              
+              {selectedIdeas.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                  <p className="mb-2">Geen ideeën geselecteerd</p>
+                  <p className="text-sm">Ga terug naar de ideeën pagina om nieuwe posts te selecteren</p>
+                </div>
+              ) : (
+                selectedIdeas.map((ideaId) => {
+                  const idea = ideas.find(i => i.id === ideaId)
+                  if (!idea) return null
+                  
+                  return (
+                    <div key={ideaId} className="border rounded-lg p-3 bg-white">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h5 className="font-medium">{idea.title}</h5>
+                            <Badge variant="secondary">{idea.status}</Badge>
+                          </div>
+                          
+                          {idea.description && (
+                            <div>
+                              {showFullContent[ideaId] ? (
+                                <p className="text-gray-600 text-sm">{idea.description}</p>
+                              ) : (
+                                <p className="text-gray-600 text-sm">
+                                  {idea.description.length > 100 
+                                    ? `${idea.description.substring(0, 100)}...` 
+                                    : idea.description
+                                  }
+                                </p>
+                              )}
+                              
+                              <button
+                                onClick={() => toggleFullContent(ideaId)}
+                                className="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1 mt-1"
+                              >
+                                {showFullContent[ideaId] ? (
+                                  <>
+                                    <EyeOff className="w-3 h-3" />
+                                    Verberg content
+                                  </>
+                                ) : (
+                                  <>
+                                    <Eye className="w-3 h-3" />
+                                    Toon volledige content
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          )}
+                          
+                          <div className="text-xs text-gray-500 mt-2">
+                            Client: {idea.clients.name} • Created: {new Date(idea.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                        
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => deselectIdea(ideaId)}
+                          className="ml-3 text-red-600 hover:text-red-800 hover:bg-red-50"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+            
             <div className="text-sm text-gray-600">
               Click Save to create previews for all selected ideas. They will be sent to the client for approval.
             </div>
@@ -314,27 +459,59 @@ export default function PreviewWizard() {
           <p className="text-gray-600">{steps[currentStep].description}</p>
         </CardHeader>
         <CardContent>
+          {selectedIdeas.length === 0 && currentStep < 5 ? (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-2 text-yellow-800">
+                <span className="text-lg">⚠️</span>
+                <div>
+                  <p className="font-medium">Geen ideeën geselecteerd</p>
+                  <p className="text-sm">Ga terug naar de ideeën pagina om posts te selecteren voordat je verder gaat.</p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <Button
+                  variant="outline"
+                  onClick={goBackToIdeas}
+                  className="text-yellow-800 border-yellow-300 hover:bg-yellow-100"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Terug naar ideeën
+                </Button>
+              </div>
+            </div>
+          ) : null}
           {renderStepContent()}
         </CardContent>
       </Card>
 
       {/* Navigation */}
       <div className="flex justify-between">
-        <Button
-          variant="outline"
-          onClick={prevStep}
-          disabled={currentStep === 0}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Previous
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={prevStep}
+            disabled={currentStep === 0}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Previous
+          </Button>
+          
+          <Button
+            variant="outline"
+            onClick={goBackToIdeas}
+            className="text-blue-600 border-blue-300 hover:bg-blue-50"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Terug naar ideeën
+          </Button>
+        </div>
 
         {currentStep === steps.length - 1 ? (
-          <Button onClick={handleSave} disabled={loading}>
+          <Button onClick={handleSave} disabled={loading || selectedIdeas.length === 0}>
             {loading ? 'Saving...' : 'Save Preview'}
           </Button>
         ) : (
-          <Button onClick={nextStep}>
+          <Button onClick={nextStep} disabled={selectedIdeas.length === 0}>
             Next
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
