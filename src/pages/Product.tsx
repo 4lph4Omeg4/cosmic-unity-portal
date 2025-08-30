@@ -13,6 +13,12 @@ import { fetchProductByHandle } from '@/integrations/shopify/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useCart } from '@/hooks/useCart';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface ShopifyProduct {
   id: string;
@@ -71,6 +77,9 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [mockupImages, setMockupImages] = useState<string[]>([]);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedImageTitle, setSelectedImageTitle] = useState<string>('');
 
   // Functie om de juiste afbeelding te vinden op basis van variant
   const findImageForVariant = (variant: any) => {
@@ -312,7 +321,16 @@ const Product = () => {
                     <img
                       src={displayImages[selectedImageIndex] || '/placeholder.svg'}
                       alt={product.title}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
+                      onClick={() => {
+                        const currentImage = displayImages[selectedImageIndex];
+                        if (currentImage) {
+                          setSelectedImageUrl(currentImage);
+                          setSelectedImageTitle(product.title);
+                          setIsImageDialogOpen(true);
+                        }
+                      }}
+                      title="Klik om afbeelding in volledige grootte te bekijken"
                       onError={(e) => {
                         // Fallback to original Shopify images if mockups don't exist
                         if (product.images.edges[selectedImageIndex]) {
@@ -499,6 +517,26 @@ const Product = () => {
             </div>
           </div>
         </div>
+
+        {/* Image Dialog */}
+        {selectedImageUrl && (
+          <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+            <DialogContent className="bg-black/95 border-gray-700 max-w-4xl max-h-[90vh] w-[90vw]">
+              <DialogHeader>
+                <DialogTitle className="text-white text-center">
+                  {selectedImageTitle}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex justify-center items-center p-4">
+                <img 
+                  src={selectedImageUrl} 
+                  alt="Full size preview" 
+                  className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </main>
       
       <Footer />

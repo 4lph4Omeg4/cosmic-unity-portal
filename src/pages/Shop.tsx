@@ -10,6 +10,12 @@ import { fetchCollections, fetchProducts, createCheckout } from '@/integrations/
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 import { getLocalizedProductContent, getLocalizedCollectionContent } from '@/utils/contentLocalization';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface ShopifyCollection {
   id: string;
@@ -114,6 +120,9 @@ const Shop = () => {
   const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedImageTitle, setSelectedImageTitle] = useState<string>('');
 
   useEffect(() => {
     const loadData = async () => {
@@ -320,7 +329,13 @@ const Shop = () => {
                         <img
                           src={product.images.edges[0].node.url}
                           alt={product.images.edges[0].node.altText || localizedContent.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 cursor-pointer"
+                          onClick={() => {
+                            setSelectedImageUrl(product.images.edges[0].node.url);
+                            setSelectedImageTitle(localizedContent.title);
+                            setIsImageDialogOpen(true);
+                          }}
+                          title="Klik om afbeelding in volledige grootte te bekijken"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-cosmic/20 to-secondary/20 flex items-center justify-center">
@@ -336,7 +351,12 @@ const Shop = () => {
                               <div
                                 key={index}
                                 className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
-                                title={`Kleur variant ${index + 1}`}
+                                title={`Kleur variant ${index + 1} - Klik om te bekijken`}
+                                onClick={() => {
+                                  setSelectedImageUrl(image.node.url);
+                                  setSelectedImageTitle(`${localizedContent.title} - Variant ${index + 1}`);
+                                  setIsImageDialogOpen(true);
+                                }}
                               >
                                 <img
                                   src={image.node.url}
@@ -409,6 +429,26 @@ const Shop = () => {
                 {t('shop.noProductsDescription')}
               </p>
             </div>
+          )}
+
+          {/* Image Dialog */}
+          {selectedImageUrl && (
+            <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+              <DialogContent className="bg-black/95 border-gray-700 max-w-4xl max-h-[90vh] w-[90vw]">
+                <DialogHeader>
+                  <DialogTitle className="text-white text-center">
+                    {selectedImageTitle}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="flex justify-center items-center p-4">
+                  <img 
+                    src={selectedImageUrl} 
+                    alt="Full size preview" 
+                    className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
           )}
         </div>
       </main>

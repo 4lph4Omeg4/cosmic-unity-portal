@@ -18,6 +18,12 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { useToast } from '@/hooks/use-toast'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 // Add image upload functionality
 const uploadImageToSupabase = async (file: File): Promise<string | null> => {
@@ -91,6 +97,8 @@ export default function TimelineAlchemyIdeas() {
   const [selectedPosts, setSelectedPosts] = useState<Set<string>>(new Set())
   const [selectAll, setSelectAll] = useState(false)
   const [imageStates, setImageStates] = useState<Record<string, { loading: boolean; error: boolean }>>({})
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false)
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
 
   useEffect(() => {
     loadBlogPosts()
@@ -619,8 +627,8 @@ export default function TimelineAlchemyIdeas() {
                          onLoad={() => handleImageLoad(post.id)}
                          onError={() => handleImageError(post.id)}
                          onClick={() => {
-                           // Open image in full size in new tab
-                           window.open(post.image_url, '_blank')
+                           setSelectedImageUrl(post.image_url)
+                           setIsImageDialogOpen(true)
                          }}
                          title="Klik om afbeelding in volledige grootte te bekijken"
                        />
@@ -666,7 +674,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
                           alt="Cosmic Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank')}
+                          onClick={() => {
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png")
+                            setIsImageDialogOpen(true)
+                          }}
                           title="Cosmic Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -682,7 +693,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank')}
+                          onClick={() => {
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png")
+                            setIsImageDialogOpen(true)
+                          }}
                           title="Cyberpunk Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -698,7 +712,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank')}
+                          onClick={() => {
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png")
+                            setIsImageDialogOpen(true)
+                          }}
                           title="Dystopia Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -714,7 +731,10 @@ export default function TimelineAlchemyIdeas() {
                           src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
-                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png", '_blank')}
+                          onClick={() => {
+                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png")
+                            setIsImageDialogOpen(true)
+                          }}
                           title="Utopia Theme - Klik om te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
@@ -957,6 +977,29 @@ export default function TimelineAlchemyIdeas() {
            )}
         </CardContent>
       </Card>
+
+             {/* Image Dialog */}
+       {selectedImageUrl && (
+         <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+           <DialogContent className="bg-black/95 border-gray-700 max-w-4xl max-h-[90vh] w-[90vw]">
+             <DialogHeader>
+               <DialogTitle className="text-white text-center">
+                 {selectedImageUrl.includes('cosmic.png') ? 'Cosmic Theme' :
+                  selectedImageUrl.includes('cyberpunk.png') ? 'Cyberpunk Theme' :
+                  selectedImageUrl.includes('dystopia.png') ? 'Dystopia Theme' :
+                  selectedImageUrl.includes('utopia.png') ? 'Utopia Theme' : 'Image Preview'}
+               </DialogTitle>
+             </DialogHeader>
+             <div className="flex justify-center items-center p-4">
+               <img 
+                 src={selectedImageUrl} 
+                 alt="Full size preview" 
+                 className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
+               />
+             </div>
+           </DialogContent>
+         </Dialog>
+       )}
     </div>
   )
 }

@@ -7,6 +7,12 @@ import { Star, Download, Book } from 'lucide-react';
 import { fetchCollections } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
 import { getLocalizedProductContent } from '@/utils/contentLocalization';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface ShopifyProduct {
   id: string;
@@ -51,6 +57,9 @@ const FeaturedSection = () => {
   const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [digitalProducts, setDigitalProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedImageTitle, setSelectedImageTitle] = useState<string>('');
   const { language, t } = useLanguage();
 
   useEffect(() => {
@@ -196,7 +205,13 @@ const FeaturedSection = () => {
                        <img
                          src={productImage}
                          alt={localizedContent.title}
-                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                         onClick={() => {
+                           setSelectedImageUrl(productImage);
+                           setSelectedImageTitle(localizedContent.title);
+                           setIsImageDialogOpen(true);
+                         }}
+                         title="Klik om afbeelding in volledige grootte te bekijken"
                        />
                       
                       {/* Color Variants Overlay */}
@@ -207,7 +222,12 @@ const FeaturedSection = () => {
                               <div
                                 key={index}
                                 className="w-6 h-6 rounded-full border-2 border-white shadow-lg overflow-hidden cursor-pointer hover:scale-110 transition-transform duration-200"
-                                title={`Kleur variant ${index + 1}`}
+                                title={`Kleur variant ${index + 1} - Klik om te bekijken`}
+                                onClick={() => {
+                                  setSelectedImageUrl(image.node.url);
+                                  setSelectedImageTitle(`${localizedContent.title} - Variant ${index + 1}`);
+                                  setIsImageDialogOpen(true);
+                                }}
                               >
                                 <img
                                   src={image.node.url}
@@ -274,6 +294,26 @@ const FeaturedSection = () => {
               );
             })}
           </div>
+        )}
+
+        {/* Image Dialog */}
+        {selectedImageUrl && (
+          <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+            <DialogContent className="bg-black/95 border-gray-700 max-w-4xl max-h-[90vh] w-[90vw]">
+              <DialogHeader>
+                <DialogTitle className="text-white text-center">
+                  {selectedImageTitle}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex justify-center items-center p-4">
+                <img 
+                  src={selectedImageUrl} 
+                  alt="Full size preview" 
+                  className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
 
       </div>
