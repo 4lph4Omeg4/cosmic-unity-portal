@@ -161,7 +161,7 @@ const App: React.FC = () => (
   <SpeedInsights />
   <Analytics />
 </TooltipProvider>
-
+ main
         </CartProvider>
       </AuthProvider>
     </LanguageProvider>
