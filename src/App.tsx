@@ -58,6 +58,33 @@ import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import OnboardingDemo from "@/components/onboarding/OnboardingDemo";
 import OnboardingTest from "@/pages/OnboardingTest";
 import OnboardingRedirect from "@/pages/OnboardingRedirect";
+import { useState, useEffect } from 'react'
+import { supabase } from '../utils/supabase'
+
+function Page() {
+  const [todos, setTodos] = useState([])
+
+  useEffect(() => {
+    function getTodos() {
+      const { data: todos } = await supabase.from('todos').select()
+
+      if (todos.length > 1) {
+        setTodos(todos)
+      }
+    }
+
+    getTodos()
+  }, [])
+
+  return (
+    <div>
+      {todos.map((todo) => (
+        <li key={todo}>{todo}</li>
+      ))}
+    </div>
+  )
+}
+export default Page
 
 const queryClient = new QueryClient();
 
