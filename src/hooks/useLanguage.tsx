@@ -210,7 +210,10 @@ const translations = {
       button: 'Abonneer',
       subscribe: 'Abonneren',
       compact: { title: 'Nieuwsbrief' },
-      email: { label: 'E-mailadres' },
+      email: { 
+        label: 'E-mailadres',
+        placeholder: 'Jouw emailadres'
+      },
       account: {
         create: 'Account aanmaken',
         benefits: 'Maak een account aan voor exclusieve voordelen',
@@ -649,7 +652,10 @@ const translations = {
       button: 'Subscribe',
       subscribe: 'Subscribe',
       compact: { title: 'Newsletter' },
-      email: { label: 'Email address' },
+      email: { 
+        label: 'Email address',
+        placeholder: 'Your email address'
+      },
       account: {
         create: 'Create an account',
         benefits: 'Unlock exclusive benefits when you create an account',
@@ -1088,7 +1094,10 @@ const translations = {
       button: 'Abonnieren',
       subscribe: 'Abonnieren',
       compact: { title: 'Newsletter' },
-      email: { label: 'E-Mail-Adresse' },
+      email: { 
+        label: 'E-Mail-Adresse',
+        placeholder: 'Deine E-Mail-Adresse'
+      },
       account: {
         create: 'Konto erstellen',
         benefits: 'Erhalte exklusive Vorteile mit einem Konto',
