@@ -75,7 +75,7 @@ export default function TimelineAlchemyPreviewWizard() {
   const [form, setForm] = useState<PreviewForm>({
     step: 1,
     selectedClient: '',
-    selectedTemplates: [],
+    selectedTemplates: templates, // Automatically select all available platforms
     scheduledDate: '',
     scheduledTime: '',
     selectedPosts: [],
