@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/client';
 
 const OnboardingRedirect: React.FC = () => {
   const [searchParams] = useSearchParams();
