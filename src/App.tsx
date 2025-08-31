@@ -89,7 +89,7 @@ function App() {
 
 const queryClient = new QueryClient();
 
-const App: React.FC = () => {
+const  React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
