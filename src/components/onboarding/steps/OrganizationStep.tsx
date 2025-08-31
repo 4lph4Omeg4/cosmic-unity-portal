@@ -24,7 +24,7 @@ export default function OrganizationStep() {
         {/* Organization Name */}
         <div className="space-y-2">
           <Label htmlFor="orgName" className="text-sm font-medium text-gray-700">
-            Organisatienaam *
+            Organisatienaam
           </Label>
           <div className="relative">
             <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -32,9 +32,7 @@ export default function OrganizationStep() {
               id="orgName"
               placeholder="Jouw bedrijf of organisatie"
               className={`pl-10 ${errors.organization?.orgName ? 'border-red-500' : ''}`}
-              {...register('organization.orgName', { 
-                required: 'Organisatienaam is verplicht'
-              })}
+              {...register('organization.orgName')}
             />
           </div>
           {errors.organization?.orgName && (
@@ -43,7 +41,7 @@ export default function OrganizationStep() {
             </p>
           )}
           <p className="text-xs text-gray-500">
-            De naam van je bedrijf, team of organisatie
+            De naam van je bedrijf, team of organisatie (optioneel)
           </p>
         </div>
 
@@ -79,7 +77,7 @@ export default function OrganizationStep() {
         {/* Use Case */}
         <div className="space-y-3">
           <Label className="text-sm font-medium text-gray-700">
-            Hoe ga je Timeline Alchemy gebruiken? *
+            Hoe ga je Timeline Alchemy gebruiken?
           </Label>
           <RadioGroup 
             value={useCase} 

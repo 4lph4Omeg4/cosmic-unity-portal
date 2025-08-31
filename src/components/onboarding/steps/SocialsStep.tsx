@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Twitter, Instagram, Youtube, Linkedin, Link, ExternalLink } from 'lucide-react'
+import { Instagram, Youtube, Linkedin, Link, ExternalLink, X } from 'lucide-react'
 
 export default function SocialsStep() {
   const { watch, setValue } = useFormContext()
@@ -14,9 +14,16 @@ export default function SocialsStep() {
     {
       key: 'X',
       label: 'X (Twitter)',
-      icon: Twitter,
-      color: 'text-blue-500',
+      icon: X,
+      color: 'text-black',
       description: 'Deel je updates en connect met anderen'
+    },
+    {
+      key: 'Facebook',
+      label: 'Facebook',
+      icon: ExternalLink,
+      color: 'text-blue-600',
+      description: 'Deel je content en connect met je community'
     },
     {
       key: 'Instagram',
@@ -24,6 +31,13 @@ export default function SocialsStep() {
       icon: Instagram,
       color: 'text-pink-500',
       description: 'Toon je visuele werk en verhalen'
+    },
+    {
+      key: 'TikTok',
+      label: 'TikTok',
+      icon: ExternalLink,
+      color: 'text-black',
+      description: 'Deel korte video content en trends'
     },
     {
       key: 'YouTube',

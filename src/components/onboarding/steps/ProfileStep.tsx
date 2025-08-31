@@ -70,13 +70,12 @@ export default function ProfileStep() {
         {/* Display Name */}
         <div className="space-y-2">
           <Label htmlFor="displayName" className="text-sm font-medium text-gray-700">
-            Weergavenaam *
+            Weergavenaam
           </Label>
           <Input
             id="displayName"
             placeholder="Jouw naam"
             {...register('profile.displayName', { 
-              required: 'Weergavenaam is verplicht',
               minLength: { value: 2, message: 'Minimaal 2 karakters' }
             })}
             className={errors.profile?.displayName ? 'border-red-500' : ''}
@@ -87,14 +86,14 @@ export default function ProfileStep() {
             </p>
           )}
           <p className="text-xs text-gray-500">
-            Dit is hoe je naam wordt weergegeven in de app
+            Dit is hoe je naam wordt weergegeven in de app (optioneel)
           </p>
         </div>
 
         {/* Role Selection */}
         <div className="space-y-2">
           <Label htmlFor="role" className="text-sm font-medium text-gray-700">
-            Wat ben je? *
+            Wat ben je?
           </Label>
           <Select onValueChange={(value) => setValue('profile.role', value)}>
             <SelectTrigger>

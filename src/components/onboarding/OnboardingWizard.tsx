@@ -22,13 +22,15 @@ const onboardingSchema = z.object({
     role: z.enum(['Creator', 'Client', 'Admin']).optional()
   }),
   organization: z.object({
-    orgName: z.string().min(1, 'Organisatienaam is verplicht'),
+    orgName: z.string(),
     website: z.string().url('Voer een geldige URL in').optional().or(z.literal('')),
     useCase: z.enum(['Solo', 'Team', 'Agency']).optional()
   }),
   socials: z.object({
     X: z.boolean().optional(),
+    Facebook: z.boolean().optional(),
     Instagram: z.boolean().optional(),
+    TikTok: z.boolean().optional(),
     YouTube: z.boolean().optional(),
     LinkedIn: z.boolean().optional()
   }),
@@ -59,9 +61,9 @@ export default function OnboardingWizard() {
   const methods = useForm<OnboardingFormData>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      profile: { displayName: '', avatar: '', role: undefined },
-      organization: { orgName: '', website: '', useCase: undefined },
-      socials: { X: false, Instagram: false, YouTube: false, LinkedIn: false },
+      profile: { displayName: 'Gebruiker', avatar: '', role: undefined },
+      organization: { orgName: 'Mijn Organisatie', website: '', useCase: undefined },
+      socials: { X: false, Facebook: false, Instagram: false, TikTok: false, YouTube: false, LinkedIn: false },
       preferences: { weeklyDigest: true, aiSuggestions: true, goals: '' }
     }
   })
