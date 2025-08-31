@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Instagram, Youtube, Linkedin, Link, ExternalLink, X } from 'lucide-react'
+import { Instagram, Youtube, Linkedin, Link, ExternalLink, X, Facebook, Video } from 'lucide-react'
 
 export default function SocialsStep() {
   const { watch, setValue } = useFormContext()
@@ -15,42 +15,48 @@ export default function SocialsStep() {
       key: 'X',
       label: 'X (Twitter)',
       icon: X,
-      color: 'text-black',
+      color: 'text-white',
+      bgColor: 'bg-black',
       description: 'Deel je updates en connect met anderen'
     },
     {
       key: 'Facebook',
       label: 'Facebook',
-      icon: ExternalLink,
-      color: 'text-blue-600',
+      icon: Facebook,
+      color: 'text-white',
+      bgColor: 'bg-blue-600',
       description: 'Deel je content en connect met je community'
     },
     {
       key: 'Instagram',
       label: 'Instagram',
       icon: Instagram,
-      color: 'text-pink-500',
+      color: 'text-white',
+      bgColor: 'bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500',
       description: 'Toon je visuele werk en verhalen'
     },
     {
       key: 'TikTok',
       label: 'TikTok',
-      icon: ExternalLink,
-      color: 'text-black',
+      icon: Video,
+      color: 'text-white',
+      bgColor: 'bg-black',
       description: 'Deel korte video content en trends'
     },
     {
       key: 'YouTube',
       label: 'YouTube',
       icon: Youtube,
-      color: 'text-red-500',
+      color: 'text-white',
+      bgColor: 'bg-red-600',
       description: 'Deel video content en tutorials'
     },
     {
       key: 'LinkedIn',
       label: 'LinkedIn',
       icon: Linkedin,
-      color: 'text-blue-600',
+      color: 'text-white',
+      bgColor: 'bg-blue-700',
       description: 'Professionele netwerking en updates'
     }
   ]
@@ -65,12 +71,12 @@ export default function SocialsStep() {
   }
 
   return (
-    <Card className="w-full max-w-xl mx-auto">
+    <Card className="w-full max-w-xl mx-auto bg-gray-800 border-gray-700">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-gray-900">
+        <CardTitle className="text-2xl font-bold text-white">
           Connect je social media
         </CardTitle>
-        <p className="text-gray-600">
+        <p className="text-gray-300">
           Kies welke platforms je wilt koppelen (optioneel)
         </p>
       </CardHeader>
@@ -81,7 +87,7 @@ export default function SocialsStep() {
           
           return (
             <div key={platform.key} className="space-y-3">
-              <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+              <div className="flex items-center space-x-3 p-4 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
                 <Checkbox
                   id={platform.key}
                   checked={isChecked}
@@ -90,8 +96,10 @@ export default function SocialsStep() {
                   }
                 />
                 <div className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <IconComponent className={`w-5 h-5 ${platform.color}`} />
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${platform.bgColor}`}>
+                      <IconComponent className={`w-4 h-4 ${platform.color}`} />
+                    </div>
                     <label 
                       htmlFor={platform.key}
                       className="font-medium text-gray-900 cursor-pointer"

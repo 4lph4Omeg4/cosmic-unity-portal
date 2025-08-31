@@ -182,21 +182,21 @@ export default function OnboardingWizard() {
   const isLastStep = currentStep === STEPS.length - 1
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Welkom bij Timeline Alchemy
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-300">
             Laten we je profiel instellen in {STEPS.length} eenvoudige stappen
           </p>
         </div>
 
         {/* Progress Bar */}
         <div className="mb-8">
-          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+          <div className="flex items-center justify-between text-sm text-gray-300 mb-2">
             <span>Stap {currentStep + 1} van {STEPS.length}</span>
             <span>{Math.round(progress)}% voltooid</span>
           </div>
@@ -206,7 +206,7 @@ export default function OnboardingWizard() {
               <span
                 key={step.id}
                 className={`${
-                  index <= currentStep ? 'text-blue-600 font-medium' : ''
+                  index <= currentStep ? 'text-blue-400 font-medium' : ''
                 }`}
               >
                 {step.title}
@@ -229,7 +229,7 @@ export default function OnboardingWizard() {
             </div>
 
             {/* Navigation */}
-            <Card className="max-w-xl mx-auto">
+            <Card className="max-w-xl mx-auto bg-gray-800 border-gray-700">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">

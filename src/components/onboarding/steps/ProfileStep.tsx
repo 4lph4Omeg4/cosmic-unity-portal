@@ -33,12 +33,12 @@ export default function ProfileStep() {
   }
 
   return (
-    <Card className="w-full max-w-xl mx-auto">
+    <Card className="w-full max-w-xl mx-auto bg-gray-800 border-gray-700">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-gray-900">
+        <CardTitle className="text-2xl font-bold text-white">
           Maak je profiel compleet
         </CardTitle>
-        <p className="text-gray-600">
+        <p className="text-gray-300">
           Vertel ons wie je bent en wat je doet
         </p>
       </CardHeader>

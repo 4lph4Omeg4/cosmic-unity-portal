@@ -11,12 +11,12 @@ export default function OrganizationStep() {
   const useCase = watch('organization.useCase')
 
   return (
-    <Card className="w-full max-w-xl mx-auto">
+    <Card className="w-full max-w-xl mx-auto bg-gray-800 border-gray-700">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-gray-900">
+        <CardTitle className="text-2xl font-bold text-white">
           Over je organisatie
         </CardTitle>
-        <p className="text-gray-600">
+        <p className="text-gray-300">
           Help ons je beter te begrijpen
         </p>
       </CardHeader>
