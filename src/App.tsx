@@ -58,6 +58,7 @@ import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import OnboardingDemo from "@/components/onboarding/OnboardingDemo";
 import OnboardingTest from "@/pages/OnboardingTest";
 import OnboardingRedirect from "@/pages/OnboardingRedirect";
+import TestPage from "@/pages/TestPage";
 
 const queryClient = new QueryClient();
 
@@ -166,6 +167,7 @@ const App: React.FC = () => {
                   <Route path="/onboarding" element={<OnboardingRedirect />} />
                   <Route path="/onboarding/demo" element={<OnboardingDemo />} />
                   <Route path="/onboarding/test" element={<OnboardingTest />} />
+                  <Route path="/test" element={<TestPage />} />
 
                   {/* Catch-all */}
                   <Route path="*" element={<NotFound />} />
