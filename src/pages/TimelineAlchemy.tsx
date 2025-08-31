@@ -90,7 +90,11 @@ const TimelineAlchemy: React.FC = () => {
   // Stripe redirect feedback (?session=success | ?session=cancel)
   useEffect(() => {
     const session = searchParams.get("session");
+    console.log('TimelineAlchemy - Session parameter:', session);
+    console.log('TimelineAlchemy - ORG_ID:', ORG_ID);
+    
     if (session === "success") {
+      console.log('TimelineAlchemy - Success detected, preparing redirect...');
       toast({ 
         title: "Welkom in de stroom ⚡", 
         description: "Je abonnement is actief. Je wordt doorgestuurd naar de onboarding...",
@@ -98,8 +102,12 @@ const TimelineAlchemy: React.FC = () => {
       });
       
       // Redirect to onboarding after a short delay
+      const redirectUrl = '/onboarding?session=success&org_id=' + ORG_ID;
+      console.log('TimelineAlchemy - Redirecting to:', redirectUrl);
+      
       setTimeout(() => {
-        window.location.href = '/onboarding?session=success&org_id=' + ORG_ID;
+        console.log('TimelineAlchemy - Executing redirect now...');
+        window.location.href = redirectUrl;
       }, 2000);
     }
     if (session === "cancel") {
@@ -189,6 +197,22 @@ const TimelineAlchemy: React.FC = () => {
           <p className="text-slate-400 text-sm mt-4 max-w-md mx-auto">
             Direct via Stripe. Je kunt later altijd upgraden of pauzeren.
           </p>
+          
+          {/* Debug: Manual redirect test */}
+          {searchParams.get("session") === "success" && (
+            <div className="mt-4 p-4 bg-blue-900/20 border border-blue-600/30 rounded-lg">
+              <p className="text-blue-300 text-sm mb-2">Debug: Handmatige redirect test</p>
+              <button
+                onClick={() => {
+                  console.log('Manual redirect clicked');
+                  window.location.href = '/onboarding?session=success&org_id=' + ORG_ID;
+                }}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+              >
+                Ga naar Onboarding (Handmatig)
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
