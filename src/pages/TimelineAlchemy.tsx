@@ -300,9 +300,10 @@ const TimelineAlchemy: React.FC = () => {
         Join de creators die al hun content stress hebben vervangen door Timeline Alchemy
       </p>
 
+      {/* ⚠️ Vervang hieronder 'price_timeline_alchemy_monthly' door je echte Stripe price ID */}
       <TlaSubscribeButton
         orgId="timeline-alchemy"
-        priceId="price_timeline_alchemy_monthly" // ⚠️ vervang met je echte Stripe price ID
+        priceId="price_timeline_alchemy_monthly"
         variant="trust"
       >
         <span className="flex items-center justify-center">
@@ -344,6 +345,7 @@ const TimelineAlchemy: React.FC = () => {
     </div>
   </div>
 </section>
+
 
         </div>
       </section>
