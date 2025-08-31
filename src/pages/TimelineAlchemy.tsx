@@ -358,7 +358,7 @@ const TimelineAlchemy: React.FC = () => {
   </div>
 </footer>
 
-<Toaster />
+<Toaster /
 </div>  {/* sluit je page wrapper */}
 );
 };
