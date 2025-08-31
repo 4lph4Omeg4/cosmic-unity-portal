@@ -814,198 +814,147 @@ export default function TimelineAlchemyPreviewWizard() {
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold text-white mb-2">Preview Overview & Review</h3>
-              <p className="text-gray-400">Review your selected posts and platforms before scheduling</p>
+              <p className="text-gray-400">Review each selected post with its social media content before scheduling</p>
             </div>
             
-            {/* Content from selected posts */}
-            {form.selectedPosts.length > 0 && (
-              <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
-                <h4 className="font-medium text-white mb-3">Content from Selected Posts:</h4>
-                <div className="space-y-3">
-                  {form.selectedPosts.map((postId) => {
-                    const post = blogPosts.find(p => p.id === postId)
-                    if (!post) return null
-                    
-                    return (
-                      <div key={post.id} className="p-3 bg-gray-600 rounded border border-gray-500">
-                        <h5 className="font-medium text-blue-300 mb-2">{post.title}</h5>
-                        <div className="space-y-2">
-                          <div>
-                            <span className="text-gray-300 font-medium">Blog Content:</span>
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">
-                              {post.body ? post.body.substring(0, 200) + '...' : 'No blog content available'}
-                            </p>
-                          </div>
-                          {post.facebook && (
-                            <div>
-                              <span className="text-gray-300 font-medium">Facebook Content:</span>
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
-                            </div>
-                          )}
-                          {post.instagram && (
-                            <div>
-                              <span className="text-gray-300 font-medium">Instagram Content:</span>
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
-                            </div>
-                          )}
-                          {post.linkedin && (
-                            <div>
-                              <span className="text-gray-300 font-medium">LinkedIn Content:</span>
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
-                            </div>
-                          )}
-                          {post.x && (
-                            <div>
-                              <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
-                            </div>
+            {/* Individual Post Reviews */}
+            {form.selectedPosts.map((postId, index) => {
+              const post = blogPosts.find(p => p.id === postId)
+              if (!post) return null
+              
+              return (
+                <div key={post.id} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                  {/* Post Header */}
+                  <div className="text-center mb-6">
+                    <h4 className="text-xl font-semibold text-white mb-2">
+                      Post {index + 1} of {form.selectedPosts.length}
+                    </h4>
+                    <h5 className="text-lg font-medium text-blue-300">{post.title}</h5>
+                  </div>
+                  
+                  {/* Post Image */}
+                  {post.image_public_url && (
+                    <div className="flex justify-center mb-6">
+                      <img 
+                        src={post.image_public_url} 
+                        alt={post.title}
+                        className="max-w-full h-auto max-h-64 rounded-lg shadow-lg border border-gray-600"
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Blog Content */}
+                  <div className="mb-6">
+                    <h6 className="font-medium text-white mb-3 flex items-center">
+                      <FileText className="w-4 h-4 mr-2 text-green-400" />
+                      Blog Content
+                    </h6>
+                    <div className="bg-gray-700 rounded-lg p-4 max-h-48 overflow-y-auto">
+                      <p className="text-gray-200 whitespace-pre-wrap text-sm">
+                        {post.body || 'No blog content available'}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Social Media Content */}
+                  <div className="mb-6">
+                    <h6 className="font-medium text-white mb-3 flex items-center">
+                      <Share2 className="w-4 h-4 mr-2 text-blue-400" />
+                      Social Media Content
+                    </h6>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {/* Facebook */}
+                      <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-2xl">📘</span>
+                          <span className="font-medium text-blue-300">Facebook</span>
+                        </div>
+                        <div className="bg-gray-800 rounded p-3 min-h-20">
+                          {post.facebook ? (
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.facebook}</p>
+                          ) : (
+                            <p className="text-gray-400 text-sm italic">No Facebook content available</p>
                           )}
                         </div>
                       </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-            
-            {/* Main Blog Post Content */}
-            {form.selectedPosts.length > 0 && (
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-blue-400" />
-                  Main Blog Post Content
-                </h4>
-                
-                {form.selectedPosts.map((postId) => {
-                  const post = blogPosts.find(p => p.id === postId);
-                  if (!post) return null;
-                  
-                  return (
-                    <div key={postId} className="space-y-4">
-                      {post.image_url && (
-                        <div className="flex justify-center">
-                          <img 
-                            src={post.image_url} 
-                            alt={post.title}
-                            className="max-w-full h-auto max-h-96 rounded-lg shadow-lg"
-                          />
-                        </div>
-                      )}
                       
-                      <div className="space-y-3">
-                        <h5 className="text-xl font-semibold text-white">{post.title}</h5>
-                        <p className="text-gray-300 text-sm">{post.excerpt}</p>
-                        
-                        <div className="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
-                          <p className="text-gray-200 whitespace-pre-wrap">{post.body}</p>
+                      {/* Instagram */}
+                      <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-2xl">📷</span>
+                          <span className="font-medium text-pink-300">Instagram</span>
+                        </div>
+                        <div className="bg-gray-800 rounded p-3 min-h-20">
+                          {post.instagram ? (
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.instagram}</p>
+                          ) : (
+                            <p className="text-gray-400 text-sm italic">No Instagram content available</p>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* LinkedIn */}
+                      <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-2xl">💼</span>
+                          <span className="font-medium text-blue-400">LinkedIn</span>
+                        </div>
+                        <div className="bg-gray-800 rounded p-3 min-h-20">
+                          {post.linkedin ? (
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.linkedin}</p>
+                          ) : (
+                            <p className="text-gray-400 text-sm italic">No LinkedIn content available</p>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* X (Twitter) */}
+                      <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-2xl">🐦</span>
+                          <span className="font-medium text-gray-300">X (Twitter)</span>
+                        </div>
+                        <div className="bg-gray-800 rounded p-3 min-h-20">
+                          {post.x ? (
+                            <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.x}</p>
+                          ) : (
+                            <p className="text-gray-400 text-sm italic">No X (Twitter) content available</p>
+                          )}
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Platform-Specific Content Previews */}
-            {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
-                  <Share2 className="w-5 h-5 mr-2 text-green-400" />
-                  Platform Content Previews
-                </h4>
-                
-                <div className="grid gap-4 md:grid-cols-2">
-                  {form.selectedTemplates.map((template) => {
-                    if (form.selectedPosts.length === 1) {
-                      // Single post - show platform-specific content
-                      const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
-                      if (!post) return null;
-                      
-                      return (
-                        <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-medium text-white">{template}</h5>
-                            <div className="flex items-center space-x-2">
-                              {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
-                              {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
-                              {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
-                              {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
-                              {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
-                            </div>
-                          </div>
-                          
-                          <div className="space-y-3">
-                            {template === 'Blog Post' ? (
-                              <div>
-                                <p className="text-sm text-gray-300 mb-2">Full blog post content will be displayed</p>
-                                <div className="bg-gray-800 rounded p-3 max-h-32 overflow-y-auto">
-                                  <p className="text-gray-200 text-sm whitespace-pre-wrap">
-                                    {(post.body || '').substring(0, 200)}...
-                                  </p>
-                                </div>
-                              </div>
-                            ) : (
-                              <div>
-                                <p className="text-sm text-gray-300 mb-2">Platform-specific content:</p>
-                                <div className="bg-gray-800 rounded p-3">
-                                  {template === 'Facebook' && post.facebook ? (
-                                    <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.facebook}</p>
-                                  ) : template === 'Instagram' && post.instagram ? (
-                                    <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.instagram}</p>
-                                  ) : template === 'LinkedIn' && post.linkedin ? (
-                                    <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.linkedin}</p>
-                                  ) : template === 'Twitter' && post.x ? (
-                                    <p className="text-gray-200 text-sm whitespace-pre-wrap">{post.x}</p>
-                                  ) : (
-                                    <p className="text-gray-400 text-sm italic">
-                                      No {template} content available for this post. 
-                                      Will use default promotional message linking to the blog.
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                  </div>
+                  
+                  {/* Post Metadata */}
+                  <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                    <h6 className="font-medium text-white mb-3 flex items-center">
+                      <Star className="w-4 h-4 mr-2 text-yellow-400" />
+                      Post Details
+                    </h6>
+                    <div className="grid gap-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Title:</span>
+                        <span className="text-gray-200">{post.title}</span>
+                      </div>
+                      {post.excerpt && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Excerpt:</span>
+                          <span className="text-gray-200">{post.excerpt}</span>
                         </div>
-                      );
-                    } else {
-                      // Multiple posts - show combined preview
-                      return (
-                        <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                          <div className="flex items-center justify-between mb-3">
-                            <h5 className="font-medium text-white">{template}</h5>
-                            <div className="flex items-center space-x-2">
-                              {template === 'Facebook' && <Facebook className="w-5 h-5 text-blue-500" />}
-                              {template === 'Instagram' && <Instagram className="w-5 h-5 text-pink-500" />}
-                              {template === 'LinkedIn' && <Linkedin className="w-5 h-5 text-blue-600" />}
-                              {template === 'Twitter' && <Twitter className="w-5 h-5 text-blue-400" />}
-                              {template === 'Blog Post' && <FileText className="w-5 h-5 text-green-500" />}
-                            </div>
-                          </div>
-                          
-                          <div className="space-y-3">
-                            <div>
-                              <p className="text-sm text-gray-300 mb-2">Combined promotional content for {form.selectedPosts.length} posts:</p>
-                              <div className="bg-gray-800 rounded p-3">
-                                <p className="text-gray-200 text-sm">
-                                  {form.selectedPosts.map((postId, index) => {
-                                    const post = blogPosts.find(p => p.id === postId);
-                                    return post ? `${index + 1}. ${post.title}` : null;
-                                  }).filter(Boolean).join('\n')}
-                                </p>
-                                <p className="text-gray-400 text-sm italic mt-2">
-                                  Will use combined promotional message linking to all selected posts.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-                  })}
+                      )}
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Content Length:</span>
+                        <span className="text-gray-200">{post.body ? post.body.length : 0} characters</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Has Image:</span>
+                        <span className="text-gray-200">{post.image_public_url ? 'Yes' : 'No'}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            })}
 
             {/* Summary Section */}
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
