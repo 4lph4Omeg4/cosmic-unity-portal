@@ -346,9 +346,6 @@ const TimelineAlchemy: React.FC = () => {
   </div>
 </section>
 
-
-     </section>
-)
 {/* Footer */}
 <footer className="relative z-10 py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-700/50">
   <div className="max-w-6xl mx-auto text-center pt-4">
@@ -358,9 +355,10 @@ const TimelineAlchemy: React.FC = () => {
   </div>
 </footer>
 
-      <Toaster />
-    </div>
-  );
+<Toaster />
+</div>
+);
 };
 
 export default TimelineAlchemy;
+
