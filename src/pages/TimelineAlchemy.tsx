@@ -23,6 +23,7 @@ import {
 import { fetchTlaPosts } from "@/services/tlaData";
 import { TlaSubscribeButton } from "@/components/TlaSubscribeButton";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
+import SupabaseDebug from "@/components/SupabaseDebug";
 
 const TimelineAlchemy: React.FC = () => {
   // ========= Config =========
@@ -32,6 +33,7 @@ const TimelineAlchemy: React.FC = () => {
   // ========= Stijlkeuze + toasts =========
   const [selectedStyle, setSelectedStyle] = useState<"krachtig" | "mystiek" | "creator">("krachtig");
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showSupabaseDebug, setShowSupabaseDebug] = useState(false);
   const { toast } = useToast();
 
   const styles = {
@@ -137,6 +139,26 @@ const TimelineAlchemy: React.FC = () => {
     );
   }
 
+  // Show Supabase Debug if requested
+  if (showSupabaseDebug) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 p-8">
+        <div className="container mx-auto">
+          <div className="mb-8">
+            <Button
+              variant="outline"
+              onClick={() => setShowSupabaseDebug(false)}
+              className="bg-white/10 border-white/50 text-white hover:bg-white/20"
+            >
+              ← Terug naar Timeline Alchemy
+            </Button>
+          </div>
+          <SupabaseDebug />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-12">
       {/* Debug Header - Always show for now */}
@@ -162,6 +184,14 @@ const TimelineAlchemy: React.FC = () => {
           className="bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30"
         >
           🎯 Start Onboarding
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowSupabaseDebug(!showSupabaseDebug)}
+          className="bg-blue-500/20 border-blue-500/50 text-blue-400 hover:bg-blue-500/30"
+        >
+          🔧 Supabase Debug
         </Button>
       </div>
       
