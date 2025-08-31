@@ -770,27 +770,8 @@ export default function TimelineAlchemyPreviewWizard() {
               Choose which social platform you want to post to. Each platform will reference your main blog post.
             </p>
             
-            {/* Show selected posts info */}
-            {form.selectedPosts.length > 0 && (
-              <div className="p-4 bg-blue-900/20 rounded-lg mb-4 border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
-                <div className="space-y-2">
-                  {form.selectedPosts.map((postId) => {
-                    const post = blogPosts.find(p => p.id === postId)
-                    return post ? (
-                      <div key={post.id} className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-blue-400" />
-                        <span className="text-sm text-blue-200">{post.title}</span>
-                      </div>
-                    ) : null
-                  })}
-                </div>
-              </div>
-            )}
-           
             <div className="grid gap-3">
               {templates.map((template) => {
-                const selectedPost = blogPosts.find(p => p.id === form.selectedPosts[0])
                 const isSelected = form.selectedTemplates.includes(template)
                 
                 return (
@@ -816,250 +797,19 @@ export default function TimelineAlchemyPreviewWizard() {
                         {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
                         {template === 'Blog Post' && <span className="text-2xl">📝</span>}
                         {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                        <div className="flex-1">
+                        <div>
                           <span className="font-medium text-white">{template}</span>
-                          {template === 'Facebook' && <p className="text-sm text-gray-300">Post to Facebook with link to main blog</p>}
-                          {template === 'Instagram' && <p className="text-sm text-gray-300">Post to Instagram with link to main blog</p>}
-                          {template === 'X (Twitter)' && <p className="text-sm text-gray-300">Post to X (Twitter) with link to main blog</p>}
-                          {template === 'LinkedIn' && <p className="text-sm text-gray-300">Post to LinkedIn with link to main blog</p>}
-                          {template === 'Blog Post' && <p className="text-sm text-gray-300">Create a new blog post</p>}
-                          {template === 'Custom Post' && <p className="text-sm text-gray-300">Create custom content</p>}
-                          
-                          {/* Show template preview if posts are selected */}
-                          {form.selectedPosts.length > 0 && (
-                            <div className="mt-2 p-2 bg-gray-600 rounded text-xs">
-                              {form.selectedPosts.length === 1 ? (
-                                // Single post preview
-                                <>
-                                  {template === 'Facebook' && selectedPost.facebook && (
-                                    <div>
-                                      <p className="font-medium text-blue-400">Facebook Content:</p>
-                                      <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.facebook}</p>
-                                    </div>
-                                  )}
-                                  {template === 'Instagram' && selectedPost.instagram && (
-                                    <div>
-                                      <p className="font-medium text-pink-400">Instagram Content:</p>
-                                      <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.instagram}</p>
-                                    </div>
-                                  )}
-                                  {template === 'X (Twitter)' && selectedPost.x && (
-                                    <div>
-                                      <p className="font-medium text-gray-300">X (Twitter) Content:</p>
-                                      <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.x}</p>
-                                    </div>
-                                  )}
-                                  {template === 'LinkedIn' && selectedPost.linkedin && (
-                                    <div>
-                                      <p className="font-medium text-blue-400">LinkedIn Content:</p>
-                                      <p className="text-gray-200 whitespace-pre-wrap break-all">{selectedPost.linkedin}</p>
-                                    </div>
-                                  )}
-                                  {template === 'Blog Post' && (
-                                    <div>
-                                      <p className="font-medium text-green-400">Blog Content:</p>
-                                      <p className="text-gray-200 whitespace-pre-wrap">{(selectedPost.body || '').substring(0, 200)}...</p>
-                                    </div>
-                                  )}
-                                  {template === 'Custom Post' && (
-                                    <div>
-                                      <p className="font-medium text-purple-400">Custom Content:</p>
-                                      <p className="text-gray-200">Will use original post content</p>
-                                    </div>
-                                  )}
-                                </>
-                              ) : (
-                                // Multiple posts preview
-                                <div>
-                                  <p className="font-medium text-purple-400">Multiple Posts Selected:</p>
-                                  <p className="text-gray-200">
-                                    {form.selectedPosts.length} posts will be promoted together
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          )}
+                          <p className="text-sm text-gray-300">Post to {template}</p>
                         </div>
-                        {isSelected && (
-                          <CheckCircle className="w-5 h-5 text-blue-400" />
-                        )}
                       </div>
+                      {isSelected && (
+                        <CheckCircle className="w-5 h-5 text-blue-400" />
+                      )}
                     </div>
                   </div>
                 )
               })}
             </div>
-            
-            {/* Template info */}
-            {form.selectedTemplates.length > 0 && (
-              <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Selected Platforms: {form.selectedTemplates.length}</h4>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {form.selectedTemplates.map((template, index) => (
-                    <span key={index} className="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">
-                      {template}
-                    </span>
-                  ))}
-                </div>
-                {form.selectedPosts.length > 0 && (
-                  <div className="text-sm text-blue-200">
-                    Will create: {form.selectedPosts.length} separate preview{form.selectedPosts.length !== 1 ? 's' : ''}
-                    {form.selectedPosts.length > 1 && (
-                      <div className="mt-1 text-xs text-blue-300">
-                        {form.selectedPosts.map((postId, index) => {
-                          const post = blogPosts.find(p => p.id === postId)
-                          return post ? `Preview ${index + 1}: ${post.title}` : null
-                        }).filter(Boolean).join(', ')}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-           
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-white">Content Message</label>
-              
-              {/* Show selected content and image - always load if post is selected */}
-              {form.selectedPosts.length > 0 && (
-                <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
-                  <h4 className="font-medium text-blue-300 mb-3">📊 Selected Content</h4>
-                  
-                  {/* Post Image */}
-                  {(() => {
-                    const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                    if (!post) return null
-                    
-                    const imageUrl = post.image_public_url || post.image_url || post.featured_image
-                    if (!imageUrl) return null
-                    
-                    return (
-                      <div className="mb-4 p-3 bg-gray-700 rounded border border-gray-600">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-green-300 font-medium">📷 Featured Image:</span>
-                          <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Included</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <img 
-                            src={imageUrl} 
-                            alt={post.title || 'Post image'}
-                            className="w-24 h-24 object-cover rounded-lg border border-gray-600"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none'
-                            }}
-                          />
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-300 font-medium">{post.title || 'Untitled Post'}</p>
-                            <p className="text-xs text-gray-400">Image will be included with your post</p>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })()}
-                  
-
-                  
-                  {/* Platform-Specific Content Preview */}
-                  {form.selectedTemplates.length > 0 && (
-                    <div className="space-y-3">
-                      <h5 className="font-medium text-blue-300 mb-2">Platform-Specific Content:</h5>
-                      {form.selectedTemplates.map((template, index) => {
-                        const post = blogPosts.find(p => p.id === form.selectedPosts[0])
-                        if (!post) return null
-                        
-                        return (
-                          <div key={index} className="p-3 bg-gray-700 rounded border border-gray-600">
-                            <div className="flex items-center gap-2 mb-2">
-                              {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                              {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                              {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                              {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                              {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                              {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                              <span className="font-medium text-white">{template}</span>
-                            </div>
-                            
-                            {/* Show platform-specific content */}
-                            {template === 'Facebook' && post.facebook && (
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
-                            )}
-                            {template === 'Instagram' && post.instagram && (
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
-                            )}
-                            {template === 'X (Twitter)' && post.x && (
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
-                            )}
-                            {template === 'LinkedIn' && post.linkedin && (
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
-                            )}
-                            {template === 'Blog Post' && post.body && (
-                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{(post.body || '').substring(0, 200)}...</p>
-                            )}
-                            {template === 'Custom Post' && (
-                              <p className="text-sm text-gray-200">Will use original post content</p>
-                            )}
-                            
-                            {/* Show if no content available */}
-                            {!post.facebook && template === 'Facebook' && (
-                              <p className="text-sm text-gray-400 italic">No Facebook content available</p>
-                            )}
-                            {!post.instagram && template === 'Instagram' && (
-                              <p className="text-sm text-gray-400 italic">No Instagram content available</p>
-                            )}
-                            {!post.x && template === 'X (Twitter)' && (
-                              <p className="text-sm text-gray-400 italic">No X (Twitter) content available</p>
-                            )}
-                            {!post.linkedin && template === 'LinkedIn' && (
-                              <p className="text-sm text-gray-400 italic">No LinkedIn content available</p>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              <div className="space-y-3">
-              <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Content Information</h4>
-                <p className="text-sm text-blue-200">
-                  Each selected post will use its own original content. No editing is needed - the posts will be presented as-is to the client for selection.
-                </p>
-              </div>
-            </div>
-            
-            {form.selectedPosts.length > 0 && (
-              <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Preview Preview:</h4>
-                <p className="text-xs text-blue-200 mb-3">
-                  Each selected post will get its own separate preview with its original content. No editing needed.
-                </p>
-                <div className="space-y-3">
-                  {form.selectedPosts.map((postId, index) => {
-                    const post = blogPosts.find(p => p.id === postId)
-                    if (!post) return null
-                    
-                    return (
-                      <div key={post.id} className="p-3 bg-blue-900/30 rounded border border-blue-600">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Star className="w-4 h-4 text-blue-400" />
-                          <span className="text-sm font-medium text-blue-200">Preview {index + 1}: {post.title}</span>
-                        </div>
-                        <div className="text-xs text-blue-300 mb-2">
-                          This post will get its own preview entry with:
-                        </div>
-                        <div className="text-xs text-blue-100 bg-blue-900/50 p-2 rounded space-y-1">
-                          <div>• Original post content: {post.body ? post.body.substring(0, 50) + '...' : 'No content'}</div>
-                          <div>• Platform-specific content (if available)</div>
-                          <div>• Original post title and metadata</div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
           </div>
         )
 
