@@ -27,7 +27,7 @@ import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 const TimelineAlchemy: React.FC = () => {
   // ========= Config =========
   const PRICE_ID = "price_1S1VMWFlYXjX03EzHKNwtkWW"; // <-- jouw Stripe Price ID
-  const ORG_ID = "timeline-alchemy"; // <-- evt. dynamisch maken via context
+  const TLA_ORG_ID = "timeline-alchemy"; // <-- hoofdorganisatie voor admin functies
 
   // ========= Stijlkeuze + toasts =========
   const [selectedStyle, setSelectedStyle] = useState<"krachtig" | "mystiek" | "creator">("krachtig");
@@ -342,7 +342,6 @@ const TimelineAlchemy: React.FC = () => {
       </p>
 
       <TlaSubscribeButton
-        orgId={ORG_ID}
         priceId={PRICE_ID}
         variant="trust"
       >
