@@ -87,9 +87,6 @@ function App() {
   )
 }
 
-export default App
-
-
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
