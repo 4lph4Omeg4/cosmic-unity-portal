@@ -9,7 +9,6 @@ import { Calendar, User, ArrowRight } from 'lucide-react';
 import { fetchBlogArticles, fetchAllBlogs, testConnection } from '@/integrations/shopify/client';
 import { useLanguage } from '@/hooks/useLanguage';
 import { getLocalizedBlogContent } from '@/utils/contentLocalization';
-import StorageImage from '@/components/StorageImage';
 
 interface BlogArticle {
   id: string;
@@ -34,6 +33,7 @@ const Blog = () => {
   const { language, t } = useLanguage();
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [blogImages, setBlogImages] = useState<{[key: string]: string}>({});
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -56,6 +56,7 @@ const Blog = () => {
         // Use existing Dutch blog handles but pass language for content translation
         const blogHandles = ['ego-to-eden', 'eenheid-gezien-door-het-enkele-oog'];
         let allArticles: BlogArticle[] = [];
+        const newBlogImages: {[key: string]: string} = {};
 
         for (const blogHandle of blogHandles) {
           try {
@@ -66,6 +67,11 @@ const Blog = () => {
               articlesFound: fetchedArticles.length,
               articles: fetchedArticles.map(a => ({ title: a.title, handle: a.handle }))
             });
+
+            // Get the first article's image as the blog header image
+            if (fetchedArticles.length > 0 && fetchedArticles[0].image?.url) {
+              newBlogImages[blogHandle] = fetchedArticles[0].image.url;
+            }
 
             // Add blog handle info to articles for correct linking
             const articlesWithBlogHandle = fetchedArticles.map(article => ({
@@ -78,6 +84,9 @@ const Blog = () => {
             console.error(`Error fetching from blog ${blogHandle}:`, error);
           }
         }
+        
+        // Set blog images
+        setBlogImages(newBlogImages);
         
         // Sort by publication date (newest first) and take top 6
         allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
@@ -138,12 +147,17 @@ const Blog = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
               <div className="aspect-video overflow-hidden">
-                <StorageImage
-                  bucket="blog-images"
-                  path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
-                  alt="Ego to Eden - Cosmic Journey"
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+                {blogImages['ego-to-eden'] ? (
+                  <img
+                    src={blogImages['ego-to-eden']}
+                    alt="Ego to Eden - Cosmic Journey"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center">
+                    <div className="text-muted-foreground">Loading...</div>
+                  </div>
+                )}
               </div>
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
@@ -169,12 +183,17 @@ const Blog = () => {
 
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
               <div className="aspect-video overflow-hidden">
-                <StorageImage
-                  bucket="blog-images"
-                  path="0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
-                  alt="Unity - Seen Through the Single Eye"
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+                {blogImages['eenheid-gezien-door-het-enkele-oog'] ? (
+                  <img
+                    src={blogImages['eenheid-gezien-door-het-enkele-oog']}
+                    alt="Unity - Seen Through the Single Eye"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center">
+                    <div className="text-muted-foreground">Loading...</div>
+                  </div>
+                )}
               </div>
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
