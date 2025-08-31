@@ -234,47 +234,43 @@ export default function TimelineAlchemyPreviewWizard() {
         return
       }
 
-      // Always create a new idea for the preview
-      const { data: ideaData, error: ideaError } = await supabase
-        .from('ideas')
-        .insert({
-          title: form.selectedPosts.length > 0 
-            ? `Preview: ${form.selectedPosts.length > 1 ? `${form.selectedPosts.length} Posts` : blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Blog Post'}`
-            : `Preview: ${form.selectedTemplates.join(', ')}`,
-          description: `Preview for ${form.selectedPosts.length} post${form.selectedPosts.length !== 1 ? 's' : ''}`,
-          status: 'draft',
-          created_by: user.id,
-          metadata: {
-            template: form.selectedTemplates.join(', '),
-            channel: form.selectedTemplates.join(', '),
-            selectedPosts: form.selectedPosts,
-            originalPostTitles: form.selectedPosts.length > 0 
-              ? form.selectedPosts.map(postId => blogPosts.find(p => p.id === postId)?.title).filter(Boolean)
-              : null
-          }
-        })
-        .select()
-        .single()
-
-      if (ideaError) {
-        console.error('Error creating idea:', ideaError)
-        alert('Failed to create idea')
-        return
-      }
-      
-      const ideaId = ideaData.id
-
-      // Combine date and time for scheduled_at
-      let scheduledAt = null
-      if (form.scheduledDate && form.scheduledTime) {
-        const scheduledDateTime = new Date(`${form.scheduledDate}T${form.scheduledTime}`)
-        scheduledAt = scheduledDateTime.toISOString()
-      }
-
       // Create previews for each selected post
       const previewPromises = form.selectedPosts.map(async (postId) => {
         const post = blogPosts.find(p => p.id === postId)
+        if (!post) return null
         
+        // Create a separate idea for each post
+        const { data: ideaData, error: ideaError } = await supabase
+          .from('ideas')
+          .insert({
+            title: `Preview: ${post.title || 'Blog Post'}`,
+            description: `Preview for ${post.title || 'Blog Post'}`,
+            status: 'draft',
+            created_by: user.id,
+            metadata: {
+              template: form.selectedTemplates.join(', '),
+              channel: form.selectedTemplates.join(', '),
+              selectedPosts: [postId], // Individual post for this idea
+              originalPostTitle: post.title || 'Unknown Post'
+            }
+          })
+          .select()
+          .single()
+
+        if (ideaError) {
+          console.error('Error creating idea for post:', postId, ideaError)
+          return { error: ideaError }
+        }
+        
+        const ideaId = ideaData.id
+
+        // Combine date and time for scheduled_at
+        let scheduledAt = null
+        if (form.scheduledDate && form.scheduledTime) {
+          const scheduledDateTime = new Date(`${form.scheduledDate}T${form.scheduledTime}`)
+          scheduledAt = scheduledDateTime.toISOString()
+        }
+
         // Use the post's original content based on selected templates
         let postContent = post?.body || ''
         if (form.selectedTemplates.length > 0 && post) {
