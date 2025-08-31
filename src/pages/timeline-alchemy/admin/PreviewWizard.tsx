@@ -51,7 +51,6 @@ interface PreviewForm {
   step: number
   selectedClient: string
   selectedTemplates: string[]
-  content: string
   scheduledDate: string
   scheduledTime: string
   selectedPosts: string[]
@@ -77,7 +76,6 @@ export default function TimelineAlchemyPreviewWizard() {
     step: 1,
     selectedClient: '',
     selectedTemplates: [],
-    content: '',
     scheduledDate: '',
     scheduledTime: '',
     selectedPosts: [],
@@ -243,7 +241,7 @@ export default function TimelineAlchemyPreviewWizard() {
           title: form.selectedPosts.length > 0 
             ? `Preview: ${form.selectedPosts.length > 1 ? `${form.selectedPosts.length} Posts` : blogPosts.find(p => p.id === form.selectedPosts[0])?.title || 'Blog Post'}`
             : `Preview: ${form.selectedTemplates.join(', ')}`,
-          description: form.content.substring(0, 200),
+          description: `Preview for ${form.selectedPosts.length} post${form.selectedPosts.length !== 1 ? 's' : ''}`,
           status: 'draft',
           created_by: user.id,
           metadata: {
@@ -417,10 +415,10 @@ export default function TimelineAlchemyPreviewWizard() {
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Select Blog Posts</h3>
-                          <p className="text-sm text-gray-300 mb-4">
-                Choose one or more blog posts you want to promote across social platforms. 
-                Each selected post will get its own separate preview entry.
-              </p>
+            <p className="text-sm text-gray-300 mb-4">
+              Choose one or more blog posts you want to promote across social platforms. 
+              Each selected post will get its own separate preview entry.
+            </p>
             
             {/* Multiple Selection Info */}
             <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
@@ -866,7 +864,7 @@ export default function TimelineAlchemyPreviewWizard() {
                                   {template === 'Custom Post' && (
                                     <div>
                                       <p className="font-medium text-purple-400">Custom Content:</p>
-                                      <p className="text-gray-200">Write your own content</p>
+                                      <p className="text-gray-200">Will use original post content</p>
                                     </div>
                                   )}
                                 </>
@@ -998,7 +996,7 @@ export default function TimelineAlchemyPreviewWizard() {
                               <p className="text-sm text-gray-200 whitespace-pre-wrap">{(post.body || '').substring(0, 200)}...</p>
                             )}
                             {template === 'Custom Post' && (
-                              <p className="text-sm text-gray-200">Write your own custom content below</p>
+                              <p className="text-sm text-gray-200">Will use original post content</p>
                             )}
                             
                             {/* Show if no content available */}
@@ -1074,7 +1072,7 @@ export default function TimelineAlchemyPreviewWizard() {
             </div>
             
             {/* Content from selected posts */}
-            {form.selectedPosts.length > 0 && form.selectedTemplate && (
+            {form.selectedPosts.length > 0 && (
               <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
                 <h4 className="font-medium text-white mb-3">Content from Selected Posts:</h4>
                 <div className="space-y-3">
@@ -1085,72 +1083,38 @@ export default function TimelineAlchemyPreviewWizard() {
                     return (
                       <div key={post.id} className="p-3 bg-gray-600 rounded border border-gray-500">
                         <h5 className="font-medium text-blue-300 mb-2">{post.title}</h5>
-                        {(() => {
-                          switch (form.selectedTemplate) {
-                            case 'Facebook':
-                              return (
-                                <div>
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-gray-300 font-medium">Facebook Content:</span>
-                                    <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
-                                  </div>
-                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook || 'No Facebook content available'}</p>
-                                </div>
-                              )
-                            case 'Instagram':
-                              return (
-                                <div>
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-pink-300 font-medium">Instagram Content:</span>
-                                    <span className="px-2 py-1 bg-pink-900 text-pink-200 text-xs rounded-full">Selected</span>
-                                  </div>
-                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram || 'No Instagram content available'}</p>
-                                </div>
-                              )
-                            case 'X (Twitter)':
-                              return (
-                                <div>
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
-                                    <span className="px-2 py-1 bg-gray-900 text-gray-200 text-xs rounded-full">Selected</span>
-                                  </div>
-                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x || 'No X content available'}</p>
-                                </div>
-                              )
-                            case 'LinkedIn':
-                              return (
-                                <div>
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-blue-300 font-medium">LinkedIn Content:</span>
-                                    <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">Selected</span>
-                                  </div>
-                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin || 'No LinkedIn content available'}</p>
-                                </div>
-                              )
-                            case 'Blog Post':
-                              return (
-                                <div>
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-green-300 font-medium">Blog Content:</span>
-                                    <span className="px-2 py-1 bg-green-900 text-green-200 text-xs rounded-full">Selected</span>
-                                  </div>
-                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body || 'No blog content available'}</p>
-                                </div>
-                              )
-                            case 'Custom Post':
-                              return (
-                                <div>
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-purple-300 font-medium">Custom Content:</span>
-                                    <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">Write Your Own</span>
-                                  </div>
-                                  <p className="text-sm text-gray-200">You can write your own custom content below</p>
-                                </div>
-                              )
-                            default:
-                              return <p className="text-gray-400">Please select a template</p>
-                          }
-                        })()}
+                        <div className="space-y-2">
+                          <div>
+                            <span className="text-gray-300 font-medium">Blog Content:</span>
+                            <p className="text-sm text-gray-200 whitespace-pre-wrap">
+                              {post.body ? post.body.substring(0, 200) + '...' : 'No blog content available'}
+                            </p>
+                          </div>
+                          {post.facebook && (
+                            <div>
+                              <span className="text-gray-300 font-medium">Facebook Content:</span>
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
+                            </div>
+                          )}
+                          {post.instagram && (
+                            <div>
+                              <span className="text-gray-300 font-medium">Instagram Content:</span>
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
+                            </div>
+                          )}
+                          {post.linkedin && (
+                            <div>
+                              <span className="text-gray-300 font-medium">LinkedIn Content:</span>
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
+                            </div>
+                          )}
+                          {post.x && (
+                            <div>
+                              <span className="text-gray-300 font-medium">X (Twitter) Content:</span>
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )
                   })}
@@ -1643,8 +1607,7 @@ export default function TimelineAlchemyPreviewWizard() {
               disabled={
                 (form.step === 1 && !form.selectedClient) ||
                 (form.step === 2 && form.selectedPosts.length === 0) ||
-                (form.step === 3 && form.selectedTemplates.length === 0) ||
-                (form.step === 4 && !form.content.trim())
+                (form.step === 3 && form.selectedTemplates.length === 0)
               }
               className="flex items-center gap-2"
             >
