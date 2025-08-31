@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Sparkles, Shield, Clock, Star } from "lucide-react";
+import TlaSubscribeButton from "@/components/tla/TlaSubscribeButton"; // pad aanpassen indien anders
 
 // Router & data
 import { useSearchParams } from "react-router-dom";
@@ -211,29 +215,136 @@ const TimelineAlchemy: React.FC = () => {
         </div>
       </section>
 
-      {/* Dynamische posts */}
-      <section className="max-w-3xl mx-auto px-6 pb-10">
-        <h2 className="text-3xl font-bold tracking-tight">Laatste posts</h2>
-        <div className="mt-6 rounded-2xl border border-slate-600/30 bg-slate-800/30 backdrop-blur p-5 shadow-sm">
-          <h3 className="text-xl font-semibold text-white">Posts</h3>
-          {!ready ? (
-            <div className="mt-4 text-gray-400">Laden…</div>
-          ) : err ? (
-            <div className="mt-4 p-3 rounded bg-yellow-900/30 text-yellow-200">{err}</div>
-          ) : items.length === 0 ? (
-            <div className="mt-4 text-gray-400">Geen posts gevonden.</div>
-          ) : (
-            <ul className="mt-4 space-y-2">
-              {items.map((p: any) => (
-                <li key={p.id} className="p-3 border rounded bg-slate-800/40">
-                  <div className="font-semibold text-white">{p.title ?? "(zonder titel)"}</div>
-                  <div className="text-sm text-slate-400">
-                    {p.created_at ? new Date(p.created_at).toLocaleString() : ""}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+{/* Dynamische posts */}
+<section className="max-w-3xl mx-auto px-6 pb-10">
+  <h2 className="text-3xl font-bold tracking-tight">Laatste posts</h2>
+  <div className="mt-6 rounded-2xl border border-slate-600/30 bg-slate-800/30 backdrop-blur p-5 shadow-sm">
+    <h3 className="text-xl font-semibold text-white">Posts</h3>
+    {!ready ? (
+      <div className="mt-4 text-gray-400">Laden…</div>
+    ) : err ? (
+      <div className="mt-4 p-3 rounded bg-yellow-900/30 text-yellow-200">{err}</div>
+    ) : items.length === 0 ? (
+      <div className="mt-4 text-gray-400">Geen posts gevonden.</div>
+    ) : (
+      <ul className="mt-4 space-y-2">
+        {items.map((p: any) => (
+          <li key={p.id} className="p-3 border rounded bg-slate-800/40">
+            <div className="font-semibold text-white">{p.title ?? "(zonder titel)"}</div>
+            <div className="text-sm text-slate-400">
+              {p.created_at ? new Date(p.created_at).toLocaleString() : ""}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+{/* FAQ Section */}
+<section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+  <div className="max-w-4xl mx-auto">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+        Veelgestelde vragen
+      </h2>
+      <p className="text-xl text-slate-300">
+        Alles wat je moet weten over Timeline Alchemy
+      </p>
+    </div>
+
+    <div className="space-y-6">
+      {[
+        {
+          question: "Kan ik feedback geven op de blog?",
+          answer: "Ja. Je krijgt een concept; wij verwerken je feedback en publiceren gepland.",
+        },
+        {
+          question: "Welke platforms dekken jullie?",
+          answer: "Minimaal: Instagram, Facebook, X, LinkedIn. Uitbreiden kan.",
+        },
+        {
+          question: "Moet ik zelf nog posten?",
+          answer: "Hoeft niet. Wij plannen en publiceren (met jouw toestemming/verbindingen).",
+        },
+        {
+          question: "Wat als mijn niche 'anders' is?",
+          answer: "Perfect. We trainen op jouw bronnen, glossarium en voorbeelden.",
+        },
+        {
+          question: "Kan ik pauzeren of upgraden?",
+          answer: "Ja. Via Stripe kun je pauzeren, wijzigen of annuleren.",
+        },
+      ].map((faq, index) => (
+        <Card key={index} className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/30">
+          <CardHeader>
+            <CardTitle className="text-white text-lg">{faq.question}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-slate-300">{faq.answer}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* Trust / CTA Section */}
+<section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
+  <div className="max-w-4xl mx-auto text-center">
+    <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-8 md:p-12">
+      <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
+        Klaar om te starten?
+      </h3>
+      <p className="text-slate-300 mb-8 text-lg">
+        Join de creators die al hun content stress hebben vervangen door Timeline Alchemy
+      </p>
+
+      <TlaSubscribeButton
+        orgId="timeline-alchemy"
+        priceId="price_timeline_alchemy_monthly" // ⚠️ vervang met je echte Stripe price ID
+        variant="trust"
+      >
+        <span className="flex items-center justify-center">
+          {(currentStyle?.cta ?? "Start je maandelijkse transformatie")}
+          <ArrowRight className="w-5 h-5 ml-2" />
+        </span>
+      </TlaSubscribeButton>
+
+      {/* Onboarding Button */}
+      <div className="mt-4">
+        <Button
+          variant="outline"
+          size="lg"
+          className="bg-transparent border-amber-400/50 text-amber-400 hover:bg-amber-400/10 hover:border-amber-400 transition-all duration-200"
+          onClick={() => (window.location.href = "/onboarding")}
+        >
+          <Sparkles className="w-5 h-5 mr-2" />
+          Start Onboarding
+        </Button>
+      </div>
+
+      {/* Trust cues */}
+      <div className="mt-8 pt-8 border-t border-slate-600/30">
+        <div className="flex flex-wrap justify-center gap-6 text-sm text-slate-400">
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-green-400" />
+            <span>SSL & Stripe — veilig en transparant</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-blue-400" />
+            <span>Maandelijks opzegbaar. Eerlijk is heilig</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Star className="w-4 h-4 text-amber-400" />
+            <span>Creator-eigen data, altijd</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
         </div>
       </section>
 

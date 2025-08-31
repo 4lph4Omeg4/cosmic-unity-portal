@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2, Eye, Edit, Trash2 } from 'lucide-react'
+import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2, Eye, Edit, Trash2, Sparkles, Play } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -252,6 +252,14 @@ export default function TimelineAlchemyAdminDashboard() {
           <Button onClick={refreshData} variant="outline" className="flex items-center gap-2" disabled={loading}>
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
+          </Button>
+          <Button onClick={() => navigate('/onboarding/demo')} variant="outline" className="bg-green-600 hover:bg-green-700 text-white border-green-600">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Test Onboarding
+          </Button>
+          <Button onClick={() => navigate('/onboarding/test')} variant="outline" className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600">
+            <Play className="w-4 h-4 mr-2" />
+            Test Page
           </Button>
         </div>
       </div>
