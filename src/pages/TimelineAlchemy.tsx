@@ -215,32 +215,6 @@ const TimelineAlchemy: React.FC = () => {
         </div>
       </section>
 
-{/* Dynamische posts */}
-<section className="max-w-3xl mx-auto px-6 pb-10">
-  <h2 className="text-3xl font-bold tracking-tight">Laatste posts</h2>
-  <div className="mt-6 rounded-2xl border border-slate-600/30 bg-slate-800/30 backdrop-blur p-5 shadow-sm">
-    <h3 className="text-xl font-semibold text-white">Posts</h3>
-    {!ready ? (
-      <div className="mt-4 text-gray-400">Laden…</div>
-    ) : err ? (
-      <div className="mt-4 p-3 rounded bg-yellow-900/30 text-yellow-200">{err}</div>
-    ) : items.length === 0 ? (
-      <div className="mt-4 text-gray-400">Geen posts gevonden.</div>
-    ) : (
-      <ul className="mt-4 space-y-2">
-        {items.map((p: any) => (
-          <li key={p.id} className="p-3 border rounded bg-slate-800/40">
-            <div className="font-semibold text-white">{p.title ?? "(zonder titel)"}</div>
-            <div className="text-sm text-slate-400">
-              {p.created_at ? new Date(p.created_at).toLocaleString() : ""}
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-</section>
-
 {/* FAQ Section */}
 <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
   <div className="max-w-4xl mx-auto">
