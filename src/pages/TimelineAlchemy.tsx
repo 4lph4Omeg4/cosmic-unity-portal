@@ -89,6 +89,7 @@ const TimelineAlchemy: React.FC = () => {
 
   // Stripe redirect feedback (?session=success | ?session=cancel)
   useEffect(() => {
+    console.log('TimelineAlchemy - useEffect triggered');
     const session = searchParams.get("session");
     console.log('TimelineAlchemy - Session parameter:', session);
     console.log('TimelineAlchemy - ORG_ID:', ORG_ID);
@@ -117,6 +118,16 @@ const TimelineAlchemy: React.FC = () => {
       });
     }
   }, [searchParams, toast]);
+
+  // Alternative redirect method - check on every render
+  const session = searchParams.get("session");
+  if (session === "success") {
+    console.log('TimelineAlchemy - Success detected on render, immediate redirect...');
+    // Use a more immediate redirect
+    setTimeout(() => {
+      window.location.href = '/onboarding?session=success&org_id=' + ORG_ID;
+    }, 100);
+  }
 
   // ========= Render =========
   return (
