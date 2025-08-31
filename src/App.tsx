@@ -48,6 +48,7 @@ import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
+
 // Analytics (optioneel) — werkt in Vite/React
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
@@ -56,28 +57,6 @@ import { Analytics } from "@vercel/analytics/react";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import OnboardingDemo from "@/components/onboarding/OnboardingDemo";
 import OnboardingTest from "@/pages/OnboardingTest";
-
-// Voorbeeld App component (Vite/React)
-export default function App() {
-  return (
-    <>
-      {/* Onboarding sectie — kies wat je wil tonen */}
-      <main className="min-h-screen bg-background text-foreground">
-        <div className="container mx-auto py-10">
-          {/* Zet hier jouw gewenste component */}
-          <OnboardingWizard />
-          {/* <OnboardingDemo /> */}
-          {/* <OnboardingTest /> */}
-        </div>
-      </main>
-
-      {/* Analytics onderaan, opt-in */}
-      <Analytics />
-      <SpeedInsights />
-    </>
-  );
-}
-
 
 const queryClient = new QueryClient();
 
@@ -92,76 +71,73 @@ const App: React.FC = () => (
             <NewsletterPopup delay={20000} exitIntent={true} />
 
             <BrowserRouter>
-<TooltipProvider>
-  <BrowserRouter>
-    <Routes>
-      {/* Publieke routes */}
-      <Route path="/" element={<Index />} />
-      <Route path="/shop" element={<Shop />} />
-      <Route path="/shop/collection/:collection" element={<Collection />} />
-      <Route path="/product/:handle" element={<Product />} />
-      <Route path="/products/:productId" element={<ProductPage />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/community" element={<Community />} />
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/user/:userId" element={<UserProfile />} />
-      <Route path="/friends" element={<Friends />} />
-      <Route path="/messages" element={<Messages />} />
-      <Route path="/messages/:userId" element={<Messages />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/ego-to-eden" element={<EgoToEden />} />
-      <Route path="/unity" element={<Unity />} />
-      <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
-      <Route path="/passport" element={<Passport />} />
+              <Routes>
+                {/* Publieke routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/shop/collection/:collection" element={<Collection />} />
+                <Route path="/product/:handle" element={<Product />} />
+                <Route path="/products/:productId" element={<ProductPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/user/:userId" element={<UserProfile />} />
+                <Route path="/friends" element={<Friends />} />
+                <Route path="/messages" element={<Messages />} />
+                <Route path="/messages/:userId" element={<Messages />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/ego-to-eden" element={<EgoToEden />} />
+                <Route path="/unity" element={<Unity />} />
+                <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
+                <Route path="/passport" element={<Passport />} />
 
-      {/* Policies (NL/EN/DE) */}
-      <Route path="/privacybeleid" element={<PrivacyPolicy />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/datenschutz" element={<PrivacyPolicy />} />
-      <Route path="/retourbeleid" element={<RefundPolicy />} />
-      <Route path="/refund-policy" element={<RefundPolicy />} />
-      <Route path="/rückgaberecht" element={<RefundPolicy />} />
-      <Route path="/verzendbeleid" element={<ShippingPolicy />} />
-      <Route path="/shipping-policy" element={<ShippingPolicy />} />
-      <Route path="/versandrichtlinien" element={<ShippingPolicy />} />
-      <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
-      <Route path="/terms-of-service" element={<TermsOfService />} />
-      <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
+                {/* Policies (NL/EN/DE) */}
+                <Route path="/privacybeleid" element={<PrivacyPolicy />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/datenschutz" element={<PrivacyPolicy />} />
+                <Route path="/retourbeleid" element={<RefundPolicy />} />
+                <Route path="/refund-policy" element={<RefundPolicy />} />
+                <Route path="/rückgaberecht" element={<RefundPolicy />} />
+                <Route path="/verzendbeleid" element={<ShippingPolicy />} />
+                <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                <Route path="/versandrichtlinien" element={<ShippingPolicy />} />
+                <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
 
-      <Route path="/digitempel" element={<UnderConstruction />} />
+                <Route path="/digitempel" element={<UnderConstruction />} />
 
-      {/* Timeline Alchemy entry (Stripe redirect-friendly) */}
-      <Route path="/timeline-alchemy" element={<TimelineAlchemy />} />
-      <Route path="/tla" element={<TimelineAlchemy />} />
+                {/* Timeline Alchemy entry (Stripe redirect-friendly) */}
+                <Route path="/timeline-alchemy" element={<TimelineAlchemy />} />
+                <Route path="/tla" element={<TimelineAlchemy />} />
 
-      {/* Timeline Alchemy Admin */}
-      <Route path="/timeline-alchemy/admin/dashboard" element={<TimelineAlchemyDashboard />} />
-      <Route path="/timeline-alchemy/admin/ideas" element={<TimelineAlchemyIdeas />} />
-      <Route path="/timeline-alchemy/admin/preview-wizard" element={<TimelineAlchemyPreviewWizard />} />
+                {/* Timeline Alchemy Admin Pages */}
+                <Route path="/timeline-alchemy/admin/dashboard" element={<TimelineAlchemyDashboard />} />
+                <Route path="/timeline-alchemy/admin/ideas" element={<TimelineAlchemyIdeas />} />
+                <Route path="/timeline-alchemy/admin/preview-wizard" element={<TimelineAlchemyPreviewWizard />} />
 
-      {/* Timeline Alchemy Client */}
-      <Route path="/timeline-alchemy/client/my-previews" element={<TimelineAlchemyMyPreviews />} />
-      <Route path="/timeline-alchemy/client/social-connections" element={<TimelineAlchemySocialConnections />} />
+                {/* Timeline Alchemy Client Pages */}
+                <Route path="/timeline-alchemy/client/my-previews" element={<TimelineAlchemyMyPreviews />} />
+                <Route path="/timeline-alchemy/client/social-connections" element={<TimelineAlchemySocialConnections />} />
 
-      {/* Onboarding Wizard */}
-      <Route path="/onboarding" element={<OnboardingWizard />} />
-      <Route path="/onboarding/demo" element={<OnboardingDemo />} />
-      <Route path="/onboarding/test" element={<OnboardingTest />} />
+                {/* Onboarding Wizard Routes */}
+                <Route path="/onboarding" element={<OnboardingWizard />} />
+                <Route path="/onboarding/demo" element={<OnboardingDemo />} />
+                <Route path="/onboarding/test" element={<OnboardingTest />} />
 
-      {/* Catch-all — altijd als laatste */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
+                {/* Catch-all — altijd als laatste */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
 
-  {/* Optioneel visueel/analytics */}
-  <SpeedInsights />
-  <Analytics />
-</TooltipProvider>
- main
+            {/* Optioneel visueel/analytics */}
+            <SpeedInsights />
+            <Analytics />
+          </TooltipProvider>
         </CartProvider>
       </AuthProvider>
     </LanguageProvider>
