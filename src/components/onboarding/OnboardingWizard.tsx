@@ -4,11 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@/hooks/use-toast'
+import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft, ArrowRight, Check, Loader, SkipForward } from 'lucide-react'
 import { loadDraft, saveDraft, finishOnboarding, OnboardingDraft } from '@/lib/onboardingStorage'
+
 import ProfileStep from './steps/ProfileStep'
 import OrganizationStep from './steps/OrganizationStep'
 import SocialsStep from './steps/SocialsStep'
@@ -53,6 +55,7 @@ const STEPS = [
 export default function OnboardingWizard() {
   const navigate = useNavigate()
   const { toast } = useToast()
+  const { user } = useAuth()
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)

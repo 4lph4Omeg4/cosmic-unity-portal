@@ -57,6 +57,7 @@ import { Analytics } from "@vercel/analytics/react";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import OnboardingDemo from "@/components/onboarding/OnboardingDemo";
 import OnboardingTest from "@/pages/OnboardingTest";
+import OnboardingRedirect from "@/pages/OnboardingRedirect";
 
 const queryClient = new QueryClient();
 
@@ -162,7 +163,7 @@ const App: React.FC = () => {
                   />
 
                   {/* Onboarding */}
-                  <Route path="/onboarding" element={<OnboardingWizard />} />
+                  <Route path="/onboarding" element={<OnboardingRedirect />} />
                   <Route path="/onboarding/demo" element={<OnboardingDemo />} />
                   <Route path="/onboarding/test" element={<OnboardingTest />} />
 

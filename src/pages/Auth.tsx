@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Star, Eye, EyeOff } from 'lucide-react';
+import { Star, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, signIn, signUp } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Check if this is an onboarding flow
+  const isOnboarding = searchParams.get('onboarding') === 'true';
+  const orgId = searchParams.get('org_id');
   
   const [signInData, setSignInData] = useState({
     email: '',
@@ -29,6 +34,25 @@ const Auth = () => {
 
   useEffect(() => {
     if (user) {
+      // Check if there's pending onboarding
+      const pendingOnboarding = sessionStorage.getItem('pendingOnboarding');
+      if (pendingOnboarding) {
+        try {
+          const { orgId: pendingOrgId, session } = JSON.parse(pendingOnboarding);
+          if (session === 'success' && pendingOrgId) {
+            // Clear the pending onboarding
+            sessionStorage.removeItem('pendingOnboarding');
+            // Redirect to onboarding
+            navigate(`/onboarding?session=success&org_id=${pendingOrgId}`);
+            return;
+          }
+        } catch (error) {
+          console.error('Error parsing pending onboarding:', error);
+          sessionStorage.removeItem('pendingOnboarding');
+        }
+      }
+      
+      // Default redirect
       navigate('/');
     }
   }, [user, navigate]);
@@ -48,7 +72,9 @@ const Auth = () => {
     } else {
       toast({
         title: "Welkom terug!",
-        description: "Je bent succesvol ingelogd.",
+        description: isOnboarding 
+          ? "Je bent ingelogd. Je wordt doorgestuurd naar de onboarding..."
+          : "Je bent succesvol ingelogd.",
       });
     }
     
@@ -112,8 +138,10 @@ const Auth = () => {
     } else {
       console.log('Signup successful!');
       toast({
-        title: "Welkom bij The Chosen Ones!",
-        description: "Controleer je email voor verificatie.",
+        title: isOnboarding ? "Welkom bij Timeline Alchemy!" : "Welkom bij The Chosen Ones!",
+        description: isOnboarding 
+          ? "Je account is aangemaakt. Je wordt doorgestuurd naar de onboarding..."
+          : "Controleer je email voor verificatie.",
       });
     }
 
@@ -123,6 +151,17 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-md">
+        {/* Onboarding Banner */}
+        {isOnboarding && (
+          <div className="mb-6 p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-white text-center">
+            <Sparkles className="w-6 h-6 mx-auto mb-2" />
+            <h2 className="text-lg font-semibold mb-1">Welkom bij Timeline Alchemy! 🎉</h2>
+            <p className="text-sm text-blue-100">
+              Maak een account aan of log in om je onboarding te voltooien
+            </p>
+          </div>
+        )}
+
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center shadow-cosmic animate-cosmic-pulse">
@@ -136,23 +175,35 @@ const Auth = () => {
           </h1>
           
           <p className="font-mystical text-muted-foreground">
-            Enter the cosmic community of awakened souls
+            {isOnboarding 
+              ? 'Maak een account aan om te beginnen met je Timeline Alchemy reis'
+              : 'Enter the cosmic community of awakened souls'
+            }
           </p>
         </div>
 
         <Card className="cosmic-hover bg-card/90 backdrop-blur-sm border-border/50 shadow-cosmic">
           <CardHeader>
-            <CardTitle className="font-cosmic text-center">Cosmic Portal</CardTitle>
+            <CardTitle className="font-cosmic text-center">
+              {isOnboarding ? 'Timeline Alchemy Account' : 'Cosmic Portal'}
+            </CardTitle>
             <CardDescription className="font-mystical text-center">
-              Access your spiritual journey
+              {isOnboarding 
+                ? 'Maak een account aan om te beginnen'
+                : 'Access your spiritual journey'
+              }
             </CardDescription>
           </CardHeader>
           
           <CardContent>
             <Tabs defaultValue="signin">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Inloggen</TabsTrigger>
-                <TabsTrigger value="signup">Registreren</TabsTrigger>
+                <TabsTrigger value="signin">
+                  {isOnboarding ? 'Bestaand Account' : 'Inloggen'}
+                </TabsTrigger>
+                <TabsTrigger value="signup">
+                  {isOnboarding ? 'Nieuw Account' : 'Registreren'}
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="signin">
@@ -196,7 +247,7 @@ const Auth = () => {
                     className="w-full" 
                     disabled={loading}
                   >
-                    {loading ? "Inloggen..." : "Inloggen"}
+                    {loading ? "Inloggen..." : (isOnboarding ? "Inloggen & Doorgaan" : "Inloggen")}
                   </Button>
                 </form>
               </TabsContent>
@@ -254,7 +305,7 @@ const Auth = () => {
                     className="w-full" 
                     disabled={loading}
                   >
-                    {loading ? "Registreren..." : "Word een Chosen One"}
+                    {loading ? "Registreren..." : (isOnboarding ? "Account Aanmaken & Beginnen" : "Word een Chosen One")}
                   </Button>
                 </form>
               </TabsContent>

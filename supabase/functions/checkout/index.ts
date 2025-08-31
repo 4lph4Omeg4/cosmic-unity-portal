@@ -24,7 +24,7 @@ const session = await stripe.checkout.sessions.create({
   mode: "subscription",
   payment_method_types: ["card"],
   line_items: [{ price: price_id, quantity: 1 }],
-  success_url: `${APP_URL}/timeline-alchemy?session=success`,
+  success_url: `${APP_URL}/onboarding?session=success&org_id=${org_id}`,
   cancel_url: `${APP_URL}/timeline-alchemy?session=cancel`,
 
   // belangrijk:

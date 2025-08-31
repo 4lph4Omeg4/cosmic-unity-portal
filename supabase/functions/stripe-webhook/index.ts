@@ -44,6 +44,24 @@ Deno.serve(async (req) => {
       );
       if (error) console.error("[webhook] upsert error", error);
       else console.log("[webhook] upsert ok", { org_id, customer_id, sub_id, status });
+
+      // Mark organization as needing onboarding if subscription is active
+      if (status === "active") {
+        const { error: onboardingError } = await sb
+          .from("orgs")
+          .update({ 
+            needs_onboarding: true,
+            onboarding_completed: false,
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", org_id);
+        
+        if (onboardingError) {
+          console.error("[webhook] onboarding status update error", onboardingError);
+        } else {
+          console.log("[webhook] marked org for onboarding", { org_id });
+        }
+      }
     } catch (e) {
       console.error("[webhook] upsert exception", e);
     }
