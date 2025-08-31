@@ -200,7 +200,7 @@ export default function TimelineAlchemyPreviewWizard() {
   }
 
   const nextStep = () => {
-    if (form.step < 5) {
+    if (form.step < 4) {
       const newStep = form.step + 1
       setForm(prev => ({ ...prev, step: newStep }))
     }
@@ -356,9 +356,8 @@ export default function TimelineAlchemyPreviewWizard() {
     switch (step) {
       case 1: return 'Select Client'
       case 2: return 'Select Blog Posts for Separate Previews'
-      case 3: return 'Select Platform'
-      case 4: return 'Review Previews'
-      case 5: return 'Schedule & Review'
+      case 3: return 'Review Previews'
+      case 4: return 'Schedule & Save'
       default: return ''
     }
   }
@@ -367,9 +366,8 @@ export default function TimelineAlchemyPreviewWizard() {
     switch (step) {
       case 1: return 'Choose which client this preview is for'
       case 2: return 'Select blog posts for separate previews'
-      case 3: return 'Choose which social platform to post to'
-      case 4: return 'Review and confirm previews'
-      case 5: return 'Set the publishing schedule and review details'
+      case 3: return 'Review each post with its social media content'
+      case 4: return 'Set the publishing schedule and save previews'
       default: return ''
     }
   }
@@ -760,57 +758,6 @@ export default function TimelineAlchemyPreviewWizard() {
 
       case 3:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Select Social Platform</h3>
-            <p className="text-sm text-gray-300 mb-4">
-              Choose which social platform you want to post to. Each platform will reference your main blog post.
-            </p>
-            
-            <div className="grid gap-3">
-              {templates.map((template) => {
-                const isSelected = form.selectedTemplates.includes(template)
-                
-                return (
-                  <div
-                    key={template}
-                    onClick={() => {
-                      const newTemplates = isSelected 
-                        ? form.selectedTemplates.filter(t => t !== template)
-                        : [...form.selectedTemplates, template]
-                      setForm(prev => ({ ...prev, selectedTemplates: newTemplates }))
-                    }}
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      isSelected
-                        ? 'border-blue-500 bg-blue-900/20'
-                        : 'border-gray-600 hover:border-gray-500 bg-gray-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                        {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                        {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                        {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                        {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                        {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                        <div>
-                          <span className="font-medium text-white">{template}</span>
-                          <p className="text-sm text-gray-300">Post to {template}</p>
-                        </div>
-                      </div>
-                      {isSelected && (
-                        <CheckCircle className="w-5 h-5 text-blue-400" />
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )
-
-      case 4:
-        return (
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold text-white mb-2">Preview Overview & Review</h3>
@@ -1056,7 +1003,7 @@ export default function TimelineAlchemyPreviewWizard() {
 
       // OLD CASE 5 - REMOVED - Using new version below
 
-      case 5:
+      case 4:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -1244,7 +1191,7 @@ export default function TimelineAlchemyPreviewWizard() {
       {/* Progress Steps */}
       <div className="flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          {[1, 2, 3, 4, 5].map((step) => (
+          {[1, 2, 3, 4].map((step) => (
             <div key={step} className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -1255,7 +1202,7 @@ export default function TimelineAlchemyPreviewWizard() {
               >
                 {step < form.step ? <CheckCircle className="w-4 h-4" /> : step}
               </div>
-              {step < 5 && (
+              {step < 4 && (
                 <div
                   className={`w-12 h-1 ${
                     step < form.step ? 'bg-blue-500' : 'bg-gray-200'
@@ -1295,13 +1242,12 @@ export default function TimelineAlchemyPreviewWizard() {
         </Button>
 
         <div className="flex gap-2">
-          {form.step < 5 ? (
+          {form.step < 4 ? (
             <Button
               onClick={nextStep}
               disabled={
                 (form.step === 1 && !form.selectedClient) ||
-                (form.step === 2 && form.selectedPosts.length === 0) ||
-                (form.step === 3 && form.selectedTemplates.length === 0)
+                (form.step === 2 && form.selectedPosts.length === 0)
               }
               className="flex items-center gap-2"
             >
