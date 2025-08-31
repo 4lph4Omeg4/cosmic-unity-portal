@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Shield, Clock, Star } from "lucide-react";
-import TlaSubscribeButton from "@/components/tla/TlaSubscribeButton"; // pad aanpassen indien anders
-
-// Router & data
 import { useSearchParams } from "react-router-dom";
-import { fetchTlaPosts } from "@/services/tlaData";
+import { useToast } from "@/hooks/use-toast";
 
-// UI libs (shadcn/ui + icons)
-import { Button } from "@/components/ui/button";
+// UI Components
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,12 +17,10 @@ import {
   Sparkles,
 } from "lucide-react";
 
-// Toasts
-import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster";
-
-// CTA
-import { TlaSubscribeButton } from "@/components/TlaSubscribeButton";
+// Services & Components
+import { fetchTlaPosts } from "@/services/tlaData";
+import TlaSubscribeButton from "@/components/tla/TlaSubscribeButton";
+import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 
 const TimelineAlchemy: React.FC = () => {
   // ========= Config =========
@@ -38,6 +29,7 @@ const TimelineAlchemy: React.FC = () => {
 
   // ========= Stijlkeuze + toasts =========
   const [selectedStyle, setSelectedStyle] = useState<"krachtig" | "mystiek" | "creator">("krachtig");
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { toast } = useToast();
 
   const styles = {
@@ -89,27 +81,19 @@ const TimelineAlchemy: React.FC = () => {
 
   // Stripe redirect feedback (?session=success | ?session=cancel)
   useEffect(() => {
-    console.log('TimelineAlchemy - useEffect triggered');
     const session = searchParams.get("session");
     console.log('TimelineAlchemy - Session parameter:', session);
-    console.log('TimelineAlchemy - ORG_ID:', ORG_ID);
     
     if (session === "success") {
-      console.log('TimelineAlchemy - Success detected, preparing redirect...');
+      console.log('TimelineAlchemy - Success detected, showing onboarding...');
       toast({ 
         title: "Welkom in de stroom ⚡", 
-        description: "Je abonnement is actief. Je wordt doorgestuurd naar de onboarding...",
+        description: "Je abonnement is actief. Laten we je profiel instellen!",
         duration: 5000
       });
       
-      // Redirect to onboarding after a short delay
-      const redirectUrl = '/onboarding?session=success&org_id=' + ORG_ID;
-      console.log('TimelineAlchemy - Redirecting to:', redirectUrl);
-      
-      setTimeout(() => {
-        console.log('TimelineAlchemy - Executing redirect now...');
-        window.location.href = redirectUrl;
-      }, 2000);
+      // Show onboarding wizard instead of redirecting
+      setShowOnboarding(true);
     }
     if (session === "cancel") {
       toast({ 
@@ -119,17 +103,27 @@ const TimelineAlchemy: React.FC = () => {
     }
   }, [searchParams, toast]);
 
-  // Alternative redirect method - check on every render
-  const session = searchParams.get("session");
-  if (session === "success") {
-    console.log('TimelineAlchemy - Success detected on render, immediate redirect...');
-    // Use a more immediate redirect
-    setTimeout(() => {
-      window.location.href = '/onboarding?session=success&org_id=' + ORG_ID;
-    }, 100);
+  // ========= Render =========
+  
+  // If onboarding should be shown, render the wizard
+  if (showOnboarding) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              Welkom bij Timeline Alchemy! 🎉
+            </h1>
+            <p className="text-lg text-gray-300">
+              Je abonnement is actief. Laten we je profiel instellen om te beginnen.
+            </p>
+          </div>
+          <OnboardingWizard />
+        </div>
+      </div>
+    );
   }
 
-  // ========= Render =========
   return (
     <div className="space-y-12">
       {/* Hero / CTA */}
@@ -208,22 +202,6 @@ const TimelineAlchemy: React.FC = () => {
           <p className="text-slate-400 text-sm mt-4 max-w-md mx-auto">
             Direct via Stripe. Je kunt later altijd upgraden of pauzeren.
           </p>
-          
-          {/* Debug: Manual redirect test */}
-          {searchParams.get("session") === "success" && (
-            <div className="mt-4 p-4 bg-blue-900/20 border border-blue-600/30 rounded-lg">
-              <p className="text-blue-300 text-sm mb-2">Debug: Handmatige redirect test</p>
-              <button
-                onClick={() => {
-                  console.log('Manual redirect clicked');
-                  window.location.href = '/onboarding?session=success&org_id=' + ORG_ID;
-                }}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
-              >
-                Ga naar Onboarding (Handmatig)
-              </button>
-            </div>
-          )}
         </div>
       </section>
 
