@@ -19,7 +19,7 @@ import {
 
 // Services & Components
 import { fetchTlaPosts } from "@/services/tlaData";
-import TlaSubscribeButton from "@/components/tla/TlaSubscribeButton";
+import { TlaSubscribeButton } from "@/components/TlaSubscribeButton";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 
 const TimelineAlchemy: React.FC = () => {
