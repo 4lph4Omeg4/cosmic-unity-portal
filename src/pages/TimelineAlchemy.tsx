@@ -347,21 +347,21 @@ const TimelineAlchemy: React.FC = () => {
 </section>
 
 
-        </div>
-      </section>
+     </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-700/50">
-        <div className="max-w-6xl mx-auto text-center pt-4">
-          <p className="text-slate-400 text-sm">
-            © 2025 Timeline Alchemy — Spread the One Message. Add Your Own Essence.
-          </p>
-        </div>
-      </footer>
+{/* Footer */}
+<footer className="relative z-10 py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-700/50">
+  <div className="max-w-6xl mx-auto text-center pt-4">
+    <p className="text-slate-400 text-sm">
+      © 2025 Timeline Alchemy — Spread the One Message. Add Your Own Essence.
+    </p>
+  </div>
+</footer>
 
-      <Toaster />
-    </div>
-  );
+<Toaster />
+</div>  {/* sluit je page wrapper */}
+);
 };
 
 export default TimelineAlchemy;
+
