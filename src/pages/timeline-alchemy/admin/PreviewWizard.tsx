@@ -832,16 +832,73 @@ export default function TimelineAlchemyPreviewWizard() {
                     <h5 className="text-lg font-medium text-blue-300">{post.title}</h5>
                   </div>
                   
-                  {/* Post Image */}
-                  {post.image_public_url && (
-                    <div className="flex justify-center mb-6">
-                      <img 
-                        src={post.image_public_url} 
-                        alt={post.title}
-                        className="max-w-full h-auto max-h-64 rounded-lg shadow-lg border border-gray-600"
-                      />
+                  {/* Post Images - All 4 variations */}
+                  <div className="mb-6">
+                    <h6 className="font-medium text-white mb-3 flex items-center">
+                      <span className="text-2xl mr-2">🖼️</span>
+                      Post Images
+                    </h6>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Main Image */}
+                      {post.image_public_url ? (
+                        <div className="text-center">
+                          <img 
+                            src={post.image_public_url} 
+                            alt={post.title}
+                            className="w-full h-32 object-cover rounded-lg shadow-lg border border-gray-600 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                            onClick={() => window.open(post.image_public_url, '_blank')}
+                            title="Hoofdafbeelding - Klik om te bekijken"
+                          />
+                          <p className="text-xs text-gray-400 mt-1">Hoofdafbeelding</p>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <div className="w-full h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                            <span className="text-white text-xs font-medium text-center px-2">
+                              Hoofdafbeelding<br/>Niet beschikbaar
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-1">Hoofdafbeelding</p>
+                        </div>
+                      )}
+                      
+                      {/* Cosmic Theme */}
+                      <div className="text-center">
+                        <img 
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                          alt={`${post.title} - Cosmic Theme`}
+                          className="w-full h-32 object-cover rounded-lg shadow-lg border border-gray-600 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank')}
+                          title="Cosmic Theme - Klik om te bekijken"
+                        />
+                        <p className="text-xs text-gray-400 mt-1">Cosmic Theme</p>
+                      </div>
+                      
+                      {/* Cyberpunk Theme */}
+                      <div className="text-center">
+                        <img 
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                          alt={`${post.title} - Cyberpunk Theme`}
+                          className="w-full h-32 object-cover rounded-lg shadow-lg border border-gray-600 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank')}
+                          title="Cyberpunk Theme - Klik om te bekijken"
+                        />
+                        <p className="text-xs text-gray-400 mt-1">Cyberpunk Theme</p>
+                      </div>
+                      
+                      {/* Dystopia Theme */}
+                      <div className="text-center">
+                        <img 
+                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                          alt={`${post.title} - Dystopia Theme`}
+                          className="w-full h-32 object-cover rounded-lg shadow-lg border border-gray-600 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                          onClick={() => window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank')}
+                          title="Dystopia Theme - Klik om te bekijken"
+                        />
+                        <p className="text-xs text-gray-400 mt-1">Dystopia Theme</p>
+                      </div>
                     </div>
-                  )}
+                  </div>
                   
                   {/* Blog Content */}
                   <div className="mb-6">
@@ -1080,65 +1137,7 @@ export default function TimelineAlchemyPreviewWizard() {
 
 
 
-            {/* Platform-Specific Content Preview */}
-            {form.selectedTemplates.length > 0 && form.selectedPosts.length > 0 && (
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h4 className="text-lg font-medium text-white mb-4 flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-blue-400" />
-                  Platform-Specific Content Preview
-                </h4>
-                
-                <div className="space-y-4">
-                  {form.selectedTemplates.map((template) => {
-                    return (
-                      <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                        <div className="flex items-center gap-3 mb-3">
-                          {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                          {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                          {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                          {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                          {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                          {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                          <h5 className="font-medium text-white">{template}</h5>
-                        </div>
-                        
-                        <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
-                          <p className="text-sm text-gray-200 mb-2">
-                            <strong>Content preview for {form.selectedPosts.length} post{form.selectedPosts.length !== 1 ? 's' : ''}:</strong>
-                          </p>
-                          <div className="space-y-2">
-                            {form.selectedPosts.map((postId, index) => {
-                              const post = blogPosts.find(p => p.id === postId);
-                              if (!post) return null;
-                              
-                              let postContent = post.body || 'No content available';
-                              if (template === 'Facebook' && post.facebook) postContent = post.facebook;
-                              if (template === 'Instagram' && post.instagram) postContent = post.instagram;
-                              if (template === 'LinkedIn' && post.linkedin) postContent = post.linkedin;
-                              if (template === 'X (Twitter)' && post.x) postContent = post.x;
-                              
-                              return (
-                                <div key={postId} className="border-l-2 border-blue-500 pl-3">
-                                  <p className="text-xs text-blue-300 font-medium mb-1">
-                                    Preview {index + 1}: {post.title}
-                                  </p>
-                                  <p className="text-xs text-gray-300">
-                                    {postContent.substring(0, 100)}{postContent.length > 100 ? '...' : ''}
-                                  </p>
-                                </div>
-                              );
-                            })}
-                          </div>
-                          <p className="text-sm text-gray-400 italic mt-3">
-                            Each post will get its own separate preview entry with its original content. No editing needed.
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+
 
             {/* Final Summary */}
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
