@@ -84,7 +84,9 @@ const TimelineAlchemy: React.FC = () => {
   // Stripe redirect feedback (?session=success | ?session=cancel)
   useEffect(() => {
     const session = searchParams.get("session");
-    console.log('TimelineAlchemy - Session parameter:', session);
+    const orgId = searchParams.get("org_id");
+    console.log('TimelineAlchemy - URL params:', { session, orgId });
+    console.log('TimelineAlchemy - Current showOnboarding state:', showOnboarding);
     
     if (session === "success") {
       console.log('TimelineAlchemy - Success detected, showing onboarding...');
@@ -103,7 +105,7 @@ const TimelineAlchemy: React.FC = () => {
         description: "Je hebt de checkout geannuleerd." 
       });
     }
-  }, [searchParams, toast]);
+  }, [searchParams, toast, showOnboarding]);
 
   // ========= Render =========
   
@@ -119,6 +121,15 @@ const TimelineAlchemy: React.FC = () => {
             <p className="text-lg text-gray-300">
               Je abonnement is actief. Laten we je profiel instellen om te beginnen.
             </p>
+            <div className="mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowOnboarding(false)}
+                className="bg-transparent border-white/50 text-white hover:bg-white/10"
+              >
+                Debug: Terug naar hoofdpagina
+              </Button>
+            </div>
           </div>
           <OnboardingWizard />
         </div>
@@ -304,10 +315,9 @@ const TimelineAlchemy: React.FC = () => {
         Join de creators die al hun content stress hebben vervangen door Timeline Alchemy
       </p>
 
-      {/* ⚠️ Vervang hieronder 'price_timeline_alchemy_monthly' door je echte Stripe price ID */}
       <TlaSubscribeButton
-        orgId="timeline-alchemy"
-        priceId="price_timeline_alchemy_monthly"
+        orgId={ORG_ID}
+        priceId={PRICE_ID}
         variant="trust"
       >
         <span className="flex items-center justify-center">
@@ -316,18 +326,7 @@ const TimelineAlchemy: React.FC = () => {
         </span>
       </TlaSubscribeButton>
 
-      {/* Onboarding Button */}
-      <div className="mt-4">
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-transparent border-amber-400/50 text-amber-400 hover:bg-amber-400/10 hover:border-amber-400 transition-all duration-200"
-          onClick={() => (window.location.href = "/onboarding")}
-        >
-          <Sparkles className="w-5 h-5 mr-2" />
-          Start Onboarding
-        </Button>
-      </div>
+
 
       {/* Trust cues */}
       <div className="mt-8 pt-8 border-t border-slate-600/30">
