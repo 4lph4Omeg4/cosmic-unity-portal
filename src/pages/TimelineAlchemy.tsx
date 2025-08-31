@@ -87,12 +87,27 @@ const TimelineAlchemy: React.FC = () => {
     })();
   }, []);
 
-  // Stripe redirect feedback (?success=1 | ?canceled=1)
+  // Stripe redirect feedback (?session=success | ?session=cancel)
   useEffect(() => {
-    const success = searchParams.get("success");
-    const canceled = searchParams.get("canceled");
-    if (success) toast({ title: "Welkom in de stroom ⚡", description: "Je abonnement is actief." });
-    if (canceled) toast({ title: "Geannuleerd", description: "Je hebt de checkout geannuleerd." });
+    const session = searchParams.get("session");
+    if (session === "success") {
+      toast({ 
+        title: "Welkom in de stroom ⚡", 
+        description: "Je abonnement is actief. Je wordt doorgestuurd naar de onboarding...",
+        duration: 5000
+      });
+      
+      // Redirect to onboarding after a short delay
+      setTimeout(() => {
+        window.location.href = '/onboarding?session=success&org_id=' + ORG_ID;
+      }, 2000);
+    }
+    if (session === "cancel") {
+      toast({ 
+        title: "Geannuleerd", 
+        description: "Je hebt de checkout geannuleerd." 
+      });
+    }
   }, [searchParams, toast]);
 
   // ========= Render =========
