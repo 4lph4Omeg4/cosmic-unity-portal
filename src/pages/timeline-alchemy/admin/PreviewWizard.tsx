@@ -95,9 +95,9 @@ export default function TimelineAlchemyPreviewWizard() {
     }
   }, [form.selectedPosts])
 
-  // Auto-fill content when blog post is selected
+  // Auto-fill content when blog post is selected (only if no content exists)
   useEffect(() => {
-    if (form.selectedPosts.length > 0) {
+    if (form.selectedPosts.length > 0 && !form.content.trim()) {
       if (form.selectedPosts.length === 1) {
         // Single post - use its content
         const post = blogPosts.find(p => p.id === form.selectedPosts[0])
@@ -118,9 +118,9 @@ export default function TimelineAlchemyPreviewWizard() {
     }
   }, [form.selectedPosts, blogPosts])
 
-  // Auto-fill content when platforms are selected
+  // Auto-fill content when platforms are selected (only if no content exists)
   useEffect(() => {
-    if (form.selectedPosts.length > 0 && form.selectedTemplates.length > 0) {
+    if (form.selectedPosts.length > 0 && form.selectedTemplates.length > 0 && !form.content.trim()) {
       if (form.selectedPosts.length === 1) {
         // Single post - use platform-specific content
         const post = blogPosts.find(p => p.id === form.selectedPosts[0])
@@ -139,7 +139,7 @@ export default function TimelineAlchemyPreviewWizard() {
               case 'LinkedIn':
                 content = post.linkedin || post.body || ''
                 break
-              case 'Twitter':
+              case 'X (Twitter)':
                 content = post.x || post.body || ''
                 break
               case 'Blog Post':
@@ -362,6 +362,40 @@ export default function TimelineAlchemyPreviewWizard() {
       // Create previews for each selected post
       const previewPromises = form.selectedPosts.map(async (postId) => {
         const post = blogPosts.find(p => p.id === postId)
+        
+        // Determine the appropriate content for this specific post
+        let postContent = form.content
+        
+        // If the user has manually edited the content, use that
+        // Otherwise, use the post-specific content based on selected templates
+        if (form.selectedTemplates.length > 0 && post) {
+          if (form.selectedTemplates.length === 1) {
+            const template = form.selectedTemplates[0]
+            switch (template) {
+              case 'Facebook':
+                postContent = post.facebook || post.body || form.content
+                break
+              case 'Instagram':
+                postContent = post.instagram || post.body || form.content
+                break
+              case 'LinkedIn':
+                postContent = post.linkedin || post.body || form.content
+                break
+              case 'X (Twitter)':
+                postContent = post.x || post.body || form.content
+                break
+              case 'Blog Post':
+                postContent = post.body || form.content
+                break
+              default:
+                postContent = post.body || form.content
+            }
+          } else {
+            // Multiple platforms - use the post's body content
+            postContent = post.body || form.content
+          }
+        }
+        
         return supabase
           .from('previews')
           .insert({
@@ -370,11 +404,18 @@ export default function TimelineAlchemyPreviewWizard() {
             channel: form.selectedTemplates.join(', '),
             template: form.selectedTemplates.join(', '),
             draft_content: {
-              content: form.content,
+              content: postContent,
               template: form.selectedTemplates.join(', '),
               selectedPosts: [postId], // Individual post for this preview
               image: post?.image_public_url || null,
-              postTitle: post?.title || 'Unknown Post'
+              postTitle: post?.title || 'Unknown Post',
+              originalPostContent: post?.body || null,
+              platformSpecificContent: {
+                facebook: post?.facebook || null,
+                instagram: post?.instagram || null,
+                linkedin: post?.linkedin || null,
+                x: post?.x || null
+              }
             },
             scheduled_at: scheduledAt,
             status: 'pending',
@@ -1076,24 +1117,50 @@ export default function TimelineAlchemyPreviewWizard() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-medium text-white">Content Message</label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
-                      if (post) {
-                        setForm(prev => ({ ...prev, content: post.body || '' }));
-                      }
-                    }}
-                    className="text-xs text-blue-400 hover:text-blue-300 underline"
-                  >
-                    🔄 Reload from Blog Post
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {form.selectedPosts.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const selectedPostTitles = form.selectedPosts
+                            .map(postId => blogPosts.find(p => p.id === postId)?.title)
+                            .filter(Boolean)
+                          
+                          if (selectedPostTitles.length > 0) {
+                            const combinedContent = `Check out these amazing posts:\n\n${selectedPostTitles.map((title, index) => `${index + 1}. ${title}`).join('\n')}\n\nRead more on our blog!`
+                            setForm(prev => ({ ...prev, content: combinedContent }))
+                          }
+                        }}
+                        className="text-xs text-blue-400 hover:text-blue-300 underline"
+                      >
+                        🔄 Reset to Combined Posts
+                      </button>
+                    )}
+                    {form.selectedPosts.length === 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                          if (post) {
+                            setForm(prev => ({ ...prev, content: post.body || '' }));
+                          }
+                        }}
+                        className="text-xs text-blue-400 hover:text-blue-300 underline"
+                      >
+                        🔄 Reset to Original Post
+                      </button>
+                    )}
+                  </div>
                 </div>
                 
                 <Textarea
                   value={form.content}
                   onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
-                  placeholder="Content will be automatically loaded based on selected platforms. You can edit it as needed..."
+                  placeholder={
+                    form.selectedPosts.length === 1 
+                      ? "Content will be automatically loaded from the selected blog post. You can edit it as needed..."
+                      : "Content will be automatically loaded as a combined message for all selected posts. You can edit it as needed..."
+                  }
                   rows={form.selectedTemplates.includes('Blog Post') ? 20 : 8}
                   maxLength={getMaxCharacters()}
                   className="resize-none bg-gray-700 border-gray-600 text-white placeholder-gray-400"
@@ -1103,23 +1170,68 @@ export default function TimelineAlchemyPreviewWizard() {
                   <span>Max: {getMaxCharacters()} characters</span>
                 </div>
                 <p className="text-xs text-gray-400">
-                  💡 Content is automatically loaded based on selected platforms. Edit as needed for customization.
+                  💡 {form.selectedPosts.length === 1 
+                    ? "Content is automatically loaded from the selected blog post. Edit as needed for customization."
+                    : "Content is automatically loaded as a combined message for all selected posts. Each post will get its own preview with its original content."
+                  }
                 </p>
               </div>
             </div>
             
             {form.selectedPosts.length > 0 && (
               <div className="p-3 bg-blue-900/20 rounded-lg border border-blue-700">
-                <h4 className="font-medium text-blue-300 mb-2">Selected Posts:</h4>
-                <div className="space-y-2">
+                <h4 className="font-medium text-blue-300 mb-2">Preview Preview:</h4>
+                <p className="text-xs text-blue-200 mb-3">
+                  This is how each preview will look when saved. Each post gets its own preview entry with its original content.
+                </p>
+                <div className="space-y-3">
                   {form.selectedPosts.map((postId) => {
                     const post = blogPosts.find(p => p.id === postId)
-                    return post ? (
-                      <div key={post.id} className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-blue-400" />
-                        <span className="text-sm text-blue-200">{post.title}</span>
+                    if (!post) return null
+                    
+                    // Determine what content will be used for this post
+                    let postContent = form.content
+                    if (form.selectedTemplates.length > 0) {
+                      if (form.selectedTemplates.length === 1) {
+                        const template = form.selectedTemplates[0]
+                        switch (template) {
+                          case 'Facebook':
+                            postContent = post.facebook || post.body || form.content
+                            break
+                          case 'Instagram':
+                            postContent = post.instagram || post.body || form.content
+                            break
+                          case 'LinkedIn':
+                            postContent = post.linkedin || post.body || form.content
+                            break
+                          case 'X (Twitter)':
+                            postContent = post.x || post.body || form.content
+                            break
+                          case 'Blog Post':
+                            postContent = post.body || form.content
+                            break
+                          default:
+                            postContent = post.body || form.content
+                        }
+                      } else {
+                        postContent = post.body || form.content
+                      }
+                    }
+                    
+                    return (
+                      <div key={post.id} className="p-3 bg-blue-900/30 rounded border border-blue-600">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Star className="w-4 h-4 text-blue-400" />
+                          <span className="text-sm font-medium text-blue-200">{post.title}</span>
+                        </div>
+                        <div className="text-xs text-blue-300 mb-2">
+                          Content preview (first 100 chars):
+                        </div>
+                        <div className="text-xs text-blue-100 bg-blue-900/50 p-2 rounded">
+                          {postContent.substring(0, 100)}{postContent.length > 100 ? '...' : ''}
+                        </div>
                       </div>
-                    ) : null
+                    )
                   })}
                 </div>
               </div>
@@ -1495,57 +1607,107 @@ export default function TimelineAlchemyPreviewWizard() {
                 
                 <div className="space-y-4">
                   {form.selectedTemplates.map((template) => {
-                    const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
-                    if (!post) return null;
-                    
-                    return (
-                      <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
-                        <div className="flex items-center gap-3 mb-3">
-                          {template === 'Facebook' && <span className="text-2xl">📘</span>}
-                          {template === 'Instagram' && <span className="text-2xl">📷</span>}
-                          {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
-                          {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
-                          {template === 'Blog Post' && <span className="text-2xl">📝</span>}
-                          {template === 'Custom Post' && <span className="text-2xl">✨</span>}
-                          <h5 className="font-medium text-white">{template}</h5>
-                        </div>
-                        
-                        <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
-                          {template === 'Facebook' && post.facebook && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
-                          )}
-                          {template === 'Instagram' && post.instagram && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
-                          )}
-                          {template === 'X (Twitter)' && post.x && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
-                          )}
-                          {template === 'LinkedIn' && post.linkedin && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
-                          )}
-                          {template === 'Blog Post' && post.body && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body}</p>
-                          )}
-                          {template === 'Custom Post' && (
-                            <p className="text-sm text-gray-200 whitespace-pre-wrap">{form.content}</p>
-                          )}
+                    if (form.selectedPosts.length === 1) {
+                      // Single post - show platform-specific content
+                      const post = blogPosts.find(p => p.id === form.selectedPosts[0]);
+                      if (!post) return null;
+                      
+                      return (
+                        <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                          <div className="flex items-center gap-3 mb-3">
+                            {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                            {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                            {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                            {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                            {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                            {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                            <h5 className="font-medium text-white">{template}</h5>
+                          </div>
                           
-                          {/* Show if no content available */}
-                          {!post.facebook && template === 'Facebook' && (
-                            <p className="text-sm text-gray-400 italic">No Facebook content available - will use main blog content</p>
-                          )}
-                          {!post.instagram && template === 'Instagram' && (
-                            <p className="text-sm text-gray-400 italic">No Instagram content available - will use main blog content</p>
-                          )}
-                          {!post.x && template === 'X (Twitter)' && (
-                            <p className="text-sm text-gray-400 italic">No X (Twitter) content available - will use main blog content</p>
-                          )}
-                          {!post.linkedin && template === 'LinkedIn' && (
-                            <p className="text-sm text-gray-400 italic">No LinkedIn content available - will use main blog content</p>
-                          )}
+                          <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
+                            {template === 'Facebook' && post.facebook && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.facebook}</p>
+                            )}
+                            {template === 'Instagram' && post.instagram && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.instagram}</p>
+                            )}
+                            {template === 'X (Twitter)' && post.x && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.x}</p>
+                            )}
+                            {template === 'LinkedIn' && post.linkedin && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.linkedin}</p>
+                            )}
+                            {template === 'Blog Post' && post.body && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{post.body}</p>
+                            )}
+                            {template === 'Custom Post' && (
+                              <p className="text-sm text-gray-200 whitespace-pre-wrap">{form.content}</p>
+                            )}
+                            
+                            {/* Show if no content available */}
+                            {!post.facebook && template === 'Facebook' && (
+                              <p className="text-sm text-gray-400 italic">No Facebook content available - will use main blog content</p>
+                            )}
+                            {!post.instagram && template === 'Instagram' && (
+                              <p className="text-sm text-gray-400 italic">No Instagram content available - will use main blog content</p>
+                            )}
+                            {!post.x && template === 'X (Twitter)' && (
+                              <p className="text-sm text-gray-400 italic">No X (Twitter) content available - will use main blog content</p>
+                            )}
+                            {!post.linkedin && template === 'LinkedIn' && (
+                              <p className="text-sm text-gray-400 italic">No LinkedIn content available - will use main blog content</p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    );
+                      );
+                    } else {
+                      // Multiple posts - show combined preview
+                      return (
+                        <div key={template} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                          <div className="flex items-center gap-3 mb-3">
+                            {template === 'Facebook' && <span className="text-2xl">📘</span>}
+                            {template === 'Instagram' && <span className="text-2xl">📷</span>}
+                            {template === 'X (Twitter)' && <span className="text-2xl">🐦</span>}
+                            {template === 'LinkedIn' && <span className="text-2xl">💼</span>}
+                            {template === 'Blog Post' && <span className="text-2xl">📝</span>}
+                            {template === 'Custom Post' && <span className="text-2xl">✨</span>}
+                            <h5 className="font-medium text-white">{template}</h5>
+                          </div>
+                          
+                          <div className="bg-gray-800 rounded p-3 max-h-48 overflow-y-auto">
+                            <p className="text-sm text-gray-200 mb-2">
+                              <strong>Combined content for {form.selectedPosts.length} posts:</strong>
+                            </p>
+                            <div className="space-y-2">
+                              {form.selectedPosts.map((postId, index) => {
+                                const post = blogPosts.find(p => p.id === postId);
+                                if (!post) return null;
+                                
+                                let postContent = post.body || 'No content available';
+                                if (template === 'Facebook' && post.facebook) postContent = post.facebook;
+                                if (template === 'Instagram' && post.instagram) postContent = post.instagram;
+                                if (template === 'LinkedIn' && post.linkedin) postContent = post.linkedin;
+                                if (template === 'X (Twitter)' && post.x) postContent = post.x;
+                                
+                                return (
+                                  <div key={postId} className="border-l-2 border-blue-500 pl-3">
+                                    <p className="text-xs text-blue-300 font-medium mb-1">
+                                      {index + 1}. {post.title}
+                                    </p>
+                                    <p className="text-xs text-gray-300">
+                                      {postContent.substring(0, 100)}{postContent.length > 100 ? '...' : ''}
+                                    </p>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <p className="text-sm text-gray-400 italic mt-3">
+                              Each post will get its own preview entry with its original content.
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    }
                   })}
                 </div>
               </div>
