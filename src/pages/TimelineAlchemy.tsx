@@ -358,7 +358,9 @@ const TimelineAlchemy: React.FC = () => {
   </div>
 </footer>
 
-  </div>
+      <Toaster />
+    </div>
+  );
+};
 
 export default TimelineAlchemy;
-
