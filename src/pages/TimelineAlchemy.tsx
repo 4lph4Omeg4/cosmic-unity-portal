@@ -295,6 +295,19 @@ const TimelineAlchemy: React.FC = () => {
               </span>
             </TlaSubscribeButton>
             
+            {/* Onboarding Button */}
+            <div className="mt-4">
+              <Button
+                variant="outline"
+                size="lg"
+                className="bg-transparent border-amber-400/50 text-amber-400 hover:bg-amber-400/10 hover:border-amber-400 transition-all duration-200"
+                onClick={() => window.location.href = '/onboarding'}
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Start Onboarding
+              </Button>
+            </div>
+
             {/* Trust cues */}
             <div className="mt-8 pt-8 border-t border-slate-600/30">
               <div className="flex flex-wrap justify-center gap-6 text-sm text-slate-400">

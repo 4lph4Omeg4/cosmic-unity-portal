@@ -46,6 +46,11 @@ import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/Preview
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
 
+// Onboarding Wizard
+import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
+import OnboardingDemo from "@/components/onboarding/OnboardingDemo";
+import OnboardingTest from "@/pages/OnboardingTest";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -104,6 +109,11 @@ const App = () => (
               {/* Timeline Alchemy Client Routes */}
               <Route path="/timeline-alchemy/client/my-previews" element={<TimelineAlchemyMyPreviews />} />
               <Route path="/timeline-alchemy/client/social-connections" element={<TimelineAlchemySocialConnections />} />
+              
+              {/* Onboarding Wizard Route */}
+              <Route path="/onboarding" element={<OnboardingWizard />} />
+              <Route path="/onboarding/demo" element={<OnboardingDemo />} />
+              <Route path="/onboarding/test" element={<OnboardingTest />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
