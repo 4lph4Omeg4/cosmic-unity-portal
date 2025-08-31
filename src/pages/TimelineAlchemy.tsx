@@ -139,6 +139,32 @@ const TimelineAlchemy: React.FC = () => {
 
   return (
     <div className="space-y-12">
+      {/* Debug Header - Always show for now */}
+      <div className="fixed top-4 right-4 z-50 space-y-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => window.location.href = "/"}
+          className="bg-red-500/20 border-red-500/50 text-red-400 hover:bg-red-500/30"
+        >
+          🏠 Terug naar Home
+        </Button>
+        <div className="bg-black/80 p-2 rounded text-xs text-white max-w-xs">
+          <div>URL: {window.location.href}</div>
+          <div>Session: {searchParams.get("session")}</div>
+          <div>Org ID: {searchParams.get("org_id")}</div>
+          <div>Show Onboarding: {showOnboarding ? "YES" : "NO"}</div>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowOnboarding(true)}
+          className="bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30"
+        >
+          🎯 Start Onboarding
+        </Button>
+      </div>
+      
       {/* Hero / CTA */}
       <section className="relative z-10 pt-16 pb-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
