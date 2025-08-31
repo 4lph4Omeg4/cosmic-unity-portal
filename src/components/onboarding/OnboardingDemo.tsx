@@ -1,10 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import OnboardingWizard from './OnboardingWizard'
 
 export default function OnboardingDemo() {
   const [showWizard, setShowWizard] = useState(false)
+
+  // Focus management voor toegankelijkheid
+  useEffect(() => {
+    if (showWizard) {
+      // Focus op de eerste input van de wizard
+      setTimeout(() => {
+        const firstInput = document.querySelector('input, select, textarea')
+        if (firstInput instanceof HTMLElement) {
+          firstInput.focus()
+        }
+      }, 100)
+    }
+  }, [showWizard])
 
   if (showWizard) {
     return <OnboardingWizard />
@@ -43,6 +56,7 @@ export default function OnboardingDemo() {
           <Button
             onClick={() => setShowWizard(true)}
             className="w-full bg-blue-600 hover:bg-blue-700"
+            aria-label="Start de onboarding wizard"
           >
             Start Onboarding Wizard
           </Button>
@@ -50,9 +64,10 @@ export default function OnboardingDemo() {
           <div className="text-xs text-gray-500 text-center space-y-1">
             <p>Features:</p>
             <p>• Autosave elke 600ms</p>
-            <p>• Framer Motion animaties</p>
+            <p>• CSS animaties</p>
             <p>• Zod validatie</p>
             <p>• Responsief design</p>
+            <p>• Toegankelijk (ARIA, focus)</p>
           </div>
         </CardContent>
       </Card>

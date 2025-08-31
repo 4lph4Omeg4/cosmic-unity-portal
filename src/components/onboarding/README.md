@@ -33,7 +33,7 @@ src/components/onboarding/
 Zorg ervoor dat je de volgende dependencies hebt geïnstalleerd:
 
 ```bash
-npm install react-hook-form @hookform/resolvers zod framer-motion lucide-react
+npm install react-hook-form @hookform/resolvers zod
 ```
 
 ## 📖 Gebruik
@@ -153,11 +153,12 @@ De wizard slaat automatisch op in localStorage onder de key `"onboardingDraft"`.
 
 ## 🎭 Animaties
 
-Framer Motion wordt gebruikt voor:
+CSS transitions worden gebruikt voor:
 
-- **Stap transities**: Fade + slide effecten
+- **Stap transities**: Fade + slide effecten met CSS transforms
 - **Progress updates**: Smooth progress bar updates
 - **Loading states**: Spinner animaties
+- **Focus management**: Automatische focus op eerste input bij stapwissel
 
 ## ♿ Toegankelijkheid
 
@@ -185,8 +186,9 @@ function TestPage() {
 
 1. **Form validatie werkt niet**: Controleer of Zod schema correct is geïmporteerd
 2. **Autosave werkt niet**: Controleer console voor errors in localStorage
-3. **Animaties werken niet**: Controleer of framer-motion is geïnstalleerd
+3. **Animaties werken niet**: Controleer of CSS transitions worden ondersteund door de browser
 4. **Routing werkt niet**: Controleer of react-router-dom is geconfigureerd
+5. **Focus management werkt niet**: Controleer of de browser ondersteuning heeft voor focus() API
 
 ### Debug Mode
 

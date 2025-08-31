@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
@@ -55,6 +54,7 @@ export default function OnboardingWizard() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   const methods = useForm<OnboardingFormData>({
     resolver: zodResolver(onboardingSchema),
@@ -120,7 +120,11 @@ export default function OnboardingWizard() {
 
   const goToStep = (stepIndex: number) => {
     if (stepIndex >= 0 && stepIndex < STEPS.length) {
-      setCurrentStep(stepIndex)
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentStep(stepIndex)
+        setIsTransitioning(false)
+      }, 150)
     }
   }
 
@@ -212,18 +216,15 @@ export default function OnboardingWizard() {
         {/* Step Content */}
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="mb-8"
-              >
-                <CurrentStepComponent />
-              </motion.div>
-            </AnimatePresence>
+            <div 
+              className={`mb-8 transition-all duration-300 ease-in-out ${
+                isTransitioning 
+                  ? 'opacity-0 transform translate-x-4' 
+                  : 'opacity-100 transform translate-x-0'
+              }`}
+            >
+              <CurrentStepComponent />
+            </div>
 
             {/* Navigation */}
             <Card className="max-w-xl mx-auto">
@@ -258,7 +259,7 @@ export default function OnboardingWizard() {
                     
                     <Button
                       type="submit"
-                      disabled={isLoading || isSaving}
+                      disabled={isLoading || isSaving || isTransitioning}
                       className="flex items-center space-x-2"
                     >
                       {isLoading ? (
