@@ -3,23 +3,34 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import Stripe from "https://esm.sh/stripe@15.4.0";
 
 Deno.serve(async (req) => {
-  // Handle CORS
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, apikey',
+        'Access-Control-Max-Age': '86400',
       },
     });
   }
+
+  // Add CORS headers to all responses
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, apikey',
+  };
 
   const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
   if (!stripeKey) {
     return new Response("Missing STRIPE_SECRET_KEY", { 
       status: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   }
 
@@ -30,7 +41,10 @@ Deno.serve(async (req) => {
     if (!price_id || !org_id) {
       return new Response("Missing price_id or org_id", { 
         status: 400,
-        headers: { 'Access-Control-Allow-Origin': '*' }
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
       });
     }
 
@@ -54,7 +68,7 @@ Deno.serve(async (req) => {
       status: 200,
       headers: { 
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
+        ...corsHeaders
       },
     });
   } catch (error) {
@@ -63,7 +77,7 @@ Deno.serve(async (req) => {
       status: 500,
       headers: { 
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
+        ...corsHeaders
       }
     });
   }

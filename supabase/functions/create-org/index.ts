@@ -3,17 +3,25 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
 
 Deno.serve(async (req) => {
-  // Handle CORS
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, apikey',
+        'Access-Control-Max-Age': '86400',
       },
     });
   }
+
+  // Add CORS headers to all responses
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, apikey',
+  };
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -24,7 +32,10 @@ Deno.serve(async (req) => {
     if (!name || !name.trim()) {
       return new Response(JSON.stringify({ error: "Missing or empty name" }), { 
         status: 400,
-        headers: { 'Access-Control-Allow-Origin': '*' }
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
       });
     }
 
@@ -45,7 +56,10 @@ Deno.serve(async (req) => {
       console.error("[create-org] error", error);
       return new Response(JSON.stringify({ error: "Failed to create organization" }), { 
         status: 500,
-        headers: { 'Access-Control-Allow-Origin': '*' }
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
       });
     }
     console.log("[create-org] created", { tlaOrgId, name });
@@ -53,14 +67,17 @@ Deno.serve(async (req) => {
       status: 200,
       headers: { 
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
+        ...corsHeaders
       },
     });
   } catch (err) {
     console.error("[create-org] error", err);
     return new Response(JSON.stringify({ error: "Organization creation failed" }), { 
       status: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   }
 });
