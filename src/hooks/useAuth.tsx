@@ -112,6 +112,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             if (profileCreateError) {
               console.error('Manual profile creation failed:', profileCreateError);
+              
+              // If RLS is blocking, try alternative approach
+              if (profileCreateError.code === '42501') {
+                console.log('RLS blocking profile creation, trying upsert method...');
+                
+                const { error: upsertError } = await supabase
+                  .from('profiles')
+                  .upsert({
+                    user_id: data.user.id,
+                    display_name: displayName || data.user.email?.split('@')[0] || 'User',
+                    updated_at: new Date().toISOString()
+                  }, {
+                    onConflict: 'user_id'
+                  });
+                
+                if (upsertError) {
+                  console.error('Upsert profile creation also failed:', upsertError);
+                } else {
+                  console.log('✅ Profile created via upsert method');
+                }
+              }
             } else {
               console.log('✅ Profile created manually');
             }
