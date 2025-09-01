@@ -42,30 +42,40 @@ const SupabaseDebug: React.FC = () => {
 
   const testEdgeFunction = async (functionName: string) => {
     try {
-      const functionUrl = `https://wdclgadjetxhcududipz.supabase.co/functions/v1/${functionName}`;
-      console.log(`Testing ${functionName} at:`, functionUrl);
+      console.log(`Testing ${functionName}...`);
       
-      const response = await fetch(functionUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabase.supabaseKey}`,
-        },
-        body: JSON.stringify({ test: true }),
+      // Use Supabase client's functions method instead of direct fetch
+      const { data, error } = await supabase.functions.invoke(functionName, {
+        body: { test: true },
+        method: 'POST'
       });
 
-      console.log(`${functionName} response:`, response.status, response.statusText);
+      console.log(`${functionName} response:`, { data, error });
       
-      if (response.status === 200 || response.status === 400 || response.status === 401) {
-        // Function exists and is responding
-        return "working";
+      if (error) {
+        // If we get an error but it's not a "function not found" error, the function exists
+        if (error.message.includes('function') && error.message.includes('not found')) {
+          addError(`${functionName}: Function not found`);
+          return "error";
+        } else {
+          // Function exists but returned an error (expected for test data)
+          console.log(`${functionName} exists but returned error (expected):`, error.message);
+          return "working";
+        }
       } else {
-        addError(`${functionName}: HTTP ${response.status} - ${response.statusText}`);
+        // Function exists and worked
+        return "working";
+      }
+    } catch (error: any) {
+      const errorMsg = `${functionName}: ${error.message || error}`;
+      console.error(errorMsg);
+      
+      // Check if it's a network/CORS error
+      if (error.message?.includes('fetch') || error.message?.includes('Failed to fetch')) {
+        addError(`${functionName}: Network/CORS error - function may exist but not accessible from browser`);
         return "error";
       }
-    } catch (error) {
-      const errorMsg = `${functionName}: ${error}`;
-      console.error(errorMsg);
+      
       addError(errorMsg);
       return "error";
     }

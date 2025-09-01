@@ -3,6 +3,18 @@ import Stripe from "https://esm.sh/stripe@15.4.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 Deno.serve(async (req) => {
+  // Handle CORS
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Stripe-Signature',
+      },
+    });
+  }
+
   const sig = req.headers.get("stripe-signature");
   const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
   const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
@@ -11,7 +23,10 @@ Deno.serve(async (req) => {
 
   if (!webhookSecret || !stripeKey || !url || !serviceRole) {
     console.error("[webhook] missing envs", { hasWebhook: !!webhookSecret, hasKey: !!stripeKey, hasUrl: !!url, hasSrv: !!serviceRole });
-    return new Response("Missing envs", { status: 500 });
+    return new Response("Missing envs", { 
+      status: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    });
   }
 
   const stripe = new Stripe(stripeKey, { apiVersion: "2024-06-20" });
@@ -22,7 +37,10 @@ Deno.serve(async (req) => {
     event = await stripe.webhooks.constructEventAsync(raw, sig!, webhookSecret);
   } catch (err) {
     console.error("[webhook] bad signature", err);
-    return new Response("Bad signature", { status: 400 });
+    return new Response("Bad signature", { 
+      status: 400,
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    });
   }
 
   const sb = createClient(url, serviceRole);
@@ -95,34 +113,42 @@ Deno.serve(async (req) => {
           .maybeSingle();
         org_id = existing?.org_id ?? org_id;
 
-        // fallback: probeer via price/product metadata (als je daar org_id opslaat)
-        if (!org_id) {
-          const price = sub.items?.data?.[0]?.price;
-          org_id = price?.metadata?.org_id ?? null;
-        }
-
-        // laatste fallback: klant zelf als tijdelijke key
-        if (!org_id) org_id = customer_id;
-
-        console.log("[webhook] subscription.upsert", { org_id, customer_id, sub_id: sub.id, status });
-        await upsertSub(org_id, customer_id, sub.id, status, cpe);
+        console.log("[webhook] subscription event", { event: event.type, customer_id, org_id, status });
+        if (org_id) await upsertSub(org_id, customer_id, sub.id, status, cpe);
         break;
       }
 
       case "customer.subscription.deleted": {
         const sub = event.data.object as any;
-        console.log("[webhook] subscription.deleted", { sub_id: sub.id });
-        await sb.from("org_subscriptions").update({ status: "canceled" }).eq("stripe_subscription_id", sub.id);
+        const customer_id = sub.customer as string;
+        console.log("[webhook] subscription deleted", { customer_id, sub_id: sub.id });
+        
+        // Mark subscription as cancelled
+        const { data: existing } = await sb
+          .from("org_subscriptions")
+          .select("org_id")
+          .eq("stripe_customer_id", customer_id)
+          .maybeSingle();
+        
+        if (existing?.org_id) {
+          await upsertSub(existing.org_id, customer_id, sub.id, "cancelled");
+        }
         break;
       }
 
       default:
-        console.log("[webhook] ignored", event.type);
+        console.log("[webhook] unhandled event", event.type);
     }
 
-    return new Response("ok", { status: 200 });
-  } catch (e) {
-    console.error("[webhook] handler error", e);
-    return new Response("Webhook handler error", { status: 500 });
+    return new Response("OK", { 
+      status: 200,
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    });
+  } catch (err) {
+    console.error("[webhook] error", err);
+    return new Response("Webhook error", { 
+      status: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    });
   }
 });

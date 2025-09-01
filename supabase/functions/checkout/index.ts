@@ -1,19 +1,37 @@
 // supabase/functions/checkout/index.ts
-import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14.19.0?target=deno";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import Stripe from "https://esm.sh/stripe@15.4.0";
 
-serve(async (req) => {
+Deno.serve(async (req) => {
+  // Handle CORS
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    });
+  }
+
+  const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (!stripeKey) {
+    return new Response("Missing STRIPE_SECRET_KEY", { 
+      status: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    });
+  }
+
+  const stripe = new Stripe(stripeKey, { apiVersion: "2024-06-20" });
+
   try {
-    const key = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!key) {
-      return new Response(JSON.stringify({ error: "Missing STRIPE_SECRET_KEY" }), { status: 500 });
-    }
-
-    const stripe = new Stripe(key, { apiVersion: "2024-06-20" });
     const { price_id, org_id } = await req.json();
-
-    if (!price_id) {
-      return new Response(JSON.stringify({ error: "Missing price_id" }), { status: 400 });
+    if (!price_id || !org_id) {
+      return new Response("Missing price_id or org_id", { 
+        status: 400,
+        headers: { 'Access-Control-Allow-Origin': '*' }
+      });
     }
 
     const origin = req.headers.get("origin")
@@ -31,15 +49,22 @@ serve(async (req) => {
       client_reference_id: org_id,
       metadata: { org_id },
     });
-    
-    console.log("[checkout] created session", { id: session.id, org_id, price_id });
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      },
     });
-  } catch (err) {
-    console.error("[checkout] error", err);
-    return new Response(JSON.stringify({ error: "Checkout failed" }), { status: 500 });
+  } catch (error) {
+    console.error("Checkout error:", error);
+    return new Response(JSON.stringify({ error: "Checkout failed" }), { 
+      status: 500,
+      headers: { 
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
   }
 });
