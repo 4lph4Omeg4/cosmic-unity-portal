@@ -289,6 +289,57 @@ const SupabaseDebug: React.FC = () => {
               >
                 🧪 Test create-org manually
               </Button>
+
+              <Button 
+                onClick={async () => {
+                  try {
+                    console.log("Testing email verification settings...");
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (user) {
+                      console.log("Current user:", {
+                        id: user.id,
+                        email: user.email,
+                        email_confirmed_at: user.email_confirmed_at,
+                        confirmed_at: user.confirmed_at,
+                        created_at: user.created_at,
+                        last_sign_in_at: user.last_sign_in_at
+                      });
+                    } else {
+                      console.log("No user logged in");
+                    }
+
+                    // Test signup with email verification
+                    const testEmail = `test-${Date.now()}@example.com`;
+                    console.log("Testing signup with email:", testEmail);
+                    
+                    const { data, error } = await supabase.auth.signUp({
+                      email: testEmail,
+                      password: 'testpassword123',
+                      options: {
+                        emailRedirectTo: window.location.origin
+                      }
+                    });
+
+                    console.log("Signup test result:", { data, error });
+                    
+                    if (data?.user) {
+                      console.log("Test user created:", {
+                        id: data.user.id,
+                        email: data.user.email,
+                        email_confirmed_at: data.user.email_confirmed_at,
+                        confirmed_at: data.user.confirmed_at
+                      });
+                    }
+                  } catch (error) {
+                    console.error("Email verification test error:", error);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                📧 Test email verification
+              </Button>
             </div>
           </div>
         </CardContent>

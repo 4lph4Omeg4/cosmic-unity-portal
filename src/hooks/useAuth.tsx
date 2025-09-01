@@ -67,6 +67,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       });
 
+      // Check if email confirmation is required
+      if (data?.user && !data.user.email_confirmed_at) {
+        console.log('Email confirmation required. User needs to verify email.');
+        console.log('User email confirmed at:', data.user.email_confirmed_at);
+        console.log('User confirmed at:', data.user.confirmed_at);
+      }
+
       console.log('=== SUPABASE SIGNUP RESPONSE ===');
       console.log('Data:', data);
       console.log('Error:', error);

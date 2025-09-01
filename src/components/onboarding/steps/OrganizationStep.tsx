@@ -1,14 +1,56 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Building2, Globe, Users } from 'lucide-react'
+import { Building2, Globe, Users, CheckCircle } from 'lucide-react'
+import { supabase } from '@/integrations/supabase/client'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function OrganizationStep() {
   const { register, watch, setValue, formState: { errors } } = useFormContext()
+  const { user } = useAuth()
   const useCase = watch('organization.useCase')
+  const orgName = watch('organization.orgName')
+
+  // Load existing organization data
+  useEffect(() => {
+    const loadOrganizationData = async () => {
+      if (!user) return;
+
+      try {
+        // Get user's organization
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('org_id')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profile?.org_id) {
+          const { data: org } = await supabase
+            .from('orgs')
+            .select('name, website')
+            .eq('id', profile.org_id)
+            .single();
+
+          if (org) {
+            // Set the organization name if it exists
+            if (org.name && org.name !== 'Mijn Organisatie') {
+              setValue('organization.orgName', org.name);
+            }
+            if (org.website) {
+              setValue('organization.website', org.website);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading organization data:', error);
+      }
+    };
+
+    loadOrganizationData();
+  }, [user, setValue]);
 
   return (
     <Card className="w-full max-w-xl mx-auto bg-gray-800 border-gray-700">
@@ -21,29 +63,45 @@ export default function OrganizationStep() {
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Organization Name */}
-        <div className="space-y-2">
-          <Label htmlFor="orgName" className="text-sm font-medium text-gray-700">
-            Organisatienaam
-          </Label>
-          <div className="relative">
-            <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              id="orgName"
-              placeholder="Jouw bedrijf of organisatie"
-              className={`pl-10 ${errors.organization?.orgName ? 'border-red-500' : ''}`}
-              {...register('organization.orgName')}
-            />
-          </div>
-          {errors.organization?.orgName && (
-            <p className="text-sm text-red-500">
-              {errors.organization.orgName.message}
+        {/* Organization Name - Only show if not already set */}
+        {(!orgName || orgName === 'Mijn Organisatie') ? (
+          <div className="space-y-2">
+            <Label htmlFor="orgName" className="text-sm font-medium text-gray-700">
+              Organisatienaam
+            </Label>
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                id="orgName"
+                placeholder="Jouw bedrijf of organisatie"
+                className={`pl-10 ${errors.organization?.orgName ? 'border-red-500' : ''}`}
+                {...register('organization.orgName')}
+              />
+            </div>
+            {errors.organization?.orgName && (
+              <p className="text-sm text-red-500">
+                {errors.organization.orgName.message}
+              </p>
+            )}
+            <p className="text-xs text-gray-500">
+              De naam van je bedrijf, team of organisatie (optioneel)
             </p>
-          )}
-          <p className="text-xs text-gray-500">
-            De naam van je bedrijf, team of organisatie (optioneel)
-          </p>
-        </div>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700">
+              Organisatienaam
+            </Label>
+            <div className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              <span className="text-green-800 font-medium">{orgName}</span>
+              <span className="text-green-600 text-sm">(al ingesteld)</span>
+            </div>
+            <p className="text-xs text-gray-500">
+              Je organisatienaam is al ingesteld bij de betaling
+            </p>
+          </div>
+        )}
 
         {/* Website */}
         <div className="space-y-2">
