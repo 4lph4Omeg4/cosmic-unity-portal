@@ -252,6 +252,45 @@ const SupabaseDebug: React.FC = () => {
               🔄 Refresh Status
             </Button>
           </div>
+
+          <div className="border-t pt-4">
+            <h3 className="font-semibold mb-2">Manual Tests:</h3>
+            <div className="space-y-2">
+              <Button 
+                onClick={async () => {
+                  try {
+                    console.log("Testing create-org manually...");
+                    const response = await fetch('https://wdclgadjetxhcududipz.supabase.co/functions/v1/create-org', {
+                      method: 'OPTIONS',
+                      headers: {
+                        'Origin': window.location.origin,
+                      }
+                    });
+                    console.log("OPTIONS response:", response.status, response.headers);
+                    
+                    const response2 = await fetch('https://wdclgadjetxhcududipz.supabase.co/functions/v1/create-org', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkY2xnYWRqZXR4aGN1ZHVkaXB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0ODMwNDUsImV4cCI6MjA2OTA1OTA0NX0.5hWgUyRpqwwqNIBFCJqjF68_6zxN65Q43d0ziA2Qleo',
+                      },
+                      body: JSON.stringify({ name: 'Test Company' })
+                    });
+                    console.log("POST response:", response2.status, response2.statusText);
+                    const text = await response2.text();
+                    console.log("Response body:", text);
+                  } catch (error) {
+                    console.error("Manual test error:", error);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                🧪 Test create-org manually
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
