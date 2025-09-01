@@ -95,24 +95,61 @@ const OnboardingRedirect: React.FC = () => {
           return;
         }
 
-          // Check if user is part of this organization
-          const { data: profile } = await supabase
+        // Check if user is part of this organization
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('org_id')
+          .eq('user_id', user.id)
+          .single();
+
+        console.log('Profile check result:', { profile, profileError });
+
+        if (profileError) {
+          console.error('Error checking profile:', profileError);
+          // Profile might not exist, try to create it
+          const { error: createProfileError } = await supabase
             .from('profiles')
-            .select('org_id')
-            .eq('user_id', user.id)
-            .single();
+            .insert({
+              user_id: user.id,
+              org_id: orgId,
+              display_name: user.email?.split('@')[0] || 'User',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
 
-          if (profile?.org_id !== orgId) {
-            // Update user's profile to link them to this organization
-            const { error: updateError } = await supabase
-              .from('profiles')
-              .update({ org_id: orgId })
-              .eq('user_id', user.id);
-
-            if (updateError) {
-              console.error('Error updating user profile:', updateError);
-            }
+          if (createProfileError) {
+            console.error('Error creating profile:', createProfileError);
+            toast({
+              title: "Profiel aanmaken mislukt",
+              description: "Er is een probleem opgetreden. Probeer het opnieuw.",
+              variant: "destructive",
+            });
+            navigate('/timeline-alchemy');
+            return;
           }
+          console.log('✅ Profile created and linked to organization');
+        } else if (profile?.org_id !== orgId) {
+          // Update user's profile to link them to this organization
+          console.log('Updating user profile to link to organization:', orgId);
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ org_id: orgId })
+            .eq('user_id', user.id);
+
+          if (updateError) {
+            console.error('Error updating user profile:', updateError);
+            toast({
+              title: "Profiel bijwerken mislukt",
+              description: "Er is een probleem opgetreden. Probeer het opnieuw.",
+              variant: "destructive",
+            });
+            navigate('/timeline-alchemy');
+            return;
+          }
+          console.log('✅ Profile updated and linked to organization');
+        } else {
+          console.log('✅ User already linked to organization');
+        }
 
           // Mark organization as needing onboarding
           const { error: onboardingError } = await supabase
