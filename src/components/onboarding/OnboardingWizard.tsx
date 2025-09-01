@@ -73,10 +73,83 @@ export default function OnboardingWizard() {
 
   const { handleSubmit, watch, reset } = methods
 
-  // Load draft data on mount
+  // Load draft data on mount and check user-organization link
   useEffect(() => {
     const loadDraftData = async () => {
       try {
+        // First check if user is linked to an organization
+        if (user) {
+          console.log('Checking user-organization link for user:', user.id);
+          
+          const { supabase } = await import('@/integrations/supabase/client');
+          
+          // Check if user has a profile with org_id
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('org_id')
+            .eq('user_id', user.id)
+            .single();
+
+          console.log('Profile check result:', { profile, profileError });
+
+          if (profileError || !profile?.org_id) {
+            console.log('User not linked to organization, trying to find TLA organization...');
+            
+            // Try to find a TLA organization that needs onboarding
+            const { data: orgs, error: orgsError } = await supabase
+              .from('orgs')
+              .select('id, name, tla_client, needs_onboarding')
+              .eq('tla_client', true)
+              .eq('needs_onboarding', true)
+              .order('created_at', { ascending: false })
+              .limit(1);
+
+            if (orgsError) {
+              console.error('Error finding TLA organizations:', orgsError);
+            } else if (orgs && orgs.length > 0) {
+              const org = orgs[0];
+              console.log('Found TLA organization:', org);
+              
+              // Link user to this organization
+              if (!profile) {
+                // Create profile if it doesn't exist
+                const { error: createError } = await supabase
+                  .from('profiles')
+                  .insert({
+                    user_id: user.id,
+                    org_id: org.id,
+                    display_name: user.email?.split('@')[0] || 'User',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                  });
+
+                if (createError) {
+                  console.error('Error creating profile:', createError);
+                } else {
+                  console.log('✅ Profile created and linked to organization:', org.id);
+                }
+              } else {
+                // Update existing profile
+                const { error: updateError } = await supabase
+                  .from('profiles')
+                  .update({ org_id: org.id })
+                  .eq('user_id', user.id);
+
+                if (updateError) {
+                  console.error('Error updating profile:', updateError);
+                } else {
+                  console.log('✅ Profile updated and linked to organization:', org.id);
+                }
+              }
+            } else {
+              console.log('No TLA organizations found that need onboarding');
+            }
+          } else {
+            console.log('✅ User already linked to organization:', profile.org_id);
+          }
+        }
+
+        // Then load draft data
         const draft = await loadDraft()
         if (draft && Object.keys(draft).length > 0) {
           reset(draft as OnboardingFormData)
@@ -91,7 +164,7 @@ export default function OnboardingWizard() {
       }
     }
     loadDraftData()
-  }, [reset, toast])
+  }, [reset, toast, user])
 
   // Debounced autosave
   const debouncedSave = useCallback(

@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [{ price: price_id, quantity: 1 }],
-      success_url: `${origin}/onboarding?session=success&org_id=${org_id}`,
+      success_url: `${origin}/timeline-alchemy?session=success&org_id=${org_id}`,
       cancel_url: `${origin}/timeline-alchemy?session=cancel`,
 
       // belangrijk:

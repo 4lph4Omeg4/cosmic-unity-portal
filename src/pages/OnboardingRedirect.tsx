@@ -151,19 +151,21 @@ const OnboardingRedirect: React.FC = () => {
           console.log('✅ User already linked to organization');
         }
 
-          // Mark organization as needing onboarding
-          const { error: onboardingError } = await supabase
-            .from('orgs')
-            .update({ 
-              needs_onboarding: true,
-              onboarding_completed: false,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', orgId);
+        // Mark organization as needing onboarding
+        const { error: onboardingError } = await supabase
+          .from('orgs')
+          .update({ 
+            needs_onboarding: true,
+            onboarding_completed: false,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', orgId);
 
-          if (onboardingError) {
-            console.error('Error updating onboarding status:', onboardingError);
-          }
+        if (onboardingError) {
+          console.error('Error updating onboarding status:', onboardingError);
+        } else {
+          console.log('✅ Organization marked as needing onboarding');
+        }
 
           setIsValidRedirect(true);
           toast({
