@@ -290,7 +290,7 @@ const SupabaseDebug: React.FC = () => {
                 🧪 Test create-org manually
               </Button>
 
-              <Button 
+                            <Button
                 onClick={async () => {
                   try {
                     console.log("Testing email verification settings...");
@@ -311,7 +311,7 @@ const SupabaseDebug: React.FC = () => {
                     // Test signup with email verification
                     const testEmail = `test-${Date.now()}@example.com`;
                     console.log("Testing signup with email:", testEmail);
-                    
+
                     const { data, error } = await supabase.auth.signUp({
                       email: testEmail,
                       password: 'testpassword123',
@@ -321,7 +321,7 @@ const SupabaseDebug: React.FC = () => {
                     });
 
                     console.log("Signup test result:", { data, error });
-                    
+
                     if (data?.user) {
                       console.log("Test user created:", {
                         id: data.user.id,
@@ -339,6 +339,54 @@ const SupabaseDebug: React.FC = () => {
                 className="w-full"
               >
                 📧 Test email verification
+              </Button>
+
+              <Button
+                onClick={async () => {
+                  try {
+                    console.log("Resetting test organizations...");
+                    
+                    // Reset test organizations via direct SQL
+                    const { data, error } = await supabase.rpc('reset_test_orgs');
+                    
+                    if (error) {
+                      console.error("Reset error:", error);
+                      // Fallback: try direct SQL
+                      const { data: sqlData, error: sqlError } = await supabase
+                        .from('orgs')
+                        .update({ 
+                          tla_client: true,
+                          needs_onboarding: true,
+                          onboarding_completed: false,
+                          updated_at: new Date().toISOString()
+                        })
+                        .like('id', 'tla_%');
+                      
+                      if (sqlError) {
+                        console.error("SQL reset error:", sqlError);
+                      } else {
+                        console.log("Test orgs reset via SQL:", sqlData);
+                      }
+                    } else {
+                      console.log("Test orgs reset:", data);
+                    }
+
+                    // Show current state
+                    const { data: orgs } = await supabase
+                      .from('orgs')
+                      .select('id, name, tla_client, needs_onboarding, onboarding_completed')
+                      .order('created_at', { ascending: false });
+                    
+                    console.log("Current organizations:", orgs);
+                  } catch (error) {
+                    console.error("Reset test orgs error:", error);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                🔄 Reset test orgs
               </Button>
             </div>
           </div>

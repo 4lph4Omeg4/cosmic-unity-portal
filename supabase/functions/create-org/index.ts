@@ -43,6 +43,9 @@ Deno.serve(async (req) => {
         name: name.trim(),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+        tla_client: true,
+        needs_onboarding: true,
+        onboarding_completed: false,
       })
       .select()
       .single();

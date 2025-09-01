@@ -77,6 +77,7 @@ Deno.serve(async (req) => {
         const { error: onboardingError } = await sb
           .from("orgs")
           .update({ 
+            tla_client: true,
             needs_onboarding: true,
             onboarding_completed: false,
             updated_at: new Date().toISOString()

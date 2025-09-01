@@ -71,6 +71,18 @@ const OnboardingRedirect: React.FC = () => {
           return;
         }
 
+        // Check if this is a TLA client organization
+        if (!org.tla_client) {
+          console.log('Not a TLA client organization');
+          toast({
+            title: "Geen TLA organisatie",
+            description: "Deze organisatie is niet gekoppeld aan Timeline Alchemy.",
+            variant: "destructive",
+          });
+          navigate('/timeline-alchemy');
+          return;
+        }
+
         // Check if onboarding is already completed
         if (org.onboarding_completed) {
           console.log('Onboarding already completed, redirecting to dashboard');

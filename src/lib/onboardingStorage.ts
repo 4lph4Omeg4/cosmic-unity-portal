@@ -75,6 +75,7 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
 
     // Update organization with onboarding data
     const orgUpdates: any = {
+      tla_client: true,
       needs_onboarding: false,
       onboarding_completed: true,
       updated_at: new Date().toISOString()
