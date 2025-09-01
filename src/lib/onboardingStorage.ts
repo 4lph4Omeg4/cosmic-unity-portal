@@ -70,6 +70,7 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
 
       if (updateError) {
         console.error('Error updating profile:', updateError);
+        throw new Error(`Failed to update profile: ${updateError.message}`);
       }
     }
 
@@ -87,6 +88,17 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
     if (d.organization?.website) {
       orgUpdates.website = d.organization.website;
     }
+    if (d.organization?.useCase) {
+      orgUpdates.use_case = d.organization.useCase;
+    }
+
+    // Add socials and preferences data
+    if (d.socials) {
+      orgUpdates.socials_data = d.socials;
+    }
+    if (d.preferences) {
+      orgUpdates.preferences_data = d.preferences;
+    }
 
     const { error: orgError } = await supabase
       .from('orgs')
@@ -95,6 +107,7 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
 
     if (orgError) {
       console.error('Error updating organization:', orgError);
+      throw new Error(`Failed to update organization: ${orgError.message}`);
     }
 
     // Save onboarding data to a separate table or as metadata
@@ -108,7 +121,6 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
       completed_at: new Date().toISOString()
     };
 
-    // You can create a separate onboarding_data table or store as JSON in profiles
     console.log('Onboarding completed successfully:', onboardingData);
 
   } catch (error) {
