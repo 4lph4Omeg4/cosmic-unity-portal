@@ -399,6 +399,56 @@ const SupabaseDebug: React.FC = () => {
               <Button
                 onClick={async () => {
                   try {
+                    console.log("=== TESTING PROFILE CREATION ===");
+                    
+                    // Test profile creation directly
+                    const testUserId = 'test-user-' + Date.now();
+                    const testProfile = {
+                      user_id: testUserId,
+                      display_name: 'Test User',
+                      created_at: new Date().toISOString(),
+                      updated_at: new Date().toISOString()
+                    };
+                    
+                    console.log("Attempting to create test profile:", testProfile);
+                    
+                    const { data, error } = await supabase
+                      .from('profiles')
+                      .insert(testProfile)
+                      .select();
+                    
+                    console.log("Profile creation result:", { data, error });
+                    
+                    if (data) {
+                      console.log("✅ Profile created successfully!");
+                      
+                      // Clean up test profile
+                      const { error: deleteError } = await supabase
+                        .from('profiles')
+                        .delete()
+                        .eq('user_id', testUserId);
+                      
+                      if (deleteError) {
+                        console.error("Failed to clean up test profile:", deleteError);
+                      } else {
+                        console.log("✅ Test profile cleaned up");
+                      }
+                    }
+                    
+                  } catch (error) {
+                    console.error("Profile creation test error:", error);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                🧪 Test profile creation
+              </Button>
+
+              <Button
+                onClick={async () => {
+                  try {
                     console.log("Resetting test organizations...");
                     
                     // Reset test organizations via direct SQL
