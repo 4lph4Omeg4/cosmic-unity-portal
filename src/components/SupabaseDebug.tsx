@@ -344,6 +344,61 @@ const SupabaseDebug: React.FC = () => {
               <Button
                 onClick={async () => {
                   try {
+                    console.log("=== CHECKING SUPABASE EMAIL SETTINGS ===");
+                    
+                    // Check current auth settings
+                    const { data: { session } } = await supabase.auth.getSession();
+                    console.log("Current session:", session);
+                    
+                    // Test email confirmation status
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (user) {
+                      console.log("Current user email status:", {
+                        email: user.email,
+                        email_confirmed_at: user.email_confirmed_at,
+                        confirmed_at: user.confirmed_at,
+                        email_confirmed: user.email_confirmed_at !== null,
+                        user_confirmed: user.confirmed_at !== null
+                      });
+                    }
+                    
+                    // Test resending confirmation email
+                    if (user && !user.email_confirmed_at) {
+                      console.log("Attempting to resend confirmation email...");
+                      const { data, error } = await supabase.auth.resend({
+                        type: 'signup',
+                        email: user.email,
+                        options: {
+                          emailRedirectTo: window.location.origin
+                        }
+                      });
+                      
+                      console.log("Resend result:", { data, error });
+                    }
+                    
+                    // Check if we can access auth settings
+                    console.log("=== EMAIL SETTINGS CHECKLIST ===");
+                    console.log("1. Go to Supabase Dashboard → Authentication → Settings");
+                    console.log("2. Check 'Enable email confirmations' is ON");
+                    console.log("3. Check 'Enable email change confirmations' is ON");
+                    console.log("4. Check SMTP settings are configured");
+                    console.log("5. Check 'Site URL' is set correctly");
+                    console.log("6. Check 'Redirect URLs' includes your domain");
+                    
+                  } catch (error) {
+                    console.error("Email settings check error:", error);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                ⚙️ Check email settings
+              </Button>
+
+              <Button
+                onClick={async () => {
+                  try {
                     console.log("Resetting test organizations...");
                     
                     // Reset test organizations via direct SQL
@@ -387,6 +442,58 @@ const SupabaseDebug: React.FC = () => {
                 className="w-full"
               >
                 🔄 Reset test orgs
+              </Button>
+
+              <Button
+                onClick={async () => {
+                  try {
+                    console.log("=== TESTING STRIPE WEBHOOK ===");
+                    
+                    // Get current organizations
+                    const { data: orgs } = await supabase
+                      .from('orgs')
+                      .select('id, name, tla_client, needs_onboarding, onboarding_completed')
+                      .order('created_at', { ascending: false });
+                    
+                    console.log("Current organizations:", orgs);
+                    
+                    // Test webhook manually by calling the function
+                    const { data, error } = await supabase.functions.invoke('stripe-webhook', {
+                      body: {
+                        type: 'checkout.session.completed',
+                        data: {
+                          object: {
+                            id: 'cs_test_' + Date.now(),
+                            customer: 'cus_test_' + Date.now(),
+                            metadata: {
+                              org_id: orgs?.[0]?.id || 'tla_test_' + Date.now()
+                            },
+                            payment_status: 'paid',
+                            status: 'complete'
+                          }
+                        }
+                      }
+                    });
+                    
+                    console.log("Webhook test result:", { data, error });
+                    
+                    // Check organizations again
+                    const { data: orgsAfter } = await supabase
+                      .from('orgs')
+                      .select('id, name, tla_client, needs_onboarding, onboarding_completed')
+                      .order('created_at', { ascending: false });
+                    
+                    console.log("Organizations after webhook:", orgsAfter);
+                    
+                  } catch (error) {
+                    console.error("Stripe webhook test error:", error);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                💳 Test Stripe webhook
               </Button>
             </div>
           </div>
