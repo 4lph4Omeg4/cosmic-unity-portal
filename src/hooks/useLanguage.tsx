@@ -221,6 +221,7 @@ const translations = {
       password: {
         label: 'Wachtwoord',
         hint: 'Minimaal 8 tekens',
+        placeholder: 'Jouw wachtwoord',
       },
       consent: 'Ik ga akkoord met het ontvangen van cosmische updates en marketingmails',
       error: {
@@ -663,6 +664,7 @@ const translations = {
       password: {
         label: 'Password',
         hint: 'Minimum 8 characters',
+        placeholder: 'Your password',
       },
       consent: 'I agree to receive cosmic updates and marketing emails',
       error: {
@@ -1105,6 +1107,7 @@ const translations = {
       password: {
         label: 'Passwort',
         hint: 'Mindestens 8 Zeichen',
+        placeholder: 'Dein Passwort',
       },
       consent: 'Ich stimme zu, kosmische Updates und Marketing-E-Mails zu erhalten',
       error: {
