@@ -261,7 +261,7 @@ const TimelineAlchemy: React.FC = () => {
           </div>
 
           {/* CTA knop */}
-          <TlaSubscribeButton orgId={ORG_ID} priceId={PRICE_ID} variant="hero" className="w-full sm:w-auto">
+          <TlaSubscribeButton priceId={PRICE_ID} variant="hero" className="w-full sm:w-auto">
             <span className="flex items-center justify-center">
               {currentStyle.cta}
               <ArrowRight className="w-5 h-5 ml-2" />
