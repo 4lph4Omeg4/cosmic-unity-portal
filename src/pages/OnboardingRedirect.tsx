@@ -71,6 +71,18 @@ const OnboardingRedirect: React.FC = () => {
           return;
         }
 
+        // Check if onboarding is already completed
+        if (org.onboarding_completed) {
+          console.log('Onboarding already completed, redirecting to dashboard');
+          toast({
+            title: "Welkom terug! 🎉",
+            description: "Je onboarding is al voltooid. Je wordt doorgestuurd naar je dashboard.",
+            duration: 3000,
+          });
+          navigate('/timeline-alchemy/client/my-previews');
+          return;
+        }
+
           // Check if user is part of this organization
           const { data: profile } = await supabase
             .from('profiles')

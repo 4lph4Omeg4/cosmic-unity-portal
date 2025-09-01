@@ -3,15 +3,18 @@ import Stripe from "https://esm.sh/stripe@15.4.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 Deno.serve(async (req) => {
-  // Handle CORS
+  // Simple CORS headers for all responses
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': '*',
+  };
+
+  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Stripe-Signature',
-      },
+      headers: corsHeaders,
     });
   }
 
@@ -25,7 +28,10 @@ Deno.serve(async (req) => {
     console.error("[webhook] missing envs", { hasWebhook: !!webhookSecret, hasKey: !!stripeKey, hasUrl: !!url, hasSrv: !!serviceRole });
     return new Response("Missing envs", { 
       status: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   }
 
@@ -39,7 +45,10 @@ Deno.serve(async (req) => {
     console.error("[webhook] bad signature", err);
     return new Response("Bad signature", { 
       status: 400,
-      headers: { 'Access-Control-Allow-Origin': '*' }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   }
 
@@ -142,13 +151,19 @@ Deno.serve(async (req) => {
 
     return new Response("OK", { 
       status: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   } catch (err) {
     console.error("[webhook] error", err);
     return new Response("Webhook error", { 
       status: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   }
 });

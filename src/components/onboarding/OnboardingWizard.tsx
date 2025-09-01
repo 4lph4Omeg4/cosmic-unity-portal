@@ -161,7 +161,7 @@ export default function OnboardingWizard() {
           duration: 5000
         })
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate('/timeline-alchemy/client/my-previews')
         }, 2000)
       } catch (error) {
         console.error('Error finishing onboarding:', error)
