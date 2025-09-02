@@ -57,6 +57,7 @@ export default function PreviewWizardNew() {
   const [ideas, setIdeas] = useState<Idea[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [form, setForm] = useState<PreviewForm>({
     step: 1,
     selectedClient: '',
@@ -65,8 +66,43 @@ export default function PreviewWizardNew() {
   })
 
   useEffect(() => {
+    checkAdminStatus()
     loadData()
   }, [])
+
+  const checkAdminStatus = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.error('User not authenticated')
+        navigate('/auth')
+        return
+      }
+
+      // Check if user is admin
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('user_id', user.id)
+        .single()
+
+      if (error) {
+        console.error('Error checking admin status:', error)
+        return
+      }
+
+      if (!profile?.is_admin) {
+        console.log('User is not admin, redirecting...')
+        navigate('/timeline-alchemy/client/my-previews-new')
+        return
+      }
+
+      setIsAdmin(true)
+      console.log('User is admin, proceeding...')
+    } catch (error) {
+      console.error('Error in checkAdminStatus:', error)
+    }
+  }
 
   const loadData = async () => {
     try {
@@ -378,10 +414,19 @@ export default function PreviewWizardNew() {
     }
   }
 
-  if (loading) {
+  if (loading || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="text-lg text-white">Loading preview wizard...</div>
+        <div className="text-center">
+          <div className="text-lg text-white mb-2">
+            {loading ? 'Loading preview wizard...' : 'Checking admin access...'}
+          </div>
+          {!isAdmin && (
+            <div className="text-sm text-gray-400">
+              Redirecting to client dashboard...
+            </div>
+          )}
+        </div>
       </div>
     )
   }
@@ -392,6 +437,16 @@ export default function PreviewWizardNew() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">Preview Wizard (New)</h1>
         <p className="mt-2 text-gray-300">Simple preview creation in 3 steps</p>
+      </div>
+
+      {/* Debug Info */}
+      <div className="bg-green-900/20 rounded-lg p-4 border border-green-700">
+        <h4 className="text-lg font-medium text-green-300 mb-2">Admin Status</h4>
+        <div className="text-sm text-green-200">
+          <p>✅ Admin access confirmed</p>
+          <p>📊 Ideas loaded: {ideas.length}</p>
+          <p>👥 Clients loaded: {clients.length}</p>
+        </div>
       </div>
 
       {/* Progress Steps */}
