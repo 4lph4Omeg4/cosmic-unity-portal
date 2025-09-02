@@ -73,14 +73,31 @@ const OnboardingRedirect: React.FC = () => {
 
         // Check if this is a TLA client organization
         if (!org.tla_client) {
-          console.log('Not a TLA client organization');
-          toast({
-            title: "Geen TLA organisatie",
-            description: "Deze organisatie is niet gekoppeld aan Timeline Alchemy.",
-            variant: "destructive",
-          });
-          navigate('/timeline-alchemy');
-          return;
+          console.log('Not a TLA client organization, updating to TLA client...');
+          
+          // Update organization to be a TLA client
+          const { error: updateTlaError } = await supabase
+            .from('orgs')
+            .update({ 
+              tla_client: true,
+              needs_onboarding: true,
+              onboarding_completed: false,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', orgId);
+
+          if (updateTlaError) {
+            console.error('Error updating organization to TLA client:', updateTlaError);
+            toast({
+              title: "Organisatie update mislukt",
+              description: "Er is een probleem opgetreden. Probeer het opnieuw.",
+              variant: "destructive",
+            });
+            navigate('/timeline-alchemy');
+            return;
+          }
+          
+          console.log('✅ Organization updated to TLA client');
         }
 
         // Check if onboarding is already completed
@@ -170,9 +187,14 @@ const OnboardingRedirect: React.FC = () => {
           setIsValidRedirect(true);
           toast({
             title: "Welkom bij Timeline Alchemy! 🎉",
-            description: "Laten we je profiel instellen om te beginnen.",
-            duration: 5000,
+            description: "Je wordt doorgestuurd naar de onboarding wizard.",
+            duration: 3000,
           });
+          
+          // Redirect to onboarding wizard after a short delay
+          setTimeout(() => {
+            navigate('/timeline-alchemy?onboarding=true');
+          }, 2000);
         } else {
           // Not a valid redirect, go back to Timeline Alchemy
           navigate('/timeline-alchemy');

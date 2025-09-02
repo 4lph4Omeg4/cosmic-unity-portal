@@ -83,15 +83,16 @@ const TimelineAlchemy: React.FC = () => {
     })();
   }, []);
 
-  // Stripe redirect feedback (?session=success | ?session=cancel)
+  // Stripe redirect feedback (?session=success | ?session=cancel) and onboarding trigger
   useEffect(() => {
     const session = searchParams.get("session");
     const orgId = searchParams.get("org_id");
-    console.log('TimelineAlchemy - URL params:', { session, orgId });
+    const onboarding = searchParams.get("onboarding");
+    console.log('TimelineAlchemy - URL params:', { session, orgId, onboarding });
     console.log('TimelineAlchemy - Current showOnboarding state:', showOnboarding);
     
-    if (session === "success") {
-      console.log('TimelineAlchemy - Success detected, showing onboarding...');
+    if (session === "success" || onboarding === "true") {
+      console.log('TimelineAlchemy - Success or onboarding detected, showing onboarding...');
       toast({ 
         title: "Welkom in de stroom ⚡", 
         description: "Je abonnement is actief. Laten we je profiel instellen!",
