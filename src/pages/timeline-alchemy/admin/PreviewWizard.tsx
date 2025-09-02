@@ -118,7 +118,7 @@ export default function TimelineAlchemyPreviewWizard() {
         setClients([])
       } else if (clientsData && clientsData.length > 0) {
         const transformedClients = clientsData.map((client: any) => ({
-          id: client.user_id, // Use user_id as the client ID
+          id: client.client_id || client.user_id, // Use client_id if available, fallback to user_id
           name: client.display_name || 'Unnamed Client',
           email: 'No email', // Profiles don't have email, would need to join with auth.users
           organization: 'Client Account' // These are individual client accounts
