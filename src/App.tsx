@@ -44,6 +44,7 @@ import NotFound from "./pages/NotFound";
 // Timeline Alchemy
 import TimelineAlchemy from "./pages/TimelineAlchemy";
 import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
+import DashboardNew from "./pages/timeline-alchemy/admin/DashboardNew";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
 import PreviewWizardNew from "./pages/timeline-alchemy/admin/PreviewWizardNew";
@@ -146,6 +147,10 @@ const App: React.FC = () => {
                   <Route
                     path="/timeline-alchemy/admin/dashboard"
                     element={<TimelineAlchemyDashboard />}
+                  />
+                  <Route
+                    path="/timeline-alchemy/admin/dashboard-new"
+                    element={<DashboardNew />}
                   />
                   <Route
                     path="/timeline-alchemy/admin/ideas"

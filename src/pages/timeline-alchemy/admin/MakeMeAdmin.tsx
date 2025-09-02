@@ -41,9 +41,9 @@ export default function MakeMeAdmin() {
       setSuccess(true)
       console.log('Successfully made user admin')
       
-      // Redirect to admin dashboard after 2 seconds
+      // Redirect to new admin dashboard after 2 seconds
       setTimeout(() => {
-        navigate('/timeline-alchemy/admin/preview-wizard-new')
+        navigate('/timeline-alchemy/admin/dashboard-new')
       }, 2000)
       
     } catch (error) {

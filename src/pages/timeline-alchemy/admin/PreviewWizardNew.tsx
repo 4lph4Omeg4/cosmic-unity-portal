@@ -256,10 +256,10 @@ export default function PreviewWizardNew() {
         return
       }
 
-      // Show success message and navigate to dashboard
+      // Show success message and navigate to new dashboard
       const previewCount = form.selectedIdeas.length
       alert(`${previewCount} preview${previewCount !== 1 ? 's' : ''} saved successfully! Redirecting to dashboard...`)
-      navigate('/timeline-alchemy/admin/dashboard')
+      navigate('/timeline-alchemy/admin/dashboard-new')
     } catch (error) {
       console.error('Error saving preview:', error)
       alert('Failed to save preview')
