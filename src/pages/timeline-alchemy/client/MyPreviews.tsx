@@ -73,14 +73,29 @@ export default function TimelineAlchemyMyPreviews() {
         return
       }
 
-      // Try to load previews for this user
+      // First, get the client_id for this user from client_users table
+      const { data: clientUserData, error: clientUserError } = await supabase
+        .from('client_users')
+        .select('client_id')
+        .eq('user_id', user.id)
+        .single()
+
+      if (clientUserError || !clientUserData?.client_id) {
+        console.log('User not found in client_users table or no client_id')
+        setPreviews([])
+        return
+      }
+
+      console.log('Found client_id for user:', clientUserData.client_id)
+
+      // Now load previews for this client_id
       const { data, error } = await supabase
         .from('previews')
         .select(`
           *,
           ideas(title, description)
         `)
-        .eq('client_id', user.id)
+        .eq('client_id', clientUserData.client_id)
         .order('created_at', { ascending: false })
 
       if (error) {
