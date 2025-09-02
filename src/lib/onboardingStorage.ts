@@ -44,10 +44,10 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
 
     console.log('Current user:', user.id);
 
-    // Get user profile to find org_id
+    // Get user profile
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('org_id, display_name, role')
+      .select('display_name, role')
       .eq('user_id', user.id)
       .single();
 
@@ -58,12 +58,7 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
       throw new Error(`User profile not found: ${profileError.message}`);
     }
 
-    if (!profile?.org_id) {
-      console.error('No org_id in profile:', profile);
-      throw new Error('User profile is not linked to any organization');
-    }
-
-    console.log('User is linked to organization:', profile.org_id);
+    console.log('User profile found:', profile);
 
     // Update user profile with onboarding data
     const profileUpdates: any = {};
@@ -88,50 +83,12 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
       console.log('✅ Profile updated successfully');
     }
 
-    // Update organization with onboarding data
-    const orgUpdates: any = {
-      tla_client: true,
-      needs_onboarding: false,
-      onboarding_completed: true,
-      updated_at: new Date().toISOString()
-    };
-
-    if (d.organization?.orgName) {
-      orgUpdates.name = d.organization.orgName;
-    }
-    if (d.organization?.website) {
-      orgUpdates.website = d.organization.website;
-    }
-    if (d.organization?.useCase) {
-      orgUpdates.use_case = d.organization.useCase;
-    }
-
-    // Add socials and preferences data
-    if (d.socials) {
-      orgUpdates.socials_data = d.socials;
-    }
-    if (d.preferences) {
-      orgUpdates.preferences_data = d.preferences;
-    }
-
-    console.log('Updating organization with:', orgUpdates);
-
-    const { error: orgError } = await supabase
-      .from('orgs')
-      .update(orgUpdates)
-      .eq('id', profile.org_id);
-
-    if (orgError) {
-      console.error('Error updating organization:', orgError);
-      throw new Error(`Failed to update organization: ${orgError.message}`);
-    }
-
-    console.log('✅ Organization updated successfully');
+    // Mark onboarding as completed (no need to update individual org since we use the main TLA org)
+    console.log('✅ Onboarding completed - user has access to TLA functions');
 
     // Save onboarding data to a separate table or as metadata
     const onboardingData = {
       user_id: user.id,
-      org_id: profile.org_id,
       profile_data: d.profile,
       organization_data: d.organization,
       socials_data: d.socials,

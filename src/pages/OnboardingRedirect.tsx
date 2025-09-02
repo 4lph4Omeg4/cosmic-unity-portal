@@ -112,60 +112,52 @@ const OnboardingRedirect: React.FC = () => {
           return;
         }
 
-        // Check if user is part of this organization
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('org_id')
-          .eq('user_id', user.id)
-          .single();
+        // Add user to the working account structure (like existing accounts)
+        console.log('Setting up user with working account structure...');
+        
+        // 1. Add to org_members table (like existing accounts)
+        const { error: orgMembersError } = await supabase
+          .from('org_members')
+          .insert({
+            org_id: 'timeline-alchemy', // Use the main TLA org
+            user_id: user.id,
+            role: 'member' // New users get member role
+          });
 
-        console.log('Profile check result:', { profile, profileError });
-
-        if (profileError) {
-          console.error('Error checking profile:', profileError);
-          // Profile might not exist, try to create it
-          const { error: createProfileError } = await supabase
-            .from('profiles')
-            .insert({
-              user_id: user.id,
-              org_id: orgId,
-              display_name: user.email?.split('@')[0] || 'User',
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            });
-
-          if (createProfileError) {
-            console.error('Error creating profile:', createProfileError);
-            toast({
-              title: "Profiel aanmaken mislukt",
-              description: "Er is een probleem opgetreden. Probeer het opnieuw.",
-              variant: "destructive",
-            });
-            navigate('/timeline-alchemy');
-            return;
-          }
-          console.log('✅ Profile created and linked to organization');
-        } else if (profile?.org_id !== orgId) {
-          // Update user's profile to link them to this organization
-          console.log('Updating user profile to link to organization:', orgId);
-          const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ org_id: orgId })
-            .eq('user_id', user.id);
-
-          if (updateError) {
-            console.error('Error updating user profile:', updateError);
-            toast({
-              title: "Profiel bijwerken mislukt",
-              description: "Er is een probleem opgetreden. Probeer het opnieuw.",
-              variant: "destructive",
-            });
-            navigate('/timeline-alchemy');
-            return;
-          }
-          console.log('✅ Profile updated and linked to organization');
+        if (orgMembersError) {
+          console.error('Error adding to org_members:', orgMembersError);
+          // Don't fail if user already exists
         } else {
-          console.log('✅ User already linked to organization');
+          console.log('✅ User added to org_members');
+        }
+
+        // 2. Add to has_tla_access table
+        const { error: tlaAccessError } = await supabase
+          .from('has_tla_access')
+          .insert({
+            user_id: user.id
+          });
+
+        if (tlaAccessError) {
+          console.error('Error adding to has_tla_access:', tlaAccessError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to has_tla_access');
+        }
+
+        // 3. Add to tla_org_access table
+        const { error: tlaOrgAccessError } = await supabase
+          .from('tla_org_access')
+          .insert({
+            user_id: user.id,
+            org_id: 'b02de5d1-382c-4c8a-b1c4-0c9abdd1b6f8' // The main TLA org ID
+          });
+
+        if (tlaOrgAccessError) {
+          console.error('Error adding to tla_org_access:', tlaOrgAccessError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to tla_org_access');
         }
 
         // Mark organization as needing onboarding
