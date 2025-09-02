@@ -160,6 +160,21 @@ const OnboardingRedirect: React.FC = () => {
           console.log('✅ User added to tla_org_access');
         }
 
+        // 4. Add to client_users table (crucial for dashboard access)
+        const { error: clientUsersError } = await supabase
+          .from('client_users')
+          .insert({
+            client_id: '1c75c839-87a9-46ad-8fe7-5c4cfb68a1db', // The main client ID
+            user_id: user.id
+          });
+
+        if (clientUsersError) {
+          console.error('Error adding to client_users:', clientUsersError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to client_users');
+        }
+
         // Mark organization as needing onboarding
         const { error: onboardingError } = await supabase
           .from('orgs')
