@@ -175,6 +175,21 @@ const OnboardingRedirect: React.FC = () => {
           console.log('✅ User added to client_users');
         }
 
+        // 5. Update user profile with client_id (crucial for preview access)
+        const { error: profileUpdateError } = await supabase
+          .from('profiles')
+          .update({ 
+            client_id: '1c75c839-87a9-46ad-8fe7-5c4cfb68a1db' // The main client ID
+          })
+          .eq('user_id', user.id);
+
+        if (profileUpdateError) {
+          console.error('Error updating profile with client_id:', profileUpdateError);
+          // Don't fail if update fails
+        } else {
+          console.log('✅ Profile updated with client_id');
+        }
+
         // Mark organization as needing onboarding
         const { error: onboardingError } = await supabase
           .from('orgs')
