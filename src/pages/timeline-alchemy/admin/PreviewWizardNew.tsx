@@ -30,7 +30,7 @@ interface Client {
   email: string
 }
 
-interface BlogPost {
+interface Idea {
   id: string
   title: string
   body?: string
@@ -47,20 +47,20 @@ interface BlogPost {
 interface PreviewForm {
   step: number
   selectedClient: string
-  selectedPosts: string[]
+  selectedIdeas: string[]
   adminNotes: string
 }
 
 export default function PreviewWizardNew() {
   const navigate = useNavigate()
   const [clients, setClients] = useState<Client[]>([])
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [ideas, setIdeas] = useState<Idea[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState<PreviewForm>({
     step: 1,
     selectedClient: '',
-    selectedPosts: [],
+    selectedIdeas: [],
     adminNotes: ''
   })
 
@@ -97,8 +97,8 @@ export default function PreviewWizardNew() {
         setClients([])
       }
 
-      // Load blog posts
-      await loadBlogPosts()
+      // Load ideas from blog_posts
+      await loadIdeas()
     } catch (error) {
       console.error('Error loading data:', error)
     } finally {
@@ -106,8 +106,9 @@ export default function PreviewWizardNew() {
     }
   }
 
-  const loadBlogPosts = async () => {
+  const loadIdeas = async () => {
     try {
+      // Load ideas from blog_posts table
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -133,13 +134,15 @@ export default function PreviewWizardNew() {
           image_url: post.image_url || null,
           image_public_url: post.image_public_url || null
         }))
-        setBlogPosts(transformedPosts)
+        setIdeas(transformedPosts)
+        console.log('Loaded ideas from blog_posts:', transformedPosts.length)
       } else {
-        setBlogPosts([])
+        setIdeas([])
+        console.log('No ideas found in blog_posts table')
       }
     } catch (error) {
-      console.error('Error in loadBlogPosts:', error)
-      setBlogPosts([])
+      console.error('Error in loadIdeas:', error)
+      setIdeas([])
     }
   }
 
@@ -160,8 +163,8 @@ export default function PreviewWizardNew() {
       console.log('handleSave called with form data:', form)
       setSaving(true)
       
-      if (!form.selectedClient || form.selectedPosts.length === 0) {
-        alert('Please select a client and at least one blog post')
+      if (!form.selectedClient || form.selectedIdeas.length === 0) {
+        alert('Please select a client and at least one idea')
         return
       }
 
@@ -172,25 +175,25 @@ export default function PreviewWizardNew() {
         return
       }
 
-      // Create previews for each selected post
-      const previewPromises = form.selectedPosts.map(async (postId) => {
-        const post = blogPosts.find(p => p.id === postId)
-        if (!post) return null
+      // Create previews for each selected idea
+      const previewPromises = form.selectedIdeas.map(async (ideaId) => {
+        const idea = ideas.find(i => i.id === ideaId)
+        if (!idea) return null
         
         // Create preview data
         const previewData = {
-          post_id: postId,
-          post_title: post.title,
-          post_content: post.body,
+          idea_id: ideaId,
+          idea_title: idea.title,
+          idea_content: idea.body,
           social_content: {
-            facebook: post.facebook,
-            instagram: post.instagram,
-            x: post.x,
-            linkedin: post.linkedin
+            facebook: idea.facebook,
+            instagram: idea.instagram,
+            x: idea.x,
+            linkedin: idea.linkedin
           },
           images: {
-            main: post.image_public_url,
-            featured: post.featured_image
+            main: idea.image_public_url,
+            featured: idea.featured_image
           },
           created_by: user.id,
           created_at: new Date().toISOString()
@@ -218,7 +221,7 @@ export default function PreviewWizardNew() {
       }
 
       // Show success message and navigate to dashboard
-      const previewCount = form.selectedPosts.length
+      const previewCount = form.selectedIdeas.length
       alert(`${previewCount} preview${previewCount !== 1 ? 's' : ''} saved successfully! Redirecting to dashboard...`)
       navigate('/timeline-alchemy/admin/dashboard')
     } catch (error) {
@@ -232,7 +235,7 @@ export default function PreviewWizardNew() {
   const getStepTitle = (step: number) => {
     switch (step) {
       case 1: return 'Select Client'
-      case 2: return 'Select Blog Posts'
+      case 2: return 'Select Ideas'
       case 3: return 'Review & Save'
       default: return ''
     }
@@ -241,7 +244,7 @@ export default function PreviewWizardNew() {
   const getStepDescription = (step: number) => {
     switch (step) {
       case 1: return 'Choose which client this preview is for'
-      case 2: return 'Select blog posts for previews'
+      case 2: return 'Select ideas from blog_posts for previews'
       case 3: return 'Review and save previews'
       default: return ''
     }
@@ -282,39 +285,39 @@ export default function PreviewWizardNew() {
       case 2:
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Select Blog Posts</h3>
+            <h3 className="text-lg font-semibold text-white">Select Ideas</h3>
             <div className="space-y-4">
-              {blogPosts.map((post) => (
+              {ideas.map((idea) => (
                 <div
-                  key={post.id}
+                  key={idea.id}
                   className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                    form.selectedPosts.includes(post.id)
+                    form.selectedIdeas.includes(idea.id)
                       ? 'border-blue-500 bg-blue-900/20'
                       : 'border-gray-600 hover:border-gray-500 bg-gray-700'
                   }`}
                   onClick={() => {
-                    const isSelected = form.selectedPosts.includes(post.id)
+                    const isSelected = form.selectedIdeas.includes(idea.id)
                     if (isSelected) {
                       setForm(prev => ({ 
                         ...prev, 
-                        selectedPosts: prev.selectedPosts.filter(id => id !== post.id) 
+                        selectedIdeas: prev.selectedIdeas.filter(id => id !== idea.id) 
                       }))
                     } else {
                       setForm(prev => ({ 
                         ...prev, 
-                        selectedPosts: [...prev.selectedPosts, post.id] 
+                        selectedIdeas: [...prev.selectedIdeas, idea.id] 
                       }))
                     }
                   }}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="font-medium text-white">{post.title}</h4>
+                      <h4 className="font-medium text-white">{idea.title}</h4>
                       <p className="text-sm text-gray-300">
-                        {post.excerpt || post.body?.substring(0, 100) || 'No content preview'}
+                        {idea.excerpt || idea.body?.substring(0, 100) || 'No content preview'}
                       </p>
                     </div>
-                    {form.selectedPosts.includes(post.id) && (
+                    {form.selectedIdeas.includes(idea.id) && (
                       <CheckCircle className="w-5 h-5 text-blue-400" />
                     )}
                   </div>
@@ -340,16 +343,16 @@ export default function PreviewWizardNew() {
               </p>
             </div>
 
-            {/* Selected Posts */}
+            {/* Selected Ideas */}
             <div className="bg-gray-700 rounded-lg p-4">
-              <h4 className="font-medium text-white mb-2">Selected Posts ({form.selectedPosts.length})</h4>
+              <h4 className="font-medium text-white mb-2">Selected Ideas ({form.selectedIdeas.length})</h4>
               <div className="space-y-2">
-                {form.selectedPosts.map((postId) => {
-                  const post = blogPosts.find(p => p.id === postId)
-                  return post ? (
-                    <div key={postId} className="flex items-center gap-2">
+                {form.selectedIdeas.map((ideaId) => {
+                  const idea = ideas.find(i => i.id === ideaId)
+                  return idea ? (
+                    <div key={ideaId} className="flex items-center gap-2">
                       <Star className="w-4 h-4 text-blue-400" />
-                      <span className="text-gray-300">{post.title}</span>
+                      <span className="text-gray-300">{idea.title}</span>
                     </div>
                   ) : null
                 })}
@@ -450,7 +453,7 @@ export default function PreviewWizardNew() {
               onClick={nextStep}
               disabled={
                 (form.step === 1 && !form.selectedClient) ||
-                (form.step === 2 && form.selectedPosts.length === 0)
+                (form.step === 2 && form.selectedIdeas.length === 0)
               }
               className="flex items-center gap-2"
             >
