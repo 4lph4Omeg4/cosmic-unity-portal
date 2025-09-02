@@ -90,23 +90,21 @@ export default function ProfileStep() {
           </p>
         </div>
 
-        {/* Role Selection */}
+        {/* Role Selection - Only Client for new users */}
         <div className="space-y-2">
           <Label htmlFor="role" className="text-sm font-medium text-gray-700">
             Wat ben je?
           </Label>
-          <Select onValueChange={(value) => setValue('profile.role', value)}>
+          <Select onValueChange={(value) => setValue('profile.role', value)} defaultValue="Client">
             <SelectTrigger>
               <SelectValue placeholder="Selecteer je rol" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Creator">Creator</SelectItem>
               <SelectItem value="Client">Client</SelectItem>
-              <SelectItem value="Admin">Admin</SelectItem>
             </SelectContent>
           </Select>
           <p className="text-xs text-gray-500">
-            Kies de rol die het beste bij je past
+            Nieuwe gebruikers zijn standaard clients
           </p>
         </div>
       </CardContent>

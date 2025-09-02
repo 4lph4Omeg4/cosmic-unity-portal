@@ -47,6 +47,7 @@ import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
 import PreviewWizardNew from "./pages/timeline-alchemy/admin/PreviewWizardNew";
+import MakeMeAdmin from "./pages/timeline-alchemy/admin/MakeMeAdmin";
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
 import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
@@ -157,6 +158,10 @@ const App: React.FC = () => {
                   <Route
                     path="/timeline-alchemy/admin/preview-wizard-new"
                     element={<PreviewWizardNew />}
+                  />
+                  <Route
+                    path="/timeline-alchemy/admin/make-me-admin"
+                    element={<MakeMeAdmin />}
                   />
 
                   {/* Timeline Alchemy Client */}
