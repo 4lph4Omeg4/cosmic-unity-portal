@@ -46,7 +46,9 @@ import TimelineAlchemy from "./pages/TimelineAlchemy";
 import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
+import PreviewWizardNew from "./pages/timeline-alchemy/admin/PreviewWizardNew";
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
+import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
 
 // Analytics
@@ -152,11 +154,19 @@ const App: React.FC = () => {
                     path="/timeline-alchemy/admin/preview-wizard"
                     element={<TimelineAlchemyPreviewWizard />}
                   />
+                  <Route
+                    path="/timeline-alchemy/admin/preview-wizard-new"
+                    element={<PreviewWizardNew />}
+                  />
 
                   {/* Timeline Alchemy Client */}
                   <Route
                     path="/timeline-alchemy/client/my-previews"
                     element={<TimelineAlchemyMyPreviews />}
+                  />
+                  <Route
+                    path="/timeline-alchemy/client/my-previews-new"
+                    element={<MyPreviewsNew />}
                   />
                   <Route
                     path="/timeline-alchemy/client/social-connections"
