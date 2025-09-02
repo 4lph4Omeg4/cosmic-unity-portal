@@ -165,6 +165,7 @@ const App: React.FC = () => {
 
                   {/* Onboarding */}
                   <Route path="/onboarding" element={<OnboardingRedirect />} />
+                  <Route path="/onboarding-redirect" element={<OnboardingRedirect />} />
                   <Route path="/onboarding/demo" element={<OnboardingDemo />} />
                   <Route path="/onboarding/test" element={<OnboardingTest />} />
                   <Route path="/test" element={<TestPage />} />

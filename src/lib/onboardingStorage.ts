@@ -45,7 +45,7 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
     console.log('Current user:', user.id);
 
     // Get user profile to find org_id
-    let { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('org_id, display_name, role')
       .eq('user_id', user.id)
@@ -60,44 +60,7 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
 
     if (!profile?.org_id) {
       console.error('No org_id in profile:', profile);
-      
-      // Try to find and link to a TLA organization
-      console.log('Trying to find and link to TLA organization...');
-      const { data: orgs, error: orgsError } = await supabase
-        .from('orgs')
-        .select('id, name, tla_client, needs_onboarding')
-        .eq('tla_client', true)
-        .eq('needs_onboarding', true)
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      if (orgsError) {
-        console.error('Error finding TLA organizations:', orgsError);
-        throw new Error('Could not find TLA organization');
-      }
-
-      if (!orgs || orgs.length === 0) {
-        throw new Error('No TLA organizations found that need onboarding');
-      }
-
-      const org = orgs[0];
-      console.log('Found TLA organization to link to:', org);
-
-      // Link user to this organization
-      const { error: linkError } = await supabase
-        .from('profiles')
-        .update({ org_id: org.id })
-        .eq('user_id', user.id);
-
-      if (linkError) {
-        console.error('Error linking user to organization:', linkError);
-        throw new Error(`Failed to link user to organization: ${linkError.message}`);
-      }
-
-      console.log('✅ User linked to organization:', org.id);
-      
-      // Update profile variable for the rest of the function
-      profile = { ...profile, org_id: org.id };
+      throw new Error('User profile is not linked to any organization');
     }
 
     console.log('User is linked to organization:', profile.org_id);
