@@ -764,7 +764,7 @@ export default function PreviewWizardNew() {
       </div>
 
       {/* Progress Steps */}
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center">
@@ -787,6 +787,21 @@ export default function PreviewWizardNew() {
             </div>
           ))}
         </div>
+        
+        {/* Next Button */}
+        {form.step < 3 && (
+          <Button
+            onClick={() => setForm(prev => ({ ...prev, step: prev.step + 1 }))}
+            disabled={
+              (form.step === 1 && !form.selectedClient) ||
+              (form.step === 2 && form.selectedIdeas.length === 0)
+            }
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <ArrowRight className="w-4 h-4 mr-2" />
+            Next
+          </Button>
+        )}
       </div>
 
       {/* Step Content */}

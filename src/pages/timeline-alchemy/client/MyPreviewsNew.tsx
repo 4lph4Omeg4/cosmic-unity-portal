@@ -40,6 +40,7 @@ export default function MyPreviewsNew() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [feedbackTexts, setFeedbackTexts] = useState<{[key: string]: string}>({})
+  const [expandedPreviews, setExpandedPreviews] = useState<{[key: string]: boolean}>({})
 
   useEffect(() => {
     loadPreviews()
@@ -83,6 +84,13 @@ export default function MyPreviewsNew() {
       default:
         return 'text-gray-400'
     }
+  }
+
+  const toggleExpanded = (previewId: string) => {
+    setExpandedPreviews(prev => ({
+      ...prev,
+      [previewId]: !prev[previewId]
+    }))
   }
 
   const loadPreviews = async () => {
@@ -312,7 +320,17 @@ export default function MyPreviewsNew() {
               <CardContent className="space-y-4">
                 {/* Preview Data */}
                 <div className="bg-gray-700 rounded-lg p-4">
-                  <h4 className="font-medium text-white mb-2">Preview Content</h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium text-white">Preview Content</h4>
+                    <Button
+                      onClick={() => toggleExpanded(preview.id)}
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                    >
+                      {expandedPreviews[preview.id] ? 'Verberg volledige content' : 'Toon volledige content'}
+                    </Button>
+                  </div>
                   
                   {/* Idea Title */}
                   {preview.preview_data?.idea_title && (
@@ -322,26 +340,31 @@ export default function MyPreviewsNew() {
                     </div>
                   )}
                   
-                  {/* Idea Content */}
+                  {/* Idea Content - Always show first part */}
                   {preview.preview_data?.idea_content && (
                     <div className="mb-3">
                       <h5 className="font-medium text-gray-300 mb-1">Idea Content:</h5>
-                      <p className="text-gray-200 whitespace-pre-wrap">{preview.preview_data.idea_content}</p>
+                      <p className="text-gray-200 whitespace-pre-wrap">
+                        {expandedPreviews[preview.id] 
+                          ? preview.preview_data.idea_content
+                          : preview.preview_data.idea_content.substring(0, 200) + (preview.preview_data.idea_content.length > 200 ? '...' : '')
+                        }
+                      </p>
                     </div>
                   )}
                   
                   {/* Images */}
-                  {preview.preview_data?.images && (
+                  {preview.preview_data?.images && expandedPreviews[preview.id] && (
                     <div className="mb-3">
                       <h5 className="font-medium text-gray-300 mb-2">Preview Images:</h5>
                       <div className="grid grid-cols-2 gap-2">
-                        {/* Main Image */}
+                        {/* Utopia Theme */}
                         {preview.preview_data.images.main && (
                           <div className="bg-gray-600 rounded border border-gray-500 p-2">
-                            <h6 className="text-xs font-medium text-gray-300 mb-1">Main Image</h6>
+                            <h6 className="text-xs font-medium text-gray-300 mb-1">Utopia Theme</h6>
                             <img 
                               src={preview.preview_data.images.main} 
-                              alt="Main preview"
+                              alt="Utopia Theme"
                               className="w-full h-24 object-cover rounded border border-gray-500"
                             />
                           </div>
@@ -391,7 +414,7 @@ export default function MyPreviewsNew() {
                   )}
 
                   {/* Social Content */}
-                  {preview.preview_data?.social_content && (
+                  {preview.preview_data?.social_content && expandedPreviews[preview.id] && (
                     <div className="mb-3">
                       <h5 className="font-medium text-gray-300 mb-2">Social Media Content:</h5>
                       <div className="space-y-2">
