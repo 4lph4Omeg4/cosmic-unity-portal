@@ -346,12 +346,12 @@ export default function MyPreviewsNew() {
                       />
                     </div>
                     
-                    {/* Featured Image */}
+                    {/* Dystopia Theme */}
                     <div className="bg-gray-600 rounded border border-gray-500 p-2">
-                      <h6 className="text-xs font-medium text-gray-300 mb-1">Featured Image</h6>
+                      <h6 className="text-xs font-medium text-gray-300 mb-1">Dystopia Theme</h6>
                       <img 
-                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-featured.png" 
-                        alt="Featured preview"
+                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png" 
+                        alt="Dystopia Theme"
                         className="w-full h-24 object-cover rounded border border-gray-500"
                       />
                     </div>

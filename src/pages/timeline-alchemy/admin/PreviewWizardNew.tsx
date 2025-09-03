@@ -108,7 +108,7 @@ export default function PreviewWizardNew() {
 
       if (!profile?.is_admin) {
         console.log('User is not admin, redirecting...')
-        navigate('/timeline-alchemy/client/my-previews-new')
+        navigate('/timeline-alchemy/client/my-previews')
         return
       }
 

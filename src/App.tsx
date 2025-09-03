@@ -177,11 +177,11 @@ const App: React.FC = () => {
                   {/* Timeline Alchemy Client */}
                   <Route
                     path="/timeline-alchemy/client/my-previews"
-                    element={<TimelineAlchemyMyPreviews />}
+                    element={<MyPreviewsNew />}
                   />
                   <Route
-                    path="/timeline-alchemy/client/my-previews-new"
-                    element={<MyPreviewsNew />}
+                    path="/timeline-alchemy/client/my-previews-old"
+                    element={<TimelineAlchemyMyPreviews />}
                   />
                   <Route
                     path="/timeline-alchemy/client/social-connections"
