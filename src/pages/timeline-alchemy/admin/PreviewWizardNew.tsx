@@ -120,6 +120,16 @@ export default function PreviewWizardNew() {
     }))
   }
 
+  const getBlogPostImages = (postId: string) => {
+    const baseUrl = 'https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images'
+    return {
+      main: `${baseUrl}/${postId}/header-utopia.png`,
+      dystopia: `${baseUrl}/${postId}/header-dystopia.png`,
+      cosmic: `${baseUrl}/${postId}/header-cosmic.png`,
+      cyberpunk: `${baseUrl}/${postId}/header-cyberpunk.png`
+    }
+  }
+
 
 
   const loadData = async () => {
@@ -282,14 +292,15 @@ export default function PreviewWizardNew() {
           idea_id: ideaId,
           idea_title: idea.title,
           idea_content: idea.body,
-                  social_content: {
-          facebook: idea.facebook || `Facebook post for: ${idea.title}`,
-          instagram: idea.instagram || `Instagram post for: ${idea.title}`,
-          x: idea.x || `X post for: ${idea.title}`,
-          linkedin: idea.linkedin || `LinkedIn post for: ${idea.title}`,
-          tiktok: idea.tiktok || `TikTok video for: ${idea.title}`,
-          youtube: idea.youtube || `YouTube video for: ${idea.title}`
-        },
+          blog_post_id: idea.id, // Store the blog post ID for image loading
+          social_content: {
+            facebook: idea.facebook || `Facebook post for: ${idea.title}`,
+            instagram: idea.instagram || `Instagram post for: ${idea.title}`,
+            x: idea.x || `X post for: ${idea.title}`,
+            linkedin: idea.linkedin || `LinkedIn post for: ${idea.title}`,
+            tiktok: idea.tiktok || `TikTok video for: ${idea.title}`,
+            youtube: idea.youtube || `YouTube video for: ${idea.title}`
+          },
           images: {
             main: idea.image_public_url,
             featured: idea.featured_image
