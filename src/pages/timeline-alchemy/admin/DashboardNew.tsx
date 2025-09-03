@@ -91,6 +91,21 @@ export default function DashboardNew() {
       // Load all previews from user_previews table
       console.log('Loading previews from user_previews table...')
       
+      // First try without joins to see if basic data loads
+      const { data: basicData, error: basicError } = await supabase
+        .from('user_previews')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (basicError) {
+        console.error('Error loading basic previews:', basicError)
+        setPreviews([])
+        return
+      }
+
+      console.log('Basic previews loaded:', basicData)
+
+      // Now try with joins
       const { data, error } = await supabase
         .from('user_previews')
         .select(`
@@ -100,12 +115,13 @@ export default function DashboardNew() {
         .order('created_at', { ascending: false })
 
       if (error) {
-        console.error('Error loading previews:', error)
-        setPreviews([])
+        console.error('Error loading previews with joins:', error)
+        // Fall back to basic data
+        setPreviews(basicData || [])
         return
       }
 
-      console.log('Previews loaded:', data)
+      console.log('Previews with joins loaded:', data)
       setPreviews(data || [])
     } catch (error) {
       console.error('Error loading data:', error)
@@ -116,6 +132,33 @@ export default function DashboardNew() {
 
   const refreshData = () => {
     loadData()
+  }
+
+  const testDatabase = async () => {
+    try {
+      console.log('Testing database connection...')
+      
+      // Test basic connection
+      const { data: testData, error: testError } = await supabase
+        .from('user_previews')
+        .select('*')
+        .limit(5)
+
+      if (testError) {
+        console.error('Database test error:', testError)
+        alert('Database test failed: ' + testError.message)
+        return
+      }
+
+      console.log('Database test successful:', testData)
+      alert(`Database test successful! Found ${testData?.length || 0} previews. Check console for details.`)
+      
+      // Reload data
+      loadData()
+    } catch (error) {
+      console.error('Database test error:', error)
+      alert('Database test failed: ' + error)
+    }
   }
 
   const filteredPreviews = previews.filter(preview => {
@@ -215,6 +258,10 @@ export default function DashboardNew() {
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
+          <Button onClick={testDatabase} variant="outline" className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white border-purple-600">
+            <Search className="w-4 h-4" />
+            Test DB
+          </Button>
         </div>
       </div>
 
@@ -226,7 +273,15 @@ export default function DashboardNew() {
           <p>📊 Previews loaded: {previews.length}</p>
           <p>👥 Clients loaded: {clients.length}</p>
           <p>🔄 Using new user_previews table</p>
+          <p>🔍 Search term: "{searchTerm}"</p>
+          <p>📋 Status filter: {selectedStatus}</p>
+          <p>📝 Filtered previews: {filteredPreviews.length}</p>
         </div>
+        {previews.length > 0 && (
+          <div className="mt-3 text-xs text-green-300">
+            <p>Preview IDs: {previews.map(p => p.id.slice(-8)).join(', ')}</p>
+          </div>
+        )}
       </div>
 
       {/* Stats Overview */}
