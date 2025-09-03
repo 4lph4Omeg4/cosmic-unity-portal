@@ -57,6 +57,7 @@ export default function PreviewWizardNew() {
   const navigate = useNavigate()
   const [clients, setClients] = useState<Client[]>([])
   const [ideas, setIdeas] = useState<Idea[]>([])
+  const [blogPosts, setBlogPosts] = useState<Idea[]>([]) // Add missing state
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -140,6 +141,12 @@ export default function PreviewWizardNew() {
           key.toLowerCase().includes('youtube')
         )
         console.log('Social media columns found:', socialColumns)
+        
+        // Check specifically for tiktok and youtube
+        const hasTikTok = testData[0].hasOwnProperty('tiktok')
+        const hasYouTube = testData[0].hasOwnProperty('youtube')
+        console.log('Has TikTok column:', hasTikTok)
+        console.log('Has YouTube column:', hasYouTube)
       }
       
       alert(`Blog posts test successful! Found ${testData?.length || 0} posts. Check console for details.`)
@@ -208,10 +215,10 @@ export default function PreviewWizardNew() {
         console.log('Sample blog post:', allData[0])
       }
       
-      // Now try to load with specific columns
+      // Now try to load with specific columns - start with basic ones first
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('id, title, body, excerpt, facebook, instagram, x, linkedin, tiktok, youtube, featured_image, image_url, image_public_url')
+        .select('id, title, body, excerpt, facebook, instagram, x, linkedin, featured_image, image_url, image_public_url')
         .order('created_at', { ascending: false })
       
       if (error) {
@@ -274,8 +281,8 @@ export default function PreviewWizardNew() {
             instagram: post.instagram || null,
             x: post.x || null,
             linkedin: post.linkedin || null,
-            tiktok: post.tiktok || null,
-            youtube: post.youtube || null,
+            tiktok: post.tiktok || null, // Will be null if column doesn't exist
+            youtube: post.youtube || null, // Will be null if column doesn't exist
             featured_image: post.featured_image || null,
             image_url: post.image_url || null,
             image_public_url: post.image_public_url || null
@@ -600,6 +607,8 @@ export default function PreviewWizardNew() {
               console.log('Current ideas state:', ideas)
               console.log('Current blogPosts state:', blogPosts)
               console.log('Current form state:', form)
+              console.log('Ideas length:', ideas.length)
+              console.log('BlogPosts length:', blogPosts.length)
             }} 
             variant="outline" 
             size="sm"
