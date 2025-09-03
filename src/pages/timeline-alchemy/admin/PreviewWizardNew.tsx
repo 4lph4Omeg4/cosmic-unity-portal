@@ -19,6 +19,9 @@ import {
   Instagram,
   Linkedin,
   Twitter,
+  X,
+  Video,
+  Youtube,
   XCircle
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
