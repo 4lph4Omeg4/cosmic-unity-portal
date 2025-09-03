@@ -455,41 +455,60 @@ export default function PreviewWizardNew() {
                               </div>
                             )}
                             
-                            {/* Cosmic Theme Variation */}
-                            <img 
-                              src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
-                              alt={`${idea.title} - Cosmic Theme`}
-                              className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank');
-                              }}
-                              title="Cosmic Theme - Klik om te bekijken"
-                            />
-                            
-                            {/* Cyberpunk Theme Variation */}
-                            <img 
-                              src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
-                              alt={`${idea.title} - Cyberpunk Theme`}
-                              className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank');
-                              }}
-                              title="Cyberpunk Theme - Klik om te bekijken"
-                            />
-                            
-                            {/* Dystopia Theme Variation */}
-                            <img 
-                              src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
-                              alt={`${idea.title} - Dystopia Theme`}
-                              className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank');
-                              }}
-                              title="Dystopia Theme - Klik om te bekijken"
-                            />
+                            {(() => {
+                              const images = getBlogPostImages(idea.id)
+                              return (
+                                <>
+                                  {/* Utopia Theme Variation */}
+                                  <img 
+                                    src={images.main}
+                                    alt={`${idea.title} - Utopia Theme`}
+                                    className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.open(images.main, '_blank');
+                                    }}
+                                    title="Utopia Theme - Klik om te bekijken"
+                                  />
+                                  
+                                  {/* Dystopia Theme Variation */}
+                                  <img 
+                                    src={images.dystopia}
+                                    alt={`${idea.title} - Dystopia Theme`}
+                                    className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.open(images.dystopia, '_blank');
+                                    }}
+                                    title="Dystopia Theme - Klik om te bekijken"
+                                  />
+                                  
+                                  {/* Cosmic Theme Variation */}
+                                  <img 
+                                    src={images.cosmic}
+                                    alt={`${idea.title} - Cosmic Theme`}
+                                    className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.open(images.cosmic, '_blank');
+                                    }}
+                                    title="Cosmic Theme - Klik om te bekijken"
+                                  />
+                                  
+                                  {/* Cyberpunk Theme Variation */}
+                                  <img 
+                                    src={images.cyberpunk}
+                                    alt={`${idea.title} - Cyberpunk Theme`}
+                                    className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      window.open(images.cyberpunk, '_blank');
+                                    }}
+                                    title="Cyberpunk Theme - Klik om te bekijken"
+                                  />
+                                </>
+                              )
+                            })()}
                           </div>
                         </div>
                         
