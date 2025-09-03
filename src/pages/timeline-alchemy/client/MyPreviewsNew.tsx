@@ -266,6 +266,20 @@ export default function MyPreviewsNew() {
             <Search className="w-4 h-4 mr-2" />
             Test Database
           </Button>
+          <Button onClick={() => {
+            console.log('=== PREVIEW DATA DEBUG ===')
+            previews.forEach((preview, index) => {
+              console.log(`Preview ${index + 1}:`, {
+                id: preview.id,
+                images: preview.preview_data?.images,
+                imageKeys: preview.preview_data?.images ? Object.keys(preview.preview_data.images) : 'No images'
+              })
+            })
+            console.log('========================')
+          }} variant="outline" className="bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
+            <Search className="w-4 h-4 mr-2" />
+            Debug Images
+          </Button>
         </div>
       </div>
 
@@ -319,60 +333,50 @@ export default function MyPreviewsNew() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Images - Always visible at top */}
-                {preview.preview_data?.images && (
-                  <div className="bg-gray-700 rounded-lg p-4">
-                    <h4 className="font-medium text-white mb-3">Preview Images</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {/* Utopia Theme */}
-                      {preview.preview_data.images.main && (
-                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
-                          <h6 className="text-xs font-medium text-gray-300 mb-1">Utopia Theme</h6>
-                          <img 
-                            src={preview.preview_data.images.main} 
-                            alt="Utopia Theme"
-                            className="w-full h-24 object-cover rounded border border-gray-500"
-                          />
-                        </div>
-                      )}
-                      
-                      {/* Featured Image */}
-                      {preview.preview_data.images.featured && (
-                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
-                          <h6 className="text-xs font-medium text-gray-300 mb-1">Featured Image</h6>
-                          <img 
-                            src={preview.preview_data.images.featured} 
-                            alt="Featured preview"
-                            className="w-full h-24 object-cover rounded border border-gray-500"
-                          />
-                        </div>
-                      )}
-                      
-                      {/* Cosmic Theme */}
-                      {preview.preview_data.images.cosmic && (
-                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
-                          <h6 className="text-xs font-medium text-gray-300 mb-1">Cosmic Theme</h6>
-                          <img 
-                            src={preview.preview_data.images.cosmic} 
-                            alt="Cosmic preview"
-                            className="w-full h-24 object-cover rounded border border-gray-500"
-                          />
-                        </div>
-                      )}
-                      
-                      {/* Cyberpunk Theme */}
-                      {preview.preview_data.images.cyberpunk && (
-                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
-                          <h6 className="text-xs font-medium text-gray-300 mb-1">Cyberpunk Theme</h6>
-                          <img 
-                            src={preview.preview_data.images.cyberpunk} 
-                            alt="Cyberpunk preview"
-                            className="w-full h-24 object-cover rounded border border-gray-500"
-                          />
-                        </div>
-                      )}
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <h4 className="font-medium text-white mb-3">Preview Images</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* Utopia Theme */}
+                    <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                      <h6 className="text-xs font-medium text-gray-300 mb-1">Utopia Theme</h6>
+                      <img 
+                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png" 
+                        alt="Utopia Theme"
+                        className="w-full h-24 object-cover rounded border border-gray-500"
+                      />
+                    </div>
+                    
+                    {/* Featured Image */}
+                    <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                      <h6 className="text-xs font-medium text-gray-300 mb-1">Featured Image</h6>
+                      <img 
+                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-featured.png" 
+                        alt="Featured preview"
+                        className="w-full h-24 object-cover rounded border border-gray-500"
+                      />
+                    </div>
+                    
+                    {/* Cosmic Theme */}
+                    <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                      <h6 className="text-xs font-medium text-gray-300 mb-1">Cosmic Theme</h6>
+                      <img 
+                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png" 
+                        alt="Cosmic preview"
+                        className="w-full h-24 object-cover rounded border border-gray-500"
+                      />
+                    </div>
+                    
+                    {/* Cyberpunk Theme */}
+                    <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                      <h6 className="text-xs font-medium text-gray-300 mb-1">Cyberpunk Theme</h6>
+                      <img 
+                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png" 
+                        alt="Cyberpunk preview"
+                        className="w-full h-24 object-cover rounded border border-gray-500"
+                      />
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* Preview Data */}
                 <div className="bg-gray-700 rounded-lg p-4">
