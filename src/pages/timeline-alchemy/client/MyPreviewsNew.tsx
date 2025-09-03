@@ -162,7 +162,20 @@ export default function MyPreviewsNew() {
       }
 
       console.log('Database test successful:', testData)
-      alert(`Database test successful! Found ${testData?.length || 0} total previews. Check console for details.`)
+      
+      // Debug social content specifically
+      if (testData && testData.length > 0) {
+        testData.forEach((preview, index) => {
+          console.log(`Preview ${index + 1} social_content:`, preview.preview_data?.social_content)
+          if (preview.preview_data?.social_content) {
+            Object.entries(preview.preview_data.social_content).forEach(([platform, content]) => {
+              console.log(`  ${platform}:`, content)
+            })
+          }
+        })
+      }
+      
+      alert(`Database test successful! Found ${testData?.length || 0} total previews. Check console for social content details.`)
       
       // Reload data
       loadPreviews()
@@ -323,7 +336,8 @@ export default function MyPreviewsNew() {
                       <h5 className="font-medium text-gray-300 mb-2">Social Media Content:</h5>
                       <div className="space-y-2">
                         {Object.entries(preview.preview_data.social_content).map(([platform, content]) => {
-                          if (!content) return null;
+                          console.log(`Rendering platform: ${platform}, content:`, content)
+                          if (!content || content === 'null' || content === '') return null;
                           return (
                             <div key={platform} className="bg-gray-600 rounded border border-gray-500">
                               <div className="flex items-center gap-2 p-2 border-b border-gray-500">
@@ -348,6 +362,20 @@ export default function MyPreviewsNew() {
                     </div>
                   )}
                   
+                  {/* Platform Debug Info */}
+                  {preview.preview_data?.social_content && (
+                    <div className="mt-3 p-2 bg-yellow-900/20 rounded border border-yellow-700">
+                      <h6 className="text-xs font-medium text-yellow-300 mb-1">Platform Debug:</h6>
+                      <div className="text-xs text-yellow-200">
+                        {Object.keys(preview.preview_data.social_content).map(platform => (
+                          <span key={platform} className="inline-block mr-2 px-1 bg-yellow-800/50 rounded">
+                            {platform}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Raw Data (for debugging) */}
                   <details className="mt-3">
                     <summary className="text-xs text-gray-400 cursor-pointer">Show raw data (debug)</summary>

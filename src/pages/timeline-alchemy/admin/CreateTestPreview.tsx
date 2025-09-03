@@ -56,12 +56,12 @@ export default function CreateTestPreview() {
         idea_title: blogPost.title,
         idea_content: blogPost.body,
         social_content: {
-          facebook: blogPost.facebook || 'Test Facebook content',
-          instagram: blogPost.instagram || 'Test Instagram content',
-          x: blogPost.x || 'Test X content',
-          linkedin: blogPost.linkedin || 'Test LinkedIn content',
-          tiktok: blogPost.tiktok || 'Test TikTok content',
-          youtube: blogPost.youtube || 'Test YouTube content'
+          facebook: blogPost.facebook || 'Test Facebook content for this idea',
+          instagram: blogPost.instagram || 'Test Instagram content for this idea',
+          x: blogPost.x || 'Test X content for this idea',
+          linkedin: blogPost.linkedin || 'Test LinkedIn content for this idea',
+          tiktok: blogPost.tiktok || 'Test TikTok content for this idea',
+          youtube: blogPost.youtube || 'Test YouTube content for this idea'
         },
         images: {
           main: blogPost.image_public_url,
