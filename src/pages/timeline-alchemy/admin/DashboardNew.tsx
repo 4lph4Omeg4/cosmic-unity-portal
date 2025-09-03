@@ -126,12 +126,12 @@ export default function DashboardNew() {
       // Load clients from profiles where role = 'client'
       const { data: clientsData, error: clientsError } = await supabase
         .from('profiles')
-        .select('id, display_name')
+        .select('user_id, display_name')
         .eq('role', 'client')
         .order('display_name')
 
       if (!clientsError && clientsData) {
-        setClients(clientsData.map(c => ({ id: c.id, name: c.display_name })))
+        setClients(clientsData.map(c => ({ id: c.user_id, name: c.display_name })))
         console.log('Clients loaded:', clientsData)
       } else {
         console.error('Error loading clients:', clientsError)
@@ -215,7 +215,7 @@ export default function DashboardNew() {
                          (preview.preview_data?.idea_content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
     
-    const matchesClient = selectedClient === 'all' || preview.profiles?.id === selectedClient
+    const matchesClient = selectedClient === 'all' || preview.user_id === selectedClient
     
     return matchesSearch && matchesStatus && matchesClient
   })
