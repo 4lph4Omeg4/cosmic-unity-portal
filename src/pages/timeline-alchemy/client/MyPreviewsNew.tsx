@@ -377,6 +377,15 @@ export default function MyPreviewsNew() {
                             className="w-full h-24 object-cover rounded border border-gray-500"
                           />
                         </div>
+                        
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Dystopia Theme</h6>
+                          <img 
+                            src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                            alt="Dystopia Theme"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
                       </div>
                     </div>
                   )}
