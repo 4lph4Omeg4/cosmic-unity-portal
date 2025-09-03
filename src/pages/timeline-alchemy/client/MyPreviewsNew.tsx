@@ -330,6 +330,57 @@ export default function MyPreviewsNew() {
                     </div>
                   )}
                   
+                  {/* Images */}
+                  {preview.preview_data?.images && (
+                    <div className="mb-3">
+                      <h5 className="font-medium text-gray-300 mb-2">Preview Images:</h5>
+                      <div className="grid grid-cols-2 gap-2">
+                        {/* Main Image */}
+                        {preview.preview_data.images.main && (
+                          <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                            <h6 className="text-xs font-medium text-gray-300 mb-1">Main Image</h6>
+                            <img 
+                              src={preview.preview_data.images.main} 
+                              alt="Main preview"
+                              className="w-full h-24 object-cover rounded border border-gray-500"
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Featured Image */}
+                        {preview.preview_data.images.featured && (
+                          <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                            <h6 className="text-xs font-medium text-gray-300 mb-1">Featured Image</h6>
+                            <img 
+                              src={preview.preview_data.images.featured} 
+                              alt="Featured preview"
+                              className="w-full h-24 object-cover rounded border border-gray-500"
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Theme Variations */}
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Cosmic Theme</h6>
+                          <img 
+                            src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                            alt="Cosmic Theme"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
+                        
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Cyberpunk Theme</h6>
+                          <img 
+                            src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                            alt="Cyberpunk Theme"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Social Content */}
                   {preview.preview_data?.social_content && (
                     <div className="mb-3">
