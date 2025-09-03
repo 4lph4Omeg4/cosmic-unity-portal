@@ -340,7 +340,7 @@ export default function MyPreviewsNew() {
                     <div className="bg-gray-600 rounded border border-gray-500 p-2">
                       <h6 className="text-xs font-medium text-gray-300 mb-1">Utopia Theme</h6>
                       <img 
-                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png" 
+                        src={preview.preview_data?.images?.main || "https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"} 
                         alt="Utopia Theme"
                         className="w-full h-24 object-cover rounded border border-gray-500"
                       />
@@ -350,7 +350,7 @@ export default function MyPreviewsNew() {
                     <div className="bg-gray-600 rounded border border-gray-500 p-2">
                       <h6 className="text-xs font-medium text-gray-300 mb-1">Dystopia Theme</h6>
                       <img 
-                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png" 
+                        src={preview.preview_data?.images?.dystopia || "https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"} 
                         alt="Dystopia Theme"
                         className="w-full h-24 object-cover rounded border border-gray-500"
                       />
@@ -360,7 +360,7 @@ export default function MyPreviewsNew() {
                     <div className="bg-gray-600 rounded border border-gray-500 p-2">
                       <h6 className="text-xs font-medium text-gray-300 mb-1">Cosmic Theme</h6>
                       <img 
-                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png" 
+                        src={preview.preview_data?.images?.cosmic || "https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"} 
                         alt="Cosmic preview"
                         className="w-full h-24 object-cover rounded border border-gray-500"
                       />
@@ -370,7 +370,7 @@ export default function MyPreviewsNew() {
                     <div className="bg-gray-600 rounded border border-gray-500 p-2">
                       <h6 className="text-xs font-medium text-gray-300 mb-1">Cyberpunk Theme</h6>
                       <img 
-                        src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png" 
+                        src={preview.preview_data?.images?.cyberpunk || "https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"} 
                         alt="Cyberpunk preview"
                         className="w-full h-24 object-cover rounded border border-gray-500"
                       />
