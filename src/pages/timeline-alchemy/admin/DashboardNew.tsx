@@ -126,12 +126,12 @@ export default function DashboardNew() {
       // Load clients from profiles where role = 'client'
       const { data: clientsData, error: clientsError } = await supabase
         .from('profiles')
-        .select('user_id, display_name')
+        .select('id, display_name')
         .eq('role', 'client')
         .order('display_name')
 
       if (!clientsError && clientsData) {
-        setClients(clientsData.map(c => ({ id: c.user_id, name: c.display_name })))
+        setClients(clientsData.map(c => ({ id: c.id, name: c.display_name })))
         console.log('Clients loaded:', clientsData)
       } else {
         console.error('Error loading clients:', clientsError)
@@ -214,7 +214,8 @@ export default function DashboardNew() {
     const matchesSearch = (preview.preview_data?.idea_title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (preview.preview_data?.idea_content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
-    const matchesClient = selectedClient === 'all' || preview.profiles?.id === selectedClient
+    
+    const matchesClient = selectedClient === 'all' || preview.user_id === selectedClient
     
     return matchesSearch && matchesStatus && matchesClient
   })
@@ -311,6 +312,17 @@ export default function DashboardNew() {
           <Button onClick={testDatabase} variant="outline" className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white border-purple-600">
             <Search className="w-4 h-4" />
             Test DB
+          </Button>
+          <Button onClick={() => {
+            console.log('=== FILTER DEBUG ===')
+            console.log('Selected client:', selectedClient)
+            console.log('Available clients:', clients)
+            console.log('All previews:', previews)
+            console.log('Filtered previews:', filteredPreviews)
+            console.log('===================')
+          }} variant="outline" className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
+            <Search className="w-4 h-4" />
+            Debug Filter
           </Button>
         </div>
       </div>
