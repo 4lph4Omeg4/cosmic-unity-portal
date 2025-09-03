@@ -77,13 +77,7 @@ export default function PreviewWizardNew() {
     loadData()
   }, [])
 
-  // Debug useEffect to monitor ideas state changes
-  useEffect(() => {
-    console.log('Ideas state changed:', ideas.length, 'ideas')
-    if (ideas.length > 0) {
-      console.log('First idea:', ideas[0])
-    }
-  }, [ideas])
+
 
   const checkAdminStatus = async () => {
     try {
@@ -126,54 +120,7 @@ export default function PreviewWizardNew() {
     }))
   }
 
-  const testBlogPosts = async () => {
-    try {
-      console.log('Testing blog_posts table...')
-      
-      // Test basic connection - get all posts
-      const { data: testData, error: testError } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (testError) {
-        console.error('Blog posts test error:', testError)
-        alert('Blog posts test failed: ' + testError.message)
-        return
-      }
-      
-      console.log('Blog posts test successful:', testData)
-      console.log('Total posts found:', testData?.length || 0)
-      
-      if (testData && testData.length > 0) {
-        console.log('Available columns:', Object.keys(testData[0]))
-        console.log('First post:', testData[0])
-        console.log('Last post:', testData[testData.length - 1])
-        
-        // Check for social media columns
-        const socialColumns = Object.keys(testData[0]).filter(key => 
-          key.toLowerCase().includes('facebook') || 
-          key.toLowerCase().includes('instagram') || 
-          key.toLowerCase().includes('x') ||
-          key.toLowerCase().includes('linkedin') ||
-          key.toLowerCase().includes('tiktok') ||
-          key.toLowerCase().includes('youtube')
-        )
-        console.log('Social media columns found:', socialColumns)
-        
-        // Check specifically for tiktok and youtube
-        const hasTikTok = testData[0].hasOwnProperty('tiktok')
-        const hasYouTube = testData[0].hasOwnProperty('youtube')
-        console.log('Has TikTok column:', hasTikTok)
-        console.log('Has YouTube column:', hasYouTube)
-      }
-      
-      alert(`Blog posts test successful! Found ${testData?.length || 0} posts. Check console for details.`)
-    } catch (error) {
-      console.error('Blog posts test error:', error)
-      alert('Blog posts test failed: ' + error)
-    }
-  }
+
 
   const loadData = async () => {
     try {
@@ -449,21 +396,12 @@ export default function PreviewWizardNew() {
             </div>
             {ideas.length === 0 && (
               <div className="text-center py-8 text-gray-400">
-                <p>No ideas found. Check console for debugging info.</p>
-                <Button 
-                  onClick={testBlogPosts} 
-                  variant="outline" 
-                  size="sm"
-                  className="mt-2"
-                >
-                  Test Blog Posts
-                </Button>
+                <p>No ideas found</p>
               </div>
             )}
             <div className="space-y-4">
               {ideas.length > 0 ? (
                 ideas.map((idea, index) => {
-                  console.log(`Rendering idea ${index + 1}:`, idea)
                   return (
                     <div
                       key={idea.id}
@@ -731,63 +669,7 @@ export default function PreviewWizardNew() {
         <p className="mt-2 text-gray-300">Simple preview creation in 3 steps</p>
       </div>
 
-      {/* Debug Info */}
-      <div className="bg-green-900/20 rounded-lg p-4 border border-green-700">
-        <h4 className="text-lg font-medium text-green-300 mb-2">Admin Status</h4>
-        <div className="text-sm text-green-200">
-          <p>✅ Admin access confirmed</p>
-          <p>📊 Ideas loaded: {ideas.length}</p>
-          <p>👥 Clients loaded: {clients.length}</p>
-          <p>🔄 Current step: {form.step}</p>
-        </div>
-        <div className="mt-3 space-x-2">
-          <Button 
-            onClick={testBlogPosts} 
-            variant="outline" 
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600"
-          >
-            Test Blog Posts
-          </Button>
-          <Button 
-            onClick={() => {
-              console.log('Current ideas state:', ideas)
-              console.log('Current blogPosts state:', blogPosts)
-              console.log('Current form state:', form)
-              console.log('Ideas length:', ideas.length)
-              console.log('BlogPosts length:', blogPosts.length)
-            }} 
-            variant="outline" 
-            size="sm"
-            className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600"
-          >
-            Debug State
-          </Button>
-          <Button 
-            onClick={() => {
-              console.log('Force reloading data...')
-              loadData()
-            }} 
-            variant="outline" 
-            size="sm"
-            className="bg-green-600 hover:bg-green-700 text-white border-green-600"
-          >
-            Reload Data
-          </Button>
-        </div>
-        {ideas.length > 0 && (
-          <div className="mt-3 text-xs text-green-300">
-            <p>First idea: {ideas[0]?.title || 'No title'}</p>
-            <p>Ideas IDs: {ideas.map(i => i.id.slice(-8)).join(', ')}</p>
-            <p>Sample idea data: {JSON.stringify(ideas[0], null, 2)}</p>
-          </div>
-        )}
-        {ideas.length === 0 && (
-          <div className="mt-3 text-xs text-red-300">
-            <p>⚠️ No ideas in state - this is the problem!</p>
-          </div>
-        )}
-      </div>
+
 
       {/* Progress Steps */}
       <div className="flex items-center justify-between">

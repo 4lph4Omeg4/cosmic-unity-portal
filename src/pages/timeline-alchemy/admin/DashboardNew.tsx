@@ -183,32 +183,7 @@ export default function DashboardNew() {
     loadData()
   }
 
-  const testDatabase = async () => {
-    try {
-      console.log('Testing database connection...')
-      
-      // Test basic connection
-      const { data: testData, error: testError } = await supabase
-        .from('user_previews')
-        .select('*')
-        .limit(5)
 
-      if (testError) {
-        console.error('Database test error:', testError)
-        alert('Database test failed: ' + testError.message)
-        return
-      }
-
-      console.log('Database test successful:', testData)
-      alert(`Database test successful! Found ${testData?.length || 0} previews. Check console for details.`)
-      
-      // Reload data
-      loadData()
-    } catch (error) {
-      console.error('Database test error:', error)
-      alert('Database test failed: ' + error)
-    }
-  }
 
   const filteredPreviews = previews.filter(preview => {
     const matchesSearch = (preview.preview_data?.idea_title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -309,43 +284,11 @@ export default function DashboardNew() {
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          <Button onClick={testDatabase} variant="outline" className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white border-purple-600">
-            <Search className="w-4 h-4" />
-            Test DB
-          </Button>
-          <Button onClick={() => {
-            console.log('=== FILTER DEBUG ===')
-            console.log('Selected client:', selectedClient)
-            console.log('Available clients:', clients)
-            console.log('All previews:', previews)
-            console.log('Filtered previews:', filteredPreviews)
-            console.log('Preview user_ids:', previews.map(p => ({ id: p.id, user_id: p.user_id, profiles_id: p.profiles?.id, profiles_name: p.profiles?.display_name })))
-            console.log('===================')
-          }} variant="outline" className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
-            <Search className="w-4 h-4" />
-            Debug Filter
-          </Button>
+
         </div>
       </div>
 
-      {/* Debug Info */}
-      <div className="bg-green-900/20 rounded-lg p-4 border border-green-700">
-        <h4 className="text-lg font-medium text-green-300 mb-2">Admin Status</h4>
-        <div className="text-sm text-green-200">
-          <p>✅ Admin access confirmed</p>
-          <p>📊 Previews loaded: {previews.length}</p>
-          <p>👥 Clients loaded: {clients.length}</p>
-          <p>🔄 Using new user_previews table</p>
-          <p>🔍 Search term: "{searchTerm}"</p>
-          <p>📋 Status filter: {selectedStatus}</p>
-          <p>📝 Filtered previews: {filteredPreviews.length}</p>
-        </div>
-        {previews.length > 0 && (
-          <div className="mt-3 text-xs text-green-300">
-            <p>Preview IDs: {previews.map(p => p.id.slice(-8)).join(', ')}</p>
-          </div>
-        )}
-      </div>
+
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -525,19 +468,7 @@ export default function DashboardNew() {
                         </div>
                       )}
 
-                      {/* Platform Debug Info */}
-                      {preview.preview_data?.social_content && (
-                        <div className="mt-3 p-2 bg-yellow-900/20 rounded border border-yellow-700">
-                          <h6 className="text-xs font-medium text-yellow-300 mb-1">Platform Debug:</h6>
-                          <div className="text-xs text-yellow-200">
-                            {Object.keys(preview.preview_data.social_content).map(platform => (
-                              <span key={platform} className="inline-block mr-2 px-1 bg-yellow-800/50 rounded">
-                                {platform}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+
                       
                       <div className="flex items-center gap-4 text-sm text-gray-400">
                         <div className="flex items-center gap-1">

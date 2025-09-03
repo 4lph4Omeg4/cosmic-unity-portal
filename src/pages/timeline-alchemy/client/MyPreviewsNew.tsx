@@ -144,54 +144,7 @@ export default function MyPreviewsNew() {
     }
   }
 
-  const testDatabase = async () => {
-    try {
-      console.log('Testing database connection...')
-      
-      // Get current user
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        alert('User not authenticated')
-        return
-      }
 
-      console.log('Current user ID:', user.id)
-
-      // Test basic connection
-      const { data: testData, error: testError } = await supabase
-        .from('user_previews')
-        .select('*')
-        .limit(5)
-
-      if (testError) {
-        console.error('Database test error:', testError)
-        alert('Database test failed: ' + testError.message)
-        return
-      }
-
-      console.log('Database test successful:', testData)
-      
-      // Debug social content specifically
-      if (testData && testData.length > 0) {
-        testData.forEach((preview, index) => {
-          console.log(`Preview ${index + 1} social_content:`, preview.preview_data?.social_content)
-          if (preview.preview_data?.social_content) {
-            Object.entries(preview.preview_data.social_content).forEach(([platform, content]) => {
-              console.log(`  ${platform}:`, content)
-            })
-          }
-        })
-      }
-      
-      alert(`Database test successful! Found ${testData?.length || 0} total previews. Check console for social content details.`)
-      
-      // Reload data
-      loadPreviews()
-    } catch (error) {
-      console.error('Database test error:', error)
-      alert('Database test failed: ' + error)
-    }
-  }
 
   const updatePreviewStatus = async (previewId: string, status: 'approved' | 'rejected') => {
     try {
@@ -261,44 +214,10 @@ export default function MyPreviewsNew() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">My Previews</h1>
         <p className="mt-2 text-gray-300">Review and approve your content previews</p>
-        <div className="mt-4">
-          <Button onClick={testDatabase} variant="outline" className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600">
-            <Search className="w-4 h-4 mr-2" />
-            Test Database
-          </Button>
-          <Button onClick={() => {
-            console.log('=== PREVIEW DATA DEBUG ===')
-            previews.forEach((preview, index) => {
-              console.log(`Preview ${index + 1}:`, {
-                id: preview.id,
-                images: preview.preview_data?.images,
-                imageKeys: preview.preview_data?.images ? Object.keys(preview.preview_data.images) : 'No images'
-              })
-            })
-            console.log('========================')
-          }} variant="outline" className="bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
-            <Search className="w-4 h-4 mr-2" />
-            Debug Images
-          </Button>
-        </div>
+
       </div>
 
-      {/* Debug Info */}
-      <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-700">
-        <h4 className="text-lg font-medium text-blue-300 mb-2">Debug Info</h4>
-        <div className="text-sm text-blue-200">
-          <p>Total previews: {previews.length}</p>
-          <p>Pending: {previews.filter(p => p.status === 'pending').length}</p>
-          <p>Approved: {previews.filter(p => p.status === 'approved').length}</p>
-          <p>Rejected: {previews.filter(p => p.status === 'rejected').length}</p>
-          <p>🔄 Using new user_previews table</p>
-        </div>
-        {previews.length > 0 && (
-          <div className="mt-3 text-xs text-blue-300">
-            <p>Preview IDs: {previews.map(p => p.id.slice(-8)).join(', ')}</p>
-          </div>
-        )}
-      </div>
+
 
       {/* Previews List */}
       {previews.length === 0 ? (
@@ -447,27 +366,9 @@ export default function MyPreviewsNew() {
                     </div>
                   )}
                   
-                  {/* Platform Debug Info */}
-                  {preview.preview_data?.social_content && (
-                    <div className="mt-3 p-2 bg-yellow-900/20 rounded border border-yellow-700">
-                      <h6 className="text-xs font-medium text-yellow-300 mb-1">Platform Debug:</h6>
-                      <div className="text-xs text-yellow-200">
-                        {Object.keys(preview.preview_data.social_content).map(platform => (
-                          <span key={platform} className="inline-block mr-2 px-1 bg-yellow-800/50 rounded">
-                            {platform}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
 
-                  {/* Raw Data (for debugging) */}
-                  <details className="mt-3">
-                    <summary className="text-xs text-gray-400 cursor-pointer">Show raw data (debug)</summary>
-                    <pre className="text-xs text-gray-400 mt-2 whitespace-pre-wrap overflow-auto max-h-32">
-                      {JSON.stringify(preview.preview_data, null, 2)}
-                    </pre>
-                  </details>
+
+
                 </div>
 
                 {/* Admin Notes */}
