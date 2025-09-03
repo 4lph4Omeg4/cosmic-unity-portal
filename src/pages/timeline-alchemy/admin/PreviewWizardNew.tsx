@@ -64,6 +64,7 @@ export default function PreviewWizardNew() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [expandedIdeas, setExpandedIdeas] = useState<{[key: string]: boolean}>({})
   const [form, setForm] = useState<PreviewForm>({
     step: 1,
     selectedClient: '',
@@ -116,6 +117,13 @@ export default function PreviewWizardNew() {
     } catch (error) {
       console.error('Error in checkAdminStatus:', error)
     }
+  }
+
+  const toggleExpanded = (ideaId: string) => {
+    setExpandedIdeas(prev => ({
+      ...prev,
+      [ideaId]: !prev[ideaId]
+    }))
   }
 
   const testBlogPosts = async () => {
@@ -542,22 +550,39 @@ export default function PreviewWizardNew() {
                             <h4 className="font-semibold text-white text-lg leading-tight">
                               {idea.title}
                             </h4>
-                            {form.selectedIdeas.includes(idea.id) && (
-                              <CheckCircle className="w-6 h-6 text-blue-400 flex-shrink-0 ml-2" />
-                            )}
+                            <div className="flex items-center gap-2">
+                              <Button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleExpanded(idea.id);
+                                }}
+                                variant="outline"
+                                size="sm"
+                                className="text-xs"
+                              >
+                                {expandedIdeas[idea.id] ? 'Verberg volledige content' : 'Toon volledige content'}
+                              </Button>
+                              {form.selectedIdeas.includes(idea.id) && (
+                                <CheckCircle className="w-6 h-6 text-blue-400 flex-shrink-0" />
+                              )}
+                            </div>
                           </div>
                           
                           {/* Complete Content */}
                           <div className="text-sm text-gray-300 mb-4">
                             <p className="whitespace-pre-wrap leading-relaxed">
-                              {idea.body || idea.excerpt || 'No content available'}
+                              {expandedIdeas[idea.id] 
+                                ? (idea.body || idea.excerpt || 'No content available')
+                                : ((idea.body || idea.excerpt || 'No content available').substring(0, 200) + ((idea.body || idea.excerpt || '').length > 200 ? '...' : ''))
+                              }
                             </p>
                           </div>
                           
                           {/* Social Media Content Preview */}
-                          <div className="space-y-2">
-                            <h5 className="text-xs font-medium text-gray-400 uppercase tracking-wide">Social Media Content:</h5>
-                            <div className="grid grid-cols-2 gap-2 text-xs">
+                          {expandedIdeas[idea.id] && (
+                            <div className="space-y-2">
+                              <h5 className="text-xs font-medium text-gray-400 uppercase tracking-wide">Social Media Content:</h5>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
                               {idea.facebook && (
                                 <div className="bg-gray-600 rounded p-2">
                                   <div className="flex items-center gap-1 mb-1">
@@ -614,6 +639,7 @@ export default function PreviewWizardNew() {
                               )}
                             </div>
                           </div>
+                          )}
                         </div>
                       </div>
                     </div>

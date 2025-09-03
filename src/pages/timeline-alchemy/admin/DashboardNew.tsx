@@ -30,6 +30,7 @@ export default function DashboardNew() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [clients, setClients] = useState<{ id: string; name: string }[]>([])
+  const [expandedPreviews, setExpandedPreviews] = useState<{[key: string]: boolean}>({})
 
   useEffect(() => {
     checkAdminStatus()
@@ -74,6 +75,13 @@ export default function DashboardNew() {
       default:
         return 'text-gray-400'
     }
+  }
+
+  const toggleExpanded = (previewId: string) => {
+    setExpandedPreviews(prev => ({
+      ...prev,
+      [previewId]: !prev[previewId]
+    }))
   }
 
   const checkAdminStatus = async () => {
@@ -434,20 +442,33 @@ export default function DashboardNew() {
                         )}
                       </div>
                       
-                      <h3 className="font-semibold text-lg text-white mb-2">
-                        {preview.preview_data?.idea_title || 'Untitled Preview'}
-                      </h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-lg text-white">
+                          {preview.preview_data?.idea_title || 'Untitled Preview'}
+                        </h3>
+                        <Button
+                          onClick={() => toggleExpanded(preview.id)}
+                          variant="outline"
+                          size="sm"
+                          className="text-xs"
+                        >
+                          {expandedPreviews[preview.id] ? 'Verberg volledige content' : 'Toon volledige content'}
+                        </Button>
+                      </div>
                       
                       {/* Main Content */}
                       <div className="mb-3">
                         <h4 className="font-medium text-gray-300 mb-2">Idea Content:</h4>
                         <p className="text-gray-200 whitespace-pre-wrap">
-                          {preview.preview_data?.idea_content || 'No content available'}
+                          {expandedPreviews[preview.id] 
+                            ? (preview.preview_data?.idea_content || 'No content available')
+                            : (preview.preview_data?.idea_content?.substring(0, 200) + (preview.preview_data?.idea_content && preview.preview_data.idea_content.length > 200 ? '...' : '') || 'No content available')
+                          }
                         </p>
                       </div>
                       
                       {/* Social Content */}
-                      {preview.preview_data?.social_content && (
+                      {preview.preview_data?.social_content && expandedPreviews[preview.id] && (
                         <div className="mb-3">
                           <h4 className="font-medium text-gray-300 mb-2">Social Media Content:</h4>
                           <div className="space-y-2">
