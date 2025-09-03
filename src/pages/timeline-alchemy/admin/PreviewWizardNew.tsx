@@ -456,7 +456,7 @@ export default function PreviewWizardNew() {
                   return (
                     <div
                       key={idea.id}
-                      className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                      className={`border rounded-lg p-6 cursor-pointer transition-colors ${
                         form.selectedIdeas.includes(idea.id)
                           ? 'border-blue-500 bg-blue-900/20'
                           : 'border-gray-600 hover:border-gray-500 bg-gray-700'
@@ -476,16 +476,142 @@ export default function PreviewWizardNew() {
                         }
                       }}
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium text-white">{idea.title}</h4>
-                          <p className="text-sm text-gray-300">
-                            {idea.excerpt || idea.body?.substring(0, 100) || 'No content preview'}
-                          </p>
+                      <div className="flex gap-6">
+                        {/* Post Images - 4 variations */}
+                        <div className="flex-shrink-0">
+                          <div className="grid grid-cols-2 gap-2">
+                            {/* Main Image or Placeholder */}
+                            {idea.image_public_url ? (
+                              <img 
+                                src={idea.image_public_url} 
+                                alt={idea.title}
+                                className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
+                              />
+                            ) : (
+                              <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
+                                <span className="text-white text-xs font-medium text-center px-2">
+                                  Hoofdafbeelding<br/>Niet beschikbaar
+                                </span>
+                              </div>
+                            )}
+                            
+                            {/* Cosmic Theme Variation */}
+                            <img 
+                              src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                              alt={`${idea.title} - Cosmic Theme`}
+                              className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png", '_blank');
+                              }}
+                              title="Cosmic Theme - Klik om te bekijken"
+                            />
+                            
+                            {/* Cyberpunk Theme Variation */}
+                            <img 
+                              src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                              alt={`${idea.title} - Cyberpunk Theme`}
+                              className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png", '_blank');
+                              }}
+                              title="Cyberpunk Theme - Klik om te bekijken"
+                            />
+                            
+                            {/* Dystopia Theme Variation */}
+                            <img 
+                              src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                              alt={`${idea.title} - Dystopia Theme`}
+                              className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md hover:scale-105 transition-transform duration-200 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png", '_blank');
+                              }}
+                              title="Dystopia Theme - Klik om te bekijken"
+                            />
+                          </div>
                         </div>
-                        {form.selectedIdeas.includes(idea.id) && (
-                          <CheckCircle className="w-5 h-5 text-blue-400" />
-                        )}
+                        
+                        {/* Post Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-3">
+                            <h4 className="font-semibold text-white text-lg leading-tight">
+                              {idea.title}
+                            </h4>
+                            {form.selectedIdeas.includes(idea.id) && (
+                              <CheckCircle className="w-6 h-6 text-blue-400 flex-shrink-0 ml-2" />
+                            )}
+                          </div>
+                          
+                          {/* Complete Content */}
+                          <div className="text-sm text-gray-300 mb-4">
+                            <p className="whitespace-pre-wrap leading-relaxed">
+                              {idea.body || idea.excerpt || 'No content available'}
+                            </p>
+                          </div>
+                          
+                          {/* Social Media Content Preview */}
+                          <div className="space-y-2">
+                            <h5 className="text-xs font-medium text-gray-400 uppercase tracking-wide">Social Media Content:</h5>
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              {idea.facebook && (
+                                <div className="bg-gray-600 rounded p-2">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <Facebook className="w-3 h-3 text-blue-400" />
+                                    <span className="text-gray-300 font-medium">Facebook</span>
+                                  </div>
+                                  <p className="text-gray-200 line-clamp-2">{idea.facebook}</p>
+                                </div>
+                              )}
+                              {idea.instagram && (
+                                <div className="bg-gray-600 rounded p-2">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <Instagram className="w-3 h-3 text-pink-400" />
+                                    <span className="text-gray-300 font-medium">Instagram</span>
+                                  </div>
+                                  <p className="text-gray-200 line-clamp-2">{idea.instagram}</p>
+                                </div>
+                              )}
+                              {idea.x && (
+                                <div className="bg-gray-600 rounded p-2">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <X className="w-3 h-3 text-blue-300" />
+                                    <span className="text-gray-300 font-medium">X</span>
+                                  </div>
+                                  <p className="text-gray-200 line-clamp-2">{idea.x}</p>
+                                </div>
+                              )}
+                              {idea.linkedin && (
+                                <div className="bg-gray-600 rounded p-2">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <Linkedin className="w-3 h-3 text-blue-500" />
+                                    <span className="text-gray-300 font-medium">LinkedIn</span>
+                                  </div>
+                                  <p className="text-gray-200 line-clamp-2">{idea.linkedin}</p>
+                                </div>
+                              )}
+                              {idea.tiktok && (
+                                <div className="bg-gray-600 rounded p-2">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <Video className="w-3 h-3 text-white" />
+                                    <span className="text-gray-300 font-medium">TikTok</span>
+                                  </div>
+                                  <p className="text-gray-200 line-clamp-2">{idea.tiktok}</p>
+                                </div>
+                              )}
+                              {idea.youtube && (
+                                <div className="bg-gray-600 rounded p-2">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <Youtube className="w-3 h-3 text-red-400" />
+                                    <span className="text-gray-300 font-medium">YouTube</span>
+                                  </div>
+                                  <p className="text-gray-200 line-clamp-2">{idea.youtube}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )
