@@ -318,6 +318,62 @@ export default function MyPreviewsNew() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Images - Always visible at top */}
+                {preview.preview_data?.images && (
+                  <div className="bg-gray-700 rounded-lg p-4">
+                    <h4 className="font-medium text-white mb-3">Preview Images</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* Utopia Theme */}
+                      {preview.preview_data.images.main && (
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Utopia Theme</h6>
+                          <img 
+                            src={preview.preview_data.images.main} 
+                            alt="Utopia Theme"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Featured Image */}
+                      {preview.preview_data.images.featured && (
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Featured Image</h6>
+                          <img 
+                            src={preview.preview_data.images.featured} 
+                            alt="Featured preview"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Cosmic Theme */}
+                      {preview.preview_data.images.cosmic && (
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Cosmic Theme</h6>
+                          <img 
+                            src={preview.preview_data.images.cosmic} 
+                            alt="Cosmic preview"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
+                      )}
+                      
+                      {/* Cyberpunk Theme */}
+                      {preview.preview_data.images.cyberpunk && (
+                        <div className="bg-gray-600 rounded border border-gray-500 p-2">
+                          <h6 className="text-xs font-medium text-gray-300 mb-1">Cyberpunk Theme</h6>
+                          <img 
+                            src={preview.preview_data.images.cyberpunk} 
+                            alt="Cyberpunk preview"
+                            className="w-full h-24 object-cover rounded border border-gray-500"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Preview Data */}
                 <div className="bg-gray-700 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">

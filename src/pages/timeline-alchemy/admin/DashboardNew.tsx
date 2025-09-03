@@ -29,6 +29,7 @@ export default function DashboardNew() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
+  const [selectedClient, setSelectedClient] = useState('all')
   const [clients, setClients] = useState<{ id: string; name: string }[]>([])
   const [expandedPreviews, setExpandedPreviews] = useState<{[key: string]: boolean}>({})
 
@@ -213,8 +214,9 @@ export default function DashboardNew() {
     const matchesSearch = (preview.preview_data?.idea_title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (preview.preview_data?.idea_content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
+    const matchesClient = selectedClient === 'all' || preview.profiles?.id === selectedClient
     
-    return matchesSearch && matchesStatus
+    return matchesSearch && matchesStatus && matchesClient
   })
 
   const handleDeletePreview = async (previewId: string) => {
@@ -410,6 +412,18 @@ export default function DashboardNew() {
               <option value="pending" className="bg-gray-700 text-gray-200">Pending</option>
               <option value="approved" className="bg-gray-700 text-gray-200">Approved</option>
               <option value="rejected" className="bg-gray-700 text-gray-200">Rejected</option>
+            </select>
+            <select
+              value={selectedClient}
+              onChange={(e) => setSelectedClient(e.target.value)}
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 focus:border-blue-400"
+            >
+              <option value="all" className="bg-gray-700 text-gray-200">All Clients</option>
+              {clients.map(client => (
+                <option key={client.id} value={client.id} className="bg-gray-700 text-gray-200">
+                  {client.name}
+                </option>
+              ))}
             </select>
           </div>
         </CardContent>
