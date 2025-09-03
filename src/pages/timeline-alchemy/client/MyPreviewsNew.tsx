@@ -95,12 +95,14 @@ export default function MyPreviewsNew() {
 
   const getBlogPostImages = (postId: string) => {
     const baseUrl = 'https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images'
-    return {
-      main: `${baseUrl}/${postId}/header-utopia.png`,
-      dystopia: `${baseUrl}/${postId}/header-dystopia.png`,
-      cosmic: `${baseUrl}/${postId}/header-cosmic.png`,
-      cyberpunk: `${baseUrl}/${postId}/header-cyberpunk.png`
+    const images = {
+      main: `${baseUrl}/${postId}/utopia.png`,
+      dystopia: `${baseUrl}/${postId}/dystopia.png`,
+      cosmic: `${baseUrl}/${postId}/cosmic.png`,
+      cyberpunk: `${baseUrl}/${postId}/cyberpunk.png`
     }
+    console.log('Generated images for postId:', postId, images)
+    return images
   }
 
   const loadPreviews = async () => {
@@ -224,7 +226,21 @@ export default function MyPreviewsNew() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">My Previews</h1>
         <p className="mt-2 text-gray-300">Review and approve your content previews</p>
-
+        <div className="mt-4">
+          <Button onClick={() => {
+            console.log('=== PREVIEW DEBUG ===')
+            previews.forEach((preview, index) => {
+              console.log(`Preview ${index + 1}:`, {
+                id: preview.id,
+                preview_data: preview.preview_data,
+                blog_post_id: preview.preview_data?.blog_post_id
+              })
+            })
+            console.log('===================')
+          }} variant="outline" className="bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
+            Debug Previews
+          </Button>
+        </div>
       </div>
 
 
@@ -268,6 +284,14 @@ export default function MyPreviewsNew() {
                     {(() => {
                       // Try to get blog post ID from preview data, fallback to a default
                       const blogPostId = preview.preview_data?.blog_post_id || '0175ee3b-7623-42f0-8af6-3a23236c9fed'
+                      console.log('Preview data:', preview.preview_data)
+                      console.log('Blog post ID:', blogPostId)
+                      console.log('Available post IDs in bucket:', [
+                        'a02736f0-a51c-4aaa-8b6d-9fa05d76e715',
+                        'f1f68cb7-7558-4ac1-a7ae-531d928693fd', 
+                        '37baa5fa-3276-49f4-86d5-c0f45092740c',
+                        'b7695ed7-f87c-41a7-8454-9e62ca776eee'
+                      ])
                       const images = getBlogPostImages(blogPostId)
                       
                       return (

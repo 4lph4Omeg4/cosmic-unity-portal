@@ -123,10 +123,10 @@ export default function PreviewWizardNew() {
   const getBlogPostImages = (postId: string) => {
     const baseUrl = 'https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images'
     return {
-      main: `${baseUrl}/${postId}/header-utopia.png`,
-      dystopia: `${baseUrl}/${postId}/header-dystopia.png`,
-      cosmic: `${baseUrl}/${postId}/header-cosmic.png`,
-      cyberpunk: `${baseUrl}/${postId}/header-cyberpunk.png`
+      main: `${baseUrl}/${postId}/utopia.png`,
+      dystopia: `${baseUrl}/${postId}/dystopia.png`,
+      cosmic: `${baseUrl}/${postId}/cosmic.png`,
+      cyberpunk: `${baseUrl}/${postId}/cyberpunk.png`
     }
   }
 

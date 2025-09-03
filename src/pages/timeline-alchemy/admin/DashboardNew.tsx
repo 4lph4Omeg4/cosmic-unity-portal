@@ -78,6 +78,16 @@ export default function DashboardNew() {
     }
   }
 
+  const getBlogPostImages = (postId: string) => {
+    const baseUrl = 'https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images'
+    return {
+      main: `${baseUrl}/${postId}/utopia.png`,
+      dystopia: `${baseUrl}/${postId}/dystopia.png`,
+      cosmic: `${baseUrl}/${postId}/cosmic.png`,
+      cyberpunk: `${baseUrl}/${postId}/cyberpunk.png`
+    }
+  }
+
   const toggleExpanded = (previewId: string) => {
     setExpandedPreviews(prev => ({
       ...prev,
