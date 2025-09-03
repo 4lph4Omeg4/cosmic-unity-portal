@@ -39,6 +39,8 @@ interface Idea {
   instagram?: string
   x?: string
   linkedin?: string
+  tiktok?: string
+  youtube?: string
   featured_image?: string
   image_url?: string
   image_public_url?: string
@@ -166,6 +168,8 @@ export default function PreviewWizardNew() {
           instagram: post.instagram || null,
           x: post.x || null,
           linkedin: post.linkedin || null,
+          tiktok: post.tiktok || null,
+          youtube: post.youtube || null,
           featured_image: post.featured_image || null,
           image_url: post.image_url || null,
           image_public_url: post.image_public_url || null
@@ -225,7 +229,9 @@ export default function PreviewWizardNew() {
             facebook: idea.facebook,
             instagram: idea.instagram,
             x: idea.x,
-            linkedin: idea.linkedin
+            linkedin: idea.linkedin,
+            tiktok: idea.tiktok,
+            youtube: idea.youtube
           },
           images: {
             main: idea.image_public_url,

@@ -59,7 +59,9 @@ export default function CreateTestPreview() {
           facebook: blogPost.facebook || 'Test Facebook content',
           instagram: blogPost.instagram || 'Test Instagram content',
           x: blogPost.x || 'Test X content',
-          linkedin: blogPost.linkedin || 'Test LinkedIn content'
+          linkedin: blogPost.linkedin || 'Test LinkedIn content',
+          tiktok: blogPost.tiktok || 'Test TikTok content',
+          youtube: blogPost.youtube || 'Test YouTube content'
         },
         images: {
           main: blogPost.image_public_url,

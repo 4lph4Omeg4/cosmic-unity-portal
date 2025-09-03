@@ -14,7 +14,13 @@ import {
   Eye,
   EyeOff,
   Loader2,
-  Search
+  Search,
+  Instagram,
+  Youtube,
+  Linkedin,
+  X,
+  Facebook,
+  Video
 } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -38,6 +44,46 @@ export default function MyPreviewsNew() {
   useEffect(() => {
     loadPreviews()
   }, [])
+
+  const getPlatformIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'facebook':
+        return <Facebook className="w-4 h-4" />
+      case 'instagram':
+        return <Instagram className="w-4 h-4" />
+      case 'x':
+      case 'twitter':
+        return <X className="w-4 h-4" />
+      case 'linkedin':
+        return <Linkedin className="w-4 h-4" />
+      case 'tiktok':
+        return <Video className="w-4 h-4" />
+      case 'youtube':
+        return <Youtube className="w-4 h-4" />
+      default:
+        return <MessageSquare className="w-4 h-4" />
+    }
+  }
+
+  const getPlatformColor = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'facebook':
+        return 'text-blue-400'
+      case 'instagram':
+        return 'text-pink-400'
+      case 'x':
+      case 'twitter':
+        return 'text-blue-300'
+      case 'linkedin':
+        return 'text-blue-500'
+      case 'tiktok':
+        return 'text-white'
+      case 'youtube':
+        return 'text-red-400'
+      default:
+        return 'text-gray-400'
+    }
+  }
 
   const loadPreviews = async () => {
     try {
@@ -281,13 +327,12 @@ export default function MyPreviewsNew() {
                           return (
                             <div key={platform} className="bg-gray-600 rounded border border-gray-500">
                               <div className="flex items-center gap-2 p-2 border-b border-gray-500">
-                                <div className="flex-shrink-0">
-                                  {platform === 'facebook' && <span className="text-blue-400">📘</span>}
-                                  {platform === 'instagram' && <span className="text-pink-400">📷</span>}
-                                  {platform === 'x' && <span className="text-blue-300">🐦</span>}
-                                  {platform === 'linkedin' && <span className="text-blue-500">💼</span>}
+                                <div className={`flex-shrink-0 ${getPlatformColor(platform)}`}>
+                                  {getPlatformIcon(platform)}
                                 </div>
-                                <span className="font-medium text-gray-200 text-sm capitalize">{platform}</span>
+                                <span className="font-medium text-gray-200 text-sm capitalize">
+                                  {platform === 'x' ? 'X (Twitter)' : platform}
+                                </span>
                               </div>
                               <div className="p-2">
                                 <div className="bg-gray-700 rounded p-2">
