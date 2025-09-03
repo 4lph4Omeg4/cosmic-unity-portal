@@ -223,54 +223,16 @@ export default function PreviewWizardNew() {
         console.log('Sample blog post:', allData[0])
       }
       
-      // Now try to load with specific columns - start with basic ones first
+      // Use the same query that works in testBlogPosts
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('id, title, body, excerpt, facebook, instagram, x, linkedin, featured_image, image_url, image_public_url')
+        .select('*')
         .order('created_at', { ascending: false })
       
       if (error) {
-        console.error('Error loading blog posts (specific columns):', error)
-        console.log('Falling back to basic columns...')
-        
-        // Fallback to basic columns if new ones don't exist yet
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('blog_posts')
-          .select('id, title, body, excerpt, facebook, instagram, x, linkedin, featured_image, image_url, image_public_url')
-          .order('created_at', { ascending: false })
-        
-        if (fallbackError) {
-          console.error('Error loading blog posts (fallback):', fallbackError)
-          setBlogPosts([])
-          return
-        }
-        
-        console.log('Fallback successful, loaded posts:', fallbackData?.length || 0)
-        
-        if (fallbackData && fallbackData.length > 0) {
-          const transformedFallbackPosts = fallbackData.map((post: any) => ({
-            id: post.id,
-            title: post.title || 'Untitled',
-            body: post.body || null,
-            excerpt: post.excerpt || null,
-            facebook: post.facebook || null,
-            instagram: post.instagram || null,
-            x: post.x || null,
-            linkedin: post.linkedin || null,
-            tiktok: null, // Not available in fallback
-            youtube: null, // Not available in fallback
-            featured_image: post.featured_image || null,
-            image_url: post.image_url || null,
-            image_public_url: post.image_public_url || null
-          }))
-          
-          console.log('Transformed fallback posts:', transformedFallbackPosts)
-          setIdeas(transformedFallbackPosts)
-          setBlogPosts(transformedFallbackPosts)
-        } else {
-          setIdeas([])
-          setBlogPosts([])
-        }
+        console.error('Error loading blog posts:', error)
+        setIdeas([])
+        setBlogPosts([])
         return
       }
       
