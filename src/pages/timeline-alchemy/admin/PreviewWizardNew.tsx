@@ -231,32 +231,69 @@ export default function PreviewWizardNew() {
         }
         
         console.log('Fallback successful, loaded posts:', fallbackData?.length || 0)
-        setBlogPosts(fallbackData || [])
+        
+        if (fallbackData && fallbackData.length > 0) {
+          const transformedFallbackPosts = fallbackData.map((post: any) => ({
+            id: post.id,
+            title: post.title || 'Untitled',
+            body: post.body || null,
+            excerpt: post.excerpt || null,
+            facebook: post.facebook || null,
+            instagram: post.instagram || null,
+            x: post.x || null,
+            linkedin: post.linkedin || null,
+            tiktok: null, // Not available in fallback
+            youtube: null, // Not available in fallback
+            featured_image: post.featured_image || null,
+            image_url: post.image_url || null,
+            image_public_url: post.image_public_url || null
+          }))
+          
+          console.log('Transformed fallback posts:', transformedFallbackPosts)
+          setIdeas(transformedFallbackPosts)
+          setBlogPosts(transformedFallbackPosts)
+        } else {
+          setIdeas([])
+          setBlogPosts([])
+        }
         return
       }
       
       if (data && data.length > 0) {
         console.log('Raw data from blog_posts:', data)
-        const transformedPosts = data.map((post: any) => ({
-          id: post.id,
-          title: post.title || 'Untitled',
-          body: post.body || null,
-          excerpt: post.excerpt || null,
-          facebook: post.facebook || null,
-          instagram: post.instagram || null,
-          x: post.x || null,
-          linkedin: post.linkedin || null,
-          tiktok: post.tiktok || null,
-          youtube: post.youtube || null,
-          featured_image: post.featured_image || null,
-          image_url: post.image_url || null,
-          image_public_url: post.image_public_url || null
-        }))
+        console.log('Number of posts found:', data.length)
+        
+        const transformedPosts = data.map((post: any, index: number) => {
+          console.log(`Transforming post ${index + 1}:`, post)
+          return {
+            id: post.id,
+            title: post.title || 'Untitled',
+            body: post.body || null,
+            excerpt: post.excerpt || null,
+            facebook: post.facebook || null,
+            instagram: post.instagram || null,
+            x: post.x || null,
+            linkedin: post.linkedin || null,
+            tiktok: post.tiktok || null,
+            youtube: post.youtube || null,
+            featured_image: post.featured_image || null,
+            image_url: post.image_url || null,
+            image_public_url: post.image_public_url || null
+          }
+        })
+        
         console.log('Transformed posts:', transformedPosts)
+        console.log('Setting ideas state with:', transformedPosts.length, 'posts')
         setIdeas(transformedPosts)
-        console.log('Loaded ideas from blog_posts:', transformedPosts.length)
+        
+        // Also set blogPosts for compatibility
+        setBlogPosts(transformedPosts)
+        
+        console.log('Ideas state set, current ideas length:', transformedPosts.length)
       } else {
+        console.log('No data found, setting empty arrays')
         setIdeas([])
+        setBlogPosts([])
         console.log('No ideas found in blog_posts table')
       }
     } catch (error) {
@@ -407,6 +444,22 @@ export default function PreviewWizardNew() {
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Select Ideas</h3>
+            <div className="text-sm text-gray-400 mb-4">
+              Found {ideas.length} ideas to choose from
+            </div>
+            {ideas.length === 0 && (
+              <div className="text-center py-8 text-gray-400">
+                <p>No ideas found. Check console for debugging info.</p>
+                <Button 
+                  onClick={testBlogPosts} 
+                  variant="outline" 
+                  size="sm"
+                  className="mt-2"
+                >
+                  Test Blog Posts
+                </Button>
+              </div>
+            )}
             <div className="space-y-4">
               {ideas.map((idea) => (
                 <div
@@ -531,8 +584,9 @@ export default function PreviewWizardNew() {
           <p>✅ Admin access confirmed</p>
           <p>📊 Ideas loaded: {ideas.length}</p>
           <p>👥 Clients loaded: {clients.length}</p>
+          <p>🔄 Current step: {form.step}</p>
         </div>
-        <div className="mt-3">
+        <div className="mt-3 space-x-2">
           <Button 
             onClick={testBlogPosts} 
             variant="outline" 
@@ -541,7 +595,25 @@ export default function PreviewWizardNew() {
           >
             Test Blog Posts
           </Button>
+          <Button 
+            onClick={() => {
+              console.log('Current ideas state:', ideas)
+              console.log('Current blogPosts state:', blogPosts)
+              console.log('Current form state:', form)
+            }} 
+            variant="outline" 
+            size="sm"
+            className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600"
+          >
+            Debug State
+          </Button>
         </div>
+        {ideas.length > 0 && (
+          <div className="mt-3 text-xs text-green-300">
+            <p>First idea: {ideas[0]?.title || 'No title'}</p>
+            <p>Ideas IDs: {ideas.map(i => i.id.slice(-8)).join(', ')}</p>
+          </div>
+        )}
       </div>
 
       {/* Progress Steps */}
