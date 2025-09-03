@@ -215,7 +215,7 @@ export default function DashboardNew() {
                          (preview.preview_data?.idea_content || '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus === 'all' || preview.status === selectedStatus
     
-    const matchesClient = selectedClient === 'all' || preview.user_id === selectedClient
+    const matchesClient = selectedClient === 'all' || preview.profiles?.id === selectedClient
     
     return matchesSearch && matchesStatus && matchesClient
   })
@@ -319,6 +319,7 @@ export default function DashboardNew() {
             console.log('Available clients:', clients)
             console.log('All previews:', previews)
             console.log('Filtered previews:', filteredPreviews)
+            console.log('Preview user_ids:', previews.map(p => ({ id: p.id, user_id: p.user_id, profiles_id: p.profiles?.id, profiles_name: p.profiles?.display_name })))
             console.log('===================')
           }} variant="outline" className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
             <Search className="w-4 h-4" />
