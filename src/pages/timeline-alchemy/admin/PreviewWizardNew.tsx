@@ -106,6 +106,35 @@ export default function PreviewWizardNew() {
     }
   }
 
+  const testBlogPosts = async () => {
+    try {
+      console.log('Testing blog_posts table...')
+      
+      // Test basic connection
+      const { data: testData, error: testError } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .limit(1)
+      
+      if (testError) {
+        console.error('Blog posts test error:', testError)
+        alert('Blog posts test failed: ' + testError.message)
+        return
+      }
+      
+      console.log('Blog posts test successful:', testData)
+      if (testData && testData.length > 0) {
+        console.log('Available columns:', Object.keys(testData[0]))
+        console.log('Sample post:', testData[0])
+      }
+      
+      alert(`Blog posts test successful! Found ${testData?.length || 0} posts. Check console for details.`)
+    } catch (error) {
+      console.error('Blog posts test error:', error)
+      alert('Blog posts test failed: ' + error)
+    }
+  }
+
   const loadData = async () => {
     try {
       setLoading(true)
@@ -146,15 +175,49 @@ export default function PreviewWizardNew() {
 
   const loadIdeas = async () => {
     try {
-      // Load ideas from blog_posts table
+      console.log('Loading ideas from blog_posts table...')
+      
+      // First try to load all columns to see what's available
+      const { data: allData, error: allError } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .limit(1)
+      
+      if (allError) {
+        console.error('Error loading blog posts (all columns):', allError)
+        setBlogPosts([])
+        return
+      }
+      
+      if (allData && allData.length > 0) {
+        console.log('Available columns in blog_posts:', Object.keys(allData[0]))
+        console.log('Sample blog post:', allData[0])
+      }
+      
+      // Now try to load with specific columns
       const { data, error } = await supabase
         .from('blog_posts')
         .select('id, title, body, excerpt, facebook, instagram, x, linkedin, tiktok, youtube, featured_image, image_url, image_public_url')
         .order('created_at', { ascending: false })
       
       if (error) {
-        console.error('Error loading blog posts:', error)
-        setBlogPosts([])
+        console.error('Error loading blog posts (specific columns):', error)
+        console.log('Falling back to basic columns...')
+        
+        // Fallback to basic columns if new ones don't exist yet
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('blog_posts')
+          .select('id, title, body, excerpt, facebook, instagram, x, linkedin, featured_image, image_url, image_public_url')
+          .order('created_at', { ascending: false })
+        
+        if (fallbackError) {
+          console.error('Error loading blog posts (fallback):', fallbackError)
+          setBlogPosts([])
+          return
+        }
+        
+        console.log('Fallback successful, loaded posts:', fallbackData?.length || 0)
+        setBlogPosts(fallbackData || [])
         return
       }
       
@@ -452,6 +515,16 @@ export default function PreviewWizardNew() {
           <p>✅ Admin access confirmed</p>
           <p>📊 Ideas loaded: {ideas.length}</p>
           <p>👥 Clients loaded: {clients.length}</p>
+        </div>
+        <div className="mt-3">
+          <Button 
+            onClick={testBlogPosts} 
+            variant="outline" 
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600"
+          >
+            Test Blog Posts
+          </Button>
         </div>
       </div>
 

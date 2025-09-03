@@ -38,12 +38,76 @@ export default function CreateTestPreview() {
       const client = clients[0]
 
       // Get a blog post (idea)
+      console.log('Loading blog posts for test preview...')
+      
       const { data: blogPosts, error: blogPostsError } = await supabase
         .from('blog_posts')
         .select('id, title, body, facebook, instagram, x, linkedin, tiktok, youtube, image_public_url, featured_image')
         .limit(1)
 
-      if (blogPostsError || !blogPosts || blogPosts.length === 0) {
+      if (blogPostsError) {
+        console.error('Error loading blog posts (with new columns):', blogPostsError)
+        console.log('Falling back to basic columns...')
+        
+        // Fallback to basic columns if new ones don't exist yet
+        const { data: fallbackPosts, error: fallbackError } = await supabase
+          .from('blog_posts')
+          .select('id, title, body, facebook, instagram, x, linkedin, image_public_url, featured_image')
+          .limit(1)
+        
+        if (fallbackError || !fallbackPosts || fallbackPosts.length === 0) {
+          setError('No blog posts found. Please create a blog post first.')
+          return
+        }
+        
+        console.log('Fallback successful, using basic columns')
+        // Use fallback data
+        const blogPost = fallbackPosts[0]
+        
+        // Create test preview data with fallback
+        const previewData = {
+          idea_id: blogPost.id,
+          idea_title: blogPost.title,
+          idea_content: blogPost.body,
+          social_content: {
+            facebook: blogPost.facebook || `Facebook post for: ${blogPost.title}`,
+            instagram: blogPost.instagram || `Instagram post for: ${blogPost.title}`,
+            x: blogPost.x || `X post for: ${blogPost.title}`,
+            linkedin: blogPost.linkedin || `LinkedIn post for: ${blogPost.title}`,
+            tiktok: `TikTok video for: ${blogPost.title}`,
+            youtube: `YouTube video for: ${blogPost.title}`
+          },
+          images: {
+            main: blogPost.image_public_url,
+            featured: blogPost.featured_image
+          },
+          created_by: user.id,
+          created_at: new Date().toISOString()
+        }
+        
+        // Create preview in user_previews table
+        const { error: insertError } = await supabase
+          .from('user_previews')
+          .insert({
+            user_id: client.user_id,
+            status: 'pending',
+            preview_data: previewData
+          })
+
+        if (insertError) {
+          console.error('Error creating preview:', insertError)
+          setError('Failed to create preview: ' + insertError.message)
+          return
+        }
+
+        setSuccess('Test preview created successfully!')
+        setTimeout(() => {
+          window.location.href = '/timeline-alchemy/admin/dashboard-new'
+        }, 2000)
+        return
+      }
+
+      if (!blogPosts || blogPosts.length === 0) {
         setError('No blog posts found. Please create a blog post first.')
         return
       }
