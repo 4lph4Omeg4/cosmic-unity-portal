@@ -73,6 +73,14 @@ export default function PreviewWizardNew() {
     loadData()
   }, [])
 
+  // Debug useEffect to monitor ideas state changes
+  useEffect(() => {
+    console.log('Ideas state changed:', ideas.length, 'ideas')
+    if (ideas.length > 0) {
+      console.log('First idea:', ideas[0])
+    }
+  }, [ideas])
+
   const checkAdminStatus = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -291,10 +299,16 @@ export default function PreviewWizardNew() {
         
         console.log('Transformed posts:', transformedPosts)
         console.log('Setting ideas state with:', transformedPosts.length, 'posts')
-        setIdeas(transformedPosts)
         
-        // Also set blogPosts for compatibility
+        // Set the state
+        setIdeas(transformedPosts)
         setBlogPosts(transformedPosts)
+        
+        // Verify the state was set
+        setTimeout(() => {
+          console.log('After state update - ideas length:', ideas.length)
+          console.log('After state update - blogPosts length:', blogPosts.length)
+        }, 100)
         
         console.log('Ideas state set, current ideas length:', transformedPosts.length)
       } else {
@@ -448,6 +462,7 @@ export default function PreviewWizardNew() {
         )
 
       case 2:
+        console.log('Rendering case 2, ideas length:', ideas.length)
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Select Ideas</h3>
@@ -468,7 +483,9 @@ export default function PreviewWizardNew() {
               </div>
             )}
             <div className="space-y-4">
-              {ideas.map((idea) => (
+              {ideas.map((idea, index) => {
+                console.log(`Rendering idea ${index + 1}:`, idea)
+                return (
                 <div
                   key={idea.id}
                   className={`border rounded-lg p-4 cursor-pointer transition-colors ${
@@ -503,7 +520,8 @@ export default function PreviewWizardNew() {
                     )}
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )
@@ -615,6 +633,17 @@ export default function PreviewWizardNew() {
             className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600"
           >
             Debug State
+          </Button>
+          <Button 
+            onClick={() => {
+              console.log('Force reloading data...')
+              loadData()
+            }} 
+            variant="outline" 
+            size="sm"
+            className="bg-green-600 hover:bg-green-700 text-white border-green-600"
+          >
+            Reload Data
           </Button>
         </div>
         {ideas.length > 0 && (
