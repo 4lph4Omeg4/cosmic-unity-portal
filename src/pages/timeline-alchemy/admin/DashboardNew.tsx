@@ -26,13 +26,49 @@ export default function DashboardNew() {
   const navigate = useNavigate()
   const [previews, setPreviews] = useState<UserPreview[]>([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [clients, setClients] = useState<{ id: string; name: string }[]>([])
 
   useEffect(() => {
+    checkAdminStatus()
     loadData()
   }, [])
+
+  const checkAdminStatus = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.error('User not authenticated')
+        navigate('/auth')
+        return
+      }
+
+      // Check if user is admin
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('user_id', user.id)
+        .single()
+
+      if (error) {
+        console.error('Error checking admin status:', error)
+        return
+      }
+
+      if (!profile?.is_admin) {
+        console.log('User is not admin, redirecting...')
+        navigate('/timeline-alchemy/client/my-previews-new')
+        return
+      }
+
+      setIsAdmin(true)
+      console.log('User is admin, proceeding...')
+    } catch (error) {
+      console.error('Error in checkAdminStatus:', error)
+    }
+  }
 
   const loadData = async () => {
     try {
@@ -134,12 +170,18 @@ export default function DashboardNew() {
     }
   }
 
-  if (loading) {
+  if (loading || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="flex items-center gap-2 text-lg text-white">
-          <Loader2 className="w-5 h-5 animate-spin" />
-          Loading dashboard...
+        <div className="text-center">
+          <div className="text-lg text-white mb-2">
+            {loading ? 'Loading dashboard...' : 'Checking admin access...'}
+          </div>
+          {!isAdmin && (
+            <div className="text-sm text-gray-400">
+              Redirecting to client dashboard...
+            </div>
+          )}
         </div>
       </div>
     )
@@ -169,6 +211,17 @@ export default function DashboardNew() {
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
+        </div>
+      </div>
+
+      {/* Debug Info */}
+      <div className="bg-green-900/20 rounded-lg p-4 border border-green-700">
+        <h4 className="text-lg font-medium text-green-300 mb-2">Admin Status</h4>
+        <div className="text-sm text-green-200">
+          <p>✅ Admin access confirmed</p>
+          <p>📊 Previews loaded: {previews.length}</p>
+          <p>👥 Clients loaded: {clients.length}</p>
+          <p>🔄 Using new user_previews table</p>
         </div>
       </div>
 
