@@ -235,7 +235,7 @@ export default function MyPreviewsNew() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white">
-                    Preview #{preview.id.slice(-8)}
+                    {preview.preview_data?.idea_title || `Preview #${preview.id.slice(-8)}`}
                   </CardTitle>
                   {getStatusBadge(preview.status)}
                 </div>
