@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2, Eye, Edit, Trash2, Sparkles, Play } from 'lucide-react'
+import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2, Eye, Edit, Trash2, Sparkles, Play, Plus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -206,6 +206,10 @@ export default function DashboardNew() {
           <Button onClick={() => navigate('/timeline-alchemy/admin/preview-wizard-new')} className="bg-blue-600 hover:bg-blue-700">
             <MessageSquare className="w-4 h-4 mr-2" />
             Create Preview (New)
+          </Button>
+          <Button onClick={() => navigate('/timeline-alchemy/admin/create-test-preview')} className="bg-green-600 hover:bg-green-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Test Preview
           </Button>
           <Button onClick={refreshData} variant="outline" className="flex items-center gap-2" disabled={loading}>
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
