@@ -110,11 +110,11 @@ export default function PreviewWizardNew() {
     try {
       console.log('Testing blog_posts table...')
       
-      // Test basic connection
+      // Test basic connection - get all posts
       const { data: testData, error: testError } = await supabase
         .from('blog_posts')
         .select('*')
-        .limit(1)
+        .order('created_at', { ascending: false })
       
       if (testError) {
         console.error('Blog posts test error:', testError)
@@ -123,9 +123,23 @@ export default function PreviewWizardNew() {
       }
       
       console.log('Blog posts test successful:', testData)
+      console.log('Total posts found:', testData?.length || 0)
+      
       if (testData && testData.length > 0) {
         console.log('Available columns:', Object.keys(testData[0]))
-        console.log('Sample post:', testData[0])
+        console.log('First post:', testData[0])
+        console.log('Last post:', testData[testData.length - 1])
+        
+        // Check for social media columns
+        const socialColumns = Object.keys(testData[0]).filter(key => 
+          key.toLowerCase().includes('facebook') || 
+          key.toLowerCase().includes('instagram') || 
+          key.toLowerCase().includes('x') ||
+          key.toLowerCase().includes('linkedin') ||
+          key.toLowerCase().includes('tiktok') ||
+          key.toLowerCase().includes('youtube')
+        )
+        console.log('Social media columns found:', socialColumns)
       }
       
       alert(`Blog posts test successful! Found ${testData?.length || 0} posts. Check console for details.`)
@@ -222,6 +236,7 @@ export default function PreviewWizardNew() {
       }
       
       if (data && data.length > 0) {
+        console.log('Raw data from blog_posts:', data)
         const transformedPosts = data.map((post: any) => ({
           id: post.id,
           title: post.title || 'Untitled',
@@ -237,6 +252,7 @@ export default function PreviewWizardNew() {
           image_url: post.image_url || null,
           image_public_url: post.image_public_url || null
         }))
+        console.log('Transformed posts:', transformedPosts)
         setIdeas(transformedPosts)
         console.log('Loaded ideas from blog_posts:', transformedPosts.length)
       } else {

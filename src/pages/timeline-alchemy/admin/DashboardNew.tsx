@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2, Eye, Edit, Trash2, Sparkles, Play, Plus } from 'lucide-react'
+import { Search, Filter, RefreshCw, CheckCircle, XCircle, Clock, MessageSquare, Calendar, User, Loader2, Eye, Edit, Trash2, Sparkles, Play, Plus, Instagram, Youtube, Linkedin, X, Facebook, Video } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -35,6 +35,46 @@ export default function DashboardNew() {
     checkAdminStatus()
     loadData()
   }, [])
+
+  const getPlatformIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'facebook':
+        return <Facebook className="w-4 h-4" />
+      case 'instagram':
+        return <Instagram className="w-4 h-4" />
+      case 'x':
+      case 'twitter':
+        return <X className="w-4 h-4" />
+      case 'linkedin':
+        return <Linkedin className="w-4 h-4" />
+      case 'tiktok':
+        return <Video className="w-4 h-4" />
+      case 'youtube':
+        return <Youtube className="w-4 h-4" />
+      default:
+        return <MessageSquare className="w-4 h-4" />
+    }
+  }
+
+  const getPlatformColor = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'facebook':
+        return 'text-blue-400'
+      case 'instagram':
+        return 'text-pink-400'
+      case 'x':
+      case 'twitter':
+        return 'text-blue-300'
+      case 'linkedin':
+        return 'text-blue-500'
+      case 'tiktok':
+        return 'text-white'
+      case 'youtube':
+        return 'text-red-400'
+      default:
+        return 'text-gray-400'
+    }
+  }
 
   const checkAdminStatus = async () => {
     try {
@@ -412,17 +452,16 @@ export default function DashboardNew() {
                           <h4 className="font-medium text-gray-300 mb-2">Social Media Content:</h4>
                           <div className="space-y-2">
                             {Object.entries(preview.preview_data.social_content).map(([platform, content]) => {
-                              if (!content) return null;
+                              if (!content || content === 'null' || content === '') return null;
                               return (
                                 <div key={platform} className="bg-gray-600 rounded border border-gray-500">
                                   <div className="flex items-center gap-2 p-2 border-b border-gray-500">
-                                    <div className="flex-shrink-0">
-                                      {platform === 'facebook' && <span className="text-blue-400">📘</span>}
-                                      {platform === 'instagram' && <span className="text-pink-400">📷</span>}
-                                      {platform === 'x' && <span className="text-blue-300">🐦</span>}
-                                      {platform === 'linkedin' && <span className="text-blue-500">💼</span>}
+                                    <div className={`flex-shrink-0 ${getPlatformColor(platform)}`}>
+                                      {getPlatformIcon(platform)}
                                     </div>
-                                    <span className="font-medium text-gray-200 text-sm capitalize">{platform}</span>
+                                    <span className="font-medium text-gray-200 text-sm capitalize">
+                                      {platform === 'x' ? 'X (Twitter)' : platform}
+                                    </span>
                                   </div>
                                   <div className="p-2">
                                     <div className="bg-gray-700 rounded p-2 max-h-24 overflow-y-auto">
@@ -434,6 +473,20 @@ export default function DashboardNew() {
                                 </div>
                               );
                             })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Platform Debug Info */}
+                      {preview.preview_data?.social_content && (
+                        <div className="mt-3 p-2 bg-yellow-900/20 rounded border border-yellow-700">
+                          <h6 className="text-xs font-medium text-yellow-300 mb-1">Platform Debug:</h6>
+                          <div className="text-xs text-yellow-200">
+                            {Object.keys(preview.preview_data.social_content).map(platform => (
+                              <span key={platform} className="inline-block mr-2 px-1 bg-yellow-800/50 rounded">
+                                {platform}
+                              </span>
+                            ))}
                           </div>
                         </div>
                       )}
