@@ -40,7 +40,7 @@ export default function CreateTestPreview() {
       // Get a blog post (idea)
       const { data: blogPosts, error: blogPostsError } = await supabase
         .from('blog_posts')
-        .select('*')
+        .select('id, title, body, facebook, instagram, x, linkedin, tiktok, youtube, image_public_url, featured_image')
         .limit(1)
 
       if (blogPostsError || !blogPosts || blogPosts.length === 0) {
@@ -56,12 +56,12 @@ export default function CreateTestPreview() {
         idea_title: blogPost.title,
         idea_content: blogPost.body,
         social_content: {
-          facebook: blogPost.facebook || 'Test Facebook content for this idea',
-          instagram: blogPost.instagram || 'Test Instagram content for this idea',
-          x: blogPost.x || 'Test X content for this idea',
-          linkedin: blogPost.linkedin || 'Test LinkedIn content for this idea',
-          tiktok: blogPost.tiktok || 'Test TikTok content for this idea',
-          youtube: blogPost.youtube || 'Test YouTube content for this idea'
+          facebook: blogPost.facebook || `Facebook post for: ${blogPost.title}`,
+          instagram: blogPost.instagram || `Instagram post for: ${blogPost.title}`,
+          x: blogPost.x || `X post for: ${blogPost.title}`,
+          linkedin: blogPost.linkedin || `LinkedIn post for: ${blogPost.title}`,
+          tiktok: blogPost.tiktok || `TikTok video for: ${blogPost.title}`,
+          youtube: blogPost.youtube || `YouTube video for: ${blogPost.title}`
         },
         images: {
           main: blogPost.image_public_url,

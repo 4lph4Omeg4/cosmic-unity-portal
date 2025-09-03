@@ -149,7 +149,7 @@ export default function PreviewWizardNew() {
       // Load ideas from blog_posts table
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('*')
+        .select('id, title, body, excerpt, facebook, instagram, x, linkedin, tiktok, youtube, featured_image, image_url, image_public_url')
         .order('created_at', { ascending: false })
       
       if (error) {
@@ -225,14 +225,14 @@ export default function PreviewWizardNew() {
           idea_id: ideaId,
           idea_title: idea.title,
           idea_content: idea.body,
-          social_content: {
-            facebook: idea.facebook,
-            instagram: idea.instagram,
-            x: idea.x,
-            linkedin: idea.linkedin,
-            tiktok: idea.tiktok,
-            youtube: idea.youtube
-          },
+                  social_content: {
+          facebook: idea.facebook || `Facebook post for: ${idea.title}`,
+          instagram: idea.instagram || `Instagram post for: ${idea.title}`,
+          x: idea.x || `X post for: ${idea.title}`,
+          linkedin: idea.linkedin || `LinkedIn post for: ${idea.title}`,
+          tiktok: idea.tiktok || `TikTok video for: ${idea.title}`,
+          youtube: idea.youtube || `YouTube video for: ${idea.title}`
+        },
           images: {
             main: idea.image_public_url,
             featured: idea.featured_image
