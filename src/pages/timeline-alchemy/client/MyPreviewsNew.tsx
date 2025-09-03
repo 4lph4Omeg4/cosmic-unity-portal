@@ -33,8 +33,7 @@ export default function MyPreviewsNew() {
   const [previews, setPreviews] = useState<UserPreview[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [feedbackText, setFeedbackText] = useState('')
-  const [selectedPreview, setSelectedPreview] = useState<string | null>(null)
+  const [feedbackTexts, setFeedbackTexts] = useState<{[key: string]: string}>({})
 
   useEffect(() => {
     loadPreviews()
@@ -127,9 +126,11 @@ export default function MyPreviewsNew() {
     }
   }
 
-  const updatePreviewStatus = async (previewId: string, status: 'approved' | 'rejected', feedback?: string) => {
+  const updatePreviewStatus = async (previewId: string, status: 'approved' | 'rejected') => {
     try {
       setSaving(true)
+      
+      const feedback = feedbackTexts[previewId] || ''
       
       const { error } = await supabase
         .from('user_previews')
@@ -148,8 +149,13 @@ export default function MyPreviewsNew() {
 
       // Reload previews
       await loadPreviews()
-      setSelectedPreview(null)
-      setFeedbackText('')
+      
+      // Clear feedback for this preview
+      setFeedbackTexts(prev => {
+        const newTexts = { ...prev }
+        delete newTexts[previewId]
+        return newTexts
+      })
     } catch (error) {
       console.error('Error updating preview:', error)
       alert('Failed to update preview')
@@ -248,9 +254,62 @@ export default function MyPreviewsNew() {
                 {/* Preview Data */}
                 <div className="bg-gray-700 rounded-lg p-4">
                   <h4 className="font-medium text-white mb-2">Preview Content</h4>
-                  <div className="text-sm text-gray-300">
-                    <pre className="whitespace-pre-wrap">{JSON.stringify(preview.preview_data, null, 2)}</pre>
-                  </div>
+                  
+                  {/* Idea Title */}
+                  {preview.preview_data?.idea_title && (
+                    <div className="mb-3">
+                      <h5 className="font-medium text-gray-300 mb-1">Idea Title:</h5>
+                      <p className="text-white">{preview.preview_data.idea_title}</p>
+                    </div>
+                  )}
+                  
+                  {/* Idea Content */}
+                  {preview.preview_data?.idea_content && (
+                    <div className="mb-3">
+                      <h5 className="font-medium text-gray-300 mb-1">Idea Content:</h5>
+                      <p className="text-gray-200 whitespace-pre-wrap">{preview.preview_data.idea_content}</p>
+                    </div>
+                  )}
+                  
+                  {/* Social Content */}
+                  {preview.preview_data?.social_content && (
+                    <div className="mb-3">
+                      <h5 className="font-medium text-gray-300 mb-2">Social Media Content:</h5>
+                      <div className="space-y-2">
+                        {Object.entries(preview.preview_data.social_content).map(([platform, content]) => {
+                          if (!content) return null;
+                          return (
+                            <div key={platform} className="bg-gray-600 rounded border border-gray-500">
+                              <div className="flex items-center gap-2 p-2 border-b border-gray-500">
+                                <div className="flex-shrink-0">
+                                  {platform === 'facebook' && <span className="text-blue-400">📘</span>}
+                                  {platform === 'instagram' && <span className="text-pink-400">📷</span>}
+                                  {platform === 'x' && <span className="text-blue-300">🐦</span>}
+                                  {platform === 'linkedin' && <span className="text-blue-500">💼</span>}
+                                </div>
+                                <span className="font-medium text-gray-200 text-sm capitalize">{platform}</span>
+                              </div>
+                              <div className="p-2">
+                                <div className="bg-gray-700 rounded p-2">
+                                  <p className="text-xs text-gray-200 whitespace-pre-wrap">
+                                    {String(content)}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Raw Data (for debugging) */}
+                  <details className="mt-3">
+                    <summary className="text-xs text-gray-400 cursor-pointer">Show raw data (debug)</summary>
+                    <pre className="text-xs text-gray-400 mt-2 whitespace-pre-wrap overflow-auto max-h-32">
+                      {JSON.stringify(preview.preview_data, null, 2)}
+                    </pre>
+                  </details>
                 </div>
 
                 {/* Admin Notes */}
@@ -280,8 +339,8 @@ export default function MyPreviewsNew() {
                         Add feedback (optional)
                       </label>
                       <Textarea
-                        value={feedbackText}
-                        onChange={(e) => setFeedbackText(e.target.value)}
+                        value={feedbackTexts[preview.id] || ''}
+                        onChange={(e) => setFeedbackTexts(prev => ({ ...prev, [preview.id]: e.target.value }))}
                         placeholder="Add your feedback or comments..."
                         className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                         rows={3}
@@ -289,7 +348,7 @@ export default function MyPreviewsNew() {
                     </div>
                     <div className="flex gap-3">
                       <Button
-                        onClick={() => updatePreviewStatus(preview.id, 'approved', feedbackText)}
+                        onClick={() => updatePreviewStatus(preview.id, 'approved')}
                         disabled={saving}
                         className="bg-green-600 hover:bg-green-700 text-white"
                       >
@@ -297,7 +356,7 @@ export default function MyPreviewsNew() {
                         Approve
                       </Button>
                       <Button
-                        onClick={() => updatePreviewStatus(preview.id, 'rejected', feedbackText)}
+                        onClick={() => updatePreviewStatus(preview.id, 'rejected')}
                         disabled={saving}
                         variant="outline"
                         className="border-red-500 text-red-400 hover:bg-red-900/20"
