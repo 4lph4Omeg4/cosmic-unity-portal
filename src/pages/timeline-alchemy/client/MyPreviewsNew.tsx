@@ -13,7 +13,8 @@ import {
   FileText,
   Eye,
   EyeOff,
-  Loader2
+  Loader2,
+  Search
 } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
 
@@ -52,6 +53,20 @@ export default function MyPreviewsNew() {
 
       console.log('Loading previews for user:', user.id)
 
+      // First test basic connection
+      const { data: testData, error: testError } = await supabase
+        .from('user_previews')
+        .select('*')
+        .limit(5)
+
+      if (testError) {
+        console.error('Database test error:', testError)
+        setPreviews([])
+        return
+      }
+
+      console.log('Database test successful, found previews:', testData?.length || 0)
+
       // Load previews directly by user_id - much simpler!
       const { data, error } = await supabase
         .from('user_previews')
@@ -65,13 +80,50 @@ export default function MyPreviewsNew() {
         return
       }
 
-      console.log('Successfully loaded previews:', data?.length || 0)
+      console.log('Successfully loaded previews for user:', data?.length || 0)
+      console.log('Preview data:', data)
       setPreviews(data || [])
     } catch (error) {
       console.error('Error loading previews:', error)
       setPreviews([])
     } finally {
       setLoading(false)
+    }
+  }
+
+  const testDatabase = async () => {
+    try {
+      console.log('Testing database connection...')
+      
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        alert('User not authenticated')
+        return
+      }
+
+      console.log('Current user ID:', user.id)
+
+      // Test basic connection
+      const { data: testData, error: testError } = await supabase
+        .from('user_previews')
+        .select('*')
+        .limit(5)
+
+      if (testError) {
+        console.error('Database test error:', testError)
+        alert('Database test failed: ' + testError.message)
+        return
+      }
+
+      console.log('Database test successful:', testData)
+      alert(`Database test successful! Found ${testData?.length || 0} total previews. Check console for details.`)
+      
+      // Reload data
+      loadPreviews()
+    } catch (error) {
+      console.error('Database test error:', error)
+      alert('Database test failed: ' + error)
     }
   }
 
@@ -136,6 +188,12 @@ export default function MyPreviewsNew() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">My Previews</h1>
         <p className="mt-2 text-gray-300">Review and approve your content previews</p>
+        <div className="mt-4">
+          <Button onClick={testDatabase} variant="outline" className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600">
+            <Search className="w-4 h-4 mr-2" />
+            Test Database
+          </Button>
+        </div>
       </div>
 
       {/* Debug Info */}
@@ -146,7 +204,13 @@ export default function MyPreviewsNew() {
           <p>Pending: {previews.filter(p => p.status === 'pending').length}</p>
           <p>Approved: {previews.filter(p => p.status === 'approved').length}</p>
           <p>Rejected: {previews.filter(p => p.status === 'rejected').length}</p>
+          <p>🔄 Using new user_previews table</p>
         </div>
+        {previews.length > 0 && (
+          <div className="mt-3 text-xs text-blue-300">
+            <p>Preview IDs: {previews.map(p => p.id.slice(-8)).join(', ')}</p>
+          </div>
+        )}
       </div>
 
       {/* Previews List */}
