@@ -182,14 +182,14 @@ export default function TimelineAlchemySocialConnections() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight">Sociale Verbindingen</h1>
           <p className="mt-2 text-gray-300">Beheer je sociale media accounts</p>
         </div>
-        <Button onClick={loadConnections} variant="outline" className="flex items-center gap-2">
+        <Button onClick={loadConnections} variant="outline" className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-700">
           <RefreshCw className="w-4 h-4" />
           Refresh
         </Button>
@@ -197,51 +197,51 @@ export default function TimelineAlchemySocialConnections() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Platforms</p>
-                <p className="text-2xl font-bold text-gray-900">{connections.length}</p>
+                <p className="text-sm font-medium text-gray-300">Total Platforms</p>
+                <p className="text-2xl font-bold text-white">{connections.length}</p>
               </div>
-              <Link className="w-8 h-8 text-blue-500" />
+              <Link className="w-8 h-8 text-blue-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Connected</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-sm font-medium text-gray-300">Connected</p>
+                <p className="text-2xl font-bold text-green-400">
                   {connections.filter(c => c.is_active).length}
                 </p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-green-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Expired Tokens</p>
-                <p className="text-2xl font-bold text-yellow-600">
+                <p className="text-sm font-medium text-gray-300">Expired Tokens</p>
+                <p className="text-2xl font-bold text-yellow-400">
                   {connections.filter(c => c.is_active && isTokenExpired(c.token_expires_at)).length}
                 </p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-500" />
+              <Clock className="w-8 h-8 text-yellow-400" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Current Connections */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle>Current Connections ({connections.length})</CardTitle>
+          <CardTitle className="text-white">Current Connections ({connections.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
