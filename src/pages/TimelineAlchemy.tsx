@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -24,43 +25,35 @@ import { fetchTlaPosts } from "@/services/tlaData";
 import { TlaSubscribeButton } from "@/components/TlaSubscribeButton";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import SupabaseDebug from "@/components/SupabaseDebug";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const TimelineAlchemy: React.FC = () => {
   // ========= Config =========
   const PRICE_ID = "price_1S1VMWFlYXjX03EzHKNwtkWW"; // <-- jouw Stripe Price ID
   const TLA_ORG_ID = "timeline-alchemy"; // <-- hoofdorganisatie voor admin functies
 
-  // ========= Stijlkeuze + toasts =========
+  // ========= Language & Stijlkeuze + toasts =========
+  const { t, language } = useLanguage();
   const [selectedStyle, setSelectedStyle] = useState<"krachtig" | "mystiek" | "creator">("krachtig");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showSupabaseDebug, setShowSupabaseDebug] = useState(false);
   const { toast } = useToast();
 
-  const styles = {
-    krachtig: {
-      title: "Timeline Alchemy",
-      subtitle:
-        "Transformeer wekelijkse trends naar ziel-resonante content. Blog + cross-platform posts. Volledig gepland. Jij blijft creëren—wij verspreiden.",
-      bullets: ["Wekelijkse blogpost", "Platform-specifieke posts", "Planning & publicatie", "Tone of voice on-brand"],
-      cta: "Activeer Timeline Alchemy",
-    },
-    mystiek: {
-      title: "Spread the One Message. Add Your Own Essence.",
-      subtitle:
-        "Jij zet de intentie neer. Wij weven jouw boodschap door de tijdlijnen—helder, ritmisch, onmisbaar.",
-      bullets: ["Alchemie van trends → inzicht", "Ziel-afgestemde blog", "Signaalversterkers voor socials", "Ritmische distributie"],
-      cta: "Start je Alchemie",
-    },
-    creator: {
-      title: "Creëer vrij. Wij doen de rest.",
-      subtitle:
-        "Wekelijks: 1 diepe blog + korte social-varianten + automatische planning. Consistent zichtbaar zonder content-stress.",
-      bullets: ["Research uit jouw domein", "Jouw tone of voice", "Publicatiekalender", "Rapportage/links"],
-      cta: "Aan de slag",
-    },
-  } as const;
+  // Update HTML lang attribute based on selected language
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
-  const currentStyle = styles[selectedStyle];
+  const getCurrentStyle = () => {
+    return {
+      title: t(`timelineAlchemy.styles.${selectedStyle}.title`),
+      subtitle: t(`timelineAlchemy.styles.${selectedStyle}.subtitle`),
+      bullets: t(`timelineAlchemy.styles.${selectedStyle}.bullets`).split(','),
+      cta: t(`timelineAlchemy.styles.${selectedStyle}.cta`),
+    };
+  };
+
+  const currentStyle = getCurrentStyle();
 
   // ========= Queryparams + data-fetch =========
   const [searchParams] = useSearchParams();
@@ -164,14 +157,17 @@ const TimelineAlchemy: React.FC = () => {
     <div className="space-y-12">
       {/* Debug Header - Always show for now */}
       <div className="fixed top-4 right-4 z-50 space-y-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => window.location.href = "/"}
-          className="bg-red-500/20 border-red-500/50 text-red-400 hover:bg-red-500/30"
-        >
-          🏠 Terug naar Home
-        </Button>
+        <div className="flex gap-2">
+          <LanguageSelector />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.location.href = "/"}
+            className="bg-red-500/20 border-red-500/50 text-red-400 hover:bg-red-500/30"
+          >
+            🏠 {t('common.back')} naar Home
+          </Button>
+        </div>
         <div className="bg-black/80 p-2 rounded text-xs text-white max-w-xs">
           <div>URL: {window.location.href}</div>
           <div>Session: {searchParams.get("session")}</div>
@@ -184,7 +180,7 @@ const TimelineAlchemy: React.FC = () => {
           onClick={() => setShowOnboarding(true)}
           className="bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30"
         >
-          🎯 Start Onboarding
+          🎯 {t('common.start')} Onboarding
         </Button>
         <Button
           variant="outline"
@@ -214,7 +210,7 @@ const TimelineAlchemy: React.FC = () => {
               <h3 className="text-xl font-serif font-bold text-amber-400 tracking-wider">ALCHEMY</h3>
             </div>
             <p className="text-amber-400 text-sm font-medium text-center">
-              Van intentie naar impact, in ritme met jouw tijdlijn
+              {t('timelineAlchemy.subtitle')}
             </p>
           </div>
 
@@ -231,9 +227,9 @@ const TimelineAlchemy: React.FC = () => {
                       : "text-slate-300 hover:text-white hover:bg-slate-700/50"
                   }`}
                 >
-                  {style === "krachtig" && "⚡ Krachtig"}
-                  {style === "mystiek" && "✨ Mystiek"}
-                  {style === "creator" && "🎨 Creator"}
+                  {style === "krachtig" && `⚡ ${t('timelineAlchemy.styles.krachtig.title')}`}
+                  {style === "mystiek" && `✨ ${t('timelineAlchemy.styles.mystiek.title')}`}
+                  {style === "creator" && `🎨 ${t('timelineAlchemy.styles.creator.title')}`}
                 </button>
               ))}
             </div>
