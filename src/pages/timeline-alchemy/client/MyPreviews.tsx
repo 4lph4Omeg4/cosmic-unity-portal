@@ -283,7 +283,7 @@ export default function TimelineAlchemyMyPreviews() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -298,77 +298,77 @@ export default function TimelineAlchemyMyPreviews() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Previews</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm font-medium text-gray-300">Total Previews</p>
+                <p className="text-2xl font-bold text-white">{stats.total}</p>
               </div>
-              <MessageSquare className="w-8 h-8 text-blue-500" />
+              <MessageSquare className="w-8 h-8 text-blue-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Review</p>
-                <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+                <p className="text-sm font-medium text-gray-300">Pending Review</p>
+                <p className="text-2xl font-bold text-yellow-400">{stats.pending}</p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-500" />
+              <Clock className="w-8 h-8 text-yellow-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Approved</p>
-                <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+                <p className="text-sm font-medium text-gray-300">Approved</p>
+                <p className="text-2xl font-bold text-green-400">{stats.approved}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-green-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Published</p>
-                <p className="text-2xl font-bold text-purple-600">{stats.published}</p>
+                <p className="text-sm font-medium text-gray-300">Published</p>
+                <p className="text-2xl font-bold text-purple-400">{stats.published}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-purple-500" />
+              <CheckCircle className="w-8 h-8 text-purple-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Rejected</p>
-                <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
+                <p className="text-sm font-medium text-gray-300">Rejected</p>
+                <p className="text-2xl font-bold text-red-400">{stats.rejected}</p>
               </div>
-              <XCircle className="w-8 h-8 text-red-500" />
+              <XCircle className="w-8 h-8 text-red-400" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+      <div className="flex space-x-1 bg-gray-800 p-1 rounded-lg border border-gray-700">
         {(['all', 'pending', 'approved', 'published', 'rejected'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === tab
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-gray-700 text-white shadow-sm'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700'
             }`}
           >
             {tab === 'all' ? 'All' : tab.charAt(0).toUpperCase() + tab.slice(1)} 
@@ -380,9 +380,9 @@ export default function TimelineAlchemyMyPreviews() {
 
 
       {/* Search and Filters */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle>Search & Filters</CardTitle>
+          <CardTitle className="text-white">Search & Filters</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -393,47 +393,47 @@ export default function TimelineAlchemyMyPreviews() {
                   placeholder="Search previews by title or content..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 focus:border-blue-400"
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 focus:border-blue-400"
             >
-              <option value="all" className="bg-gray-800 text-gray-200">All Statuses</option>
-              <option value="pending" className="bg-gray-800 text-gray-200">Pending</option>
-              <option value="approved" className="bg-gray-800 text-gray-200">Approved</option>
-              <option value="published" className="bg-gray-800 text-gray-200">Published</option>
-              <option value="rejected" className="bg-gray-800 text-gray-200">Rejected</option>
+              <option value="all" className="bg-gray-700 text-gray-200">All Statuses</option>
+              <option value="pending" className="bg-gray-700 text-gray-200">Pending</option>
+              <option value="approved" className="bg-gray-700 text-gray-200">Approved</option>
+              <option value="published" className="bg-gray-700 text-gray-200">Published</option>
+              <option value="rejected" className="bg-gray-700 text-gray-200">Rejected</option>
             </select>
             <select
               value={selectedChannel}
               onChange={(e) => setSelectedChannel(e.target.value)}
-              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-gray-200 focus:border-blue-400"
+              className="px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-gray-200 focus:border-blue-400"
             >
-              <option value="all" className="bg-gray-800 text-gray-200">All Channels</option>
-              <option value="Instagram" className="bg-gray-800 text-gray-200">Instagram</option>
-              <option value="LinkedIn" className="bg-gray-800 text-gray-200">LinkedIn</option>
-              <option value="X (Twitter)" className="bg-gray-800 text-gray-200">X (Twitter)</option>
-              <option value="Facebook" className="bg-gray-800 text-gray-200">Facebook</option>
-              <option value="Blog Post" className="bg-gray-800 text-gray-200">Blog Post</option>
-              <option value="Custom Post" className="bg-gray-800 text-gray-200">Custom Post</option>
+              <option value="all" className="bg-gray-700 text-gray-200">All Channels</option>
+              <option value="Instagram" className="bg-gray-700 text-gray-200">Instagram</option>
+              <option value="LinkedIn" className="bg-gray-700 text-gray-200">LinkedIn</option>
+              <option value="X (Twitter)" className="bg-gray-700 text-gray-200">X (Twitter)</option>
+              <option value="Facebook" className="bg-gray-700 text-gray-200">Facebook</option>
+              <option value="Blog Post" className="bg-gray-700 text-gray-200">Blog Post</option>
+              <option value="Custom Post" className="bg-gray-700 text-gray-200">Custom Post</option>
             </select>
           </div>
         </CardContent>
       </Card>
 
       {/* Previews List */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle>Previews ({filteredPreviews.length})</CardTitle>
+          <CardTitle className="text-white">Previews ({filteredPreviews.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {filteredPreviews.map((preview) => (
-              <div key={preview.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+              <div key={preview.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700 border-gray-600">
                 <div className="space-y-4">
                   {/* Header */}
                   <div className="flex items-start justify-between">
