@@ -55,6 +55,8 @@ interface PreviewForm {
   selectedClient: string
   selectedIdeas: string[]
   adminNotes: string
+  socialPlatforms: string[]
+  scheduledPublishAt?: string
 }
 
 export default function PreviewWizardNew() {
@@ -70,7 +72,9 @@ export default function PreviewWizardNew() {
     step: 1,
     selectedClient: '',
     selectedIdeas: [],
-    adminNotes: ''
+    adminNotes: '',
+    socialPlatforms: [],
+    scheduledPublishAt: undefined
   })
 
   useEffect(() => {
@@ -258,7 +262,7 @@ export default function PreviewWizardNew() {
   }
 
   const nextStep = () => {
-    if (form.step < 3) {
+    if (form.step < 4) {
       setForm(prev => ({ ...prev, step: prev.step + 1 }))
     }
   }
@@ -319,7 +323,10 @@ export default function PreviewWizardNew() {
             user_id: form.selectedClient, // Direct user_id link
             preview_data: previewData,
             status: 'pending',
-            admin_notes: form.adminNotes
+            admin_notes: form.adminNotes,
+            social_platforms: form.socialPlatforms,
+            scheduled_publish_at: form.scheduledPublishAt,
+            publish_status: form.scheduledPublishAt ? 'scheduled' : 'draft'
           })
           .select()
           .single()
@@ -350,7 +357,8 @@ export default function PreviewWizardNew() {
     switch (step) {
       case 1: return 'Select Client'
       case 2: return 'Select Ideas'
-      case 3: return 'Review & Save'
+      case 3: return 'Social Media & Schedule'
+      case 4: return 'Review & Save'
       default: return ''
     }
   }
@@ -359,7 +367,8 @@ export default function PreviewWizardNew() {
     switch (step) {
       case 1: return 'Choose which client this preview is for'
       case 2: return 'Select ideas from blog_posts for previews'
-      case 3: return 'Review and save previews'
+      case 3: return 'Choose social platforms and schedule publishing'
+      case 4: return 'Review and save previews'
       default: return ''
     }
   }
@@ -632,6 +641,103 @@ export default function PreviewWizardNew() {
         return (
           <div className="space-y-6">
             <div className="text-center">
+              <h3 className="text-xl font-semibold text-white mb-2">Social Media & Schedule</h3>
+              <p className="text-gray-400">Choose platforms and schedule publishing</p>
+            </div>
+
+            {/* Social Media Platforms */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-medium text-white">Select Social Platforms</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { id: 'instagram', name: 'Instagram', icon: Instagram, color: 'bg-gradient-to-r from-purple-500 to-pink-500' },
+                  { id: 'facebook', name: 'Facebook', icon: Facebook, color: 'bg-blue-600' },
+                  { id: 'twitter', name: 'Twitter', icon: Twitter, color: 'bg-sky-500' },
+                  { id: 'linkedin', name: 'LinkedIn', icon: Linkedin, color: 'bg-blue-700' }
+                ].map((platform) => {
+                  const IconComponent = platform.icon
+                  const isSelected = form.socialPlatforms.includes(platform.id)
+                  
+                  return (
+                    <div
+                      key={platform.id}
+                      onClick={() => {
+                        const newPlatforms = isSelected
+                          ? form.socialPlatforms.filter(p => p !== platform.id)
+                          : [...form.socialPlatforms, platform.id]
+                        setForm(prev => ({ ...prev, socialPlatforms: newPlatforms }))
+                      }}
+                      className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                        isSelected
+                          ? 'border-blue-500 bg-blue-900/20'
+                          : 'border-gray-600 hover:border-gray-500 bg-gray-700'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`p-2 rounded-full text-white ${platform.color}`}>
+                          <IconComponent className="w-6 h-6" />
+                        </div>
+                        <span className="text-sm font-medium text-white">{platform.name}</span>
+                        {isSelected && <CheckCircle className="w-4 h-4 text-blue-400" />}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Scheduling */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-medium text-white">Schedule Publishing</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Publish Date
+                  </label>
+                  <Input
+                    type="date"
+                    value={form.scheduledPublishAt ? form.scheduledPublishAt.split('T')[0] : ''}
+                    onChange={(e) => {
+                      const date = e.target.value
+                      const time = form.scheduledPublishAt ? form.scheduledPublishAt.split('T')[1] : '09:00'
+                      setForm(prev => ({ 
+                        ...prev, 
+                        scheduledPublishAt: date ? `${date}T${time}` : undefined 
+                      }))
+                    }}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Publish Time
+                  </label>
+                  <Input
+                    type="time"
+                    value={form.scheduledPublishAt ? form.scheduledPublishAt.split('T')[1] : '09:00'}
+                    onChange={(e) => {
+                      const time = e.target.value
+                      const date = form.scheduledPublishAt ? form.scheduledPublishAt.split('T')[0] : new Date().toISOString().split('T')[0]
+                      setForm(prev => ({ 
+                        ...prev, 
+                        scheduledPublishAt: `${date}T${time}` 
+                      }))
+                    }}
+                    className="bg-gray-700 border-gray-600 text-white"
+                  />
+                </div>
+              </div>
+              <p className="text-sm text-gray-400">
+                Leave empty to publish immediately when approved
+              </p>
+            </div>
+          </div>
+        )
+
+      case 4:
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
               <h3 className="text-xl font-semibold text-white mb-2">Review & Save</h3>
               <p className="text-gray-400">Review your selections before saving</p>
             </div>
@@ -667,6 +773,52 @@ export default function PreviewWizardNew() {
                   ) : null
                 })}
               </div>
+            </div>
+
+            {/* Social Platforms */}
+            <div className="bg-gray-700 rounded-lg p-4">
+              <h4 className="font-medium text-white mb-2">Social Platforms ({form.socialPlatforms.length})</h4>
+              {form.socialPlatforms.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {form.socialPlatforms.map((platform) => {
+                    const platformInfo = {
+                      instagram: { name: 'Instagram', icon: Instagram, color: 'bg-gradient-to-r from-purple-500 to-pink-500' },
+                      facebook: { name: 'Facebook', icon: Facebook, color: 'bg-blue-600' },
+                      twitter: { name: 'Twitter', icon: Twitter, color: 'bg-sky-500' },
+                      linkedin: { name: 'LinkedIn', icon: Linkedin, color: 'bg-blue-700' }
+                    }[platform]
+                    
+                    if (!platformInfo) return null
+                    
+                    const IconComponent = platformInfo.icon
+                    return (
+                      <div key={platform} className="flex items-center gap-2 px-3 py-1 bg-gray-600 rounded-full">
+                        <div className={`p-1 rounded-full text-white ${platformInfo.color}`}>
+                          <IconComponent className="w-3 h-3" />
+                        </div>
+                        <span className="text-sm text-white">{platformInfo.name}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <p className="text-gray-400">No platforms selected</p>
+              )}
+            </div>
+
+            {/* Scheduling */}
+            <div className="bg-gray-700 rounded-lg p-4">
+              <h4 className="font-medium text-white mb-2">Publishing Schedule</h4>
+              {form.scheduledPublishAt ? (
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-blue-400" />
+                  <span className="text-gray-300">
+                    {new Date(form.scheduledPublishAt).toLocaleString()}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-gray-400">Publish immediately when approved</p>
+              )}
             </div>
 
             {/* Admin Notes */}
@@ -718,7 +870,7 @@ export default function PreviewWizardNew() {
       {/* Progress Steps */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          {[1, 2, 3].map((step) => (
+                      {[1, 2, 3, 4].map((step) => (
             <div key={step} className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -729,7 +881,7 @@ export default function PreviewWizardNew() {
               >
                 {step < form.step ? <CheckCircle className="w-4 h-4" /> : step}
               </div>
-              {step < 3 && (
+              {step < 4 && (
                 <div
                   className={`w-12 h-1 ${
                     step < form.step ? 'bg-blue-500' : 'bg-gray-200'
@@ -741,12 +893,13 @@ export default function PreviewWizardNew() {
         </div>
         
         {/* Next Button */}
-        {form.step < 3 && (
+        {form.step < 4 && (
           <Button
             onClick={() => setForm(prev => ({ ...prev, step: prev.step + 1 }))}
             disabled={
               (form.step === 1 && !form.selectedClient) ||
-              (form.step === 2 && form.selectedIdeas.length === 0)
+              (form.step === 2 && form.selectedIdeas.length === 0) ||
+              (form.step === 3 && form.socialPlatforms.length === 0)
             }
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >

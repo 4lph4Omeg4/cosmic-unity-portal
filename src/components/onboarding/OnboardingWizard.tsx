@@ -14,6 +14,7 @@ import { loadDraft, saveDraft, finishOnboarding, OnboardingDraft } from '@/lib/o
 import ProfileStep from './steps/ProfileStep'
 import OrganizationStep from './steps/OrganizationStep'
 import SocialsStep from './steps/SocialsStep'
+import SocialConnectionsStep from './steps/SocialConnectionsStep'
 import PreferencesStep from './steps/PreferencesStep'
 
 // Zod schema voor validatie
@@ -36,6 +37,9 @@ const onboardingSchema = z.object({
     YouTube: z.boolean().optional(),
     LinkedIn: z.boolean().optional()
   }),
+  socialConnections: z.object({
+    platforms: z.array(z.string()).default([])
+  }).optional(),
   preferences: z.object({
     weeklyDigest: z.boolean().default(true),
     aiSuggestions: z.boolean().default(true),
@@ -49,6 +53,7 @@ const STEPS = [
   { id: 'profile', title: 'Profiel', component: ProfileStep },
   { id: 'organization', title: 'Organisatie', component: OrganizationStep },
   { id: 'socials', title: 'Social Media', component: SocialsStep },
+  { id: 'socialConnections', title: 'Connect Accounts', component: SocialConnectionsStep },
   { id: 'preferences', title: 'Voorkeuren', component: PreferencesStep }
 ]
 
