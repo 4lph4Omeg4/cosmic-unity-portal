@@ -143,6 +143,7 @@ export default function PreviewWizardNew() {
         .select(`
           user_id,
           display_name,
+          email,
           role,
           org_id,
           orgs(name)
@@ -157,7 +158,7 @@ export default function PreviewWizardNew() {
         const transformedClients = clientsData.map((client: any) => ({
           id: client.user_id, // Use user_id directly
           name: client.display_name || 'Unnamed Client',
-          email: 'No email',
+          email: client.email || 'No email',
           organization: client.orgs?.name || 'No organization'
         }))
         setClients(transformedClients)
