@@ -125,7 +125,7 @@ function generateFacebookAuthUrl(state: string): string {
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    scope: 'pages_manage_posts,pages_read_engagement,instagram_basic',
+    scope: 'pages_manage_posts,pages_read_engagement',
     response_type: 'code',
     state: state
   })
