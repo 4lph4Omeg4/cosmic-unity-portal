@@ -55,6 +55,7 @@ import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
 import AdminSocialConnections from "./pages/timeline-alchemy/admin/SocialConnections";
 import FacebookDebug from "./pages/timeline-alchemy/admin/FacebookDebug";
+import AuthCallback from "./pages/AuthCallback";
 
 // Analytics
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -94,6 +95,10 @@ const App: React.FC = () => {
                   <Route path="/cart" element={<CartPage />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/auth/callback/facebook" element={<AuthCallback />} />
+                  <Route path="/auth/callback/instagram" element={<AuthCallback />} />
+                  <Route path="/auth/callback/twitter" element={<AuthCallback />} />
+                  <Route path="/auth/callback/linkedin" element={<AuthCallback />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/user/:userId" element={<UserProfile />} />
                   <Route path="/friends" element={<Friends />} />

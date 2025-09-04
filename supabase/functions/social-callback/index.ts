@@ -13,6 +13,17 @@ serve(async (req) => {
   }
 
   try {
+    // Check if this is a POST request with body data
+    if (req.method === 'POST') {
+      const body = await req.json()
+      const { code, state, platform } = body
+      
+      console.log('Callback received via POST:', { code, state, platform })
+      
+      return await processCallback(code, state, platform)
+    }
+    
+    // Handle GET request (direct URL callback)
     const url = new URL(req.url)
     const code = url.searchParams.get('code')
     const state = url.searchParams.get('state')
@@ -51,79 +62,7 @@ serve(async (req) => {
       )
     }
 
-    // Initialize Supabase client
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
-
-    // Exchange code for access token
-    const tokenData = await exchangeCodeForToken(platform, code, req.url)
-    
-    if (!tokenData) {
-      return new Response(
-        JSON.stringify({ error: 'Failed to exchange code for token' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      )
-    }
-
-    // Get user profile from platform
-    const profileData = await getUserProfile(platform, tokenData.access_token)
-    
-    if (!profileData) {
-      return new Response(
-        JSON.stringify({ error: 'Failed to get user profile' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      )
-    }
-
-    // Save connection to database
-    const { error: dbError } = await supabaseClient
-      .from('social_connections')
-      .upsert({
-        user_id: userId,
-        platform: platform,
-        platform_user_id: profileData.id,
-        platform_username: profileData.username,
-        access_token: tokenData.access_token,
-        refresh_token: tokenData.refresh_token,
-        token_expires_at: tokenData.expires_at ? new Date(tokenData.expires_at).toISOString() : null,
-        scope: tokenData.scope,
-        is_active: true,
-        last_used_at: new Date().toISOString()
-      }, {
-        onConflict: 'user_id,platform'
-      })
-
-    if (dbError) {
-      console.error('Database error:', dbError)
-      return new Response(
-        JSON.stringify({ error: 'Failed to save connection' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      )
-    }
-
-    // Return success response
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        platform: platform,
-        username: profileData.username 
-      }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    )
+    return await processCallback(code, state, platform)
 
   } catch (error) {
     console.error('Error in social-callback function:', error)
@@ -137,9 +76,101 @@ serve(async (req) => {
   }
 })
 
+async function processCallback(code: string, state: string, platform: string) {
+  // Parse state to get user ID and platform
+  const [userId, platformFromState] = state.split('_')
+  
+  if (!userId || !platformFromState) {
+    return new Response(
+      JSON.stringify({ error: 'Invalid state parameter' }),
+      { 
+        status: 400, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    )
+  }
+
+  // Use platform from state if not provided in body
+  const actualPlatform = platform || platformFromState
+
+  // Initialize Supabase client
+  const supabaseClient = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+  )
+
+  // Exchange code for access token
+  const tokenData = await exchangeCodeForToken(actualPlatform, code, '')
+  
+  if (!tokenData) {
+    return new Response(
+      JSON.stringify({ error: 'Failed to exchange code for token' }),
+      { 
+        status: 400, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    )
+  }
+
+  // Get user profile from platform
+  const profileData = await getUserProfile(actualPlatform, tokenData.access_token)
+  
+  if (!profileData) {
+    return new Response(
+      JSON.stringify({ error: 'Failed to get user profile' }),
+      { 
+        status: 400, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    )
+  }
+
+  // Save connection to database
+  const { error: dbError } = await supabaseClient
+    .from('social_connections')
+    .upsert({
+      user_id: userId,
+      platform: actualPlatform,
+      platform_user_id: profileData.id,
+      platform_username: profileData.username,
+      access_token: tokenData.access_token,
+      refresh_token: tokenData.refresh_token,
+      token_expires_at: tokenData.expires_at ? new Date(tokenData.expires_at).toISOString() : null,
+      scope: tokenData.scope,
+      is_active: true,
+      last_used_at: new Date().toISOString()
+    }, {
+      onConflict: 'user_id,platform'
+    })
+
+  if (dbError) {
+    console.error('Database error:', dbError)
+    return new Response(
+      JSON.stringify({ error: 'Failed to save connection' }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    )
+  }
+
+  // Return success response
+  return new Response(
+    JSON.stringify({ 
+      success: true, 
+      platform: actualPlatform,
+      username: profileData.username 
+    }),
+    { 
+      status: 200, 
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+    }
+  )
+}
+
 async function exchangeCodeForToken(platform: string, code: string, redirectUri: string) {
-  const baseUrl = new URL(redirectUri).origin
-  const redirectUriParam = `${baseUrl}/auth/callback/${platform}`
+  const siteUrl = Deno.env.get('SITE_URL')
+  const redirectUriParam = `${siteUrl}/auth/callback/${platform}`
   
   switch (platform) {
     case 'instagram':
