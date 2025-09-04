@@ -99,6 +99,7 @@ export default function TimelineAlchemyIdeas() {
   const [imageStates, setImageStates] = useState<Record<string, { loading: boolean; error: boolean }>>({})
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
+  const [selectedImagePerPost, setSelectedImagePerPost] = useState<Record<string, string>>({})
 
   useEffect(() => {
     loadBlogPosts()
@@ -467,6 +468,18 @@ export default function TimelineAlchemyIdeas() {
     return images
   }
 
+  const getSelectedImageForPost = (postId: string) => {
+    const images = getBlogPostImages(postId)
+    return selectedImagePerPost[postId] || images.main
+  }
+
+  const setSelectedImageForPost = (postId: string, imageUrl: string) => {
+    setSelectedImagePerPost(prev => ({
+      ...prev,
+      [postId]: imageUrl
+    }))
+  }
+
   const copyToClipboard = async (text: string, platform: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -623,52 +636,50 @@ export default function TimelineAlchemyIdeas() {
                   </div>
                   
                   {/* Featured Image - Prominent position */}
-                  {post.image_url && (
-                    <div className="flex-shrink-0 relative">
-                      {/* Loading state */}
-                      {imageStates[post.id]?.loading !== false && (
-                        <div className="w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <div className="flex-shrink-0 relative">
+                    {/* Loading state */}
+                    {imageStates[post.id]?.loading !== false && (
+                      <div className="w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                      </div>
+                    )}
+                    
+                    {/* Main Image - Shows selected theme */}
+                    <img 
+                      src={getSelectedImageForPost(post.id)} 
+                      alt={post.title}
+                      className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
+                        imageStates[post.id]?.loading !== false ? 'hidden' : ''
+                      }`}
+                      onLoad={() => handleImageLoad(post.id)}
+                      onError={() => handleImageError(post.id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent event bubbling
+                        setSelectedImageUrl(getSelectedImageForPost(post.id));
+                        setIsImageDialogOpen(true);
+                      }}
+                      title="Klik om afbeelding in volledige grootte te bekijken"
+                    />
+                    
+                    {/* Error state */}
+                    {imageStates[post.id]?.error && (
+                      <div className="absolute inset-0 w-32 h-32 bg-red-900 rounded-lg border border-red-600 shadow-sm flex items-center justify-center">
+                        <div className="text-red-400 text-xs text-center">
+                          <div className="w-8 h-8 mx-auto mb-1">❌</div>
+                          Afbeelding kon niet laden
                         </div>
-                      )}
-                      
-                      {/* Image */}
-                      <img 
-                        src={post.image_url} 
-                        alt={post.title}
-                        className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
-                          imageStates[post.id]?.loading !== false ? 'hidden' : ''
-                        }`}
-                        onLoad={() => handleImageLoad(post.id)}
-                        onError={() => handleImageError(post.id)}
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevent event bubbling
-                          setSelectedImageUrl(post.image_url);
-                          setIsImageDialogOpen(true);
-                        }}
-                        title="Klik om afbeelding in volledige grootte te bekijken"
-                      />
-                      
-                      {/* Error state */}
-                      {imageStates[post.id]?.error && (
-                        <div className="absolute inset-0 w-32 h-32 bg-red-900 rounded-lg border border-red-600 shadow-sm flex items-center justify-center">
-                          <div className="text-red-400 text-xs text-center">
-                            <div className="w-8 h-8 mx-auto mb-1">❌</div>
-                            Afbeelding kon niet laden
-                          </div>
+                      </div>
+                    )}
+                    
+                    {/* Image overlay with info */}
+                    {!imageStates[post.id]?.error && !imageStates[post.id]?.loading && (
+                      <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
+                        <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                          Bekijk afbeelding
                         </div>
-                      )}
-                      
-                      {/* Image overlay with info */}
-                      {!imageStates[post.id]?.error && !imageStates[post.id]?.loading && (
-                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
-                          <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
-                            Bekijk afbeelding
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
                   
                   {/* Fallback placeholder when no image */}
                   {!post.image_url && (
@@ -685,17 +696,16 @@ export default function TimelineAlchemyIdeas() {
                     <div className="text-xs text-gray-400 mb-2 font-medium">Variatie Afbeeldingen:</div>
                     <div className="grid grid-cols-2 gap-2">
                       {/* Cosmic Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).cosmic ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
                           src={getBlogPostImages(post.id).cosmic}
                           alt="Cosmic Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
-                            setIsImageDialogOpen(true);
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).cosmic);
                           }}
-                          title="Cosmic Theme - Klik om te bekijken"
+                          title="Cosmic Theme - Klik om te selecteren"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -705,17 +715,16 @@ export default function TimelineAlchemyIdeas() {
                       </div>
 
                       {/* Cyberpunk Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).cyberpunk ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
                           src={getBlogPostImages(post.id).cyberpunk}
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl(getBlogPostImages(post.id).cyberpunk);
-                            setIsImageDialogOpen(true);
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).cyberpunk);
                           }}
-                          title="Cyberpunk Theme - Klik om te bekijken"
+                          title="Cyberpunk Theme - Klik om te selecteren"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -725,17 +734,16 @@ export default function TimelineAlchemyIdeas() {
                       </div>
 
                       {/* Dystopia Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).dystopia ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
                           src={getBlogPostImages(post.id).dystopia}
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl(getBlogPostImages(post.id).dystopia);
-                            setIsImageDialogOpen(true);
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).dystopia);
                           }}
-                          title="Dystopia Theme - Klik om te bekijken"
+                          title="Dystopia Theme - Klik om te selecteren"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -745,17 +753,16 @@ export default function TimelineAlchemyIdeas() {
                       </div>
 
                       {/* Utopia Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).main ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
                           src={getBlogPostImages(post.id).main}
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl(getBlogPostImages(post.id).main);
-                            setIsImageDialogOpen(true);
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).main);
                           }}
-                          title="Utopia Theme - Klik om te bekijken"
+                          title="Utopia Theme - Klik om te selecteren"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
