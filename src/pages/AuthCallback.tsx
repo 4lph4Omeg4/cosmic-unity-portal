@@ -16,8 +16,6 @@ export default function AuthCallback() {
 
   const handleCallback = async () => {
     try {
-      setLoading(true)
-      
       const code = searchParams.get('code')
       const state = searchParams.get('state')
       const error = searchParams.get('error')
@@ -44,26 +42,11 @@ export default function AuthCallback() {
       
       console.log('Processing callback for platform:', platform)
       
-      // Call the Supabase Edge Function to handle the callback
-      const { data, error: callbackError } = await supabase.functions.invoke('social-callback', {
-        body: {
-          code,
-          state,
-          platform
-        }
-      })
-      
-      if (callbackError) {
-        console.error('Callback error:', callbackError)
-        setError(JSON.stringify(callbackError, null, 2))
-        return
-      }
-      
-      console.log('Callback success:', data)
-      
+      // For now, just show success and redirect
+      // TODO: Implement actual token exchange
       toast({
-        title: "Success!",
-        description: `Successfully connected to ${platform}`,
+        title: "OAuth Callback Received!",
+        description: `Received callback for ${platform}. This is a test - actual integration coming soon.`,
       })
       
       // Close the popup window if it was opened in a popup
