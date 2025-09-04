@@ -54,6 +54,7 @@ import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreview
 import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
 import AdminSocialConnections from "./pages/timeline-alchemy/admin/SocialConnections";
+import FacebookDebug from "./pages/timeline-alchemy/admin/FacebookDebug";
 
 // Analytics
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -169,6 +170,10 @@ const App: React.FC = () => {
                   <Route
                     path="/timeline-alchemy/admin/social-connections"
                     element={<AdminSocialConnections />}
+                  />
+                  <Route
+                    path="/timeline-alchemy/admin/facebook-debug"
+                    element={<FacebookDebug />}
                   />
                   <Route
                     path="/timeline-alchemy/admin/make-me-admin"

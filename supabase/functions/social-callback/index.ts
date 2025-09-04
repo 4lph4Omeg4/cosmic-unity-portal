@@ -185,12 +185,7 @@ async function exchangeFacebookToken(code: string, redirectUri: string) {
   const clientId = Deno.env.get('FACEBOOK_CLIENT_ID')
   const clientSecret = Deno.env.get('FACEBOOK_CLIENT_SECRET')
   
-  const response = await fetch('https://graph.facebook.com/v18.0/oauth/access_token', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
+  console.log('Facebook token exchange:', { clientId, redirectUri, code: code.substring(0, 10) + '...' })
   
   const url = new URL('https://graph.facebook.com/v18.0/oauth/access_token')
   url.searchParams.set('client_id', clientId!)
@@ -198,14 +193,20 @@ async function exchangeFacebookToken(code: string, redirectUri: string) {
   url.searchParams.set('redirect_uri', redirectUri)
   url.searchParams.set('code', code)
   
-  const response2 = await fetch(url.toString())
+  console.log('Facebook token URL:', url.toString())
   
-  if (!response2.ok) {
-    console.error('Facebook token exchange failed:', await response2.text())
+  const response = await fetch(url.toString())
+  
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error('Facebook token exchange failed:', errorText)
     return null
   }
   
-  return await response2.json()
+  const tokenData = await response.json()
+  console.log('Facebook token response:', tokenData)
+  
+  return tokenData
 }
 
 async function exchangeTwitterToken(code: string, redirectUri: string) {
@@ -297,6 +298,8 @@ async function getInstagramProfile(accessToken: string) {
 }
 
 async function getFacebookProfile(accessToken: string) {
+  console.log('Fetching Facebook profile with token:', accessToken.substring(0, 10) + '...')
+  
   const response = await fetch('https://graph.facebook.com/me?fields=id,name', {
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -304,11 +307,14 @@ async function getFacebookProfile(accessToken: string) {
   })
   
   if (!response.ok) {
-    console.error('Facebook profile fetch failed:', await response.text())
+    const errorText = await response.text()
+    console.error('Facebook profile fetch failed:', errorText)
     return null
   }
   
   const data = await response.json()
+  console.log('Facebook profile data:', data)
+  
   return {
     id: data.id,
     username: data.name
