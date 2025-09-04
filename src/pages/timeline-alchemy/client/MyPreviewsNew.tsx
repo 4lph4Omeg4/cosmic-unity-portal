@@ -226,21 +226,6 @@ export default function MyPreviewsNew() {
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white tracking-tight">My Previews</h1>
         <p className="mt-2 text-gray-300">Review and approve your content previews</p>
-        <div className="mt-4">
-          <Button onClick={() => {
-            console.log('=== PREVIEW DEBUG ===')
-            previews.forEach((preview, index) => {
-              console.log(`Preview ${index + 1}:`, {
-                id: preview.id,
-                preview_data: preview.preview_data,
-                blog_post_id: preview.preview_data?.blog_post_id
-              })
-            })
-            console.log('===================')
-          }} variant="outline" className="bg-orange-600 hover:bg-orange-700 text-white border-orange-600">
-            Debug Previews
-          </Button>
-        </div>
       </div>
 
 
