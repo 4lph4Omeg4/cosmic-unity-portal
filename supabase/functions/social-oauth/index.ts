@@ -117,15 +117,23 @@ function generateFacebookAuthUrl(state: string): string {
   
   console.log('Facebook OAuth URL generation:', { clientId, siteUrl, redirectUri })
   
+  if (!clientId) {
+    console.error('FACEBOOK_CLIENT_ID is not set in environment variables')
+    throw new Error('FACEBOOK_CLIENT_ID environment variable is required')
+  }
+  
   const params = new URLSearchParams({
-    client_id: clientId!,
+    client_id: clientId,
     redirect_uri: redirectUri,
     scope: 'pages_manage_posts,pages_read_engagement,instagram_basic',
     response_type: 'code',
     state: state
   })
   
-  return `https://www.facebook.com/v18.0/dialog/oauth?${params.toString()}`
+  const authUrl = `https://www.facebook.com/v18.0/dialog/oauth?${params.toString()}`
+  console.log('Generated Facebook auth URL:', authUrl)
+  
+  return authUrl
 }
 
 function generateTwitterAuthUrl(state: string): string {
