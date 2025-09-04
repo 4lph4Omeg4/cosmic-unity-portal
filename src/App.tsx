@@ -53,6 +53,7 @@ import CreateTestPreview from "./pages/timeline-alchemy/admin/CreateTestPreview"
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
 import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
+import AdminSocialConnections from "./pages/timeline-alchemy/admin/SocialConnections";
 
 // Analytics
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -164,6 +165,10 @@ const App: React.FC = () => {
                   <Route
                     path="/timeline-alchemy/admin/preview-wizard-new"
                     element={<PreviewWizardNew />}
+                  />
+                  <Route
+                    path="/timeline-alchemy/admin/social-connections"
+                    element={<AdminSocialConnections />}
                   />
                   <Route
                     path="/timeline-alchemy/admin/make-me-admin"

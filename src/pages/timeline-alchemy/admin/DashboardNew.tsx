@@ -286,6 +286,10 @@ export default function DashboardNew() {
             <MessageSquare className="w-4 h-4 mr-2" />
             Create Preview (New)
           </Button>
+          <Button onClick={() => navigate('/timeline-alchemy/admin/social-connections')} className="bg-purple-600 hover:bg-purple-700">
+            <Link className="w-4 h-4 mr-2" />
+            Social Connections
+          </Button>
           <Button onClick={refreshData} variant="outline" className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-700" disabled={loading}>
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
