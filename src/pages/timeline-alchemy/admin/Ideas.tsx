@@ -455,6 +455,18 @@ export default function TimelineAlchemyIdeas() {
     }
   }
 
+  const getBlogPostImages = (postId: string) => {
+    const baseUrl = 'https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images'
+    const images = {
+      main: `${baseUrl}/${postId}/utopia.png`,
+      dystopia: `${baseUrl}/${postId}/dystopia.png`,
+      cosmic: `${baseUrl}/${postId}/cosmic.png`,
+      cyberpunk: `${baseUrl}/${postId}/cyberpunk.png`
+    }
+    console.log('Generated images for postId:', postId, images)
+    return images
+  }
+
   const copyToClipboard = async (text: string, platform: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -675,12 +687,12 @@ export default function TimelineAlchemyIdeas() {
                       {/* Cosmic Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                          src={getBlogPostImages(post.id).cosmic}
                           alt="Cosmic Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png");
+                            setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
                             setIsImageDialogOpen(true);
                           }}
                           title="Cosmic Theme - Klik om te bekijken"
@@ -695,12 +707,12 @@ export default function TimelineAlchemyIdeas() {
                       {/* Cyberpunk Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                          src={getBlogPostImages(post.id).cyberpunk}
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png");
+                            setSelectedImageUrl(getBlogPostImages(post.id).cyberpunk);
                             setIsImageDialogOpen(true);
                           }}
                           title="Cyberpunk Theme - Klik om te bekijken"
@@ -715,12 +727,12 @@ export default function TimelineAlchemyIdeas() {
                       {/* Dystopia Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                          src={getBlogPostImages(post.id).dystopia}
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png");
+                            setSelectedImageUrl(getBlogPostImages(post.id).dystopia);
                             setIsImageDialogOpen(true);
                           }}
                           title="Dystopia Theme - Klik om te bekijken"
@@ -735,12 +747,12 @@ export default function TimelineAlchemyIdeas() {
                       {/* Utopia Theme */}
                       <div className="relative group">
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
+                          src={getBlogPostImages(post.id).main}
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png");
+                            setSelectedImageUrl(getBlogPostImages(post.id).main);
                             setIsImageDialogOpen(true);
                           }}
                           title="Utopia Theme - Klik om te bekijken"
