@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Instagram, Twitter, Facebook, Linkedin, Youtube, Link, Plus, Trash2, RefreshCw, CheckCircle, XCircle, AlertCircle, ExternalLink, Clock } from 'lucide-react'
+import { Instagram, X, Facebook, Linkedin, Youtube, Link, Plus, Trash2, RefreshCw, CheckCircle, XCircle, AlertCircle, ExternalLink, Clock } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 
@@ -154,7 +154,8 @@ export default function TimelineAlchemySocialConnections() {
   const getPlatformIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
       case 'instagram': return <Instagram className="w-5 h-5" />
-      case 'twitter': return <Twitter className="w-5 h-5" />
+      case 'twitter': return <X className="w-5 h-5" />
+      case 'x': return <X className="w-5 h-5" />
       case 'facebook': return <Facebook className="w-5 h-5" />
       case 'linkedin': return <Linkedin className="w-5 h-5" />
       case 'youtube': return <Youtube className="w-5 h-5" />
