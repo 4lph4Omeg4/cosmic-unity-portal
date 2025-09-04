@@ -584,19 +584,34 @@ const translations = {
         krachtig: {
           title: 'Timeline Alchemy',
           subtitle: 'Transformeer wekelijkse trends naar ziel-resonante content. Blog + cross-platform posts. Volledig gepland. Jij blijft creëren—wij verspreiden.',
-          bullets: ['Wekelijkse blogpost', 'Platform-specifieke posts', 'Planning & publicatie', 'Tone of voice on-brand'],
+          bullets: {
+            0: 'Wekelijkse blogpost',
+            1: 'Platform-specifieke posts', 
+            2: 'Planning & publicatie',
+            3: 'Tone of voice on-brand'
+          },
           cta: 'Activeer Timeline Alchemy',
         },
         mystiek: {
           title: 'Spread the One Message. Add Your Own Essence.',
           subtitle: 'Jij zet de intentie neer. Wij weven jouw boodschap door de tijdlijnen—helder, ritmisch, onmisbaar.',
-          bullets: ['Alchemie van trends → inzicht', 'Ziel-afgestemde blog', 'Signaalversterkers voor socials', 'Ritmische distributie'],
+          bullets: {
+            0: 'Alchemie van trends → inzicht',
+            1: 'Ziel-afgestemde blog',
+            2: 'Signaalversterkers voor socials',
+            3: 'Ritmische distributie'
+          },
           cta: 'Start je Alchemie',
         },
         creator: {
           title: 'Creëer vrij. Wij doen de rest.',
           subtitle: 'Wekelijks: 1 diepe blog + korte social-varianten + automatische planning. Consistent zichtbaar zonder content-stress.',
-          bullets: ['Research uit jouw domein', 'Jouw tone of voice', 'Publicatiekalender', 'Rapportage/links'],
+          bullets: {
+            0: 'Research uit jouw domein',
+            1: 'Jouw tone of voice',
+            2: 'Publicatiekalender',
+            3: 'Rapportage/links'
+          },
           cta: 'Aan de slag',
         },
       },
@@ -1077,19 +1092,34 @@ const translations = {
         krachtig: {
           title: 'Timeline Alchemy',
           subtitle: 'Transform weekly trends into soul-resonant content. Blog + cross-platform posts. Fully planned. You keep creating—we distribute.',
-          bullets: ['Weekly blog post', 'Platform-specific posts', 'Planning & publishing', 'On-brand tone of voice'],
+          bullets: {
+            0: 'Weekly blog post',
+            1: 'Platform-specific posts',
+            2: 'Planning & publishing',
+            3: 'On-brand tone of voice'
+          },
           cta: 'Activate Timeline Alchemy',
         },
         mystiek: {
           title: 'Spread the One Message. Add Your Own Essence.',
           subtitle: 'You set the intention. We weave your message through the timelines—clear, rhythmic, indispensable.',
-          bullets: ['Alchemy of trends → insight', 'Soul-tuned blog', 'Signal boosters for socials', 'Rhythmic distribution'],
+          bullets: {
+            0: 'Alchemy of trends → insight',
+            1: 'Soul-tuned blog',
+            2: 'Signal boosters for socials',
+            3: 'Rhythmic distribution'
+          },
           cta: 'Start your Alchemy',
         },
         creator: {
           title: 'Create freely. We do the rest.',
           subtitle: 'Weekly: 1 deep blog + short social variants + automatic planning. Consistently visible without content stress.',
-          bullets: ['Research from your domain', 'Your tone of voice', 'Publishing calendar', 'Reporting/links'],
+          bullets: {
+            0: 'Research from your domain',
+            1: 'Your tone of voice',
+            2: 'Publishing calendar',
+            3: 'Reporting/links'
+          },
           cta: 'Get Started',
         },
       },
@@ -1570,19 +1600,34 @@ const translations = {
         krachtig: {
           title: 'Timeline Alchemy',
           subtitle: 'Verwandle wöchentliche Trends in seelenresonante Inhalte. Blog + plattformübergreifende Posts. Vollständig geplant. Du erstellst—wir verteilen.',
-          bullets: ['Wöchentlicher Blog-Post', 'Plattformspezifische Posts', 'Planung & Veröffentlichung', 'Markenkonforme Tonalität'],
+          bullets: {
+            0: 'Wöchentlicher Blog-Post',
+            1: 'Plattformspezifische Posts',
+            2: 'Planung & Veröffentlichung',
+            3: 'Markenkonforme Tonalität'
+          },
           cta: 'Timeline Alchemy aktivieren',
         },
         mystiek: {
           title: 'Spread the One Message. Add Your Own Essence.',
           subtitle: 'Du setzt die Intention. Wir weben deine Botschaft durch die Zeitlinien—klar, rhythmisch, unverzichtbar.',
-          bullets: ['Alchemie der Trends → Einsicht', 'Seelenabgestimmter Blog', 'Signalverstärker für Socials', 'Rhythmische Verteilung'],
+          bullets: {
+            0: 'Alchemie der Trends → Einsicht',
+            1: 'Seelenabgestimmter Blog',
+            2: 'Signalverstärker für Socials',
+            3: 'Rhythmische Verteilung'
+          },
           cta: 'Starte deine Alchemie',
         },
         creator: {
           title: 'Erschaffe frei. Wir erledigen den Rest.',
           subtitle: 'Wöchentlich: 1 tiefer Blog + kurze Social-Varianten + automatische Planung. Konsistent sichtbar ohne Content-Stress.',
-          bullets: ['Recherche aus deinem Bereich', 'Deine Tonalität', 'Veröffentlichungskalender', 'Berichterstattung/Links'],
+          bullets: {
+            0: 'Recherche aus deinem Bereich',
+            1: 'Deine Tonalität',
+            2: 'Veröffentlichungskalender',
+            3: 'Berichterstattung/Links'
+          },
           cta: 'Loslegen',
         },
       },

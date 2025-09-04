@@ -45,11 +45,17 @@ const TimelineAlchemy: React.FC = () => {
   }, [language]);
 
   const getCurrentStyle = () => {
+    const styleKey = `timelineAlchemy.styles.${selectedStyle}`;
     return {
-      title: t(`timelineAlchemy.styles.${selectedStyle}.title`),
-      subtitle: t(`timelineAlchemy.styles.${selectedStyle}.subtitle`),
-      bullets: t(`timelineAlchemy.styles.${selectedStyle}.bullets`).split(','),
-      cta: t(`timelineAlchemy.styles.${selectedStyle}.cta`),
+      title: t(`${styleKey}.title`),
+      subtitle: t(`${styleKey}.subtitle`),
+      bullets: [
+        t(`${styleKey}.bullets.0`),
+        t(`${styleKey}.bullets.1`),
+        t(`${styleKey}.bullets.2`),
+        t(`${styleKey}.bullets.3`)
+      ].filter(Boolean),
+      cta: t(`${styleKey}.cta`),
     };
   };
 
