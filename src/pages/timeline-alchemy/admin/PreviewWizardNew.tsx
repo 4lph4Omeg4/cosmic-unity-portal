@@ -31,6 +31,7 @@ interface Client {
   id: string
   name: string
   email: string
+  organization: string
 }
 
 interface Idea {
@@ -142,7 +143,9 @@ export default function PreviewWizardNew() {
         .select(`
           user_id,
           display_name,
-          role
+          role,
+          org_id,
+          orgs(name)
         `)
         .eq('role', 'client')
         .order('display_name')
@@ -154,7 +157,8 @@ export default function PreviewWizardNew() {
         const transformedClients = clientsData.map((client: any) => ({
           id: client.user_id, // Use user_id directly
           name: client.display_name || 'Unnamed Client',
-          email: 'No email'
+          email: 'No email',
+          organization: client.orgs?.name || 'No organization'
         }))
         setClients(transformedClients)
       } else {
@@ -381,6 +385,7 @@ export default function PreviewWizardNew() {
                     <div>
                       <h4 className="font-medium text-white">{client.name}</h4>
                       <p className="text-sm text-gray-300">{client.email}</p>
+                      <p className="text-xs text-gray-400">{client.organization}</p>
                     </div>
                     {form.selectedClient === client.id && (
                       <CheckCircle className="w-5 h-5 text-blue-400" />
@@ -634,9 +639,18 @@ export default function PreviewWizardNew() {
             {/* Client Info */}
             <div className="bg-gray-700 rounded-lg p-4">
               <h4 className="font-medium text-white mb-2">Selected Client</h4>
-              <p className="text-gray-300">
-                {clients.find(c => c.id === form.selectedClient)?.name || 'No client selected'}
-              </p>
+              {(() => {
+                const selectedClient = clients.find(c => c.id === form.selectedClient);
+                return selectedClient ? (
+                  <div>
+                    <p className="text-gray-300 font-medium">{selectedClient.name}</p>
+                    <p className="text-sm text-gray-400">{selectedClient.email}</p>
+                    <p className="text-xs text-gray-500">{selectedClient.organization}</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-300">No client selected</p>
+                );
+              })()}
             </div>
 
             {/* Selected Ideas */}
