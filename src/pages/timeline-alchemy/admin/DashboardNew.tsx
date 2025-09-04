@@ -286,7 +286,7 @@ export default function DashboardNew() {
             <MessageSquare className="w-4 h-4 mr-2" />
             Create Preview (New)
           </Button>
-          <Button onClick={refreshData} variant="outline" className="flex items-center gap-2" disabled={loading}>
+          <Button onClick={refreshData} variant="outline" className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-700" disabled={loading}>
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
@@ -302,7 +302,7 @@ export default function DashboardNew() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-400">Total Previews</p>
+                <p className="text-sm font-medium text-gray-300">Total Previews</p>
                 <p className="text-2xl font-bold text-white">{stats.total}</p>
               </div>
               <MessageSquare className="w-8 h-8 text-blue-400" />
@@ -314,7 +314,7 @@ export default function DashboardNew() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-400">Pending Review</p>
+                <p className="text-sm font-medium text-gray-300">Pending Review</p>
                 <p className="text-2xl font-bold text-yellow-400">{stats.pending}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-400" />
@@ -326,7 +326,7 @@ export default function DashboardNew() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-400">Approved</p>
+                <p className="text-sm font-medium text-gray-300">Approved</p>
                 <p className="text-2xl font-bold text-green-400">{stats.approved}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-400" />
@@ -338,7 +338,7 @@ export default function DashboardNew() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-400">Rejected</p>
+                <p className="text-sm font-medium text-gray-300">Rejected</p>
                 <p className="text-2xl font-bold text-red-400">{stats.rejected}</p>
               </div>
               <XCircle className="w-8 h-8 text-red-400" />

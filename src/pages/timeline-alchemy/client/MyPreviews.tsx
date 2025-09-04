@@ -290,7 +290,7 @@ export default function TimelineAlchemyMyPreviews() {
           <h1 className="text-3xl font-bold text-white tracking-tight">Mijn Previews</h1>
           <p className="mt-2 text-gray-300">Bekijk en beheer je content previews</p>
         </div>
-        <Button onClick={refreshPreviews} variant="outline" className="flex items-center gap-2" disabled={loading}>
+        <Button onClick={refreshPreviews} variant="outline" className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-700" disabled={loading}>
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
@@ -433,7 +433,7 @@ export default function TimelineAlchemyMyPreviews() {
         <CardContent>
           <div className="space-y-4">
             {filteredPreviews.map((preview) => (
-              <div key={preview.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700 border-gray-600">
+              <div key={preview.id} className="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
                 <div className="space-y-4">
                   {/* Header */}
                   <div className="flex items-start justify-between">

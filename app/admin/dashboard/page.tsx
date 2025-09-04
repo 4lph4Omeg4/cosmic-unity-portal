@@ -197,19 +197,19 @@ export default function Dashboard() {
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-300">Cron Jobs</span>
-              <Badge variant="success" className="bg-green-100 text-green-800">
+              <Badge variant="success" className="bg-green-400 text-green-900">
                 Active
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-300">Database</span>
-              <Badge variant="success" className="bg-green-100 text-green-800">
+              <Badge variant="success" className="bg-green-400 text-green-900">
                 Connected
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-300">RLS Policies</span>
-              <Badge variant="success" className="bg-green-100 text-green-800">
+              <Badge variant="success" className="bg-green-400 text-green-900">
                 Enforced
               </Badge>
             </div>

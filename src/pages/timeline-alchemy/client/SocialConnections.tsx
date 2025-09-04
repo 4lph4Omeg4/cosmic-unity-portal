@@ -239,16 +239,16 @@ export default function TimelineAlchemySocialConnections() {
       </div>
 
       {/* Current Connections */}
-      <Card className="bg-gray-800 border-gray-700">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-white">Current Connections ({connections.length})</CardTitle>
+          <CardTitle>Current Connections ({connections.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {connections.map((connection) => {
               const isExpired = isTokenExpired(connection.token_expires_at)
               return (
-                <div key={connection.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-800 border-gray-600">
+                <div key={connection.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4 flex-1">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${getPlatformColor(connection.platform)}`}>
