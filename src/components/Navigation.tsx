@@ -38,7 +38,7 @@ const Navigation = () => {
   const timelineAlchemyNav = user && profile?.role === 'admin' ? [
     { name: 'Dashboard', href: '/timeline-alchemy/admin/dashboard', icon: Star },
     { name: 'Ideas', href: '/timeline-alchemy/admin/ideas', icon: Star },
-    { name: 'Preview Wizard', href: '/timeline-alchemy/admin/preview-wizard', icon: Star },
+    { name: 'Preview Wizard', href: '/timeline-alchemy/admin/preview-wizard-new', icon: Star },
     { name: 'Social Connections', href: '/timeline-alchemy/admin/social-connections', icon: Star },
   ] : user && profile?.role === 'client' ? [
     { name: 'My Previews', href: '/timeline-alchemy/client/my-previews', icon: Star },
