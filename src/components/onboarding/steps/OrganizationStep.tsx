@@ -20,26 +20,28 @@ export default function OrganizationStep() {
       if (!user) return;
 
       try {
-        // Get user's organization
+        // Get user's organization data from profiles table
         const { data: profile } = await supabase
           .from('profiles')
-          .select('org_id')
+          .select('organization_name, org_id')
           .eq('user_id', user.id)
           .single();
 
-        if (profile?.org_id) {
-          const { data: org } = await supabase
-            .from('orgs')
-            .select('name, website')
-            .eq('id', profile.org_id)
-            .single();
+        if (profile) {
+          // Set the organization name from the profile
+          if (profile.organization_name) {
+            setValue('organization.orgName', profile.organization_name);
+          }
+          
+          // Get additional org data if org_id exists
+          if (profile.org_id) {
+            const { data: org } = await supabase
+              .from('orgs')
+              .select('website')
+              .eq('id', profile.org_id)
+              .single();
 
-          if (org) {
-            // Set the organization name if it exists
-            if (org.name && org.name !== 'Mijn Organisatie') {
-              setValue('organization.orgName', org.name);
-            }
-            if (org.website) {
+            if (org?.website) {
               setValue('organization.website', org.website);
             }
           }
@@ -56,87 +58,81 @@ export default function OrganizationStep() {
     <Card className="w-full max-w-xl mx-auto bg-gray-800 border-gray-700">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold text-white">
-          Over je organisatie
+          Je organisatie
         </CardTitle>
         <p className="text-gray-300">
-          Help ons je beter te begrijpen
+          Je organisatie informatie is al ingesteld
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Organization Name - Only show if not already set */}
-        {(!orgName || orgName === 'Mijn Organisatie') ? (
+        {/* Organization Name - Always show as read-only */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium text-gray-700">
+            Organisatienaam
+          </Label>
+          <div className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <span className="text-green-800 font-medium">{orgName || 'Organisatie wordt geladen...'}</span>
+            <span className="text-green-600 text-sm">(ingesteld bij betaling)</span>
+          </div>
+          <p className="text-xs text-gray-500">
+            Je organisatienaam is automatisch ingesteld op basis van je betaling
+          </p>
+        </div>
+
+        {/* Website - Only show if not already set */}
+        {watch('organization.website') ? (
           <div className="space-y-2">
-            <Label htmlFor="orgName" className="text-sm font-medium text-gray-700">
-              Organisatienaam
+            <Label className="text-sm font-medium text-gray-700">
+              Website
             </Label>
-            <div className="relative">
-              <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                id="orgName"
-                placeholder="Jouw bedrijf of organisatie"
-                className={`pl-10 ${errors.organization?.orgName ? 'border-red-500' : ''}`}
-                {...register('organization.orgName')}
-              />
+            <div className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <Globe className="w-5 h-5 text-blue-600" />
+              <span className="text-blue-800 font-medium">{watch('organization.website')}</span>
+              <span className="text-blue-600 text-sm">(ingesteld)</span>
             </div>
-            {errors.organization?.orgName && (
-              <p className="text-sm text-red-500">
-                {errors.organization.orgName.message}
-              </p>
-            )}
             <p className="text-xs text-gray-500">
-              De naam van je bedrijf, team of organisatie (optioneel)
+              Je website is al ingesteld
             </p>
           </div>
         ) : (
           <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-700">
-              Organisatienaam
+            <Label htmlFor="website" className="text-sm font-medium text-gray-700">
+              Website (optioneel)
             </Label>
-            <div className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-green-800 font-medium">{orgName}</span>
-              <span className="text-green-600 text-sm">(al ingesteld)</span>
+            <div className="relative">
+              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                id="website"
+                placeholder="https://jouwwebsite.nl"
+                className="pl-10"
+                {...register('organization.website', {
+                  pattern: {
+                    value: /^https?:\/\/.+/,
+                    message: 'Voer een geldige URL in (begint met http:// of https://)'
+                  }
+                })}
+              />
             </div>
+            {errors.organization?.website && (
+              <p className="text-sm text-red-500">
+                {errors.organization.website.message}
+              </p>
+            )}
             <p className="text-xs text-gray-500">
-              Je organisatienaam is al ingesteld bij de betaling
+              Je website of portfolio link (optioneel)
             </p>
           </div>
         )}
 
-        {/* Website */}
-        <div className="space-y-2">
-          <Label htmlFor="website" className="text-sm font-medium text-gray-700">
-            Website (optioneel)
-          </Label>
-          <div className="relative">
-            <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              id="website"
-              placeholder="https://jouwwebsite.nl"
-              className="pl-10"
-              {...register('organization.website', {
-                pattern: {
-                  value: /^https?:\/\/.+/,
-                  message: 'Voer een geldige URL in (begint met http:// of https://)'
-                }
-              })}
-            />
-          </div>
-          {errors.organization?.website && (
-            <p className="text-sm text-red-500">
-              {errors.organization.website.message}
-            </p>
-          )}
-          <p className="text-xs text-gray-500">
-            Je website of portfolio link
-          </p>
-        </div>
-
-        {/* Use Case */}
-        <div className="space-y-3">
-          <Label className="text-sm font-medium text-gray-700">
+        {/* Use Case - Main focus */}
+        <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <Label className="text-lg font-semibold text-gray-800">
             Hoe ga je Timeline Alchemy gebruiken?
           </Label>
+          <p className="text-sm text-gray-600 mb-4">
+            Dit helpt ons je de juiste features en instellingen te tonen
+          </p>
           <RadioGroup 
             value={useCase} 
             onValueChange={(value) => setValue('organization.useCase', value)}
@@ -174,9 +170,6 @@ export default function OrganizationStep() {
               Selecteer een gebruikscategorie
             </p>
           )}
-          <p className="text-xs text-gray-500">
-            Dit helpt ons je de juiste features te tonen
-          </p>
         </div>
       </CardContent>
     </Card>

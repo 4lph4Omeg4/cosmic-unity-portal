@@ -145,8 +145,7 @@ export default function PreviewWizardNew() {
           display_name,
           email,
           role,
-          org_id,
-          orgs(name)
+          organization_name
         `)
         .eq('role', 'client')
         .order('display_name')
@@ -159,7 +158,7 @@ export default function PreviewWizardNew() {
           id: client.user_id, // Use user_id directly
           name: client.display_name || 'Unnamed Client',
           email: client.email || 'No email',
-          organization: client.orgs?.name || 'No organization'
+          organization: client.organization_name || 'No organization'
         }))
         setClients(transformedClients)
       } else {
