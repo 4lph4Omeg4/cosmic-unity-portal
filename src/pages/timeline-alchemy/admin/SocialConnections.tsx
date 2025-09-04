@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Instagram, Twitter, Facebook, Linkedin, Youtube, Link, Plus, Trash2, RefreshCw, CheckCircle, XCircle, AlertCircle, ExternalLink, Clock, Users } from 'lucide-react'
+import { Instagram, X, Facebook, Linkedin, Youtube, Link, Plus, Trash2, RefreshCw, CheckCircle, XCircle, AlertCircle, ExternalLink, Clock, Users } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 
@@ -166,7 +166,8 @@ export default function AdminSocialConnections() {
   const getPlatformIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
       case 'instagram': return <Instagram className="w-5 h-5" />
-      case 'twitter': return <Twitter className="w-5 h-5" />
+      case 'twitter': return <X className="w-5 h-5" />
+      case 'x': return <X className="w-5 h-5" />
       case 'facebook': return <Facebook className="w-5 h-5" />
       case 'linkedin': return <Linkedin className="w-5 h-5" />
       case 'youtube': return <Youtube className="w-5 h-5" />
@@ -178,7 +179,8 @@ export default function AdminSocialConnections() {
     switch (platform.toLowerCase()) {
       case 'instagram': return 'bg-gradient-to-r from-purple-500 to-pink-500'
       case 'facebook': return 'bg-blue-600'
-      case 'twitter': return 'bg-sky-500'
+      case 'twitter': return 'bg-black'
+      case 'x': return 'bg-black'
       case 'linkedin': return 'bg-blue-700'
       case 'youtube': return 'bg-red-600'
       default: return 'bg-gray-600'
@@ -354,7 +356,7 @@ export default function AdminSocialConnections() {
             {[
               { id: 'instagram', name: 'Instagram', description: 'Share visual content and stories' },
               { id: 'facebook', name: 'Facebook', description: 'Reach your audience with posts' },
-              { id: 'twitter', name: 'Twitter', description: 'Share quick updates and engage' },
+              { id: 'twitter', name: 'X (Twitter)', description: 'Share quick updates and engage' },
               { id: 'linkedin', name: 'LinkedIn', description: 'Professional networking content' }
             ].map((platform) => {
               const isConnecting = connecting === platform.id

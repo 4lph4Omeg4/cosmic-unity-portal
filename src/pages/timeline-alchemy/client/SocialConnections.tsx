@@ -167,7 +167,8 @@ export default function TimelineAlchemySocialConnections() {
     switch (platform.toLowerCase()) {
       case 'instagram': return 'bg-gradient-to-r from-purple-500 to-pink-500'
       case 'facebook': return 'bg-blue-600'
-      case 'twitter': return 'bg-sky-500'
+      case 'twitter': return 'bg-black'
+      case 'x': return 'bg-black'
       case 'linkedin': return 'bg-blue-700'
       case 'youtube': return 'bg-red-600'
       default: return 'bg-gray-600'
@@ -313,7 +314,7 @@ export default function TimelineAlchemySocialConnections() {
             {[
               { id: 'instagram', name: 'Instagram', description: 'Share visual content and stories' },
               { id: 'facebook', name: 'Facebook', description: 'Reach your audience with posts' },
-              { id: 'twitter', name: 'Twitter', description: 'Share quick updates and engage' },
+              { id: 'twitter', name: 'X (Twitter)', description: 'Share quick updates and engage' },
               { id: 'linkedin', name: 'LinkedIn', description: 'Professional networking content' }
             ].map((platform) => {
               const isConnected = connections.some(c => c.platform === platform.id && c.is_active)
