@@ -286,10 +286,6 @@ export default function DashboardNew() {
             <MessageSquare className="w-4 h-4 mr-2" />
             Create Preview (New)
           </Button>
-          <Button onClick={() => navigate('/timeline-alchemy/admin/create-test-preview')} className="bg-green-600 hover:bg-green-700">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Test Preview
-          </Button>
           <Button onClick={refreshData} variant="outline" className="flex items-center gap-2" disabled={loading}>
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -519,14 +515,6 @@ export default function DashboardNew() {
 
                   {/* Actions */}
                   <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => navigate(`/timeline-alchemy/admin/preview-wizard-new?id=${preview.id}`)}
-                      className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-600"
-                    >
-                      <Eye className="w-4 h-4" />
-                      View
-                    </Button>
                     <Button
                       variant="outline"
                       onClick={() => handleDeletePreview(preview.id)}
