@@ -640,6 +640,67 @@ const translations = {
         features: 'Inclusief alle features',
         cancelAnytime: 'Opzeggen wanneer je wilt',
       },
+      sections: {
+        whatYouGet: {
+          title: 'Wat je krijgt',
+          subtitle: 'Een complete content machine die jouw visie verspreidt zonder dat jij er energie aan verliest',
+          features: {
+            weeklyBlog: {
+              title: 'Wekelijkse Blogpost',
+              description: 'Diep, helder, on-brand content dat jouw expertise toont'
+            },
+            crossPlatform: {
+              title: 'Cross-Platform Posts',
+              description: 'Per kanaal geoptimaliseerd voor maximale impact'
+            },
+            planning: {
+              title: 'Planning & Publicatie',
+              description: 'Ritme = bereik. Wij zorgen voor consistentie'
+            },
+            toneOfVoice: {
+              title: 'Tone-of-Voice Guardrails',
+              description: 'Jouw signatuur, consistent door alle content'
+            },
+            linkArchitecture: {
+              title: 'Linkarchitectuur',
+              description: 'Alles verwijst terug naar jouw kern'
+            },
+            autoDistribution: {
+              title: 'Automatische Distributie',
+              description: 'Set it and forget it — wij doen de rest'
+            }
+          }
+        },
+        faq: {
+          title: 'Veelgestelde vragen',
+          subtitle: 'Alles wat je moet weten over Timeline Alchemy',
+          questions: {
+            feedback: {
+              question: 'Kan ik feedback geven op de blog?',
+              answer: 'Ja. Je krijgt een concept; wij verwerken je feedback en publiceren gepland.'
+            },
+            platforms: {
+              question: 'Welke platforms dekken jullie?',
+              answer: 'Minimaal: Instagram, Facebook, X, LinkedIn. Uitbreiden kan.'
+            },
+            posting: {
+              question: 'Moet ik zelf nog posten?',
+              answer: 'Hoeft niet. Wij plannen en publiceren (met jouw toestemming/verbindingen).'
+            },
+            niche: {
+              question: 'Wat als mijn niche \'anders\' is?',
+              answer: 'Perfect. We trainen op jouw bronnen, glossarium en voorbeelden.'
+            },
+            pause: {
+              question: 'Kan ik pauzeren of upgraden?',
+              answer: 'Ja. Via je Stripe dashboard, direct en flexibel.'
+            }
+          }
+        },
+        cta: {
+          stripeNote: 'Direct via Stripe. Je kunt later altijd upgraden of pauzeren.'
+        }
+      },
     },
   },
 
@@ -1148,6 +1209,67 @@ const translations = {
         features: 'Includes all features',
         cancelAnytime: 'Cancel anytime',
       },
+      sections: {
+        whatYouGet: {
+          title: 'What you get',
+          subtitle: 'A complete content machine that spreads your vision without you losing energy',
+          features: {
+            weeklyBlog: {
+              title: 'Weekly Blog Post',
+              description: 'Deep, clear, on-brand content that showcases your expertise'
+            },
+            crossPlatform: {
+              title: 'Cross-Platform Posts',
+              description: 'Optimized per channel for maximum impact'
+            },
+            planning: {
+              title: 'Planning & Publishing',
+              description: 'Rhythm = reach. We ensure consistency'
+            },
+            toneOfVoice: {
+              title: 'Tone-of-Voice Guardrails',
+              description: 'Your signature, consistent through all content'
+            },
+            linkArchitecture: {
+              title: 'Link Architecture',
+              description: 'Everything refers back to your core'
+            },
+            autoDistribution: {
+              title: 'Automatic Distribution',
+              description: 'Set it and forget it — we do the rest'
+            }
+          }
+        },
+        faq: {
+          title: 'Frequently Asked Questions',
+          subtitle: 'Everything you need to know about Timeline Alchemy',
+          questions: {
+            feedback: {
+              question: 'Can I give feedback on the blog?',
+              answer: 'Yes. You get a draft; we process your feedback and publish as planned.'
+            },
+            platforms: {
+              question: 'Which platforms do you cover?',
+              answer: 'Minimum: Instagram, Facebook, X, LinkedIn. Expansion possible.'
+            },
+            posting: {
+              question: 'Do I still need to post myself?',
+              answer: 'Not necessary. We plan and publish (with your permission/connections).'
+            },
+            niche: {
+              question: 'What if my niche is \'different\'?',
+              answer: 'Perfect. We train on your sources, glossary and examples.'
+            },
+            pause: {
+              question: 'Can I pause or upgrade?',
+              answer: 'Yes. Via your Stripe dashboard, directly and flexibly.'
+            }
+          }
+        },
+        cta: {
+          stripeNote: 'Directly via Stripe. You can always upgrade or pause later.'
+        }
+      },
     },
   },
 
@@ -1655,6 +1777,67 @@ const translations = {
         yearly: 'pro Jahr',
         features: 'Alle Features inklusive',
         cancelAnytime: 'Jederzeit kündbar',
+      },
+      sections: {
+        whatYouGet: {
+          title: 'Was du bekommst',
+          subtitle: 'Eine komplette Content-Maschine, die deine Vision verbreitet, ohne dass du Energie verlierst',
+          features: {
+            weeklyBlog: {
+              title: 'Wöchentlicher Blog-Post',
+              description: 'Tiefer, klarer, markenkonformer Content, der deine Expertise zeigt'
+            },
+            crossPlatform: {
+              title: 'Plattformübergreifende Posts',
+              description: 'Pro Kanal optimiert für maximale Wirkung'
+            },
+            planning: {
+              title: 'Planung & Veröffentlichung',
+              description: 'Rhythmus = Reichweite. Wir sorgen für Konsistenz'
+            },
+            toneOfVoice: {
+              title: 'Tonalitäts-Leitplanken',
+              description: 'Deine Signatur, konsistent durch alle Inhalte'
+            },
+            linkArchitecture: {
+              title: 'Link-Architektur',
+              description: 'Alles verweist zurück zu deinem Kern'
+            },
+            autoDistribution: {
+              title: 'Automatische Verteilung',
+              description: 'Einrichten und vergessen — wir erledigen den Rest'
+            }
+          }
+        },
+        faq: {
+          title: 'Häufig gestellte Fragen',
+          subtitle: 'Alles was du über Timeline Alchemy wissen musst',
+          questions: {
+            feedback: {
+              question: 'Kann ich Feedback zum Blog geben?',
+              answer: 'Ja. Du bekommst einen Entwurf; wir verarbeiten dein Feedback und veröffentlichen wie geplant.'
+            },
+            platforms: {
+              question: 'Welche Plattformen deckt ihr ab?',
+              answer: 'Minimum: Instagram, Facebook, X, LinkedIn. Erweiterung möglich.'
+            },
+            posting: {
+              question: 'Muss ich noch selbst posten?',
+              answer: 'Nicht nötig. Wir planen und veröffentlichen (mit deiner Erlaubnis/Verbindungen).'
+            },
+            niche: {
+              question: 'Was wenn meine Nische \'anders\' ist?',
+              answer: 'Perfekt. Wir trainieren mit deinen Quellen, Glossar und Beispielen.'
+            },
+            pause: {
+              question: 'Kann ich pausieren oder upgraden?',
+              answer: 'Ja. Über dein Stripe-Dashboard, direkt und flexibel.'
+            }
+          }
+        },
+        cta: {
+          stripeNote: 'Direkt über Stripe. Du kannst später immer upgraden oder pausieren.'
+        }
       },
     },
   },

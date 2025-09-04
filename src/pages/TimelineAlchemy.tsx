@@ -272,7 +272,7 @@ const TimelineAlchemy: React.FC = () => {
           </TlaSubscribeButton>
 
           <p className="text-slate-400 text-sm mt-4 max-w-md mx-auto">
-            Direct via Stripe. Je kunt later altijd upgraden of pauzeren.
+            {t('timelineAlchemy.sections.cta.stripeNote')}
           </p>
         </div>
       </section>
@@ -281,20 +281,20 @@ const TimelineAlchemy: React.FC = () => {
       <section className="relative z-10 py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Wat je krijgt</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">{t('timelineAlchemy.sections.whatYouGet.title')}</h2>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Een complete content machine die jouw visie verspreidt zonder dat jij er energie aan verliest
+              {t('timelineAlchemy.sections.whatYouGet.subtitle')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: <MessageSquare className="w-8 h-8" />, title: "Wekelijkse Blogpost", description: "Diep, helder, on-brand content dat jouw expertise toont" },
-              { icon: <Share2 className="w-8 h-8" />, title: "Cross-Platform Posts", description: "Per kanaal geoptimaliseerd voor maximale impact" },
-              { icon: <Clock className="w-8 h-8" />, title: "Planning & Publicatie", description: "Ritme = bereik. Wij zorgen voor consistentie" },
-              { icon: <Shield className="w-8 h-8" />, title: "Tone-of-Voice Guardrails", description: "Jouw signatuur, consistent door alle content" },
-              { icon: <Zap className="w-8 h-8" />, title: "Linkarchitectuur", description: "Alles verwijst terug naar jouw kern" },
-              { icon: <Sparkles className="w-8 h-8" />, title: "Automatische Distributie", description: "Set it and forget it — wij doen de rest" },
+              { icon: <MessageSquare className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.weeklyBlog.title'), description: t('timelineAlchemy.sections.whatYouGet.features.weeklyBlog.description') },
+              { icon: <Share2 className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.crossPlatform.title'), description: t('timelineAlchemy.sections.whatYouGet.features.crossPlatform.description') },
+              { icon: <Clock className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.planning.title'), description: t('timelineAlchemy.sections.whatYouGet.features.planning.description') },
+              { icon: <Shield className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.toneOfVoice.title'), description: t('timelineAlchemy.sections.whatYouGet.features.toneOfVoice.description') },
+              { icon: <Zap className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.linkArchitecture.title'), description: t('timelineAlchemy.sections.whatYouGet.features.linkArchitecture.description') },
+              { icon: <Sparkles className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.autoDistribution.title'), description: t('timelineAlchemy.sections.whatYouGet.features.autoDistribution.description') },
             ].map((item, idx) => (
               <Card
                 key={idx}
@@ -320,34 +320,34 @@ const TimelineAlchemy: React.FC = () => {
   <div className="max-w-4xl mx-auto">
     <div className="text-center mb-16">
       <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-        Veelgestelde vragen
+        {t('timelineAlchemy.sections.faq.title')}
       </h2>
       <p className="text-xl text-slate-300">
-        Alles wat je moet weten over Timeline Alchemy
+        {t('timelineAlchemy.sections.faq.subtitle')}
       </p>
     </div>
 
     <div className="space-y-6">
       {[
         {
-          question: "Kan ik feedback geven op de blog?",
-          answer: "Ja. Je krijgt een concept; wij verwerken je feedback en publiceren gepland.",
+          question: t('timelineAlchemy.sections.faq.questions.feedback.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.feedback.answer'),
         },
         {
-          question: "Welke platforms dekken jullie?",
-          answer: "Minimaal: Instagram, Facebook, X, LinkedIn. Uitbreiden kan.",
+          question: t('timelineAlchemy.sections.faq.questions.platforms.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.platforms.answer'),
         },
         {
-          question: "Moet ik zelf nog posten?",
-          answer: "Hoeft niet. Wij plannen en publiceren (met jouw toestemming/verbindingen).",
+          question: t('timelineAlchemy.sections.faq.questions.posting.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.posting.answer'),
         },
         {
-          question: "Wat als mijn niche 'anders' is?",
-          answer: "Perfect. We trainen op jouw bronnen, glossarium en voorbeelden.",
+          question: t('timelineAlchemy.sections.faq.questions.niche.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.niche.answer'),
         },
         {
-          question: "Kan ik pauzeren of upgraden?",
-          answer: "Ja. Via Stripe kun je pauzeren, wijzigen of annuleren.",
+          question: t('timelineAlchemy.sections.faq.questions.pause.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.pause.answer'),
         },
       ].map((faq, index) => (
         <Card key={index} className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/30">
