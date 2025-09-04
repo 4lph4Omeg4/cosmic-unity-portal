@@ -681,15 +681,6 @@ export default function TimelineAlchemyIdeas() {
                     )}
                   </div>
                   
-                  {/* Fallback placeholder when no image */}
-                  {!post.image_url && (
-                    <div className="flex-shrink-0 w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
-                      <div className="text-gray-400 text-xs text-center">
-                        <div className="w-8 h-8 mx-auto mb-1">📄</div>
-                        Geen afbeelding
-                      </div>
-                    </div>
-                  )}
 
                   {/* Variation Images Section */}
                   <div className="flex-shrink-0">
