@@ -699,6 +699,11 @@ const translations = {
         },
         cta: {
           stripeNote: 'Direct via Stripe. Je kunt later altijd upgraden of pauzeren.'
+        },
+        readyToStart: {
+          title: 'Klaar om te starten?',
+          subtitle: 'Join de creators die al hun content stress hebben vervangen door Timeline Alchemy',
+          buttonText: 'Start je maandelijkse transformatie'
         }
       },
     },
@@ -1268,6 +1273,11 @@ const translations = {
         },
         cta: {
           stripeNote: 'Directly via Stripe. You can always upgrade or pause later.'
+        },
+        readyToStart: {
+          title: 'Ready to get started?',
+          subtitle: 'Join the creators who have already replaced their content stress with Timeline Alchemy',
+          buttonText: 'Start your monthly transformation'
         }
       },
     },
@@ -1837,6 +1847,11 @@ const translations = {
         },
         cta: {
           stripeNote: 'Direkt über Stripe. Du kannst später immer upgraden oder pausieren.'
+        },
+        readyToStart: {
+          title: 'Bereit loszulegen?',
+          subtitle: 'Tritt den Creators bei, die bereits ihren Content-Stress durch Timeline Alchemy ersetzt haben',
+          buttonText: 'Starte deine monatliche Transformation'
         }
       },
     },

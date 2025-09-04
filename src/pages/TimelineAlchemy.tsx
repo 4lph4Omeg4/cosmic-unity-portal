@@ -368,10 +368,10 @@ const TimelineAlchemy: React.FC = () => {
   <div className="max-w-4xl mx-auto text-center">
     <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-8 md:p-12">
       <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
-        Klaar om te starten?
+        {t('timelineAlchemy.sections.readyToStart.title')}
       </h3>
       <p className="text-slate-300 mb-8 text-lg">
-        Join de creators die al hun content stress hebben vervangen door Timeline Alchemy
+        {t('timelineAlchemy.sections.readyToStart.subtitle')}
       </p>
 
       <TlaSubscribeButton
@@ -379,7 +379,7 @@ const TimelineAlchemy: React.FC = () => {
         variant="trust"
       >
         <span className="flex items-center justify-center">
-          {(currentStyle?.cta ?? "Start je maandelijkse transformatie")}
+          {(currentStyle?.cta ?? t('timelineAlchemy.sections.readyToStart.buttonText'))}
           <ArrowRight className="w-5 h-5 ml-2" />
         </span>
       </TlaSubscribeButton>
