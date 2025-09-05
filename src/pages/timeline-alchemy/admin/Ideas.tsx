@@ -801,9 +801,12 @@ export default function TimelineAlchemyIdeas() {
                        <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
                          Toon volledige content
                        </summary>
-                       <div className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 whitespace-pre-wrap border border-gray-700">
-                         {post.body || post.content}
-                       </div>
+                       <div 
+                         className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 border border-gray-700 prose prose-invert prose-sm max-w-none"
+                         dangerouslySetInnerHTML={{ 
+                           __html: post.body || post.content || '' 
+                         }}
+                       />
                      </details>
                    )}
                    
