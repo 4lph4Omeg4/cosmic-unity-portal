@@ -835,54 +835,39 @@ export default function TimelineAlchemyIdeas() {
                      </div>
                    )}
                    
-                   {/* Social Media Content */}
+                   {/* Social Media Platforms */}
                    {(post.facebook || post.instagram || post.x || post.linkedin || post.tiktok) && (
                      <div className="mb-3">
-                       <span className="text-sm text-gray-300 font-medium">Social Media Content:</span>
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                       <span className="text-sm text-gray-300 font-medium mb-2 block">Social Media:</span>
+                       <div className="flex flex-wrap gap-2">
                          {post.facebook && (
-                           <div className="bg-gray-600 rounded p-2">
-                             <div className="flex items-center gap-1 mb-1">
-                               <span className="text-blue-400 text-sm">📘</span>
-                               <span className="text-gray-300 font-medium text-sm">Facebook</span>
-                             </div>
-                             <p className="text-gray-200 text-sm line-clamp-2">{post.facebook}</p>
+                           <div className="flex items-center gap-2 px-3 py-1 bg-blue-600 rounded-full">
+                             <span className="text-white text-sm">📘</span>
+                             <span className="text-white text-sm font-medium">Facebook</span>
                            </div>
                          )}
                          {post.instagram && (
-                           <div className="bg-gray-600 rounded p-2">
-                             <div className="flex items-center gap-1 mb-1">
-                               <span className="text-pink-400 text-sm">📷</span>
-                               <span className="text-gray-300 font-medium text-sm">Instagram</span>
-                             </div>
-                             <p className="text-gray-200 text-sm line-clamp-2">{post.instagram}</p>
+                           <div className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full">
+                             <span className="text-white text-sm">📷</span>
+                             <span className="text-white text-sm font-medium">Instagram</span>
                            </div>
                          )}
                          {post.x && (
-                           <div className="bg-gray-600 rounded p-2">
-                             <div className="flex items-center gap-1 mb-1">
-                               <span className="text-blue-300 text-sm">🐦</span>
-                               <span className="text-gray-300 font-medium text-sm">X (Twitter)</span>
-                             </div>
-                             <p className="text-gray-200 text-sm line-clamp-2">{post.x}</p>
+                           <div className="flex items-center gap-2 px-3 py-1 bg-black rounded-full">
+                             <span className="text-white text-sm">🐦</span>
+                             <span className="text-white text-sm font-medium">X</span>
                            </div>
                          )}
                          {post.linkedin && (
-                           <div className="bg-gray-600 rounded p-2">
-                             <div className="flex items-center gap-1 mb-1">
-                               <span className="text-blue-500 text-sm">💼</span>
-                               <span className="text-gray-300 font-medium text-sm">LinkedIn</span>
-                             </div>
-                             <p className="text-gray-200 text-sm line-clamp-2">{post.linkedin}</p>
+                           <div className="flex items-center gap-2 px-3 py-1 bg-blue-700 rounded-full">
+                             <span className="text-white text-sm">💼</span>
+                             <span className="text-white text-sm font-medium">LinkedIn</span>
                            </div>
                          )}
                          {post.tiktok && (
-                           <div className="bg-gray-600 rounded p-2">
-                             <div className="flex items-center gap-1 mb-1">
-                               <span className="text-white text-sm">🎵</span>
-                               <span className="text-gray-300 font-medium text-sm">TikTok</span>
-                             </div>
-                             <p className="text-gray-200 text-sm line-clamp-2">{post.tiktok}</p>
+                           <div className="flex items-center gap-2 px-3 py-1 bg-black rounded-full">
+                             <span className="text-white text-sm">🎵</span>
+                             <span className="text-white text-sm font-medium">TikTok</span>
                            </div>
                          )}
                        </div>
