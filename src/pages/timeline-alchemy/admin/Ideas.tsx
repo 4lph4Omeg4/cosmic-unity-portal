@@ -695,8 +695,10 @@ export default function TimelineAlchemyIdeas() {
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).cosmic);
+                            setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
+                            setIsImageDialogOpen(true);
                           }}
-                          title="Cosmic Theme - Klik om te selecteren"
+                          title="Cosmic Theme - Klik om te selecteren en te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -714,8 +716,10 @@ export default function TimelineAlchemyIdeas() {
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).cyberpunk);
+                            setSelectedImageUrl(getBlogPostImages(post.id).cyberpunk);
+                            setIsImageDialogOpen(true);
                           }}
-                          title="Cyberpunk Theme - Klik om te selecteren"
+                          title="Cyberpunk Theme - Klik om te selecteren en te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -733,8 +737,10 @@ export default function TimelineAlchemyIdeas() {
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).dystopia);
+                            setSelectedImageUrl(getBlogPostImages(post.id).dystopia);
+                            setIsImageDialogOpen(true);
                           }}
-                          title="Dystopia Theme - Klik om te selecteren"
+                          title="Dystopia Theme - Klik om te selecteren en te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -752,8 +758,10 @@ export default function TimelineAlchemyIdeas() {
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).main);
+                            setSelectedImageUrl(getBlogPostImages(post.id).main);
+                            setIsImageDialogOpen(true);
                           }}
-                          title="Utopia Theme - Klik om te selecteren"
+                          title="Utopia Theme - Klik om te selecteren en te bekijken"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
@@ -824,7 +832,7 @@ export default function TimelineAlchemyIdeas() {
                    )}
                    
                    {/* Social Media Content */}
-                   {(post.facebook || post.instagram || post.x || post.linkedin) && (
+                   {(post.facebook || post.instagram || post.x || post.linkedin || post.tiktok) && (
                      <div className="mb-3">
                        <span className="text-sm text-gray-300 font-medium">Social Media Content:</span>
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
@@ -862,6 +870,15 @@ export default function TimelineAlchemyIdeas() {
                                <span className="text-gray-300 font-medium text-sm">LinkedIn</span>
                              </div>
                              <p className="text-gray-200 text-sm line-clamp-2">{post.linkedin}</p>
+                           </div>
+                         )}
+                         {post.tiktok && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <span className="text-white text-sm">🎵</span>
+                               <span className="text-gray-300 font-medium text-sm">TikTok</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.tiktok}</p>
                            </div>
                          )}
                        </div>
