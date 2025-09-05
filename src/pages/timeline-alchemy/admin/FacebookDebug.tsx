@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,10 +8,42 @@ import { supabase } from '@/integrations/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 
 export default function FacebookDebug() {
+  const [searchParams] = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
+
+  // Check if this is a callback from OAuth
+  useEffect(() => {
+    const code = searchParams.get('code')
+    const state = searchParams.get('state')
+    const error = searchParams.get('error')
+    
+    if (code && state) {
+      console.log('OAuth callback detected:', { code, state, error })
+      handleOAuthCallback(code, state, error)
+    }
+  }, [searchParams])
+
+  const handleOAuthCallback = async (code: string, state: string, error: string | null) => {
+    if (error) {
+      setError(`OAuth error: ${error}`)
+      return
+    }
+    
+    toast({
+      title: "OAuth Callback Received!",
+      description: `Received callback with code: ${code.substring(0, 10)}...`,
+    })
+    
+    setResult({
+      type: 'oauth_callback',
+      code: code.substring(0, 10) + '...',
+      state: state,
+      message: 'OAuth callback received successfully!'
+    })
+  }
 
   const testFacebookOAuth = async () => {
     try {

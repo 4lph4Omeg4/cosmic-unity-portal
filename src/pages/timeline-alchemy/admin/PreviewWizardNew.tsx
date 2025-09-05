@@ -455,18 +455,12 @@ export default function PreviewWizardNew() {
                         <div className="flex-shrink-0">
                           <div className="grid grid-cols-2 gap-2">
                             {/* Main Image or Placeholder */}
-                            {idea.image_public_url ? (
+                            {idea.image_public_url && (
                               <img 
                                 src={idea.image_public_url} 
                                 alt={idea.title}
                                 className="w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-md"
                               />
-                            ) : (
-                              <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg border border-gray-600 shadow-md flex items-center justify-center">
-                                <span className="text-white text-xs font-medium text-center px-2">
-                                  Hoofdafbeelding<br/>Niet beschikbaar
-                                </span>
-                              </div>
                             )}
                             
                             {(() => {
