@@ -74,6 +74,7 @@ interface BlogPost {
   instagram?: string
   x?: string
   linkedin?: string
+  tiktok?: string
   ai_blog?: any // Use any to avoid TypeScript issues with dynamic field names
   imageLoading?: boolean
   imageError?: boolean
@@ -277,6 +278,7 @@ export default function TimelineAlchemyIdeas() {
         const instagramLink = post.instagram || null
         const xLink = post.x || null
         const linkedinLink = post.linkedin || null
+        const tiktokLink = post.tiktok || null
         
         // Ensure arrays are always arrays to prevent .length errors
         // Handle tags - split string if it's a comma-separated string
@@ -340,6 +342,7 @@ export default function TimelineAlchemyIdeas() {
            instagram: instagramLink,
            x: xLink,
            linkedin: linkedinLink,
+           tiktok: tiktokLink,
            ai_blog: aiBlog
          }
       })
@@ -694,6 +697,7 @@ export default function TimelineAlchemyIdeas() {
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
+                            console.log('Cosmic image clicked!', post.id);
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).cosmic);
                             setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
                             setIsImageDialogOpen(true);
