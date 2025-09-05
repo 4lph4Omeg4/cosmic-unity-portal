@@ -113,7 +113,7 @@ function generateInstagramAuthUrl(state: string): string {
 function generateFacebookAuthUrl(state: string): string {
   const clientId = Deno.env.get('FACEBOOK_CLIENT_ID')
   const siteUrl = Deno.env.get('SITE_URL')
-  const redirectUri = `${siteUrl}/timeline-alchemy/admin/facebook-debug`
+  const redirectUri = `${siteUrl}/auth/callback/facebook`
   
   console.log('Facebook OAuth URL generation:', { clientId, siteUrl, redirectUri })
   
