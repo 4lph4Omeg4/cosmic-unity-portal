@@ -480,6 +480,11 @@ export default function TimelineAlchemyIdeas() {
     }))
   }
 
+  const stripHtmlTags = (html: string): string => {
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    return doc.body.textContent || ''
+  }
+
   const copyToClipboard = async (text: string, platform: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -792,7 +797,7 @@ export default function TimelineAlchemyIdeas() {
                     </h3>
                     
                     <p className="text-gray-200 mb-3">
-                      {post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content')}
+                      {post.excerpt || (post.body || post.content ? stripHtmlTags((post.body || post.content).substring(0, 150)) + '...' : 'Geen content')}
                     </p>
                    
                    {/* Show full content if available */}
