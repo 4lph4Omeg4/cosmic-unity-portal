@@ -546,12 +546,18 @@ export default function PreviewWizardNew() {
                           
                           {/* Complete Content */}
                           <div className="text-sm text-gray-300 mb-4">
-                            <p className="whitespace-pre-wrap leading-relaxed">
-                              {expandedIdeas[idea.id] 
-                                ? (idea.body || idea.excerpt || 'No content available')
-                                : ((idea.body || idea.excerpt || 'No content available').substring(0, 200) + ((idea.body || idea.excerpt || '').length > 200 ? '...' : ''))
-                              }
-                            </p>
+                            {expandedIdeas[idea.id] ? (
+                              <div 
+                                className="prose prose-invert prose-sm max-w-none leading-relaxed"
+                                dangerouslySetInnerHTML={{ 
+                                  __html: idea.body || idea.excerpt || 'No content available' 
+                                }}
+                              />
+                            ) : (
+                              <p className="whitespace-pre-wrap leading-relaxed">
+                                {((idea.body || idea.excerpt || 'No content available').substring(0, 200) + ((idea.body || idea.excerpt || '').length > 200 ? '...' : ''))}
+                              </p>
+                            )}
                           </div>
                           
                           {/* Social Media Content Preview */}
