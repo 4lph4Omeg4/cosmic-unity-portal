@@ -823,90 +823,50 @@ export default function TimelineAlchemyIdeas() {
                      </div>
                    )}
                    
-                   {/* Social Media Links */}
+                   {/* Social Media Content */}
                    {(post.facebook || post.instagram || post.x || post.linkedin) && (
                      <div className="mb-3">
-                                               <span className="text-sm text-gray-300 font-medium">Social Media Links:</span>
-                       <div className="flex flex-wrap gap-2 mt-1">
-                          {post.facebook && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.facebook}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                📘 Facebook
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.facebook!, 'Facebook')}
-                                className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer Facebook link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                          {post.instagram && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.instagram}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-pink-600 hover:bg-pink-700 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                📷 Instagram
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.instagram!, 'Instagram')}
-                                className="px-2 py-1 bg-pink-500 hover:bg-pink-600 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer Instagram link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                          {post.x && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.x}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-black hover:bg-gray-800 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                🐦 X (Twitter)
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.x!, 'X (Twitter)')}
-                                className="px-2 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer X link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                          {post.linkedin && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                💼 LinkedIn
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.linkedin!, 'LinkedIn')}
-                                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer LinkedIn link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                       <span className="text-sm text-gray-300 font-medium">Social Media Content:</span>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                         {post.facebook && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <span className="text-blue-400 text-sm">📘</span>
+                               <span className="text-gray-300 font-medium text-sm">Facebook</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.facebook}</p>
+                           </div>
+                         )}
+                         {post.instagram && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <span className="text-pink-400 text-sm">📷</span>
+                               <span className="text-gray-300 font-medium text-sm">Instagram</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.instagram}</p>
+                           </div>
+                         )}
+                         {post.x && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <span className="text-blue-300 text-sm">🐦</span>
+                               <span className="text-gray-300 font-medium text-sm">X (Twitter)</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.x}</p>
+                           </div>
+                         )}
+                         {post.linkedin && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <span className="text-blue-500 text-sm">💼</span>
+                               <span className="text-gray-300 font-medium text-sm">LinkedIn</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.linkedin}</p>
+                           </div>
+                         )}
+                       </div>
+                     </div>
+                   )}
                  </div>
                   
                   <div className="flex flex-col gap-2 ml-4">
