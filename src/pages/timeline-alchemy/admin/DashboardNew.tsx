@@ -28,6 +28,8 @@ export default function DashboardNew() {
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  
+  console.log('DashboardNew component rendering...')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedClient, setSelectedClient] = useState('all')
   const [clients, setClients] = useState<{ id: string; name: string }[]>([])
@@ -273,8 +275,9 @@ export default function DashboardNew() {
     rejected: previews.filter(p => p.status === 'rejected').length
   }
 
-  return (
-    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
+  try {
+    return (
+      <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -542,5 +545,19 @@ export default function DashboardNew() {
         </CardContent>
       </Card>
     </div>
-  )
+    )
+  } catch (error) {
+    console.error('DashboardNew error:', error)
+    return (
+      <div className="container mx-auto p-6 bg-gray-900 min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-400 mb-4">Error Loading Dashboard</h1>
+          <p className="text-gray-300 mb-4">Something went wrong while loading the dashboard.</p>
+          <pre className="text-sm text-gray-400 bg-gray-800 p-4 rounded">
+            {error instanceof Error ? error.message : String(error)}
+          </pre>
+        </div>
+      </div>
+    )
+  }
 }
