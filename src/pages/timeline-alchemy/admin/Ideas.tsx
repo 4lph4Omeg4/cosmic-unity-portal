@@ -703,20 +703,17 @@ export default function TimelineAlchemyIdeas() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log('Image clicked!', post.id);
-                            alert('Image clicked!'); // Temporary test
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).cosmic);
                             setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
                             setIsImageDialogOpen(true);
                           }}
                           title="Cosmic Theme - Klik om te selecteren en te bekijken"
                         />
-                        {/* Temporarily disabled overlay for testing */}
-                        {/* <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Cosmic
                           </div>
-                        </div> */}
+                        </div>
                       </div>
 
                       {/* Cyberpunk Theme */}
@@ -726,14 +723,15 @@ export default function TimelineAlchemyIdeas() {
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
+                            e.preventDefault();
+                            e.stopPropagation();
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).cyberpunk);
                             setSelectedImageUrl(getBlogPostImages(post.id).cyberpunk);
                             setIsImageDialogOpen(true);
                           }}
                           title="Cyberpunk Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Cyberpunk
                           </div>
@@ -747,14 +745,15 @@ export default function TimelineAlchemyIdeas() {
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
+                            e.preventDefault();
+                            e.stopPropagation();
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).dystopia);
                             setSelectedImageUrl(getBlogPostImages(post.id).dystopia);
                             setIsImageDialogOpen(true);
                           }}
                           title="Dystopia Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Dystopia
                           </div>
@@ -768,14 +767,15 @@ export default function TimelineAlchemyIdeas() {
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
+                            e.preventDefault();
+                            e.stopPropagation();
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).main);
                             setSelectedImageUrl(getBlogPostImages(post.id).main);
                             setIsImageDialogOpen(true);
                           }}
                           title="Utopia Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Utopia
                           </div>
