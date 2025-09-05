@@ -506,6 +506,52 @@ export default function TimelineAlchemyIdeas() {
     }
   }
 
+  const handleDeletePost = async (postId: string, postTitle: string) => {
+    if (!window.confirm(`Weet je zeker dat je "${postTitle}" wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.`)) {
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', postId)
+
+      if (error) {
+        console.error('Error deleting post:', error)
+        toast({
+          title: "Fout bij verwijderen",
+          description: "Kon blog post niet verwijderen uit de database.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      // Remove from local state
+      setBlogPosts(prev => prev.filter(post => post.id !== postId))
+      
+      // Remove from selected posts if it was selected
+      setSelectedPosts(prev => {
+        const newSelected = new Set(prev)
+        newSelected.delete(postId)
+        return newSelected
+      })
+
+      toast({
+        title: "Verwijderd!",
+        description: `"${postTitle}" is succesvol verwijderd.`,
+        variant: "default",
+      })
+    } catch (error) {
+      console.error('Error in handleDeletePost:', error)
+      toast({
+        title: "Fout bij verwijderen",
+        description: "Er is een onverwachte fout opgetreden.",
+        variant: "destructive",
+      })
+    }
+  }
+
   const handleCreatePreview = () => {
     if (selectedPosts.size === 0) return
     
@@ -965,7 +1011,12 @@ export default function TimelineAlchemyIdeas() {
                        📷 Upload Image
                      </Button>
                      
-                     <Button variant="outline" size="sm" className="flex items-center gap-2 bg-red-900 border-red-700 text-red-200 hover:bg-red-800">
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="flex items-center gap-2 bg-red-900 border-red-700 text-red-200 hover:bg-red-800"
+                       onClick={() => handleDeletePost(post.id, post.title)}
+                     >
                        <Trash2 className="w-4 h-4" />
                        Delete
                      </Button>
