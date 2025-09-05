@@ -702,7 +702,6 @@ export default function TimelineAlchemyIdeas() {
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling
-                            console.log('Cosmic image clicked!', post.id);
                             setSelectedImageForPost(post.id, getBlogPostImages(post.id).cosmic);
                             setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
                             setIsImageDialogOpen(true);
