@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
 
 type Props = {
   orgId?: string;
@@ -23,25 +24,48 @@ export function TlaSubscribeButton({ orgId, priceId, className, children, varian
     try {
       setCreatingOrg(true);
       
-      const endpoint = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-org`;
+      console.log("[TlaSubscribeButton] Creating organization:", name);
       
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-        }),
-      });
+      // Try using Supabase client first
+      try {
+        const { data, error } = await supabase.functions.invoke('create-org', {
+          body: { name: name },
+          method: 'POST'
+        });
 
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`Organization creation failed: ${res.status} ${txt}`);
+        if (error) {
+          console.error("[TlaSubscribeButton] create-org error:", error);
+          throw new Error(`Organization creation failed: ${error.message}`);
+        }
+
+        console.log("[TlaSubscribeButton] Organization created:", data);
+        return data.org_id;
+      } catch (supabaseError) {
+        console.warn("[TlaSubscribeButton] Supabase client failed, trying direct fetch:", supabaseError);
+        
+        // Fallback to direct fetch with proper headers
+        const endpoint = `https://wdclgadjetxhcududipz.supabase.co/functions/v1/create-org`;
+        
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkY2xnYWRqZXR4aGN1ZHVkaXB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0ODMwNDUsImV4cCI6MjA2OTA1OTA0NX0.5hWgUyRpqwwqNIBFCJqjF68_6zxN65Q43d0ziA2Qleo`,
+          },
+          body: JSON.stringify({
+            name: name,
+          }),
+        });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`Organization creation failed: ${res.status} ${txt}`);
+        }
+
+        const data = await res.json();
+        console.log("[TlaSubscribeButton] Organization created via fetch:", data);
+        return data.org_id;
       }
-
-      const { org_id } = await res.json();
-      return org_id;
     } catch (err) {
       console.error("[TlaSubscribeButton] create org error", err);
       throw err;
@@ -93,29 +117,66 @@ export function TlaSubscribeButton({ orgId, priceId, className, children, varian
   }
 
   async function startCheckout(orgId: string) {
-    // ✅ Je Supabase Edge Function endpoint
-    const endpoint = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/checkout`;
+    try {
+      console.log("[TlaSubscribeButton] Starting checkout for org:", orgId);
+      
+      // Try using Supabase client first
+      try {
+        const { data, error } = await supabase.functions.invoke('checkout', {
+          body: {
+            price_id: priceId,
+            org_id: orgId,
+          },
+          method: 'POST'
+        });
 
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        price_id: priceId,
-        org_id: orgId,
-      }),
-    });
+        if (error) {
+          console.error("[TlaSubscribeButton] checkout error:", error);
+          throw new Error(`Checkout request failed: ${error.message}`);
+        }
 
-    if (!res.ok) {
-      const txt = await res.text();
-      throw new Error(`Checkout request failed: ${res.status} ${txt}`);
-    }
+        console.log("[TlaSubscribeButton] Checkout response:", data);
 
-    const { url } = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error("No checkout URL received");
+        }
+      } catch (supabaseError) {
+        console.warn("[TlaSubscribeButton] Supabase client failed, trying direct fetch:", supabaseError);
+        
+        // Fallback to direct fetch with proper headers
+        const endpoint = `https://wdclgadjetxhcududipz.supabase.co/functions/v1/checkout`;
+        
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkY2xnYWRqZXR4aGN1ZHVkaXB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0ODMwNDUsImV4cCI6MjA2OTA1OTA0NX0.5hWgUyRpqwwqNIBFCJqjF68_6zxN65Q43d0ziA2Qleo`,
+          },
+          body: JSON.stringify({
+            price_id: priceId,
+            org_id: orgId,
+          }),
+        });
 
-    if (url) {
-      window.location.href = url;
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`Checkout request failed: ${res.status} ${txt}`);
+        }
+
+        const data = await res.json();
+        console.log("[TlaSubscribeButton] Checkout response via fetch:", data);
+
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error("No checkout URL received");
+        }
+      }
+    } catch (err) {
+      console.error("[TlaSubscribeButton] checkout error", err);
+      throw err;
     }
   }
 

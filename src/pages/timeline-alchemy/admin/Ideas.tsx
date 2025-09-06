@@ -13,7 +13,12 @@ import {
   Star,
   Calendar,
   User,
-  ArrowRight
+  ArrowRight,
+  Facebook,
+  Instagram,
+  X,
+  Linkedin,
+  Video
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
@@ -74,6 +79,7 @@ interface BlogPost {
   instagram?: string
   x?: string
   linkedin?: string
+  tiktok?: string
   ai_blog?: any // Use any to avoid TypeScript issues with dynamic field names
   imageLoading?: boolean
   imageError?: boolean
@@ -99,6 +105,7 @@ export default function TimelineAlchemyIdeas() {
   const [imageStates, setImageStates] = useState<Record<string, { loading: boolean; error: boolean }>>({})
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
+  const [selectedImagePerPost, setSelectedImagePerPost] = useState<Record<string, string>>({})
 
   useEffect(() => {
     loadBlogPosts()
@@ -276,6 +283,7 @@ export default function TimelineAlchemyIdeas() {
         const instagramLink = post.instagram || null
         const xLink = post.x || null
         const linkedinLink = post.linkedin || null
+        const tiktokLink = post.tiktok || null
         
         // Ensure arrays are always arrays to prevent .length errors
         // Handle tags - split string if it's a comma-separated string
@@ -339,6 +347,7 @@ export default function TimelineAlchemyIdeas() {
            instagram: instagramLink,
            x: xLink,
            linkedin: linkedinLink,
+           tiktok: tiktokLink,
            ai_blog: aiBlog
          }
       })
@@ -455,6 +464,30 @@ export default function TimelineAlchemyIdeas() {
     }
   }
 
+  const getBlogPostImages = (postId: string) => {
+    const baseUrl = 'https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images'
+    const images = {
+      main: `${baseUrl}/${postId}/utopia.png`,
+      dystopia: `${baseUrl}/${postId}/dystopia.png`,
+      cosmic: `${baseUrl}/${postId}/cosmic.png`,
+      cyberpunk: `${baseUrl}/${postId}/cyberpunk.png`
+    }
+    console.log('Generated images for postId:', postId, images)
+    return images
+  }
+
+  const getSelectedImageForPost = (postId: string) => {
+    const images = getBlogPostImages(postId)
+    return selectedImagePerPost[postId] || images.main
+  }
+
+  const setSelectedImageForPost = (postId: string, imageUrl: string) => {
+    setSelectedImagePerPost(prev => ({
+      ...prev,
+      [postId]: imageUrl
+    }))
+  }
+
   const copyToClipboard = async (text: string, platform: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -468,6 +501,52 @@ export default function TimelineAlchemyIdeas() {
       toast({
         title: "Fout bij kopiëren",
         description: "Kon link niet kopiëren naar klembord.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleDeletePost = async (postId: string, postTitle: string) => {
+    if (!window.confirm(`Weet je zeker dat je "${postTitle}" wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.`)) {
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', postId)
+
+      if (error) {
+        console.error('Error deleting post:', error)
+        toast({
+          title: "Fout bij verwijderen",
+          description: "Kon blog post niet verwijderen uit de database.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      // Remove from local state
+      setBlogPosts(prev => prev.filter(post => post.id !== postId))
+      
+      // Remove from selected posts if it was selected
+      setSelectedPosts(prev => {
+        const newSelected = new Set(prev)
+        newSelected.delete(postId)
+        return newSelected
+      })
+
+      toast({
+        title: "Verwijderd!",
+        description: `"${postTitle}" is succesvol verwijderd.`,
+        variant: "default",
+      })
+    } catch (error) {
+      console.error('Error in handleDeletePost:', error)
+      toast({
+        title: "Fout bij verwijderen",
+        description: "Er is een onverwachte fout opgetreden.",
         variant: "destructive",
       })
     }
@@ -611,81 +690,72 @@ export default function TimelineAlchemyIdeas() {
                   </div>
                   
                   {/* Featured Image - Prominent position */}
-                  {post.image_url && (
-                    <div className="flex-shrink-0 relative">
-                      {/* Loading state */}
-                      {imageStates[post.id]?.loading !== false && (
-                        <div className="w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                        </div>
-                      )}
-                      
-                      {/* Image */}
-                      <img 
-                        src={post.image_url} 
-                        alt={post.title}
-                        className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
-                          imageStates[post.id]?.loading !== false ? 'hidden' : ''
-                        }`}
-                        onLoad={() => handleImageLoad(post.id)}
-                        onError={() => handleImageError(post.id)}
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevent event bubbling
-                          setSelectedImageUrl(post.image_url);
-                          setIsImageDialogOpen(true);
-                        }}
-                        title="Klik om afbeelding in volledige grootte te bekijken"
-                      />
-                      
-                      {/* Error state */}
-                      {imageStates[post.id]?.error && (
-                        <div className="absolute inset-0 w-32 h-32 bg-red-900 rounded-lg border border-red-600 shadow-sm flex items-center justify-center">
-                          <div className="text-red-400 text-xs text-center">
-                            <div className="w-8 h-8 mx-auto mb-1">❌</div>
-                            Afbeelding kon niet laden
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Image overlay with info */}
-                      {!imageStates[post.id]?.error && !imageStates[post.id]?.loading && (
-                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
-                          <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
-                            Bekijk afbeelding
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  
-                  {/* Fallback placeholder when no image */}
-                  {!post.image_url && (
-                    <div className="flex-shrink-0 w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
-                      <div className="text-gray-400 text-xs text-center">
-                        <div className="w-8 h-8 mx-auto mb-1">📄</div>
-                        Geen afbeelding
+                  <div className="flex-shrink-0 relative">
+                    {/* Loading state */}
+                    {imageStates[post.id]?.loading !== false && (
+                      <div className="w-32 h-32 bg-gray-700 rounded-lg border border-gray-600 shadow-sm flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                    
+                    {/* Main Image - Shows selected theme */}
+                    <img 
+                      src={getSelectedImageForPost(post.id)} 
+                      alt={post.title}
+                      className={`w-32 h-32 object-cover rounded-lg border border-gray-600 shadow-sm hover:scale-105 transition-transform duration-200 cursor-pointer ${
+                        imageStates[post.id]?.loading !== false ? 'hidden' : ''
+                      }`}
+                      onLoad={() => handleImageLoad(post.id)}
+                      onError={() => handleImageError(post.id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent event bubbling
+                        setSelectedImageUrl(getSelectedImageForPost(post.id));
+                        setIsImageDialogOpen(true);
+                      }}
+                      title="Klik om afbeelding in volledige grootte te bekijken"
+                    />
+                    
+                    {/* Error state */}
+                    {imageStates[post.id]?.error && (
+                      <div className="absolute inset-0 w-32 h-32 bg-red-900 rounded-lg border border-red-600 shadow-sm flex items-center justify-center">
+                        <div className="text-red-400 text-xs text-center">
+                          <div className="w-8 h-8 mx-auto mb-1">❌</div>
+                          Afbeelding kon niet laden
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Image overlay with info */}
+                    {!imageStates[post.id]?.error && !imageStates[post.id]?.loading && (
+                      <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
+                        <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
+                          Bekijk afbeelding
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
 
                   {/* Variation Images Section */}
                   <div className="flex-shrink-0">
                     <div className="text-xs text-gray-400 mb-2 font-medium">Variatie Afbeeldingen:</div>
                     <div className="grid grid-cols-2 gap-2">
                       {/* Cosmic Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).cosmic ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png"
+                          src={getBlogPostImages(post.id).cosmic}
                           alt="Cosmic Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cosmic.png");
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).cosmic);
+                            setSelectedImageUrl(getBlogPostImages(post.id).cosmic);
                             setIsImageDialogOpen(true);
                           }}
-                          title="Cosmic Theme - Klik om te bekijken"
+                          title="Cosmic Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Cosmic
                           </div>
@@ -693,19 +763,21 @@ export default function TimelineAlchemyIdeas() {
                       </div>
 
                       {/* Cyberpunk Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).cyberpunk ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png"
+                          src={getBlogPostImages(post.id).cyberpunk}
                           alt="Cyberpunk Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-cyberpunk.png");
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).cyberpunk);
+                            setSelectedImageUrl(getBlogPostImages(post.id).cyberpunk);
                             setIsImageDialogOpen(true);
                           }}
-                          title="Cyberpunk Theme - Klik om te bekijken"
+                          title="Cyberpunk Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Cyberpunk
                           </div>
@@ -713,19 +785,21 @@ export default function TimelineAlchemyIdeas() {
                       </div>
 
                       {/* Dystopia Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).dystopia ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png"
+                          src={getBlogPostImages(post.id).dystopia}
                           alt="Dystopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-dystopia.png");
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).dystopia);
+                            setSelectedImageUrl(getBlogPostImages(post.id).dystopia);
                             setIsImageDialogOpen(true);
                           }}
-                          title="Dystopia Theme - Klik om te bekijken"
+                          title="Dystopia Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Dystopia
                           </div>
@@ -733,19 +807,21 @@ export default function TimelineAlchemyIdeas() {
                       </div>
 
                       {/* Utopia Theme */}
-                      <div className="relative group">
+                      <div className={`relative group ${getSelectedImageForPost(post.id) === getBlogPostImages(post.id).main ? 'ring-2 ring-blue-400' : ''}`}>
                         <img
-                          src="https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png"
+                          src={getBlogPostImages(post.id).main}
                           alt="Utopia Theme"
                           className="w-16 h-16 object-cover rounded border border-gray-600 hover:scale-110 transition-transform duration-200 cursor-pointer"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
-                            setSelectedImageUrl("https://wdclgadjetxhcududipz.supabase.co/storage/v1/object/public/blog-images/0175ee3b-7623-42f0-8af6-3a23236c9fed/header-utopia.png");
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedImageForPost(post.id, getBlogPostImages(post.id).main);
+                            setSelectedImageUrl(getBlogPostImages(post.id).main);
                             setIsImageDialogOpen(true);
                           }}
-                          title="Utopia Theme - Klik om te bekijken"
+                          title="Utopia Theme - Klik om te selecteren en te bekijken"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded flex items-center justify-center pointer-events-none">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-xs font-medium">
                             Utopia
                           </div>
@@ -780,10 +856,6 @@ export default function TimelineAlchemyIdeas() {
                     <h3 className="font-semibold text-lg text-white mb-2">
                       {post.title}
                     </h3>
-                    
-                    <p className="text-gray-200 mb-3">
-                      {post.excerpt || (post.body || post.content ? (post.body || post.content).substring(0, 150) + '...' : 'Geen content')}
-                    </p>
                    
                    {/* Show full content if available */}
                    {(post.body || post.content) && (post.body || post.content).length > 150 && (
@@ -791,9 +863,12 @@ export default function TimelineAlchemyIdeas() {
                        <summary className="cursor-pointer text-blue-400 hover:text-blue-300 text-sm">
                          Toon volledige content
                        </summary>
-                       <div className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 whitespace-pre-wrap border border-gray-700">
-                         {post.body || post.content}
-                       </div>
+                       <div 
+                         className="mt-2 p-3 bg-gray-800 rounded text-sm text-gray-200 border border-gray-700 prose prose-invert prose-sm max-w-none"
+                         dangerouslySetInnerHTML={{ 
+                           __html: post.body || post.content || '' 
+                         }}
+                       />
                      </details>
                    )}
                    
@@ -814,90 +889,59 @@ export default function TimelineAlchemyIdeas() {
                      </div>
                    )}
                    
-                   {/* Social Media Links */}
-                   {(post.facebook || post.instagram || post.x || post.linkedin) && (
+                   {/* Social Media Content */}
+                   {(post.facebook || post.instagram || post.x || post.linkedin || post.tiktok) && (
                      <div className="mb-3">
-                                               <span className="text-sm text-gray-300 font-medium">Social Media Links:</span>
-                       <div className="flex flex-wrap gap-2 mt-1">
-                          {post.facebook && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.facebook}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                📘 Facebook
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.facebook!, 'Facebook')}
-                                className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer Facebook link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                          {post.instagram && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.instagram}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-pink-600 hover:bg-pink-700 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                📷 Instagram
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.instagram!, 'Instagram')}
-                                className="px-2 py-1 bg-pink-500 hover:bg-pink-600 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer Instagram link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                          {post.x && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.x}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-black hover:bg-gray-800 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                🐦 X (Twitter)
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.x!, 'X (Twitter)')}
-                                className="px-2 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer X link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                          {post.linkedin && (
-                            <div className="flex items-center gap-1">
-                              <a
-                                href={post.linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white text-xs rounded-full transition-colors duration-200 flex items-center gap-1"
-                              >
-                                💼 LinkedIn
-                              </a>
-                              <button
-                                onClick={() => copyToClipboard(post.linkedin!, 'LinkedIn')}
-                                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors duration-200"
-                                title="Kopieer LinkedIn link"
-                              >
-                                📋
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                       <span className="text-sm text-gray-300 font-medium">Social Media Content:</span>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                         {post.facebook && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <Facebook className="w-3 h-3 text-blue-400" />
+                               <span className="text-gray-300 font-medium text-sm">Facebook</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.facebook}</p>
+                           </div>
+                         )}
+                         {post.instagram && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <Instagram className="w-3 h-3 text-pink-400" />
+                               <span className="text-gray-300 font-medium text-sm">Instagram</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.instagram}</p>
+                           </div>
+                         )}
+                         {post.x && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <X className="w-3 h-3 text-blue-300" />
+                               <span className="text-gray-300 font-medium text-sm">X</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.x}</p>
+                           </div>
+                         )}
+                         {post.linkedin && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <Linkedin className="w-3 h-3 text-blue-500" />
+                               <span className="text-gray-300 font-medium text-sm">LinkedIn</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.linkedin}</p>
+                           </div>
+                         )}
+                         {post.tiktok && (
+                           <div className="bg-gray-600 rounded p-2">
+                             <div className="flex items-center gap-1 mb-1">
+                               <Video className="w-3 h-3 text-white" />
+                               <span className="text-gray-300 font-medium text-sm">TikTok</span>
+                             </div>
+                             <p className="text-gray-200 text-sm line-clamp-2">{post.tiktok}</p>
+                           </div>
+                         )}
+                       </div>
+                     </div>
+                   )}
                  </div>
                   
                   <div className="flex flex-col gap-2 ml-4">
@@ -967,7 +1011,12 @@ export default function TimelineAlchemyIdeas() {
                        📷 Upload Image
                      </Button>
                      
-                     <Button variant="outline" size="sm" className="flex items-center gap-2 bg-red-900 border-red-700 text-red-200 hover:bg-red-800">
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="flex items-center gap-2 bg-red-900 border-red-700 text-red-200 hover:bg-red-800"
+                       onClick={() => handleDeletePost(post.id, post.title)}
+                     >
                        <Trash2 className="w-4 h-4" />
                        Delete
                      </Button>

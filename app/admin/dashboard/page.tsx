@@ -52,16 +52,16 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading dashboard...</div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="text-lg text-white">Loading dashboard...</div>
       </div>
     )
   }
 
   if (!stats) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center text-red-600">
+      <div className="container mx-auto p-6 bg-gray-900 min-h-screen">
+        <div className="text-center text-red-400">
           Failed to load dashboard data
         </div>
       </div>
@@ -131,13 +131,13 @@ export default function Dashboard() {
   ]
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-gray-600">Overview of Timeline Alchemy system</p>
+          <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+          <p className="text-gray-300">Overview of Timeline Alchemy system</p>
         </div>
-        <Button onClick={refreshStats} variant="outline">
+        <Button onClick={refreshStats} variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
           Refresh
         </Button>
       </div>
@@ -145,9 +145,9 @@ export default function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {statCards.map((stat, index) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow">
+          <Card key={index} className="hover:shadow-lg transition-shadow bg-gray-800 border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
+              <CardTitle className="text-sm font-medium text-gray-300">
                 {stat.title}
               </CardTitle>
               <div className={`p-2 rounded-full ${stat.color}`}>
@@ -155,8 +155,8 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-gray-500 mt-1">
+              <div className="text-2xl font-bold text-white">{stat.value}</div>
+              <p className="text-xs text-gray-400 mt-1">
                 {stat.description}
               </p>
             </CardContent>
@@ -165,9 +165,9 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle className="text-white">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -190,38 +190,38 @@ export default function Dashboard() {
 
       {/* System Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
-            <CardTitle>System Status</CardTitle>
+            <CardTitle className="text-white">System Status</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm">Cron Jobs</span>
-              <Badge variant="success" className="bg-green-100 text-green-800">
+              <span className="text-sm text-gray-300">Cron Jobs</span>
+              <Badge variant="success" className="bg-green-400 text-green-900">
                 Active
               </Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm">Database</span>
-              <Badge variant="success" className="bg-green-100 text-green-800">
+              <span className="text-sm text-gray-300">Database</span>
+              <Badge variant="success" className="bg-green-400 text-green-900">
                 Connected
               </Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm">RLS Policies</span>
-              <Badge variant="success" className="bg-green-100 text-green-800">
+              <span className="text-sm text-gray-300">RLS Policies</span>
+              <Badge variant="success" className="bg-green-400 text-green-900">
                 Enforced
               </Badge>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle className="text-white">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-sm text-gray-600 space-y-2">
+            <div className="text-sm text-gray-300 space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span>Dashboard loaded successfully</span>

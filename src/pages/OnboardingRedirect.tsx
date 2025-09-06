@@ -71,45 +71,152 @@ const OnboardingRedirect: React.FC = () => {
           return;
         }
 
-          // Check if user is part of this organization
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('org_id')
-            .eq('user_id', user.id)
-            .single();
-
-          if (profile?.org_id !== orgId) {
-            // Update user's profile to link them to this organization
-            const { error: updateError } = await supabase
-              .from('profiles')
-              .update({ org_id: orgId })
-              .eq('user_id', user.id);
-
-            if (updateError) {
-              console.error('Error updating user profile:', updateError);
-            }
-          }
-
-          // Mark organization as needing onboarding
-          const { error: onboardingError } = await supabase
+        // Check if this is a TLA client organization
+        if (!org.tla_client) {
+          console.log('Not a TLA client organization, updating to TLA client...');
+          
+          // Update organization to be a TLA client
+          const { error: updateTlaError } = await supabase
             .from('orgs')
             .update({ 
+              tla_client: true,
               needs_onboarding: true,
               onboarding_completed: false,
               updated_at: new Date().toISOString()
             })
             .eq('id', orgId);
 
-          if (onboardingError) {
-            console.error('Error updating onboarding status:', onboardingError);
+          if (updateTlaError) {
+            console.error('Error updating organization to TLA client:', updateTlaError);
+            toast({
+              title: "Organisatie update mislukt",
+              description: "Er is een probleem opgetreden. Probeer het opnieuw.",
+              variant: "destructive",
+            });
+            navigate('/timeline-alchemy');
+            return;
           }
+          
+          console.log('✅ Organization updated to TLA client');
+        }
+
+        // Check if onboarding is already completed
+        if (org.onboarding_completed) {
+          console.log('Onboarding already completed, redirecting to dashboard');
+          toast({
+            title: "Welkom terug! 🎉",
+            description: "Je onboarding is al voltooid. Je wordt doorgestuurd naar je dashboard.",
+            duration: 3000,
+          });
+          navigate('/timeline-alchemy/client/my-previews');
+          return;
+        }
+
+        // Add user to the working account structure (like existing accounts)
+        console.log('Setting up user with working account structure...');
+        
+        // 1. Add to org_members table (like existing accounts)
+        const { error: orgMembersError } = await supabase
+          .from('org_members')
+          .insert({
+            org_id: 'timeline-alchemy', // Use the main TLA org
+            user_id: user.id,
+            role: 'member' // New users get member role
+          });
+
+        if (orgMembersError) {
+          console.error('Error adding to org_members:', orgMembersError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to org_members');
+        }
+
+        // 2. Add to has_tla_access table
+        const { error: tlaAccessError } = await supabase
+          .from('has_tla_access')
+          .insert({
+            user_id: user.id
+          });
+
+        if (tlaAccessError) {
+          console.error('Error adding to has_tla_access:', tlaAccessError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to has_tla_access');
+        }
+
+        // 3. Add to tla_org_access table
+        const { error: tlaOrgAccessError } = await supabase
+          .from('tla_org_access')
+          .insert({
+            user_id: user.id,
+            org_id: 'b02de5d1-382c-4c8a-b1c4-0c9abdd1b6f8' // The main TLA org ID
+          });
+
+        if (tlaOrgAccessError) {
+          console.error('Error adding to tla_org_access:', tlaOrgAccessError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to tla_org_access');
+        }
+
+        // 4. Add to client_users table (crucial for dashboard access)
+        const { error: clientUsersError } = await supabase
+          .from('client_users')
+          .insert({
+            client_id: '1c75c839-87a9-46ad-8fe7-5c4cfb68a1db', // The main client ID
+            user_id: user.id
+          });
+
+        if (clientUsersError) {
+          console.error('Error adding to client_users:', clientUsersError);
+          // Don't fail if user already exists
+        } else {
+          console.log('✅ User added to client_users');
+        }
+
+        // 5. Update user profile with client_id (crucial for preview access)
+        const { error: profileUpdateError } = await supabase
+          .from('profiles')
+          .update({ 
+            client_id: '1c75c839-87a9-46ad-8fe7-5c4cfb68a1db' // The main client ID
+          })
+          .eq('user_id', user.id);
+
+        if (profileUpdateError) {
+          console.error('Error updating profile with client_id:', profileUpdateError);
+          // Don't fail if update fails
+        } else {
+          console.log('✅ Profile updated with client_id');
+        }
+
+        // Mark organization as needing onboarding
+        const { error: onboardingError } = await supabase
+          .from('orgs')
+          .update({ 
+            needs_onboarding: true,
+            onboarding_completed: false,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', orgId);
+
+        if (onboardingError) {
+          console.error('Error updating onboarding status:', onboardingError);
+        } else {
+          console.log('✅ Organization marked as needing onboarding');
+        }
 
           setIsValidRedirect(true);
           toast({
             title: "Welkom bij Timeline Alchemy! 🎉",
-            description: "Laten we je profiel instellen om te beginnen.",
-            duration: 5000,
+            description: "Je wordt doorgestuurd naar de onboarding wizard.",
+            duration: 3000,
           });
+          
+          // Redirect to onboarding wizard after a short delay
+          setTimeout(() => {
+            navigate('/timeline-alchemy?onboarding=true');
+          }, 2000);
         } else {
           // Not a valid redirect, go back to Timeline Alchemy
           navigate('/timeline-alchemy');

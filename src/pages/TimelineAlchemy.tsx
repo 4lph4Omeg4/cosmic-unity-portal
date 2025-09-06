@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -24,43 +25,41 @@ import { fetchTlaPosts } from "@/services/tlaData";
 import { TlaSubscribeButton } from "@/components/TlaSubscribeButton";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import SupabaseDebug from "@/components/SupabaseDebug";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const TimelineAlchemy: React.FC = () => {
   // ========= Config =========
   const PRICE_ID = "price_1S1VMWFlYXjX03EzHKNwtkWW"; // <-- jouw Stripe Price ID
   const TLA_ORG_ID = "timeline-alchemy"; // <-- hoofdorganisatie voor admin functies
 
-  // ========= Stijlkeuze + toasts =========
+  // ========= Language & Stijlkeuze + toasts =========
+  const { t, language } = useLanguage();
   const [selectedStyle, setSelectedStyle] = useState<"krachtig" | "mystiek" | "creator">("krachtig");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showSupabaseDebug, setShowSupabaseDebug] = useState(false);
   const { toast } = useToast();
 
-  const styles = {
-    krachtig: {
-      title: "Timeline Alchemy",
-      subtitle:
-        "Transformeer wekelijkse trends naar ziel-resonante content. Blog + cross-platform posts. Volledig gepland. Jij blijft creëren—wij verspreiden.",
-      bullets: ["Wekelijkse blogpost", "Platform-specifieke posts", "Planning & publicatie", "Tone of voice on-brand"],
-      cta: "Activeer Timeline Alchemy",
-    },
-    mystiek: {
-      title: "Spread the One Message. Add Your Own Essence.",
-      subtitle:
-        "Jij zet de intentie neer. Wij weven jouw boodschap door de tijdlijnen—helder, ritmisch, onmisbaar.",
-      bullets: ["Alchemie van trends → inzicht", "Ziel-afgestemde blog", "Signaalversterkers voor socials", "Ritmische distributie"],
-      cta: "Start je Alchemie",
-    },
-    creator: {
-      title: "Creëer vrij. Wij doen de rest.",
-      subtitle:
-        "Wekelijks: 1 diepe blog + korte social-varianten + automatische planning. Consistent zichtbaar zonder content-stress.",
-      bullets: ["Research uit jouw domein", "Jouw tone of voice", "Publicatiekalender", "Rapportage/links"],
-      cta: "Aan de slag",
-    },
-  } as const;
+  // Update HTML lang attribute based on selected language
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
-  const currentStyle = styles[selectedStyle];
+  const getCurrentStyle = () => {
+    const styleKey = `timelineAlchemy.styles.${selectedStyle}`;
+    return {
+      title: t(`${styleKey}.title`),
+      subtitle: t(`${styleKey}.subtitle`),
+      bullets: [
+        t(`${styleKey}.bullets.0`),
+        t(`${styleKey}.bullets.1`),
+        t(`${styleKey}.bullets.2`),
+        t(`${styleKey}.bullets.3`)
+      ].filter(Boolean),
+      cta: t(`${styleKey}.cta`),
+    };
+  };
+
+  const currentStyle = getCurrentStyle();
 
   // ========= Queryparams + data-fetch =========
   const [searchParams] = useSearchParams();
@@ -83,15 +82,16 @@ const TimelineAlchemy: React.FC = () => {
     })();
   }, []);
 
-  // Stripe redirect feedback (?session=success | ?session=cancel)
+  // Stripe redirect feedback (?session=success | ?session=cancel) and onboarding trigger
   useEffect(() => {
     const session = searchParams.get("session");
     const orgId = searchParams.get("org_id");
-    console.log('TimelineAlchemy - URL params:', { session, orgId });
+    const onboarding = searchParams.get("onboarding");
+    console.log('TimelineAlchemy - URL params:', { session, orgId, onboarding });
     console.log('TimelineAlchemy - Current showOnboarding state:', showOnboarding);
     
-    if (session === "success") {
-      console.log('TimelineAlchemy - Success detected, showing onboarding...');
+    if (session === "success" || onboarding === "true") {
+      console.log('TimelineAlchemy - Success or onboarding detected, showing onboarding...');
       toast({ 
         title: "Welkom in de stroom ⚡", 
         description: "Je abonnement is actief. Laten we je profiel instellen!",
@@ -163,14 +163,17 @@ const TimelineAlchemy: React.FC = () => {
     <div className="space-y-12">
       {/* Debug Header - Always show for now */}
       <div className="fixed top-4 right-4 z-50 space-y-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => window.location.href = "/"}
-          className="bg-red-500/20 border-red-500/50 text-red-400 hover:bg-red-500/30"
-        >
-          🏠 Terug naar Home
-        </Button>
+        <div className="flex gap-2">
+          <LanguageSelector />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.location.href = "/"}
+            className="bg-red-500/20 border-red-500/50 text-red-400 hover:bg-red-500/30"
+          >
+            🏠 {t('common.back')} naar Home
+          </Button>
+        </div>
         <div className="bg-black/80 p-2 rounded text-xs text-white max-w-xs">
           <div>URL: {window.location.href}</div>
           <div>Session: {searchParams.get("session")}</div>
@@ -183,7 +186,7 @@ const TimelineAlchemy: React.FC = () => {
           onClick={() => setShowOnboarding(true)}
           className="bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30"
         >
-          🎯 Start Onboarding
+          🎯 {t('common.start')} Onboarding
         </Button>
         <Button
           variant="outline"
@@ -213,7 +216,7 @@ const TimelineAlchemy: React.FC = () => {
               <h3 className="text-xl font-serif font-bold text-amber-400 tracking-wider">ALCHEMY</h3>
             </div>
             <p className="text-amber-400 text-sm font-medium text-center">
-              Van intentie naar impact, in ritme met jouw tijdlijn
+              {t('timelineAlchemy.subtitle')}
             </p>
           </div>
 
@@ -230,9 +233,9 @@ const TimelineAlchemy: React.FC = () => {
                       : "text-slate-300 hover:text-white hover:bg-slate-700/50"
                   }`}
                 >
-                  {style === "krachtig" && "⚡ Krachtig"}
-                  {style === "mystiek" && "✨ Mystiek"}
-                  {style === "creator" && "🎨 Creator"}
+                  {style === "krachtig" && `⚡ ${t('timelineAlchemy.styles.krachtig.title')}`}
+                  {style === "mystiek" && `✨ ${t('timelineAlchemy.styles.mystiek.title')}`}
+                  {style === "creator" && `🎨 ${t('timelineAlchemy.styles.creator.title')}`}
                 </button>
               ))}
             </div>
@@ -261,7 +264,7 @@ const TimelineAlchemy: React.FC = () => {
           </div>
 
           {/* CTA knop */}
-          <TlaSubscribeButton orgId={ORG_ID} priceId={PRICE_ID} variant="hero" className="w-full sm:w-auto">
+          <TlaSubscribeButton priceId={PRICE_ID} variant="hero" className="w-full sm:w-auto">
             <span className="flex items-center justify-center">
               {currentStyle.cta}
               <ArrowRight className="w-5 h-5 ml-2" />
@@ -269,7 +272,7 @@ const TimelineAlchemy: React.FC = () => {
           </TlaSubscribeButton>
 
           <p className="text-slate-400 text-sm mt-4 max-w-md mx-auto">
-            Direct via Stripe. Je kunt later altijd upgraden of pauzeren.
+            {t('timelineAlchemy.sections.cta.stripeNote')}
           </p>
         </div>
       </section>
@@ -278,20 +281,20 @@ const TimelineAlchemy: React.FC = () => {
       <section className="relative z-10 py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Wat je krijgt</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">{t('timelineAlchemy.sections.whatYouGet.title')}</h2>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Een complete content machine die jouw visie verspreidt zonder dat jij er energie aan verliest
+              {t('timelineAlchemy.sections.whatYouGet.subtitle')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: <MessageSquare className="w-8 h-8" />, title: "Wekelijkse Blogpost", description: "Diep, helder, on-brand content dat jouw expertise toont" },
-              { icon: <Share2 className="w-8 h-8" />, title: "Cross-Platform Posts", description: "Per kanaal geoptimaliseerd voor maximale impact" },
-              { icon: <Clock className="w-8 h-8" />, title: "Planning & Publicatie", description: "Ritme = bereik. Wij zorgen voor consistentie" },
-              { icon: <Shield className="w-8 h-8" />, title: "Tone-of-Voice Guardrails", description: "Jouw signatuur, consistent door alle content" },
-              { icon: <Zap className="w-8 h-8" />, title: "Linkarchitectuur", description: "Alles verwijst terug naar jouw kern" },
-              { icon: <Sparkles className="w-8 h-8" />, title: "Automatische Distributie", description: "Set it and forget it — wij doen de rest" },
+              { icon: <MessageSquare className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.weeklyBlog.title'), description: t('timelineAlchemy.sections.whatYouGet.features.weeklyBlog.description') },
+              { icon: <Share2 className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.crossPlatform.title'), description: t('timelineAlchemy.sections.whatYouGet.features.crossPlatform.description') },
+              { icon: <Clock className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.planning.title'), description: t('timelineAlchemy.sections.whatYouGet.features.planning.description') },
+              { icon: <Shield className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.toneOfVoice.title'), description: t('timelineAlchemy.sections.whatYouGet.features.toneOfVoice.description') },
+              { icon: <Zap className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.linkArchitecture.title'), description: t('timelineAlchemy.sections.whatYouGet.features.linkArchitecture.description') },
+              { icon: <Sparkles className="w-8 h-8" />, title: t('timelineAlchemy.sections.whatYouGet.features.autoDistribution.title'), description: t('timelineAlchemy.sections.whatYouGet.features.autoDistribution.description') },
             ].map((item, idx) => (
               <Card
                 key={idx}
@@ -317,34 +320,34 @@ const TimelineAlchemy: React.FC = () => {
   <div className="max-w-4xl mx-auto">
     <div className="text-center mb-16">
       <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-        Veelgestelde vragen
+        {t('timelineAlchemy.sections.faq.title')}
       </h2>
       <p className="text-xl text-slate-300">
-        Alles wat je moet weten over Timeline Alchemy
+        {t('timelineAlchemy.sections.faq.subtitle')}
       </p>
     </div>
 
     <div className="space-y-6">
       {[
         {
-          question: "Kan ik feedback geven op de blog?",
-          answer: "Ja. Je krijgt een concept; wij verwerken je feedback en publiceren gepland.",
+          question: t('timelineAlchemy.sections.faq.questions.feedback.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.feedback.answer'),
         },
         {
-          question: "Welke platforms dekken jullie?",
-          answer: "Minimaal: Instagram, Facebook, X, LinkedIn. Uitbreiden kan.",
+          question: t('timelineAlchemy.sections.faq.questions.platforms.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.platforms.answer'),
         },
         {
-          question: "Moet ik zelf nog posten?",
-          answer: "Hoeft niet. Wij plannen en publiceren (met jouw toestemming/verbindingen).",
+          question: t('timelineAlchemy.sections.faq.questions.posting.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.posting.answer'),
         },
         {
-          question: "Wat als mijn niche 'anders' is?",
-          answer: "Perfect. We trainen op jouw bronnen, glossarium en voorbeelden.",
+          question: t('timelineAlchemy.sections.faq.questions.niche.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.niche.answer'),
         },
         {
-          question: "Kan ik pauzeren of upgraden?",
-          answer: "Ja. Via Stripe kun je pauzeren, wijzigen of annuleren.",
+          question: t('timelineAlchemy.sections.faq.questions.pause.question'),
+          answer: t('timelineAlchemy.sections.faq.questions.pause.answer'),
         },
       ].map((faq, index) => (
         <Card key={index} className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/30">
@@ -365,10 +368,10 @@ const TimelineAlchemy: React.FC = () => {
   <div className="max-w-4xl mx-auto text-center">
     <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-600/30 rounded-2xl p-8 md:p-12">
       <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
-        Klaar om te starten?
+        {t('timelineAlchemy.sections.readyToStart.title')}
       </h3>
       <p className="text-slate-300 mb-8 text-lg">
-        Join de creators die al hun content stress hebben vervangen door Timeline Alchemy
+        {t('timelineAlchemy.sections.readyToStart.subtitle')}
       </p>
 
       <TlaSubscribeButton
@@ -376,7 +379,7 @@ const TimelineAlchemy: React.FC = () => {
         variant="trust"
       >
         <span className="flex items-center justify-center">
-          {(currentStyle?.cta ?? "Start je maandelijkse transformatie")}
+          {(currentStyle?.cta ?? t('timelineAlchemy.sections.readyToStart.buttonText'))}
           <ArrowRight className="w-5 h-5 ml-2" />
         </span>
       </TlaSubscribeButton>

@@ -137,12 +137,26 @@ const Auth = () => {
       });
     } else {
       console.log('Signup successful!');
+      
+      // Show email verification message
       toast({
-        title: isOnboarding ? "Welkom bij Timeline Alchemy!" : "Welkom bij The Chosen Ones!",
-        description: isOnboarding 
-          ? "Je account is aangemaakt. Je wordt doorgestuurd naar de onboarding..."
-          : "Controleer je email voor verificatie.",
+        title: "Account succesvol aangemaakt! 🎉",
+        description: "Bevestig je aanmelding in je email. Vervolgens kun je inloggen in deze interface.",
+        duration: 8000, // Show for 8 seconds
       });
+      
+      // Clear the form
+      setSignUpData({
+        email: '',
+        password: '',
+        displayName: ''
+      });
+      
+      // Switch to signin tab
+      const signinTab = document.querySelector('[data-value="signin"]') as HTMLElement;
+      if (signinTab) {
+        signinTab.click();
+      }
     }
 
     setLoading(false);
@@ -253,6 +267,21 @@ const Auth = () => {
               </TabsContent>
               
               <TabsContent value="signup">
+                {/* Email verification info banner */}
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 text-sm">
+                  <div className="flex items-start space-x-2">
+                    <div className="flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium">Email verificatie vereist</p>
+                      <p className="text-blue-700">Na registratie ontvang je een bevestigingsemail. Klik op de link in de email om je account te activeren.</p>
+                    </div>
+                  </div>
+                </div>
+                
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Naam</Label>

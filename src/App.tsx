@@ -46,10 +46,19 @@ import NotFound from "./pages/NotFound";
 // Timeline Alchemy
 import TimelineAlchemy from "./pages/TimelineAlchemy";
 import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
+import DashboardNew from "./pages/timeline-alchemy/admin/DashboardNew";
 import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
 import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
+import PreviewWizardNew from "./pages/timeline-alchemy/admin/PreviewWizardNew";
+import MakeMeAdmin from "./pages/timeline-alchemy/admin/MakeMeAdmin";
+import CreateTestPreview from "./pages/timeline-alchemy/admin/CreateTestPreview";
 import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
+import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
 import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
+import AdminSocialConnections from "./pages/timeline-alchemy/admin/SocialConnections";
+import FacebookDebug from "./pages/timeline-alchemy/admin/FacebookDebug";
+import AuthCallback from "./pages/AuthCallback";
+import TestCallback from "./pages/TestCallback";
 
 // Analytics
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -111,6 +120,11 @@ const App: React.FC = () => {
                   <Route path="/cart" element={<CartPage />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/test-callback" element={<TestCallback />} />
+                  <Route path="/auth/callback/facebook" element={<AuthCallback />} />
+                  <Route path="/auth/callback/instagram" element={<AuthCallback />} />
+                  <Route path="/auth/callback/twitter" element={<AuthCallback />} />
+                  <Route path="/auth/callback/linkedin" element={<AuthCallback />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/user/:userId" element={<UserProfile />} />
                   <Route path="/friends" element={<Friends />} />
@@ -147,15 +161,23 @@ const App: React.FC = () => {
 
                   {/* Timeline Alchemy Admin */}
                   <Route path="/timeline-alchemy/admin/dashboard" element={<TimelineAlchemyDashboard />} />
+                  <Route path="/timeline-alchemy/admin/dashboard-new" element={<DashboardNew />} />
                   <Route path="/timeline-alchemy/admin/ideas" element={<TimelineAlchemyIdeas />} />
                   <Route path="/timeline-alchemy/admin/preview-wizard" element={<TimelineAlchemyPreviewWizard />} />
+                  <Route path="/timeline-alchemy/admin/preview-wizard-new" element={<PreviewWizardNew />} />
+                  <Route path="/timeline-alchemy/admin/social-connections" element={<AdminSocialConnections />} />
+                  <Route path="/timeline-alchemy/admin/facebook-debug" element={<FacebookDebug />} />
+                  <Route path="/timeline-alchemy/admin/make-me-admin" element={<MakeMeAdmin />} />
+                  <Route path="/timeline-alchemy/admin/create-test-preview" element={<CreateTestPreview />} />
 
                   {/* Timeline Alchemy Client */}
-                  <Route path="/timeline-alchemy/client/my-previews" element={<TimelineAlchemyMyPreviews />} />
+                  <Route path="/timeline-alchemy/client/my-previews" element={<MyPreviewsNew />} />
+                  <Route path="/timeline-alchemy/client/my-previews-old" element={<TimelineAlchemyMyPreviews />} />
                   <Route path="/timeline-alchemy/client/social-connections" element={<TimelineAlchemySocialConnections />} />
 
                   {/* Onboarding */}
                   <Route path="/onboarding" element={<OnboardingRedirect />} />
+                  <Route path="/onboarding-redirect" element={<OnboardingRedirect />} />
                   <Route path="/onboarding/demo" element={<OnboardingDemo />} />
                   <Route path="/onboarding/test" element={<OnboardingTest />} />
                   <Route path="/test" element={<TestPage />} />

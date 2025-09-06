@@ -67,6 +67,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       });
 
+      // Check if email confirmation is required
+      if (data?.user && !data.user.email_confirmed_at) {
+        console.log('Email confirmation required. User needs to verify email.');
+        console.log('User email confirmed at:', data.user.email_confirmed_at);
+        console.log('User confirmed at:', data.user.confirmed_at);
+      }
+
       console.log('=== SUPABASE SIGNUP RESPONSE ===');
       console.log('Data:', data);
       console.log('Error:', error);
@@ -105,6 +112,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             if (profileCreateError) {
               console.error('Manual profile creation failed:', profileCreateError);
+              
+              // If RLS is blocking, try alternative approach
+              if (profileCreateError.code === '42501') {
+                console.log('RLS blocking profile creation, trying upsert method...');
+                
+                const { error: upsertError } = await supabase
+                  .from('profiles')
+                  .upsert({
+                    user_id: data.user.id,
+                    display_name: displayName || data.user.email?.split('@')[0] || 'User',
+                    updated_at: new Date().toISOString()
+                  }, {
+                    onConflict: 'user_id'
+                  });
+                
+                if (upsertError) {
+                  console.error('Upsert profile creation also failed:', upsertError);
+                } else {
+                  console.log('✅ Profile created via upsert method');
+                }
+              }
             } else {
               console.log('✅ Profile created manually');
             }

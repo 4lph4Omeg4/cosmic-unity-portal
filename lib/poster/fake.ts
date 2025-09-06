@@ -1,4 +1,4 @@
-import { Database } from '@/lib/supabase/types'
+import { Database } from '@/integrations/supabase/types'
 
 type Preview = Database['public']['Tables']['previews']['Row']
 

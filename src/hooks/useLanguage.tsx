@@ -30,6 +30,7 @@ const translations = {
       previous: 'Vorige',
       close: 'Sluiten',
       open: 'Openen',
+      start: 'Start',
       yes: 'Ja',
       no: 'Nee',
       search: 'Zoeken',
@@ -221,6 +222,7 @@ const translations = {
       password: {
         label: 'Wachtwoord',
         hint: 'Minimaal 8 tekens',
+        placeholder: 'Jouw wachtwoord',
       },
       consent: 'Ik ga akkoord met het ontvangen van cosmische updates en marketingmails',
       error: {
@@ -421,6 +423,21 @@ const translations = {
       redirecting: 'Je wordt doorverwezen naar de checkout...',
       errorMessage: 'Er ging iets mis. Probeer het opnieuw.',
     },
+    collection: {
+      view: 'Bekijk Product',
+      backToShop: 'Terug naar Shop',
+      viewOtherCollections: 'Bekijk Andere Collecties',
+      notFoundTitle: 'Collectie Niet Gevonden',
+      notFoundDescription: 'De gevraagde collectie kon niet worden gevonden.',
+      loadErrorTitle: 'Fout bij Laden',
+      loadErrorDescription: 'Er is een fout opgetreden bij het laden van de collectie.',
+      loading: 'Collectie laden...',
+      addedToCart: 'Toegevoegd aan winkelwagen',
+      addErrorTitle: 'Fout bij toevoegen',
+      addErrorDescription: 'Er is een fout opgetreden bij het toevoegen aan de winkelwagen.',
+      noProductsTitle: 'Geen Producten',
+      noProductsDescription: 'Er zijn momenteel geen producten beschikbaar in deze collectie.',
+    },
     friends: {
       title: 'Vrienden',
       subtitle: 'Verbind met andere leden van de community',
@@ -575,6 +592,136 @@ const translations = {
       errorLoading: 'Fout bij laden',
       errorLoadingMessage: 'Er ging iets mis bij het laden van de berichten',
     },
+    timelineAlchemy: {
+      title: 'Timeline Alchemy',
+      subtitle: 'Transformeer wekelijkse trends naar ziel-resonante content. Blog + cross-platform posts. Volledig gepland. Jij blijft creëren—wij verspreiden.',
+      styles: {
+        krachtig: {
+          title: 'Timeline Alchemy',
+          subtitle: 'Transformeer wekelijkse trends naar ziel-resonante content. Blog + cross-platform posts. Volledig gepland. Jij blijft creëren—wij verspreiden.',
+          bullets: {
+            0: 'Wekelijkse blogpost',
+            1: 'Platform-specifieke posts', 
+            2: 'Planning & publicatie',
+            3: 'Tone of voice on-brand'
+          },
+          cta: 'Activeer Timeline Alchemy',
+        },
+        mystiek: {
+          title: 'Spread the One Message. Add Your Own Essence.',
+          subtitle: 'Jij zet de intentie neer. Wij weven jouw boodschap door de tijdlijnen—helder, ritmisch, onmisbaar.',
+          bullets: {
+            0: 'Alchemie van trends → inzicht',
+            1: 'Ziel-afgestemde blog',
+            2: 'Signaalversterkers voor socials',
+            3: 'Ritmische distributie'
+          },
+          cta: 'Start je Alchemie',
+        },
+        creator: {
+          title: 'Creëer vrij. Wij doen de rest.',
+          subtitle: 'Wekelijks: 1 diepe blog + korte social-varianten + automatische planning. Consistent zichtbaar zonder content-stress.',
+          bullets: {
+            0: 'Research uit jouw domein',
+            1: 'Jouw tone of voice',
+            2: 'Publicatiekalender',
+            3: 'Rapportage/links'
+          },
+          cta: 'Aan de slag',
+        },
+      },
+      features: {
+        weeklyBlog: 'Wekelijkse Blog',
+        platformPosts: 'Platform-specifieke Posts',
+        planning: 'Planning & Publicatie',
+        toneOfVoice: 'Tone of Voice on-brand',
+        research: 'Research uit jouw domein',
+        calendar: 'Publicatiekalender',
+        reporting: 'Rapportage/links',
+        alchemy: 'Alchemie van trends → inzicht',
+        soulBlog: 'Ziel-afgestemde blog',
+        signalBoosters: 'Signaalversterkers voor socials',
+        rhythmicDistribution: 'Ritmische distributie',
+      },
+      cta: {
+        activate: 'Activeer Timeline Alchemy',
+        startAlchemy: 'Start je Alchemie',
+        getStarted: 'Aan de slag',
+      },
+      pricing: {
+        title: 'Prijzen',
+        monthly: 'per maand',
+        yearly: 'per jaar',
+        features: 'Inclusief alle features',
+        cancelAnytime: 'Opzeggen wanneer je wilt',
+      },
+      sections: {
+        whatYouGet: {
+          title: 'Wat je krijgt',
+          subtitle: 'Een complete content machine die jouw visie verspreidt zonder dat jij er energie aan verliest',
+          features: {
+            weeklyBlog: {
+              title: 'Wekelijkse Blogpost',
+              description: 'Diep, helder, on-brand content dat jouw expertise toont'
+            },
+            crossPlatform: {
+              title: 'Cross-Platform Posts',
+              description: 'Per kanaal geoptimaliseerd voor maximale impact'
+            },
+            planning: {
+              title: 'Planning & Publicatie',
+              description: 'Ritme = bereik. Wij zorgen voor consistentie'
+            },
+            toneOfVoice: {
+              title: 'Tone-of-Voice Guardrails',
+              description: 'Jouw signatuur, consistent door alle content'
+            },
+            linkArchitecture: {
+              title: 'Linkarchitectuur',
+              description: 'Alles verwijst terug naar jouw kern'
+            },
+            autoDistribution: {
+              title: 'Automatische Distributie',
+              description: 'Set it and forget it — wij doen de rest'
+            }
+          }
+        },
+        faq: {
+          title: 'Veelgestelde vragen',
+          subtitle: 'Alles wat je moet weten over Timeline Alchemy',
+          questions: {
+            feedback: {
+              question: 'Kan ik feedback geven op de blog?',
+              answer: 'Ja. Je krijgt een concept; wij verwerken je feedback en publiceren gepland.'
+            },
+            platforms: {
+              question: 'Welke platforms dekken jullie?',
+              answer: 'Minimaal: Instagram, Facebook, X, LinkedIn. Uitbreiden kan.'
+            },
+            posting: {
+              question: 'Moet ik zelf nog posten?',
+              answer: 'Hoeft niet. Wij plannen en publiceren (met jouw toestemming/verbindingen).'
+            },
+            niche: {
+              question: 'Wat als mijn niche \'anders\' is?',
+              answer: 'Perfect. We trainen op jouw bronnen, glossarium en voorbeelden.'
+            },
+            pause: {
+              question: 'Kan ik pauzeren of upgraden?',
+              answer: 'Ja. Via je Stripe dashboard, direct en flexibel.'
+            }
+          }
+        },
+        cta: {
+          stripeNote: 'Direct via Stripe. Je kunt later altijd upgraden of pauzeren.'
+        },
+        readyToStart: {
+          title: 'Klaar om te starten?',
+          subtitle: 'Join de creators die al hun content stress hebben vervangen door Timeline Alchemy',
+          buttonText: 'Start je maandelijkse transformatie'
+        }
+      },
+    },
   },
 
   en: {
@@ -596,6 +743,7 @@ const translations = {
       previous: 'Previous',
       close: 'Close',
       open: 'Open',
+      start: 'Start',
       yes: 'Yes',
       no: 'No',
       search: 'Search',
@@ -663,6 +811,7 @@ const translations = {
       password: {
         label: 'Password',
         hint: 'Minimum 8 characters',
+        placeholder: 'Your password',
       },
       consent: 'I agree to receive cosmic updates and marketing emails',
       error: {
@@ -913,6 +1062,21 @@ const translations = {
       redirecting: 'Redirecting you to checkout...',
       errorMessage: 'Something went wrong. Please try again.',
     },
+    collection: {
+      view: 'View Product',
+      backToShop: 'Back to Shop',
+      viewOtherCollections: 'View Other Collections',
+      notFoundTitle: 'Collection Not Found',
+      notFoundDescription: 'The requested collection could not be found.',
+      loadErrorTitle: 'Loading Error',
+      loadErrorDescription: 'An error occurred while loading the collection.',
+      loading: 'Loading collection...',
+      addedToCart: 'Added to cart',
+      addErrorTitle: 'Add Error',
+      addErrorDescription: 'An error occurred while adding to cart.',
+      noProductsTitle: 'No Products',
+      noProductsDescription: 'There are currently no products available in this collection.',
+    },
     profile: {
       title: 'Cosmic Profile',
       subtitle: 'Personalize your spiritual identity in our community',
@@ -1017,6 +1181,136 @@ const translations = {
       errorLoading: 'Error loading',
       errorLoadingMessage: 'Something went wrong while loading the posts',
     },
+    timelineAlchemy: {
+      title: 'Timeline Alchemy',
+      subtitle: 'Transform weekly trends into soul-resonant content. Blog + cross-platform posts. Fully planned. You keep creating—we distribute.',
+      styles: {
+        krachtig: {
+          title: 'Timeline Alchemy',
+          subtitle: 'Transform weekly trends into soul-resonant content. Blog + cross-platform posts. Fully planned. You keep creating—we distribute.',
+          bullets: {
+            0: 'Weekly blog post',
+            1: 'Platform-specific posts',
+            2: 'Planning & publishing',
+            3: 'On-brand tone of voice'
+          },
+          cta: 'Activate Timeline Alchemy',
+        },
+        mystiek: {
+          title: 'Spread the One Message. Add Your Own Essence.',
+          subtitle: 'You set the intention. We weave your message through the timelines—clear, rhythmic, indispensable.',
+          bullets: {
+            0: 'Alchemy of trends → insight',
+            1: 'Soul-tuned blog',
+            2: 'Signal boosters for socials',
+            3: 'Rhythmic distribution'
+          },
+          cta: 'Start your Alchemy',
+        },
+        creator: {
+          title: 'Create freely. We do the rest.',
+          subtitle: 'Weekly: 1 deep blog + short social variants + automatic planning. Consistently visible without content stress.',
+          bullets: {
+            0: 'Research from your domain',
+            1: 'Your tone of voice',
+            2: 'Publishing calendar',
+            3: 'Reporting/links'
+          },
+          cta: 'Get Started',
+        },
+      },
+      features: {
+        weeklyBlog: 'Weekly Blog',
+        platformPosts: 'Platform-specific Posts',
+        planning: 'Planning & Publishing',
+        toneOfVoice: 'On-brand Tone of Voice',
+        research: 'Research from your domain',
+        calendar: 'Publishing Calendar',
+        reporting: 'Reporting/links',
+        alchemy: 'Alchemy of trends → insight',
+        soulBlog: 'Soul-tuned blog',
+        signalBoosters: 'Signal boosters for socials',
+        rhythmicDistribution: 'Rhythmic distribution',
+      },
+      cta: {
+        activate: 'Activate Timeline Alchemy',
+        startAlchemy: 'Start your Alchemy',
+        getStarted: 'Get Started',
+      },
+      pricing: {
+        title: 'Pricing',
+        monthly: 'per month',
+        yearly: 'per year',
+        features: 'Includes all features',
+        cancelAnytime: 'Cancel anytime',
+      },
+      sections: {
+        whatYouGet: {
+          title: 'What you get',
+          subtitle: 'A complete content machine that spreads your vision without you losing energy',
+          features: {
+            weeklyBlog: {
+              title: 'Weekly Blog Post',
+              description: 'Deep, clear, on-brand content that showcases your expertise'
+            },
+            crossPlatform: {
+              title: 'Cross-Platform Posts',
+              description: 'Optimized per channel for maximum impact'
+            },
+            planning: {
+              title: 'Planning & Publishing',
+              description: 'Rhythm = reach. We ensure consistency'
+            },
+            toneOfVoice: {
+              title: 'Tone-of-Voice Guardrails',
+              description: 'Your signature, consistent through all content'
+            },
+            linkArchitecture: {
+              title: 'Link Architecture',
+              description: 'Everything refers back to your core'
+            },
+            autoDistribution: {
+              title: 'Automatic Distribution',
+              description: 'Set it and forget it — we do the rest'
+            }
+          }
+        },
+        faq: {
+          title: 'Frequently Asked Questions',
+          subtitle: 'Everything you need to know about Timeline Alchemy',
+          questions: {
+            feedback: {
+              question: 'Can I give feedback on the blog?',
+              answer: 'Yes. You get a draft; we process your feedback and publish as planned.'
+            },
+            platforms: {
+              question: 'Which platforms do you cover?',
+              answer: 'Minimum: Instagram, Facebook, X, LinkedIn. Expansion possible.'
+            },
+            posting: {
+              question: 'Do I still need to post myself?',
+              answer: 'Not necessary. We plan and publish (with your permission/connections).'
+            },
+            niche: {
+              question: 'What if my niche is \'different\'?',
+              answer: 'Perfect. We train on your sources, glossary and examples.'
+            },
+            pause: {
+              question: 'Can I pause or upgrade?',
+              answer: 'Yes. Via your Stripe dashboard, directly and flexibly.'
+            }
+          }
+        },
+        cta: {
+          stripeNote: 'Directly via Stripe. You can always upgrade or pause later.'
+        },
+        readyToStart: {
+          title: 'Ready to get started?',
+          subtitle: 'Join the creators who have already replaced their content stress with Timeline Alchemy',
+          buttonText: 'Start your monthly transformation'
+        }
+      },
+    },
   },
 
   de: {
@@ -1038,6 +1332,7 @@ const translations = {
       previous: 'Vorherige',
       close: 'Schließen',
       open: 'Öffnen',
+      start: 'Start',
       yes: 'Ja',
       no: 'Nein',
       search: 'Suchen',
@@ -1105,6 +1400,7 @@ const translations = {
       password: {
         label: 'Passwort',
         hint: 'Mindestens 8 Zeichen',
+        placeholder: 'Dein Passwort',
       },
       consent: 'Ich stimme zu, kosmische Updates und Marketing-E-Mails zu erhalten',
       error: {
@@ -1355,6 +1651,21 @@ const translations = {
       redirecting: 'Du wirst zur Kasse weitergeleitet...',
       errorMessage: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
     },
+    collection: {
+      view: 'Produkt ansehen',
+      backToShop: 'Zurück zum Shop',
+      viewOtherCollections: 'Andere Kollektionen ansehen',
+      notFoundTitle: 'Kollektion nicht gefunden',
+      notFoundDescription: 'Die angeforderte Kollektion konnte nicht gefunden werden.',
+      loadErrorTitle: 'Ladefehler',
+      loadErrorDescription: 'Beim Laden der Kollektion ist ein Fehler aufgetreten.',
+      loading: 'Kollektion wird geladen...',
+      addedToCart: 'Zum Warenkorb hinzugefügt',
+      addErrorTitle: 'Hinzufügefehler',
+      addErrorDescription: 'Beim Hinzufügen zum Warenkorb ist ein Fehler aufgetreten.',
+      noProductsTitle: 'Keine Produkte',
+      noProductsDescription: 'Derzeit sind keine Produkte in dieser Kollektion verfügbar.',
+    },
     profile: {
       title: 'Kosmisches Profil',
       subtitle: 'Personalisiere deine spirituelle Identität in unserer Gemeinschaft',
@@ -1458,6 +1769,136 @@ const translations = {
       errorDeleteMessage: 'Etwas ging beim Löschen deines Beitrags schief',
       errorLoading: 'Fehler beim Laden',
       errorLoadingMessage: 'Etwas ging beim Laden der Beiträge schief',
+    },
+    timelineAlchemy: {
+      title: 'Timeline Alchemy',
+      subtitle: 'Verwandle wöchentliche Trends in seelenresonante Inhalte. Blog + plattformübergreifende Posts. Vollständig geplant. Du erstellst—wir verteilen.',
+      styles: {
+        krachtig: {
+          title: 'Timeline Alchemy',
+          subtitle: 'Verwandle wöchentliche Trends in seelenresonante Inhalte. Blog + plattformübergreifende Posts. Vollständig geplant. Du erstellst—wir verteilen.',
+          bullets: {
+            0: 'Wöchentlicher Blog-Post',
+            1: 'Plattformspezifische Posts',
+            2: 'Planung & Veröffentlichung',
+            3: 'Markenkonforme Tonalität'
+          },
+          cta: 'Timeline Alchemy aktivieren',
+        },
+        mystiek: {
+          title: 'Spread the One Message. Add Your Own Essence.',
+          subtitle: 'Du setzt die Intention. Wir weben deine Botschaft durch die Zeitlinien—klar, rhythmisch, unverzichtbar.',
+          bullets: {
+            0: 'Alchemie der Trends → Einsicht',
+            1: 'Seelenabgestimmter Blog',
+            2: 'Signalverstärker für Socials',
+            3: 'Rhythmische Verteilung'
+          },
+          cta: 'Starte deine Alchemie',
+        },
+        creator: {
+          title: 'Erschaffe frei. Wir erledigen den Rest.',
+          subtitle: 'Wöchentlich: 1 tiefer Blog + kurze Social-Varianten + automatische Planung. Konsistent sichtbar ohne Content-Stress.',
+          bullets: {
+            0: 'Recherche aus deinem Bereich',
+            1: 'Deine Tonalität',
+            2: 'Veröffentlichungskalender',
+            3: 'Berichterstattung/Links'
+          },
+          cta: 'Loslegen',
+        },
+      },
+      features: {
+        weeklyBlog: 'Wöchentlicher Blog',
+        platformPosts: 'Plattformspezifische Posts',
+        planning: 'Planung & Veröffentlichung',
+        toneOfVoice: 'Markenkonforme Tonalität',
+        research: 'Recherche aus deinem Bereich',
+        calendar: 'Veröffentlichungskalender',
+        reporting: 'Berichterstattung/Links',
+        alchemy: 'Alchemie der Trends → Einsicht',
+        soulBlog: 'Seelenabgestimmter Blog',
+        signalBoosters: 'Signalverstärker für Socials',
+        rhythmicDistribution: 'Rhythmische Verteilung',
+      },
+      cta: {
+        activate: 'Timeline Alchemy aktivieren',
+        startAlchemy: 'Starte deine Alchemie',
+        getStarted: 'Loslegen',
+      },
+      pricing: {
+        title: 'Preise',
+        monthly: 'pro Monat',
+        yearly: 'pro Jahr',
+        features: 'Alle Features inklusive',
+        cancelAnytime: 'Jederzeit kündbar',
+      },
+      sections: {
+        whatYouGet: {
+          title: 'Was du bekommst',
+          subtitle: 'Eine komplette Content-Maschine, die deine Vision verbreitet, ohne dass du Energie verlierst',
+          features: {
+            weeklyBlog: {
+              title: 'Wöchentlicher Blog-Post',
+              description: 'Tiefer, klarer, markenkonformer Content, der deine Expertise zeigt'
+            },
+            crossPlatform: {
+              title: 'Plattformübergreifende Posts',
+              description: 'Pro Kanal optimiert für maximale Wirkung'
+            },
+            planning: {
+              title: 'Planung & Veröffentlichung',
+              description: 'Rhythmus = Reichweite. Wir sorgen für Konsistenz'
+            },
+            toneOfVoice: {
+              title: 'Tonalitäts-Leitplanken',
+              description: 'Deine Signatur, konsistent durch alle Inhalte'
+            },
+            linkArchitecture: {
+              title: 'Link-Architektur',
+              description: 'Alles verweist zurück zu deinem Kern'
+            },
+            autoDistribution: {
+              title: 'Automatische Verteilung',
+              description: 'Einrichten und vergessen — wir erledigen den Rest'
+            }
+          }
+        },
+        faq: {
+          title: 'Häufig gestellte Fragen',
+          subtitle: 'Alles was du über Timeline Alchemy wissen musst',
+          questions: {
+            feedback: {
+              question: 'Kann ich Feedback zum Blog geben?',
+              answer: 'Ja. Du bekommst einen Entwurf; wir verarbeiten dein Feedback und veröffentlichen wie geplant.'
+            },
+            platforms: {
+              question: 'Welche Plattformen deckt ihr ab?',
+              answer: 'Minimum: Instagram, Facebook, X, LinkedIn. Erweiterung möglich.'
+            },
+            posting: {
+              question: 'Muss ich noch selbst posten?',
+              answer: 'Nicht nötig. Wir planen und veröffentlichen (mit deiner Erlaubnis/Verbindungen).'
+            },
+            niche: {
+              question: 'Was wenn meine Nische \'anders\' ist?',
+              answer: 'Perfekt. Wir trainieren mit deinen Quellen, Glossar und Beispielen.'
+            },
+            pause: {
+              question: 'Kann ich pausieren oder upgraden?',
+              answer: 'Ja. Über dein Stripe-Dashboard, direkt und flexibel.'
+            }
+          }
+        },
+        cta: {
+          stripeNote: 'Direkt über Stripe. Du kannst später immer upgraden oder pausieren.'
+        },
+        readyToStart: {
+          title: 'Bereit loszulegen?',
+          subtitle: 'Tritt den Creators bei, die bereits ihren Content-Stress durch Timeline Alchemy ersetzt haben',
+          buttonText: 'Starte deine monatliche Transformation'
+        }
+      },
     },
   },
 } as const;

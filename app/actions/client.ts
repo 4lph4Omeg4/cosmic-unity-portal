@@ -1,6 +1,11 @@
 'use server'
 
-import { supabaseAdmin } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseAdmin = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 import { revalidatePath } from 'next/cache'
 
 // Test function to see what's in the database

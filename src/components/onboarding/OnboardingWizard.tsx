@@ -14,6 +14,7 @@ import { loadDraft, saveDraft, finishOnboarding, OnboardingDraft } from '@/lib/o
 import ProfileStep from './steps/ProfileStep'
 import OrganizationStep from './steps/OrganizationStep'
 import SocialsStep from './steps/SocialsStep'
+import SocialConnectionsStep from './steps/SocialConnectionsStep'
 import PreferencesStep from './steps/PreferencesStep'
 
 // Zod schema voor validatie
@@ -21,11 +22,12 @@ const onboardingSchema = z.object({
   profile: z.object({
     displayName: z.string().min(2, 'Weergavenaam moet minimaal 2 karakters zijn'),
     avatar: z.string().optional(),
+    bio: z.string().max(500, 'Bio mag maximaal 500 karakters zijn').optional(),
+    website: z.string().url('Voer een geldige URL in').optional().or(z.literal('')),
     role: z.enum(['Creator', 'Client', 'Admin']).optional()
   }),
   organization: z.object({
     orgName: z.string(),
-    website: z.string().url('Voer een geldige URL in').optional().or(z.literal('')),
     useCase: z.enum(['Solo', 'Team', 'Agency']).optional()
   }),
   socials: z.object({
@@ -36,6 +38,9 @@ const onboardingSchema = z.object({
     YouTube: z.boolean().optional(),
     LinkedIn: z.boolean().optional()
   }),
+  socialConnections: z.object({
+    platforms: z.array(z.string()).default([])
+  }).optional(),
   preferences: z.object({
     weeklyDigest: z.boolean().default(true),
     aiSuggestions: z.boolean().default(true),
@@ -49,6 +54,7 @@ const STEPS = [
   { id: 'profile', title: 'Profiel', component: ProfileStep },
   { id: 'organization', title: 'Organisatie', component: OrganizationStep },
   { id: 'socials', title: 'Social Media', component: SocialsStep },
+  { id: 'socialConnections', title: 'Connect Accounts', component: SocialConnectionsStep },
   { id: 'preferences', title: 'Voorkeuren', component: PreferencesStep }
 ]
 
@@ -64,8 +70,8 @@ export default function OnboardingWizard() {
   const methods = useForm<OnboardingFormData>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      profile: { displayName: 'Gebruiker', avatar: '', role: undefined },
-      organization: { orgName: 'Mijn Organisatie', website: '', useCase: undefined },
+      profile: { displayName: 'Gebruiker', avatar: '', bio: '', website: '', role: undefined },
+      organization: { orgName: 'Mijn Organisatie', useCase: undefined },
       socials: { X: false, Facebook: false, Instagram: false, TikTok: false, YouTube: false, LinkedIn: false },
       preferences: { weeklyDigest: true, aiSuggestions: true, goals: '' }
     }
@@ -73,10 +79,83 @@ export default function OnboardingWizard() {
 
   const { handleSubmit, watch, reset } = methods
 
-  // Load draft data on mount
+  // Load draft data on mount and check user-organization link
   useEffect(() => {
     const loadDraftData = async () => {
       try {
+        // First check if user is linked to an organization
+        if (user) {
+          console.log('Checking user-organization link for user:', user.id);
+          
+          const { supabase } = await import('@/integrations/supabase/client');
+          
+          // Check if user has a profile with org_id
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('org_id')
+            .eq('user_id', user.id)
+            .single();
+
+          console.log('Profile check result:', { profile, profileError });
+
+          if (profileError || !profile?.org_id) {
+            console.log('User not linked to organization, trying to find TLA organization...');
+            
+            // Try to find a TLA organization that needs onboarding
+            const { data: orgs, error: orgsError } = await supabase
+              .from('orgs')
+              .select('id, name, tla_client, needs_onboarding')
+              .eq('tla_client', true)
+              .eq('needs_onboarding', true)
+              .order('created_at', { ascending: false })
+              .limit(1);
+
+            if (orgsError) {
+              console.error('Error finding TLA organizations:', orgsError);
+            } else if (orgs && orgs.length > 0) {
+              const org = orgs[0];
+              console.log('Found TLA organization:', org);
+              
+              // Link user to this organization
+              if (!profile) {
+                // Create profile if it doesn't exist
+                const { error: createError } = await supabase
+                  .from('profiles')
+                  .insert({
+                    user_id: user.id,
+                    org_id: org.id,
+                    display_name: user.email?.split('@')[0] || 'User',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                  });
+
+                if (createError) {
+                  console.error('Error creating profile:', createError);
+                } else {
+                  console.log('✅ Profile created and linked to organization:', org.id);
+                }
+              } else {
+                // Update existing profile
+                const { error: updateError } = await supabase
+                  .from('profiles')
+                  .update({ org_id: org.id })
+                  .eq('user_id', user.id);
+
+                if (updateError) {
+                  console.error('Error updating profile:', updateError);
+                } else {
+                  console.log('✅ Profile updated and linked to organization:', org.id);
+                }
+              }
+            } else {
+              console.log('No TLA organizations found that need onboarding');
+            }
+          } else {
+            console.log('✅ User already linked to organization:', profile.org_id);
+          }
+        }
+
+        // Then load draft data
         const draft = await loadDraft()
         if (draft && Object.keys(draft).length > 0) {
           reset(draft as OnboardingFormData)
@@ -91,7 +170,7 @@ export default function OnboardingWizard() {
       }
     }
     loadDraftData()
-  }, [reset, toast])
+  }, [reset, toast, user])
 
   // Debounced autosave
   const debouncedSave = useCallback(
@@ -161,7 +240,7 @@ export default function OnboardingWizard() {
           duration: 5000
         })
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate('/timeline-alchemy/client/my-previews')
         }, 2000)
       } catch (error) {
         console.error('Error finishing onboarding:', error)

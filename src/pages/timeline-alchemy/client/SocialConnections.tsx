@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Instagram, Twitter, Facebook, Linkedin, Youtube, Link, Plus, Trash2, RefreshCw, CheckCircle, XCircle, AlertCircle, ExternalLink } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Instagram, X, Facebook, Linkedin, Youtube, Link, Plus, Trash2, RefreshCw, CheckCircle, XCircle, AlertCircle, ExternalLink, Clock } from 'lucide-react'
+import { supabase } from '@/integrations/supabase/client'
+import { useToast } from '@/hooks/use-toast'
 
 interface SocialConnection {
   id: string
   platform: string
-  username: string
-  displayName: string
-  profileUrl: string
-  status: 'connected' | 'disconnected' | 'error'
-  lastSync: string
-  followers?: number
-  posts?: number
+  platform_username: string
+  is_active: boolean
+  connected_at: string
+  last_used_at?: string
+  token_expires_at?: string
 }
 
 export default function TimelineAlchemySocialConnections() {
   const [connections, setConnections] = useState<SocialConnection[]>([])
   const [loading, setLoading] = useState(true)
+  const [connecting, setConnecting] = useState<string | null>(null)
+  const { toast } = useToast()
 
   useEffect(() => {
     loadConnections()
@@ -26,74 +29,149 @@ export default function TimelineAlchemySocialConnections() {
 
   const loadConnections = async () => {
     try {
-      // TODO: Implement actual API call
-      const mockData: SocialConnection[] = [
-        {
-          id: '1',
-          platform: 'Instagram',
-          username: '@cosmic_creator',
-          displayName: 'Cosmic Creator',
-          profileUrl: 'https://instagram.com/cosmic_creator',
-          status: 'connected',
-          lastSync: '2025-01-15 10:30',
-          followers: 12500,
-          posts: 345
-        },
-        {
-          id: '2',
-          platform: 'LinkedIn',
-          username: 'cosmic-creator-official',
-          displayName: 'Cosmic Creator Official',
-          profileUrl: 'https://linkedin.com/in/cosmic-creator-official',
-          status: 'connected',
-          lastSync: '2025-01-15 09:00',
-          followers: 8700,
-          posts: 120
-        },
-        {
-          id: '3',
-          platform: 'Twitter',
-          username: '@cosmic_creator',
-          displayName: 'Cosmic Creator',
-          profileUrl: 'https://twitter.com/cosmic_creator',
-          status: 'error',
-          lastSync: '2025-01-13 16:45'
-        }
-      ]
-      setConnections(mockData)
+      setLoading(true)
+      
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.error('User not authenticated')
+        return
+      }
+
+      // Load social connections from database
+      const { data, error } = await supabase
+        .from('social_connections')
+        .select('id, platform, platform_username, is_active, connected_at, last_used_at, token_expires_at')
+        .eq('user_id', user.id)
+        .order('connected_at', { ascending: false })
+
+      if (error) {
+        console.error('Error loading connections:', error)
+        toast({
+          title: "Error",
+          description: "Failed to load social media connections",
+          variant: "destructive",
+        })
+        return
+      }
+
+      setConnections(data || [])
     } catch (error) {
       console.error('Error loading social connections:', error)
+      toast({
+        title: "Error",
+        description: "Failed to load social media connections",
+        variant: "destructive",
+      })
     } finally {
       setLoading(false)
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'connected': return 'bg-green-100 text-green-800'
-      case 'disconnected': return 'bg-gray-100 text-gray-800'
-      case 'error': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+  const connectPlatform = async (platform: string) => {
+    try {
+      setConnecting(platform)
+      
+      const { data, error } = await supabase.functions.invoke('social-oauth', {
+        body: { platform }
+      })
+
+      if (error) throw error
+
+      if (data?.authUrl) {
+        // Open OAuth in popup window
+        const popup = window.open(
+          data.authUrl,
+          `${platform}_oauth`,
+          'width=600,height=700,scrollbars=yes,resizable=yes'
+        )
+
+        // Listen for popup completion
+        const checkClosed = setInterval(() => {
+          if (popup?.closed) {
+            clearInterval(checkClosed)
+            setConnecting(null)
+            loadConnections() // Refresh connections
+          }
+        }, 1000)
+
+      } else {
+        throw new Error('No auth URL received')
+      }
+    } catch (error) {
+      console.error('Error connecting platform:', error)
+      toast({
+        title: "Connection Failed",
+        description: `Failed to connect ${platform}. Please try again.`,
+        variant: "destructive",
+      })
+      setConnecting(null)
     }
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'connected': return <CheckCircle className="w-4 h-4" />
-      case 'disconnected': return <XCircle className="w-4 h-4" />
-      case 'error': return <AlertCircle className="w-4 h-4" />
-      default: return <XCircle className="w-4 h-4" />
+  const disconnectPlatform = async (connectionId: string) => {
+    try {
+      const { error } = await supabase
+        .from('social_connections')
+        .update({ is_active: false })
+        .eq('id', connectionId)
+
+      if (error) throw error
+
+      toast({
+        title: "Disconnected",
+        description: "Social media account disconnected successfully",
+      })
+
+      loadConnections()
+    } catch (error) {
+      console.error('Error disconnecting platform:', error)
+      toast({
+        title: "Error",
+        description: "Failed to disconnect account",
+        variant: "destructive",
+      })
     }
   }
 
-  const getPlatformIcon = (platformName: string) => {
-    switch (platformName) {
-      case 'Instagram': return <Instagram className="w-5 h-5" />
-      case 'Twitter': return <Twitter className="w-5 h-5" />
-      case 'LinkedIn': return <Linkedin className="w-5 h-5" />
-      case 'Facebook': return <Facebook className="w-5 h-5" />
-      case 'YouTube': return <Youtube className="w-5 h-5" />
+  const getStatusColor = (isActive: boolean, isExpired?: boolean) => {
+    if (!isActive) return 'bg-gray-100 text-gray-800'
+    if (isExpired) return 'bg-yellow-100 text-yellow-800'
+    return 'bg-green-100 text-green-800'
+  }
+
+  const getStatusIcon = (isActive: boolean, isExpired?: boolean) => {
+    if (!isActive) return <XCircle className="w-4 h-4" />
+    if (isExpired) return <Clock className="w-4 h-4" />
+    return <CheckCircle className="w-4 h-4" />
+  }
+
+  const isTokenExpired = (expiresAt?: string) => {
+    if (!expiresAt) return false
+    return new Date(expiresAt) < new Date()
+  }
+
+  const getPlatformIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'instagram': return <Instagram className="w-5 h-5" />
+      case 'twitter': return <X className="w-5 h-5" />
+      case 'x': return <X className="w-5 h-5" />
+      case 'facebook': return <Facebook className="w-5 h-5" />
+      case 'linkedin': return <Linkedin className="w-5 h-5" />
+      case 'youtube': return <Youtube className="w-5 h-5" />
       default: return <Link className="w-5 h-5" />
+    }
+  }
+
+  const getPlatformColor = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'instagram': return 'bg-gradient-to-r from-purple-500 to-pink-500'
+      case 'facebook': return 'bg-blue-600'
+      case 'twitter': return 'bg-black'
+      case 'x': return 'bg-black'
+      case 'linkedin': return 'bg-blue-700'
+      case 'youtube': return 'bg-red-600'
+      default: return 'bg-gray-600'
     }
   }
 
@@ -106,14 +184,14 @@ export default function TimelineAlchemySocialConnections() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight">Sociale Verbindingen</h1>
           <p className="mt-2 text-gray-300">Beheer je sociale media accounts</p>
         </div>
-        <Button onClick={loadConnections} variant="outline" className="flex items-center gap-2">
+        <Button onClick={loadConnections} variant="outline" className="flex items-center gap-2 border-gray-600 text-gray-300 hover:bg-gray-700">
           <RefreshCw className="w-4 h-4" />
           Refresh
         </Button>
@@ -121,49 +199,42 @@ export default function TimelineAlchemySocialConnections() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Platforms</p>
-                <p className="text-2xl font-bold text-gray-900">{connections.length}</p>
+                <p className="text-sm font-medium text-gray-300">Total Platforms</p>
+                <p className="text-2xl font-bold text-white">{connections.length}</p>
               </div>
-              <Link className="w-8 h-8 text-blue-500" />
+              <Link className="w-8 h-8 text-blue-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Connected</p>
-                <p className="text-2xl font-bold text-green-600">
-                  {connections.filter(c => c.status === 'connected').length}
+                <p className="text-sm font-medium text-gray-300">Connected</p>
+                <p className="text-2xl font-bold text-green-400">
+                  {connections.filter(c => c.is_active).length}
                 </p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-green-400" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Followers</p>
-                <p className="text-2xl font-bold text-purple-600">
-                  {connections
-                    .filter(c => c.status === 'connected' && c.followers)
-                    .reduce((sum, c) => sum + (c.followers || 0), 0)
-                    .toLocaleString()}
+                <p className="text-sm font-medium text-gray-300">Expired Tokens</p>
+                <p className="text-2xl font-bold text-yellow-400">
+                  {connections.filter(c => c.is_active && isTokenExpired(c.token_expires_at)).length}
                 </p>
               </div>
-              <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.38 4.38 0 0 0-4.121-4.112h-.875c-.371 0-.725.119-1.024.334M15 19.128a9.368 9.368 0 0 1-3.027.867 9.368 9.368 0 0 1-3.027-.867M15 19.128v2.25c0 .29-.115.56-.319.754A12.152 12.152 0 0 1 12 21.75c-2.354 0-4.6-.74-6.468-2.043a1.157 1.157 0 0 1-.319-.754v-2.25m7.5-10.872a9.364 9.364 0 0 0-3.027-.867 9.364 9.364 0 0 0-3.027.867m7.5-10.872c1.251.243 2.413.713 3.463 1.394M12 4.5c1.497 0 2.906.426 4.121 1.152M12 4.5v2.25m-4.121 1.152a9.364 9.364 0 0 0-3.027.867M12 4.5c-1.497 0-2.906.426-4.121 1.152m0 0a9.364 9.364 0 0 0-3.027-.867m7.5 3.372h-.875c-.371 0-.725.119-1.024.334M14.25 12h-.004M12 7.5h.004M10.5 12h-.004M12 10.5h-.004m-7.5 3.372c1.251-.243 2.413-.713 3.463-1.394m0 0A9.364 9.364 0 0 1 12 10.5c1.497 0 2.906.426 4.121 1.152m0 0c1.05.681 2.212 1.151 3.463 1.394M17.25 12h-.004M12 14.25h.004M4.5 15.75h-.004M12 18.75h.004M19.5 15.75h-.004" />
-                </svg>
-              </div>
+              <Clock className="w-8 h-8 text-yellow-400" />
             </div>
           </CardContent>
         </Card>
@@ -176,57 +247,136 @@ export default function TimelineAlchemySocialConnections() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {connections.map((connection) => (
-              <div key={connection.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                      {getPlatformIcon(connection.platform)}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg text-gray-900">{connection.displayName}</h3>
-                      <p className="text-gray-600 text-sm mb-2">@{connection.username} ({connection.platform})</p>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge className={getStatusColor(connection.status)}>
-                          <div className="flex items-center gap-1">
-                            {getStatusIcon(connection.status)}
-                            {connection.status}
-                          </div>
-                        </Badge>
-                        <span className="text-sm text-gray-500">Last Sync: {new Date(connection.lastSync).toLocaleString()}</span>
+            {connections.map((connection) => {
+              const isExpired = isTokenExpired(connection.token_expires_at)
+              return (
+                <div key={connection.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${getPlatformColor(connection.platform)}`}>
+                        {getPlatformIcon(connection.platform)}
                       </div>
-                      {connection.followers && (
-                        <p><span className="font-medium">Followers:</span> {connection.followers.toLocaleString()}</p>
-                      )}
-                      {connection.posts && (
-                        <p><span className="font-medium">Posts:</span> {connection.posts}</p>
-                      )}
+                      <div>
+                        <h3 className="font-semibold text-lg text-white capitalize">{connection.platform}</h3>
+                        <p className="text-gray-300 text-sm mb-2">@{connection.platform_username}</p>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge className={getStatusColor(connection.is_active, isExpired)}>
+                            <div className="flex items-center gap-1">
+                              {getStatusIcon(connection.is_active, isExpired)}
+                              {!connection.is_active ? 'Disconnected' : isExpired ? 'Token Expired' : 'Connected'}
+                            </div>
+                          </Badge>
+                          <span className="text-sm text-gray-400">
+                            Connected: {new Date(connection.connected_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        {connection.last_used_at && (
+                          <p className="text-sm text-gray-400">
+                            Last used: {new Date(connection.last_used_at).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => window.open(connection.profileUrl, '_blank')}
-                      className="flex items-center gap-1"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      View Profile
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => disconnectPlatform(connection.id)}
+                        className="flex items-center gap-1 text-red-400 border-red-600 hover:bg-red-900/20"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Disconnect
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           
           {connections.length === 0 && (
             <div className="text-center py-8">
               <Link className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No social connections found.</p>
+              <p className="text-gray-500 mb-4">No social media accounts connected yet.</p>
+              <p className="text-sm text-gray-400">Connect your accounts to enable automatic posting.</p>
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Available Platforms */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Connect New Accounts</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { id: 'instagram', name: 'Instagram', description: 'Share visual content and stories' },
+              { id: 'facebook', name: 'Facebook', description: 'Reach your audience with posts' },
+              { id: 'twitter', name: 'X (Twitter)', description: 'Share quick updates and engage' },
+              { id: 'linkedin', name: 'LinkedIn', description: 'Professional networking content' }
+            ].map((platform) => {
+              const isConnected = connections.some(c => c.platform === platform.id && c.is_active)
+              const isConnecting = connecting === platform.id
+              
+              return (
+                <div
+                  key={platform.id}
+                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                    isConnected
+                      ? 'border-green-500 bg-green-900/20'
+                      : 'border-gray-600 bg-gray-800 hover:border-gray-500'
+                  }`}
+                  onClick={() => !isConnected && !isConnecting && connectPlatform(platform.id)}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className={`p-3 rounded-full text-white mb-3 ${getPlatformColor(platform.id)}`}>
+                      {getPlatformIcon(platform.id)}
+                    </div>
+                    <h3 className="font-medium text-white mb-1">{platform.name}</h3>
+                    <p className="text-sm text-gray-400 mb-3">{platform.description}</p>
+                    
+                    {isConnected ? (
+                      <Badge className="bg-green-100 text-green-800">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Connected
+                      </Badge>
+                    ) : isConnecting ? (
+                      <Badge className="bg-blue-100 text-blue-800">
+                        <RefreshCw className="w-3 h-3 mr-1 animate-spin" />
+                        Connecting...
+                      </Badge>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          connectPlatform(platform.id)
+                        }}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Connect
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Info Alert */}
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          <strong>Note:</strong> Connected accounts will be used for automatic posting when you approve content previews. 
+          You can manage these connections anytime from this page.
+        </AlertDescription>
+      </Alert>
     </div>
   )
 }
