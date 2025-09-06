@@ -13,5 +13,26 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true,
   }
 });
+
+// Debug function to test Supabase connection
+export const testSupabaseConnection = async () => {
+  try {
+    console.log('Testing Supabase connection...');
+    console.log('URL:', SUPABASE_URL);
+    console.log('Key (first 20 chars):', SUPABASE_PUBLISHABLE_KEY.substring(0, 20) + '...');
+    
+    const { data, error } = await supabase.auth.getSession();
+    console.log('Session test result:', { data, error });
+    
+    if (error) {
+      console.error('Supabase connection error:', error);
+    } else {
+      console.log('Supabase connection successful');
+    }
+  } catch (err) {
+    console.error('Supabase connection test failed:', err);
+  }
+};
