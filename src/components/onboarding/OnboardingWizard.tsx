@@ -28,7 +28,6 @@ const onboardingSchema = z.object({
   }),
   organization: z.object({
     orgName: z.string(),
-    website: z.string().url('Voer een geldige URL in').optional().or(z.literal('')),
     useCase: z.enum(['Solo', 'Team', 'Agency']).optional()
   }),
   socials: z.object({
@@ -72,7 +71,7 @@ export default function OnboardingWizard() {
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
       profile: { displayName: 'Gebruiker', avatar: '', bio: '', website: '', role: undefined },
-      organization: { orgName: 'Mijn Organisatie', website: '', useCase: undefined },
+      organization: { orgName: 'Mijn Organisatie', useCase: undefined },
       socials: { X: false, Facebook: false, Instagram: false, TikTok: false, YouTube: false, LinkedIn: false },
       preferences: { weeklyDigest: true, aiSuggestions: true, goals: '' }
     }

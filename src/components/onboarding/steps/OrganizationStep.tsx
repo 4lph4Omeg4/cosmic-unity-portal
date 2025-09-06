@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Building2, Globe, Users, CheckCircle } from 'lucide-react'
+import { Building2, Users, CheckCircle } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -31,19 +31,6 @@ export default function OrganizationStep() {
           // Set the organization name from the profile
           if (profile.organization_name) {
             setValue('organization.orgName', profile.organization_name);
-          }
-          
-          // Get additional org data if org_id exists
-          if (profile.org_id) {
-            const { data: org } = await supabase
-              .from('orgs')
-              .select('website')
-              .eq('id', profile.org_id)
-              .single();
-
-            if (org?.website) {
-              setValue('organization.website', org.website);
-            }
           }
         }
       } catch (error) {
@@ -80,50 +67,6 @@ export default function OrganizationStep() {
           </p>
         </div>
 
-        {/* Website - Only show if not already set */}
-        {watch('organization.website') ? (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-700">
-              Website
-            </Label>
-            <div className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <Globe className="w-5 h-5 text-blue-600" />
-              <span className="text-blue-800 font-medium">{watch('organization.website')}</span>
-              <span className="text-blue-600 text-sm">(ingesteld)</span>
-            </div>
-            <p className="text-xs text-gray-500">
-              Je website is al ingesteld
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <Label htmlFor="website" className="text-sm font-medium text-gray-700">
-              Website (optioneel)
-            </Label>
-            <div className="relative">
-              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                id="website"
-                placeholder="https://jouwwebsite.nl"
-                className="pl-10"
-                {...register('organization.website', {
-                  pattern: {
-                    value: /^https?:\/\/.+/,
-                    message: 'Voer een geldige URL in (begint met http:// of https://)'
-                  }
-                })}
-              />
-            </div>
-            {errors.organization?.website && (
-              <p className="text-sm text-red-500">
-                {errors.organization.website.message}
-              </p>
-            )}
-            <p className="text-xs text-gray-500">
-              Je website of portfolio link (optioneel)
-            </p>
-          </div>
-        )}
 
         {/* Use Case - Main focus */}
         <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
