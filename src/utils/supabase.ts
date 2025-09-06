@@ -1,8 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
+// src/utils/supabase.ts
+// Laat dit bestand NIETS zelf aanmaken; gebruik 1 bron: integrations/client
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+import supabaseClient from "@/integrations/supabase/client";
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Exporteer zowel default als named, zodat
+// - import supabase from "@/utils/supabase"
+// - import { supabase } from "@/utils/supabase"
+// allebei werken.
+const supabase = supabaseClient;
 
-export default supabase
+export default supabase;
+export { supabase };
