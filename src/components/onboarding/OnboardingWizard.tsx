@@ -22,6 +22,8 @@ const onboardingSchema = z.object({
   profile: z.object({
     displayName: z.string().min(2, 'Weergavenaam moet minimaal 2 karakters zijn'),
     avatar: z.string().optional(),
+    bio: z.string().max(500, 'Bio mag maximaal 500 karakters zijn').optional(),
+    website: z.string().url('Voer een geldige URL in').optional().or(z.literal('')),
     role: z.enum(['Creator', 'Client', 'Admin']).optional()
   }),
   organization: z.object({
@@ -69,7 +71,7 @@ export default function OnboardingWizard() {
   const methods = useForm<OnboardingFormData>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      profile: { displayName: 'Gebruiker', avatar: '', role: undefined },
+      profile: { displayName: 'Gebruiker', avatar: '', bio: '', website: '', role: undefined },
       organization: { orgName: 'Mijn Organisatie', website: '', useCase: undefined },
       socials: { X: false, Facebook: false, Instagram: false, TikTok: false, YouTube: false, LinkedIn: false },
       preferences: { weeklyDigest: true, aiSuggestions: true, goals: '' }

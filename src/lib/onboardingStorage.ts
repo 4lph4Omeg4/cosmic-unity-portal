@@ -2,6 +2,8 @@ export type OnboardingDraft = {
   profile?: { 
     displayName: string; 
     avatar?: string; 
+    bio?: string;
+    website?: string;
     role?: "Creator"|"Client"|"Admin" 
   };
   organization?: { 
@@ -64,6 +66,15 @@ export async function finishOnboarding(d: OnboardingDraft): Promise<void> {
     const profileUpdates: any = {};
     if (d.profile?.displayName) {
       profileUpdates.display_name = d.profile.displayName;
+    }
+    if (d.profile?.bio) {
+      profileUpdates.bio = d.profile.bio;
+    }
+    if (d.profile?.website) {
+      profileUpdates.website = d.profile.website;
+    }
+    if (d.profile?.avatar) {
+      profileUpdates.avatar_url = d.profile.avatar;
     }
     if (d.profile?.role) {
       profileUpdates.role = d.profile.role.toLowerCase();

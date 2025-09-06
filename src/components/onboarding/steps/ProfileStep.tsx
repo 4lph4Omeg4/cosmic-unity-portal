@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Camera } from 'lucide-react'
@@ -12,14 +13,49 @@ export default function ProfileStep() {
   const avatar = watch('profile.avatar')
   const displayName = watch('profile.displayName')
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setValue('profile.avatar', e.target?.result as string)
+      try {
+        // Upload to Supabase Storage
+        const { supabase } = await import('@/integrations/supabase/client')
+        
+        const fileExt = file.name.split('.').pop()
+        const fileName = `avatars/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+        
+        const { data, error } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false
+          })
+        
+        if (error) {
+          console.error('Error uploading avatar:', error)
+          // Fallback to base64
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            setValue('profile.avatar', e.target?.result as string)
+          }
+          reader.readAsDataURL(file)
+          return
+        }
+        
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(fileName)
+        
+        setValue('profile.avatar', urlData.publicUrl)
+      } catch (error) {
+        console.error('Error in handleAvatarChange:', error)
+        // Fallback to base64
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          setValue('profile.avatar', e.target?.result as string)
+        }
+        reader.readAsDataURL(file)
       }
-      reader.readAsDataURL(file)
     }
   }
 
@@ -87,6 +123,57 @@ export default function ProfileStep() {
           )}
           <p className="text-xs text-gray-500">
             Dit is hoe je naam wordt weergegeven in de app (optioneel)
+          </p>
+        </div>
+
+        {/* Bio */}
+        <div className="space-y-2">
+          <Label htmlFor="bio" className="text-sm font-medium text-gray-700">
+            Bio (optioneel)
+          </Label>
+          <Textarea
+            id="bio"
+            placeholder="Vertel iets over jezelf..."
+            {...register('profile.bio', { 
+              maxLength: { value: 500, message: 'Bio mag maximaal 500 karakters zijn' }
+            })}
+            className={errors.profile?.bio ? 'border-red-500' : ''}
+            rows={3}
+          />
+          {errors.profile?.bio && (
+            <p className="text-sm text-red-500">
+              {errors.profile.bio.message}
+            </p>
+          )}
+          <p className="text-xs text-gray-500">
+            Een korte beschrijving van jezelf (maximaal 500 karakters)
+          </p>
+        </div>
+
+        {/* Website */}
+        <div className="space-y-2">
+          <Label htmlFor="website" className="text-sm font-medium text-gray-700">
+            Website (optioneel)
+          </Label>
+          <Input
+            id="website"
+            type="url"
+            placeholder="https://jouwwebsite.com"
+            {...register('profile.website', { 
+              pattern: {
+                value: /^https?:\/\/.+/,
+                message: 'Voer een geldige URL in (begin met http:// of https://)'
+              }
+            })}
+            className={errors.profile?.website ? 'border-red-500' : ''}
+          />
+          {errors.profile?.website && (
+            <p className="text-sm text-red-500">
+              {errors.profile.website.message}
+            </p>
+          )}
+          <p className="text-xs text-gray-500">
+            Je persoonlijke of bedrijfswebsite
           </p>
         </div>
 
