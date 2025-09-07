@@ -1,14 +1,15 @@
-// bv. src/components/LoginWithFacebook.tsx
-import { supabase } from '@/utils/supabase';
+import { supabase } from '@/utils/supabase'; // laat dit zo als jouw supabase.ts in /utils staat
 
-export default function LoginWithFacebook() {
-  return (
-    <button
-      onClick={() =>
-        supabase.auth.signInWithOAuth({ provider: 'facebook' }) // geen redirectTo -> gebruikt je Site URL
-      }
-    >
-      Sign in with Facebook
-    </button>
-  );
+export default function FacebookConnectButton() {
+  const handleClick = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      // NA het inloggen terug naar JOUW pagina:
+      options: {
+        redirectTo: `${window.location.origin}/timeline-alchemy/admin/social-connections`,
+      },
+    });
+  };
+
+  return <button onClick={handleClick}>Connect Facebook</button>;
 }
