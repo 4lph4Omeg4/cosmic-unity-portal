@@ -1,5 +1,5 @@
 // bv. src/components/LoginWithFacebook.tsx
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/utils/supabase';
 
 export default function LoginWithFacebook() {
   return (
