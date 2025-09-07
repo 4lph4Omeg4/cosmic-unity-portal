@@ -256,7 +256,8 @@ const Community = () => {
         .insert({
           title: newPost.title,
           content: newPost.content,
-          image_url: imageUrl,
+          image_url: imageUrl || 'cosmic-utopia.png',
+          additional_images: imageUrl ? ['cyberpunk-dystopia.png'] : ['cyberpunk-dystopia.png'],
           user_id: user.id
         });
 
@@ -586,14 +587,29 @@ const Community = () => {
                       {post.content}
                     </p>
                     
-                    {/* Post Image */}
-                    {post.image_url && (
+                    {/* Post Images */}
+                    {(post.image_url || (post.additional_images && post.additional_images.length > 0)) && (
                       <div className="mb-6">
-                        <img 
-                          src={post.image_url} 
-                          alt="Post image" 
-                          className="w-full h-auto object-contain max-h-96 rounded-lg shadow-cosmic"
-                        />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {post.image_url && (
+                            <div>
+                              <img 
+                                src={post.image_url} 
+                                alt="Cosmic Utopia" 
+                                className="w-full h-auto object-contain max-h-96 rounded-lg shadow-cosmic"
+                              />
+                            </div>
+                          )}
+                          {post.additional_images?.map((imageUrl, index) => (
+                            <div key={index}>
+                              <img 
+                                src={imageUrl} 
+                                alt={`Additional image ${index + 1}`} 
+                                className="w-full h-auto object-contain max-h-96 rounded-lg shadow-cosmic"
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                     

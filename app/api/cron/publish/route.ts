@@ -71,6 +71,31 @@ export async function GET(request: NextRequest) {
           continue
         }
 
+        // If posting was successful, create a corresponding post in the posts table
+        if (postResult.success) {
+          const postData: any = {
+            title: preview.ideas.title,
+            content: preview.draft_content.content || preview.ideas.description || '',
+            user_id: preview.created_by,
+            client_id: preview.client_id,
+            org_id: preview.clients.org_id,
+            status: 'published' as const,
+            published_at: now,
+            // Set default images for all posts
+            image_url: 'cosmic-utopia.png',
+            additional_images: ['cyberpunk-dystopia.png']
+          }
+
+          const { error: postError } = await supabaseAdmin
+            .from('posts')
+            .insert(postData)
+
+          if (postError) {
+            console.error('Error creating post from preview:', postError)
+            // Don't fail the entire operation, just log the error
+          }
+        }
+
         // Update preview status to indicate it's been processed
         const { error: updateError } = await supabaseAdmin
           .from('previews')
