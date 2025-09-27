@@ -108,8 +108,24 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Bottom Row: Community and Contact */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Bottom Row: SH4M4NI4K, Community, and Contact */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* SH4M4NI4K Brand */}
+            <div>
+              <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
+                SH4M4NI4K
+              </h3>
+              <div className="space-y-3">
+                <p className="font-mystical text-sm text-muted-foreground">
+                  Awakening consciousness through sacred scripture and divine wisdom.
+                </p>
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
+                  <span className="font-cosmic text-sm text-cosmic-gradient">Galactic Federation of Light</span>
+                </div>
+              </div>
+            </div>
+
             {/* Community Links */}
             <div>
               <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
