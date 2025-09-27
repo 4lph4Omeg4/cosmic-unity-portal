@@ -4,13 +4,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent } from '@/components/ui/card';
-import { Mail, Stars, Sparkles, CheckCircle, Loader2 } from 'lucide-react';
+import { Mail, Stars, Sparkles, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
-import { subscribeToNewsletter } from '@/services/newsletterService';
-import { submitToShopifyForm } from '@/services/shopifyFormService';
 
 interface NewsletterSignupProps {
   variant?: 'footer' | 'section' | 'popup';
@@ -60,27 +58,23 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
     setIsSubmitting(true);
 
     try {
-      // Submit to Shopify form first
-      const fullName = `${firstName} ${lastName}`.trim();
-      await submitToShopifyForm({
+      // Simple email collection - store in localStorage for now
+      // In a real implementation, you would send this to your backend
+      const subscriberData = {
         email,
         firstName,
         lastName,
-        consent
-      });
-
-      // Then subscribe to newsletter
-      const result = await subscribeToNewsletter({
-        email,
-        name: fullName || undefined,
         consent,
-        source: variant as 'footer' | 'homepage' | 'popup',
+        timestamp: new Date().toISOString(),
+        source: variant,
         language,
-      });
+        createAccount
+      };
 
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to subscribe');
-      }
+      // Store in localStorage (you can later export this data)
+      const existingSubscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+      existingSubscribers.push(subscriberData);
+      localStorage.setItem('newsletterSubscribers', JSON.stringify(existingSubscribers));
 
       // If user wants to create account and isn't already logged in
       if (createAccount && !user && password) {
