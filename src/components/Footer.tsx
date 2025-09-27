@@ -50,11 +50,6 @@ const Footer = () => {
   const policyUrls = getPolicyUrls();
 
   const footerLinks = {
-    shop: [
-      { name: t('footer.allProducts'), href: '/shop/alle-kleding' },
-      { name: t('footer.newArrivals'), href: '/shop/digitale-producten' },
-      { name: t('footer.featured'), href: '/shop/andere-merchandise' },
-    ],
     community: [
       { name: t('footer.community'), href: '/community' },
       { name: t('footer.blog'), href: '/blog' },
@@ -113,38 +108,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Bottom Row: Shop, Community, and Contact */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Shop Links */}
-            <div>
-              <h3 className="font-cosmic text-lg font-semibold text-mystical-gradient mb-4">
-                {t('footer.shop')}
-              </h3>
-              <ul className="space-y-2">
-                {footerLinks.shop.map((link) => (
-                  <li key={link.name}>
-                    <Link 
-                      to={link.href} 
-                      className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link 
-                    to="/passport" 
-                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm flex items-center gap-2"
-                  >
-                    Galactic Passport (€3,69)
-                    <span className="px-2 py-1 bg-cosmic/20 text-cosmic text-xs font-mono rounded-full border border-cosmic/30">
-                      NEW
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
+          {/* Bottom Row: Community and Contact */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Community Links */}
             <div>
               <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">

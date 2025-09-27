@@ -20,10 +20,9 @@ const Navigation = () => {
   const timelineAlchemyEntryHref = 'https://timeline-alc.vercel.app';
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
-    { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
+    { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star },
     { name: t('nav.community'), href: '/community', icon: Users },
     { name: 'Blog', href: '/blog', icon: BookOpen },
-    { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
   ];
