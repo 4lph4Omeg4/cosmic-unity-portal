@@ -63,33 +63,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Main Footer Content */}
         <div className="space-y-12 mb-12">
-          {/* Top Row: Brand and Newsletter Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Brand Section */}
-            <div className="space-y-6 text-center lg:text-left">
-              <div className="flex items-center justify-center lg:justify-start space-x-2">
-                <div className="w-8 h-8 bg-cosmic-gradient rounded-full shadow-cosmic animate-cosmic-pulse"></div>
-                <span className="font-cosmic text-xl text-cosmic-gradient">SH4M4NI4K</span>
-              </div>
-              <div className="space-y-2">
-                <p className="font-mystical text-muted-foreground">
-                  Awakening consciousness through sacred scripture and divine merchandise.
-                </p>
-                <p className="font-mystical text-muted-foreground">
-                  Join the galactic federation of light.
-                </p>
-              </div>
-            </div>
-
-            {/* Newsletter Section */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="w-full max-w-md">
-                <NewsletterSignup variant="footer" compact />
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Row: Community (left), Social Links (center), Contact (right) */}
+          {/* Footer Row: Community (left), Social Links (center), Contact (right) */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             {/* Community Links - Left */}
             <div className="w-full md:w-auto">
