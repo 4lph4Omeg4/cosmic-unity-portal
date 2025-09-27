@@ -17,13 +17,7 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
   const { t, language } = useLanguage();
-  const timelineAlchemyEntryHref = user
-    ? (profile?.role === 'admin'
-        ? '/timeline-alchemy/admin/dashboard'
-        : (profile?.role === 'client'
-            ? '/timeline-alchemy/client/my-previews'
-            : '/timeline-alchemy'))
-    : '/timeline-alchemy';
+  const timelineAlchemyEntryHref = 'https://timeline-alc.vercel.app';
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: t('nav.shop'), href: '/shop', icon: ShoppingBag },
@@ -131,14 +125,12 @@ const Navigation = () => {
                   </DropdownMenuItem>
                   
                   {/* Timeline Alchemy Direct Link */}
-                  {timelineAlchemyNav.length > 0 && (
-                    <DropdownMenuItem asChild className="font-mystical">
-                      <Link to={timelineAlchemyNav[0].href} className="flex items-center">
-                        <Star className="mr-2 h-4 w-4" />
-                        <span>Timeline Alchemy</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem asChild className="font-mystical">
+                    <a href="https://timeline-alc.vercel.app" className="flex items-center" target="_blank" rel="noopener noreferrer">
+                      <Star className="mr-2 h-4 w-4" />
+                      <span>Timeline Alchemy</span>
+                    </a>
+                  </DropdownMenuItem>
                   
                   {/* Timeline Alchemy Section */}
                   {timelineAlchemyNav.length > 0 && (

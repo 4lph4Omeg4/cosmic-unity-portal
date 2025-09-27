@@ -11,13 +11,7 @@ const Footer = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const { profile } = useProfile();
-  const timelineAlchemyEntryHref = user
-    ? (profile?.role === 'admin'
-        ? '/timeline-alchemy/admin/dashboard'
-        : (profile?.role === 'client'
-            ? '/timeline-alchemy/client/my-previews'
-            : '/timeline-alchemy'))
-    : '/timeline-alchemy';
+  const timelineAlchemyEntryHref = 'https://timeline-alc.vercel.app';
 
   // Generate language-specific policy URLs
   const getPolicyUrls = () => {
