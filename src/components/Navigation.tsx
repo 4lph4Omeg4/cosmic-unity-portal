@@ -6,7 +6,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Menu, X, Star, Home, ShoppingBag, BookOpen, Users, Mail, User, LogOut, LogIn, MessageCircle } from 'lucide-react';
+import { Menu, X, Star, Home, BookOpen, Users, Mail, User, LogOut, LogIn, MessageCircle } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
 
 const Navigation = () => {
@@ -16,7 +16,7 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
   const { t, language } = useLanguage();
-  const timelineAlchemyEntryHref = 'https://timeline-alc.vercel.app';
+  const timelineAlchemyEntryHref = 'https://timeline-alchemy.nl';
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star },
@@ -218,17 +218,6 @@ const Navigation = () => {
               )
             ))}
 
-            {/* Additional actions mobile */}
-            <div className="space-y-1">
-              <Link
-                to="/cart"
-                className="flex items-center px-3 py-2 rounded-md text-base font-mystical cosmic-hover text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                onClick={() => setIsOpen(false)}
-              >
-                <ShoppingBag className="mr-3 h-5 w-5" />
-                {t('nav.cart') || 'Winkelwagen'}
-              </Link>
-            </div>
 
             {/* Auth Section Mobile */}
             <div className="pt-4 border-t border-border/20">

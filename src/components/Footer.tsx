@@ -11,7 +11,7 @@ const Footer = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const { profile } = useProfile();
-  const timelineAlchemyEntryHref = 'https://timeline-alc.vercel.app';
+  const timelineAlchemyEntryHref = 'https://timeline-alchemy.nl';
 
   // Generate language-specific policy URLs
   const getPolicyUrls = () => {
@@ -178,18 +178,6 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-sm">
-            <Link 
-              to={policyUrls.shipping} 
-              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-            >
-              {t('footer.shipping')}
-            </Link>
-            <Link 
-              to={policyUrls.refund} 
-              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-            >
-              {t('footer.returns')}
-            </Link>
             <Link 
               to={policyUrls.privacy} 
               className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
