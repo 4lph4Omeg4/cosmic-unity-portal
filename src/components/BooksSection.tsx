@@ -33,7 +33,10 @@ interface Book {
     nl: string;
     en: string;
   };
-  coverImage?: string;
+  coverImage: {
+    nl: string;
+    en: string;
+  };
 }
 
 const books: Book[] = [
@@ -65,7 +68,10 @@ const books: Book[] = [
       nl: "Begin je reis van ontwaken en ontdek de waarheid achter de illusie van de 'echte' wereld. De eerste stap in je spirituele transformatie.",
       en: "Begin your journey of awakening and discover the truth behind the illusion of the 'real' world. The first step in your spiritual transformation."
     },
-    coverImage: "https://books.google.com/books/publisher/content/images/frontcover/QN1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
+    coverImage: {
+      nl: "https://books.google.com/books/publisher/content/images/frontcover/QN1hEQAAQBAJ?fife=w400-h600&source=gbs_api",
+      en: "https://books.google.com/books/publisher/content/images/frontcover/QN1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
+    }
   },
   {
     id: '2',
@@ -95,7 +101,10 @@ const books: Book[] = [
       nl: "Een radicale uitnodiging tot innerlijke overgave, ego-loslating en het herontdekken van je goddelijke oorsprong. Geen dogma's, geen theorie – maar directe herkenning en herinnering.",
       en: "A radical invitation to inner surrender, ego-letting and rediscovering your divine origin. No dogma, no theory – but direct recognition and memory."
     },
-    coverImage: "https://books.google.com/books/publisher/content/images/frontcover/It1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
+    coverImage: {
+      nl: "https://books.google.com/books/publisher/content/images/frontcover/It1hEQAAQBAJ?fife=w400-h600&source=gbs_api",
+      en: "https://books.google.com/books/publisher/content/images/frontcover/It1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
+    }
   },
   {
     id: '3',
@@ -125,7 +134,10 @@ const books: Book[] = [
       nl: "Een baanbrekend eBook dat onthult hoe religie, wetenschap en spiritualiteit uitdrukkingen zijn van één onderliggende waarheid: de Eenheid die alles doordringt.",
       en: "A groundbreaking eBook revealing how religion, science and spirituality are expressions of one underlying truth: the Oneness that permeates all."
     },
-    coverImage: "https://books.google.com/books/publisher/content/images/frontcover/0d1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
+    coverImage: {
+      nl: "https://books.google.com/books/publisher/content/images/frontcover/0d1hEQAAQBAJ?fife=w400-h600&source=gbs_api",
+      en: "https://books.google.com/books/publisher/content/images/frontcover/0d1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
+    }
   }
 ];
 
@@ -177,25 +189,12 @@ const BooksSection = () => {
                   </Badge>
                 </div>
                 
-                <div className="aspect-[3/4] bg-gradient-to-br from-cosmic/20 to-mystical/20 rounded-lg overflow-hidden relative mb-4 flex items-center justify-center">
-                  {book.coverImage ? (
-                    <img 
-                      src={book.coverImage}
-                      alt={book.title[currentLang]}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="text-center p-6">
-                      <BookOpen className="w-16 h-16 mx-auto mb-4 text-cosmic animate-pulse" />
-                      <div className="space-y-2">
-                        <p className="font-cosmic text-sm text-cosmic-gradient">Trinity of</p>
-                        <p className="font-cosmic text-sm text-mystical-gradient">Transformation</p>
-                        <p className="font-mystical text-xs text-muted-foreground mt-4">
-                          {currentLang === 'nl' ? 'Boek' : 'Book'} {book.bookNumber}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                <div className="aspect-[2/3] bg-gradient-to-br from-cosmic/20 to-mystical/20 rounded-lg overflow-hidden relative mb-4">
+                  <img 
+                    src={book.coverImage[currentLang]}
+                    alt={book.title[currentLang]}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
 
                 <CardTitle className="font-cosmic text-xl text-cosmic-gradient line-clamp-2">
