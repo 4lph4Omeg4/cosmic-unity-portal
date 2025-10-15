@@ -250,26 +250,6 @@ const BooksSection = () => {
           ))}
         </div>
 
-        {/* Author Bio */}
-        <div className="mt-16 text-center max-w-3xl mx-auto">
-          <div className="p-8 bg-card/50 backdrop-blur-sm rounded-lg border border-border/30">
-            <h3 className="font-cosmic text-2xl font-bold text-mystical-gradient mb-4">
-              {currentLang === 'nl' ? 'Over de Auteur' : 'About the Author'}
-            </h3>
-            <p className="font-mystical text-muted-foreground leading-relaxed">
-              {currentLang === 'nl' 
-                ? 'Dennis Erens is een visionair auteur, spreker en de bedenker van The Chosen Ones Merchandise en SH4M4NI4K.NL. Zijn werk verbindt de domeinen van spiritualiteit, wetenschap en soeverein ontwaken. Na een levensveranderende ervaring buiten tijd en ruimte, wijdde hij zich aan het ontmaskeren van controlesystemen en het begeleiden van anderen naar multidimensionale bevrijding.'
-                : 'Dennis Erens is a visionary author, speaker, and the creator of The Chosen Ones Merchandise and SH4M4NI4K.NL. His work bridges the realms of spirituality, science, and sovereign awakening. After a life-altering experience beyond time and space, he committed himself to exposing control systems and guiding others toward multidimensional liberation.'
-              }
-            </p>
-            <p className="font-mystical text-muted-foreground leading-relaxed mt-4">
-              {currentLang === 'nl'
-                ? 'Dennis schrijft vanuit directe kennis, niet vanuit geloof. Met helderheid, diepgang en kosmische humor nodigt hij lezers uit om te ontwaken tot hun ware essentie — de onwrikbare IK BEN aanwezigheid achter alle illusie. Zijn boodschap is niet alleen een leer, maar een frequentie: bevrijdend, activerend en onmogelijk om te ont-weten eenmaal gevoeld.'
-                : 'Dennis writes from direct knowing, not belief. With clarity, depth, and cosmic humor, he invites readers to awaken to their true essence — the unshakable I AM presence behind all illusion. His message is not just a teaching, but a frequency: liberating, activating, and impossible to un-know once felt.'
-              }
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );
