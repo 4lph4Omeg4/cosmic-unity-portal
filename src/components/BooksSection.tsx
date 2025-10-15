@@ -51,9 +51,9 @@ const books: Book[] = [
       en: "Discover the Truth Behind the Illusion"
     },
     bookNumber: 1,
-    pages: 17,
+    pages: 16,
     price: {
-      nl: "€3,99",
+      nl: "€3,33",
       en: "$3.91"
     },
     originalPrice: {
@@ -61,32 +61,32 @@ const books: Book[] = [
       en: "$5.87"
     },
     link: {
-      nl: "https://play.google.com/store/books/details?id=QN1hEQAAQBAJ",
+      nl: "https://play.google.com/store/books/details?id=OFpjEQAAQBAJ",
       en: "https://play.google.com/store/books/details?id=QN1hEQAAQBAJ"
     },
     description: {
-      nl: "Begin je reis van ontwaken en ontdek de waarheid achter de illusie van de 'echte' wereld. De eerste stap in je spirituele transformatie.",
+      nl: "Ben je klaar om de sluier van misleiding op te lichten en de werkelijke realiteit te zien? Dit boek onthult hoe overheden, religie, het onderwijssysteem, de gezondheidszorg en de politiek samenwerken om de menselijke ziel gevangen te houden.",
       en: "Begin your journey of awakening and discover the truth behind the illusion of the 'real' world. The first step in your spiritual transformation."
     },
     coverImage: {
-      nl: "https://books.google.com/books/publisher/content/images/frontcover/QN1hEQAAQBAJ?fife=w400-h600&source=gbs_api",
+      nl: "https://books.google.com/books/publisher/content/images/frontcover/OFpjEQAAQBAJ?fife=w400-h600&source=gbs_api",
       en: "https://books.google.com/books/publisher/content/images/frontcover/QN1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
     }
   },
   {
     id: '2',
     title: {
-      nl: "De Waarheid Die Echt Bevrijdt",
+      nl: "De Waarheid die werkelijk Bevrijdt",
       en: "The Truth that Sets Free"
     },
     subtitle: {
-      nl: "Een Spiritueel Ontwaken voor het Nieuwe Tijdperk",
+      nl: "Een Spirituele Ontwaking voor de Nieuwe Tijd",
       en: "A Spiritual Awakening for the New Age"
     },
     bookNumber: 2,
-    pages: 17,
+    pages: 19,
     price: {
-      nl: "€3,99",
+      nl: "€3,33",
       en: "$3.91"
     },
     originalPrice: {
@@ -94,32 +94,32 @@ const books: Book[] = [
       en: "$5.87"
     },
     link: {
-      nl: "https://play.google.com/store/books/details?id=It1hEQAAQBAJ",
+      nl: "https://play.google.com/store/books/details?id=m-RhEQAAQBAJ",
       en: "https://play.google.com/store/books/details?id=It1hEQAAQBAJ"
     },
     description: {
-      nl: "Een radicale uitnodiging tot innerlijke overgave, ego-loslating en het herontdekken van je goddelijke oorsprong. Geen dogma's, geen theorie – maar directe herkenning en herinnering.",
+      nl: "Een radicale uitnodiging tot innerlijke overgave, ego-loslating en het herontdekken van je goddelijke oorsprong. Geen dogma, geen theorie – maar directe herkenning en herinnering.",
       en: "A radical invitation to inner surrender, ego-letting and rediscovering your divine origin. No dogma, no theory – but direct recognition and memory."
     },
     coverImage: {
-      nl: "https://books.google.com/books/publisher/content/images/frontcover/It1hEQAAQBAJ?fife=w400-h600&source=gbs_api",
+      nl: "https://books.google.com/books/publisher/content/images/frontcover/m-RhEQAAQBAJ?fife=w400-h600&source=gbs_api",
       en: "https://books.google.com/books/publisher/content/images/frontcover/It1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
     }
   },
   {
     id: '3',
     title: {
-      nl: "Eenheid Onthuld",
+      nl: "Eenheid Ontsluierd",
       en: "Unity Unveiled"
     },
     subtitle: {
-      nl: "Waar Religie, Wetenschap en Spiritualiteit Samensmelten tot Realiteit",
+      nl: "Waar Religie, Wetenschap en Spiritualiteit Samensmelten",
       en: "Where Religion, Science and Spirituality Merge into Reality"
     },
     bookNumber: 3,
-    pages: 27,
+    pages: 26,
     price: {
-      nl: "€3,99",
+      nl: "€3,33",
       en: "$3.91"
     },
     originalPrice: {
@@ -127,15 +127,15 @@ const books: Book[] = [
       en: "$5.87"
     },
     link: {
-      nl: "https://play.google.com/store/books/details?id=0d1hEQAAQBAJ",
+      nl: "https://play.google.com/store/books/details?id=ieRhEQAAQBAJ",
       en: "https://play.google.com/store/books/details?id=0d1hEQAAQBAJ"
     },
     description: {
-      nl: "Een baanbrekend eBook dat onthult hoe religie, wetenschap en spiritualiteit uitdrukkingen zijn van één onderliggende waarheid: de Eenheid die alles doordringt.",
+      nl: "Een baanbrekend e-book dat onthult hoe de schijnbare tegenstellingen tussen religie, wetenschap en spiritualiteit in werkelijkheid uitdrukking zijn van één onderliggende waarheid: de Eenheid die alles doordringt.",
       en: "A groundbreaking eBook revealing how religion, science and spirituality are expressions of one underlying truth: the Oneness that permeates all."
     },
     coverImage: {
-      nl: "https://books.google.com/books/publisher/content/images/frontcover/0d1hEQAAQBAJ?fife=w400-h600&source=gbs_api",
+      nl: "https://books.google.com/books/publisher/content/images/frontcover/ieRhEQAAQBAJ?fife=w400-h600&source=gbs_api",
       en: "https://books.google.com/books/publisher/content/images/frontcover/0d1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
     }
   }
