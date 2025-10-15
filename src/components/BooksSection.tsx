@@ -17,8 +17,14 @@ interface Book {
   };
   bookNumber: number;
   pages: number;
-  price: string;
-  originalPrice: string;
+  price: {
+    nl: string;
+    en: string;
+  };
+  originalPrice: {
+    nl: string;
+    en: string;
+  };
   link: {
     nl: string;
     en: string;
@@ -27,6 +33,7 @@ interface Book {
     nl: string;
     en: string;
   };
+  coverImage?: string;
 }
 
 const books: Book[] = [
@@ -42,16 +49,23 @@ const books: Book[] = [
     },
     bookNumber: 1,
     pages: 17,
-    price: "$3.91",
-    originalPrice: "$5.87",
+    price: {
+      nl: "€3,99",
+      en: "$3.91"
+    },
+    originalPrice: {
+      nl: "€5,99",
+      en: "$5.87"
+    },
     link: {
       nl: "https://play.google.com/store/books/details?id=QN1hEQAAQBAJ",
-      en: "https://play.google.com/store/books/details?id=QN1hEQAAQBAJ" // Update with EN version if different
+      en: "https://play.google.com/store/books/details?id=QN1hEQAAQBAJ"
     },
     description: {
       nl: "Begin je reis van ontwaken en ontdek de waarheid achter de illusie van de 'echte' wereld. De eerste stap in je spirituele transformatie.",
       en: "Begin your journey of awakening and discover the truth behind the illusion of the 'real' world. The first step in your spiritual transformation."
-    }
+    },
+    coverImage: "https://books.google.com/books/publisher/content/images/frontcover/QN1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
   },
   {
     id: '2',
@@ -65,16 +79,23 @@ const books: Book[] = [
     },
     bookNumber: 2,
     pages: 17,
-    price: "$3.91",
-    originalPrice: "$5.87",
+    price: {
+      nl: "€3,99",
+      en: "$3.91"
+    },
+    originalPrice: {
+      nl: "€5,99",
+      en: "$5.87"
+    },
     link: {
       nl: "https://play.google.com/store/books/details?id=It1hEQAAQBAJ",
-      en: "https://play.google.com/store/books/details?id=It1hEQAAQBAJ" // Update with EN version if different
+      en: "https://play.google.com/store/books/details?id=It1hEQAAQBAJ"
     },
     description: {
       nl: "Een radicale uitnodiging tot innerlijke overgave, ego-loslating en het herontdekken van je goddelijke oorsprong. Geen dogma's, geen theorie – maar directe herkenning en herinnering.",
       en: "A radical invitation to inner surrender, ego-letting and rediscovering your divine origin. No dogma, no theory – but direct recognition and memory."
-    }
+    },
+    coverImage: "https://books.google.com/books/publisher/content/images/frontcover/It1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
   },
   {
     id: '3',
@@ -88,16 +109,23 @@ const books: Book[] = [
     },
     bookNumber: 3,
     pages: 27,
-    price: "$3.91",
-    originalPrice: "$5.87",
+    price: {
+      nl: "€3,99",
+      en: "$3.91"
+    },
+    originalPrice: {
+      nl: "€5,99",
+      en: "$5.87"
+    },
     link: {
       nl: "https://play.google.com/store/books/details?id=0d1hEQAAQBAJ",
-      en: "https://play.google.com/store/books/details?id=0d1hEQAAQBAJ" // Update with EN version if different
+      en: "https://play.google.com/store/books/details?id=0d1hEQAAQBAJ"
     },
     description: {
       nl: "Een baanbrekend eBook dat onthult hoe religie, wetenschap en spiritualiteit uitdrukkingen zijn van één onderliggende waarheid: de Eenheid die alles doordringt.",
       en: "A groundbreaking eBook revealing how religion, science and spirituality are expressions of one underlying truth: the Oneness that permeates all."
-    }
+    },
+    coverImage: "https://books.google.com/books/publisher/content/images/frontcover/0d1hEQAAQBAJ?fife=w400-h600&source=gbs_api"
   }
 ];
 
@@ -149,20 +177,15 @@ const BooksSection = () => {
                   </Badge>
                 </div>
                 
-                <div className="aspect-[3/4] bg-gradient-to-br from-cosmic/20 to-mystical/20 rounded-lg overflow-hidden relative mb-4">
-                  <img 
-                    src={`https://play-lh.googleusercontent.com/books/images?id=${book.link[currentLang].split('id=')[1]}&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api`}
-                    alt={book.title[currentLang]}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback to placeholder if image fails to load
-                      e.currentTarget.style.display = 'none';
-                      const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="absolute inset-0 items-center justify-center text-center p-6 hidden">
-                    <div>
+                <div className="aspect-[3/4] bg-gradient-to-br from-cosmic/20 to-mystical/20 rounded-lg overflow-hidden relative mb-4 flex items-center justify-center">
+                  {book.coverImage ? (
+                    <img 
+                      src={book.coverImage}
+                      alt={book.title[currentLang]}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-center p-6">
                       <BookOpen className="w-16 h-16 mx-auto mb-4 text-cosmic animate-pulse" />
                       <div className="space-y-2">
                         <p className="font-cosmic text-sm text-cosmic-gradient">Trinity of</p>
@@ -172,7 +195,7 @@ const BooksSection = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <CardTitle className="font-cosmic text-xl text-cosmic-gradient line-clamp-2">
@@ -191,10 +214,10 @@ const BooksSection = () => {
 
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="font-cosmic text-2xl font-bold text-cosmic-gradient">
-                    {book.price}
+                    {book.price[currentLang]}
                   </span>
                   <span className="font-mystical text-sm text-muted-foreground line-through">
-                    {book.originalPrice}
+                    {book.originalPrice[currentLang]}
                   </span>
                 </div>
 
