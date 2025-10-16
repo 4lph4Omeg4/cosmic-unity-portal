@@ -17,19 +17,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Pages
 import Index from "./pages/Index";
-import Community from "./pages/Community";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
-import UserProfile from "./pages/UserProfile";
-import Friends from "./pages/Friends";
-import Messages from "./pages/Messages";
 import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import EgoToEden from "./pages/EgoToEden";
 import Unity from "./pages/Unity";
-import Passport from "./pages/Passport";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import ShippingPolicy from "./pages/ShippingPolicy";
@@ -37,22 +32,6 @@ import TermsOfService from "./pages/TermsOfService";
 import UnderConstruction from "./pages/UnderConstruction";
 import NotFound from "./pages/NotFound";
 
-// Timeline Alchemy
-import TimelineAlchemy from "./pages/TimelineAlchemy";
-import TimelineAlchemyDashboard from "./pages/timeline-alchemy/admin/Dashboard";
-import DashboardNew from "./pages/timeline-alchemy/admin/DashboardNew";
-import TimelineAlchemyIdeas from "./pages/timeline-alchemy/admin/Ideas";
-import TimelineAlchemyPreviewWizard from "./pages/timeline-alchemy/admin/PreviewWizard";
-import PreviewWizardNew from "./pages/timeline-alchemy/admin/PreviewWizardNew";
-import MakeMeAdmin from "./pages/timeline-alchemy/admin/MakeMeAdmin";
-import CreateTestPreview from "./pages/timeline-alchemy/admin/CreateTestPreview";
-import TimelineAlchemyMyPreviews from "./pages/timeline-alchemy/client/MyPreviews";
-import MyPreviewsNew from "./pages/timeline-alchemy/client/MyPreviewsNew";
-import TimelineAlchemySocialConnections from "./pages/timeline-alchemy/client/SocialConnections";
-import AdminSocialConnections from "./pages/timeline-alchemy/admin/SocialConnections";
-import FacebookDebug from "./pages/timeline-alchemy/admin/FacebookDebug";
-import AuthCallback from "./pages/AuthCallback";
-import TestCallback from "./pages/TestCallback";
 
 // Analytics
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -106,18 +85,8 @@ const App: React.FC = () => {
                 <Routes>
                   {/* Public routes */}
                   <Route path="/" element={<Index />} />
-                  <Route path="/community" element={<Community />} />
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/test-callback" element={<TestCallback />} />
-                  <Route path="/auth/callback/facebook" element={<AuthCallback />} />
-                  <Route path="/auth/callback/instagram" element={<AuthCallback />} />
-                  <Route path="/auth/callback/twitter" element={<AuthCallback />} />
-                  <Route path="/auth/callback/linkedin" element={<AuthCallback />} />
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/user/:userId" element={<UserProfile />} />
-                  <Route path="/friends" element={<Friends />} />
-                  <Route path="/messages" element={<Messages />} />
-                  <Route path="/messages/:userId" element={<Messages />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
                   <Route path="/about" element={<About />} />
@@ -125,7 +94,6 @@ const App: React.FC = () => {
                   <Route path="/ego-to-eden" element={<EgoToEden />} />
                   <Route path="/unity" element={<Unity />} />
                   <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
-                  <Route path="/passport" element={<Passport />} />
 
                   {/* Policies (NL/EN/DE) */}
                   <Route path="/privacybeleid" element={<PrivacyPolicy />} />
@@ -143,32 +111,6 @@ const App: React.FC = () => {
 
                   <Route path="/digitempel" element={<UnderConstruction />} />
 
-                  {/* Timeline Alchemy entry */}
-                  <Route path="/timeline-alchemy" element={<TimelineAlchemy />} />
-                  <Route path="/tla" element={<TimelineAlchemy />} />
-
-                  {/* Timeline Alchemy Admin */}
-                  <Route path="/timeline-alchemy/admin/dashboard" element={<TimelineAlchemyDashboard />} />
-                  <Route path="/timeline-alchemy/admin/dashboard-new" element={<DashboardNew />} />
-                  <Route path="/timeline-alchemy/admin/ideas" element={<TimelineAlchemyIdeas />} />
-                  <Route path="/timeline-alchemy/admin/preview-wizard" element={<TimelineAlchemyPreviewWizard />} />
-                  <Route path="/timeline-alchemy/admin/preview-wizard-new" element={<PreviewWizardNew />} />
-                  <Route path="/timeline-alchemy/admin/social-connections" element={<AdminSocialConnections />} />
-                  <Route path="/timeline-alchemy/admin/facebook-debug" element={<FacebookDebug />} />
-                  <Route path="/timeline-alchemy/admin/make-me-admin" element={<MakeMeAdmin />} />
-                  <Route path="/timeline-alchemy/admin/create-test-preview" element={<CreateTestPreview />} />
-
-                  {/* Timeline Alchemy Client */}
-                  <Route path="/timeline-alchemy/client/my-previews" element={<MyPreviewsNew />} />
-                  <Route path="/timeline-alchemy/client/my-previews-old" element={<TimelineAlchemyMyPreviews />} />
-                  <Route path="/timeline-alchemy/client/social-connections" element={<TimelineAlchemySocialConnections />} />
-
-                  {/* Onboarding */}
-                  <Route path="/onboarding" element={<OnboardingRedirect />} />
-                  <Route path="/onboarding-redirect" element={<OnboardingRedirect />} />
-                  <Route path="/onboarding/demo" element={<OnboardingDemo />} />
-                  <Route path="/onboarding/test" element={<OnboardingTest />} />
-                  <Route path="/test" element={<TestPage />} />
 
                   {/* Catch-all */}
                   <Route path="*" element={<NotFound />} />
