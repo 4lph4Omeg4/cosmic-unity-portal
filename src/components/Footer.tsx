@@ -51,8 +51,7 @@ const Footer = () => {
 
   const footerLinks = {
     community: [
-      { name: t('footer.community'), href: '/community' },
-      { name: t('footer.blog'), href: '/blog' },
+      { name: 'Blog', href: '/blog' },
       { name: t('footer.about'), href: '/about' },
       { name: t('footer.contact'), href: '/contact' },
     ]
@@ -65,10 +64,10 @@ const Footer = () => {
         <div className="space-y-12 mb-12">
           {/* Footer Row: Community (left), Social Links (center), Contact (right) */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-            {/* Community Links - Left */}
+            {/* Navigation Links - Left */}
             <div className="w-full md:w-auto">
               <h3 className="font-cosmic text-lg font-semibold text-cosmic-gradient mb-4">
-                {t('footer.community')}
+                Links
               </h3>
               <ul className="space-y-2">
                 {footerLinks.community.map((link) => (
