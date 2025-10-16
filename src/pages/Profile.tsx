@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import CommunityMembersList from '@/components/CommunityMembersList';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Upload, User, Save, MessageCircle, Instagram, Twitter, Linkedin, Youtube, Facebook } from 'lucide-react';
+import { Upload, User, Save, Instagram, Twitter, Linkedin, Youtube, Facebook } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
@@ -430,35 +429,6 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          {/* Community Members Section */}
-          <div className="mt-8">
-            <CommunityMembersList
-              title={t('profile.communityMembers')}
-              maxMembers={10}
-              onMessageClick={(memberId) => navigate(`/messages/${memberId}`)}
-            />
-          </div>
-
-          <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic mt-8">
-            <CardHeader>
-              <CardTitle className="font-cosmic text-cosmic-gradient">{t('profile.quickActions')}</CardTitle>
-              <CardDescription className="font-mystical">
-                {t('profile.quickActionsDesc')}
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="flex flex-wrap gap-4">
-              <Button onClick={() => navigate('/messages')} variant="cosmic" className="gap-2">
-                <MessageCircle className="w-4 h-4" />
-                {t('profile.viewMessages')}
-              </Button>
-
-              <Button onClick={() => navigate('/community')} variant="mystical" className="gap-2">
-                <User className="w-4 h-4" />
-                {t('profile.community')}
-              </Button>
-            </CardContent>
-          </Card>
         </div>
       </main>
       <Footer />
