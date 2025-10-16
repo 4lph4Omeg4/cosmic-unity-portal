@@ -25,16 +25,6 @@ const Navigation = () => {
     { name: t('nav.contact'), href: '/contact', icon: Mail },
   ];
 
-  // Timeline Alchemy sub-navigation based on user role
-  const timelineAlchemyNav = user && profile?.role === 'admin' ? [
-    { name: 'Dashboard', href: '/timeline-alchemy/admin/dashboard', icon: Star },
-    { name: 'Ideas', href: '/timeline-alchemy/admin/ideas', icon: Star },
-    { name: 'Preview Wizard', href: '/timeline-alchemy/admin/preview-wizard-new', icon: Star },
-    { name: 'Social Connections', href: '/timeline-alchemy/admin/social-connections', icon: Star },
-  ] : user && profile?.role === 'client' ? [
-    { name: 'My Previews', href: '/timeline-alchemy/client/my-previews', icon: Star },
-    { name: 'Social Connections', href: '/timeline-alchemy/client/social-connections', icon: Star },
-  ] : [];
 
   async function handleSignOut() {
     await signOut();
@@ -115,24 +105,6 @@ const Navigation = () => {
                       <span>Timeline Alchemy</span>
                     </a>
                   </DropdownMenuItem>
-                  
-                  {/* Timeline Alchemy Section */}
-                  {timelineAlchemyNav.length > 0 && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="font-mystical text-xs text-muted-foreground cursor-default">
-                        Timeline Alchemy
-                      </DropdownMenuItem>
-                      {timelineAlchemyNav.map((item) => (
-                        <DropdownMenuItem key={item.name} asChild className="font-mystical">
-                          <Link to={item.href} className="flex items-center">
-                            <item.icon className="mr-2 h-4 w-4" />
-                            <span>{item.name}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </>
-                  )}
                   
                   <DropdownMenuItem className="font-mystical">
                     <span className="text-xs text-muted-foreground">{user.email}</span>
