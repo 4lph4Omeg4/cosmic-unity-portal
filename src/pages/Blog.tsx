@@ -27,19 +27,19 @@ const Blog = () => {
           </div>
 
           {/* Blog Categories */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="max-w-2xl mx-auto mb-16">
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
               <div className="aspect-video overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center">
-                  <div className="text-muted-foreground">Coming Soon</div>
+                <div className="w-full h-full bg-gradient-to-br from-purple-500/20 to-blue-600/20 flex items-center justify-center">
+                  <div className="text-4xl font-cosmic text-cosmic-gradient">Timeline Alchemy</div>
                 </div>
               </div>
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
-                  {t('blog.egoToEden.title')}
+                  Timeline Alchemy
                 </CardTitle>
                 <CardDescription className="font-mystical">
-                  {t('blog.egoToEden.description')}
+                  Ontdek de kunst van bewustzijnstransformatie en tijdlijn alchemie. Leer hoe je jouw realiteit kunt verschuiven naar een hogere dimensie van ervaring.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -48,54 +48,13 @@ const Blog = () => {
                   className="w-full group"
                   asChild
                 >
-                  <Link to="/ego-to-eden">
-                    {t('blog.exploreBlog')}
+                  <a href="https://timeline-alchemy.nl" target="_blank" rel="noopener noreferrer">
+                    Bezoek Timeline Alchemy Blog
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  </a>
                 </Button>
               </CardContent>
             </Card>
-
-            <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
-              <div className="aspect-video overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center">
-                  <div className="text-muted-foreground">Coming Soon</div>
-                </div>
-              </div>
-              <CardHeader>
-                <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
-                  {t('blog.unity.title')}
-                </CardTitle>
-                <CardDescription className="font-mystical">
-                  {t('blog.unity.description')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  variant="cosmic"
-                  className="w-full group"
-                  asChild
-                >
-                  <Link to="/eenheid-gezien-door-het-enkele-oog">
-                    {t('blog.exploreBlog')}
-                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Coming Soon Message */}
-          <div className="text-center py-16">
-            <div className="w-16 h-16 bg-cosmic-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-cosmic animate-cosmic-pulse">
-              <Calendar className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="font-cosmic text-2xl font-bold text-cosmic-gradient mb-4">
-              Coming Soon
-            </h3>
-            <p className="font-mystical text-muted-foreground max-w-md mx-auto">
-              Blog articles are currently being updated and will be available soon.
-            </p>
           </div>
         </div>
       </main>

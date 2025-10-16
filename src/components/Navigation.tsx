@@ -20,7 +20,6 @@ const Navigation = () => {
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star },
-    { name: t('nav.community'), href: '/community', icon: Users },
     { name: 'Blog', href: '/blog', icon: BookOpen },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
