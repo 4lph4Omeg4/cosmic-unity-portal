@@ -6,7 +6,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Menu, X, Star, Home, BookOpen, Mail, User, LogOut, LogIn } from 'lucide-react';
+import { Menu, X, Star, Home, BookOpen, Mail, User, LogOut, LogIn, Users } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
 
 const Navigation = () => {
@@ -17,9 +17,11 @@ const Navigation = () => {
   const { profile } = useProfile();
   const { t, language } = useLanguage();
   const timelineAlchemyEntryHref = 'https://timeline-alchemy.nl';
+  const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
-    { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star },
+    { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star, external: true },
+    { name: 'Cosmic Community Creator', href: cosmicCommunityCreatorHref, icon: Users, external: true },
     { name: 'Blog', href: '/blog', icon: BookOpen },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },

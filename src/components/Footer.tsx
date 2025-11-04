@@ -12,6 +12,7 @@ const Footer = () => {
   const { user } = useAuth();
   const { profile } = useProfile();
   const timelineAlchemyEntryHref = 'https://timeline-alchemy.nl';
+  const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
 
   // Generate language-specific policy URLs
   const getPolicyUrls = () => {
@@ -82,12 +83,24 @@ const Footer = () => {
                 ))}
 
                 <li>
-                  <Link
-                    to={timelineAlchemyEntryHref}
+                  <a
+                    href={timelineAlchemyEntryHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
                   >
                     Timeline Alchemy
-                  </Link>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={cosmicCommunityCreatorHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
+                  >
+                    Cosmic Community Creator
+                  </a>
                 </li>
               </ul>
             </div>
