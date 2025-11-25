@@ -13,7 +13,7 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Header */}
@@ -30,9 +30,11 @@ const Blog = () => {
           <div className="max-w-2xl mx-auto mb-16">
             <Card className="cosmic-hover bg-card/80 backdrop-blur-sm border-border/50 shadow-cosmic overflow-hidden">
               <div className="aspect-video overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-purple-500/20 to-blue-600/20 flex items-center justify-center">
-                  <div className="text-4xl font-cosmic text-cosmic-gradient">Timeline Alchemy</div>
-                </div>
+                <img
+                  src="/images/timeline-alchemy.png"
+                  alt="Timeline Alchemy"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
               </div>
               <CardHeader>
                 <CardTitle className="font-cosmic text-2xl text-cosmic-gradient">
@@ -58,7 +60,7 @@ const Blog = () => {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
