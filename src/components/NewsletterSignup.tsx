@@ -7,8 +7,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Mail, Stars, Sparkles, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/hooks/useProfile';
 
 interface NewsletterSignupProps {
   variant?: 'footer' | 'section' | 'popup';
@@ -24,15 +22,11 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [password, setPassword] = useState('');
-  const [createAccount, setCreateAccount] = useState(true);
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
   const { t, language } = useLanguage();
-  const { user, signUp } = useAuth();
-  const { profile } = useProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,15 +35,6 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       toast({
         title: t('newsletter.error.incomplete'),
         description: t('newsletter.error.incomplete'),
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (createAccount && !password) {
-      toast({
-        title: t('newsletter.error.password'),
-        description: t('newsletter.error.password'),
         variant: "destructive",
       });
       return;
@@ -67,8 +52,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         consent,
         timestamp: new Date().toISOString(),
         source: variant,
-        language,
-        createAccount
+        language
       };
 
       // Store in localStorage (you can later export this data)
@@ -76,42 +60,10 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       existingSubscribers.push(subscriberData);
       localStorage.setItem('newsletterSubscribers', JSON.stringify(existingSubscribers));
 
-      // If user wants to create account and isn't already logged in
-      if (createAccount && !user && password) {
-        const fullName = `${firstName} ${lastName}`.trim();
-        const { error: authError } = await signUp(email, password, fullName || undefined);
-
-        if (authError) {
-          // Newsletter subscription succeeded but account creation failed
-          const title = language === 'en' ? 'Newsletter subscription successful' : language === 'de' ? 'Newsletter-Anmeldung erfolgreich' : 'Nieuwsbrief aanmelding geslaagd';
-          const description = language === 'en'
-            ? `You're subscribed to the newsletter, but account creation failed: ${authError.message}`
-            : language === 'de'
-            ? `Sie sind für den Newsletter angemeldet, aber die Kontoerstellung ist fehlgeschlagen: ${authError.message}`
-            : `Je bent aangemeld voor de nieuwsbrief, maar account aanmaken mislukte: ${authError.message}`;
-          toast({
-            title,
-            description,
-            variant: "destructive",
-          });
-        } else {
-          const title = language === 'en' ? 'Welcome to the Inner Circle! 🌀' : language === 'de' ? 'Willkommen im Inneren Kreis! 🌀' : 'Welkom in de Inner Circle! 🌀';
-          const description = language === 'en'
-            ? 'Your newsletter subscription and portal account have been created! Check your email for confirmation.'
-            : language === 'de'
-            ? 'Ihre Newsletter-Anmeldung und Ihr Portal-Konto wurden erstellt! Überprüfen Sie Ihre E-Mail zur Bestätigung.'
-            : 'Je nieuwsbrief aanmelding en portal account zijn aangemaakt! Check je email voor bevestiging.';
-          toast({
-            title,
-            description,
-          });
-        }
-      } else {
-        toast({
-          title: t('newsletter.success.title'),
-          description: t('newsletter.success.description'),
-        });
-      }
+      toast({
+        title: t('newsletter.success.title'),
+        description: t('newsletter.success.description'),
+      });
 
       setIsSuccess(true);
 
@@ -140,8 +92,6 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
         setEmail('');
         setFirstName('');
         setLastName('');
-        setPassword('');
-        setCreateAccount(true);
         setConsent(false);
       }, 3000);
 
@@ -150,8 +100,8 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
       const description = language === 'en'
         ? 'Something went wrong. Please try again.'
         : language === 'de'
-        ? 'Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.'
-        : 'Er is iets misgegaan. Probeer het opnieuw.';
+          ? 'Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.'
+          : 'Er is iets misgegaan. Probeer het opnieuw.';
       toast({
         title,
         description,
@@ -165,7 +115,7 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   const getCardClassName = () => {
     const base = "relative overflow-hidden transition-all duration-500";
     const glowEffect = "before:absolute before:inset-0 before:bg-cosmic-gradient before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-5";
-    
+
     switch (variant) {
       case 'footer':
         return `${base} bg-card/50 backdrop-blur-sm border-cosmic/30 ${glowEffect}`;
@@ -179,63 +129,6 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
   const getContentClassName = () => {
     return compact ? "p-4 space-y-3" : "p-6 space-y-4";
   };
-
-  // Show welcome back message for logged in users
-  if (user) {
-    return (
-      <Card className={getCardClassName()}>
-        <CardContent className={getContentClassName()}>
-          <div className="text-center space-y-4 animate-in fade-in-50 zoom-in-95 duration-500">
-            <div className="relative mx-auto">
-              {profile?.avatar_url ? (
-                <div className="relative">
-                  <img
-                    src={profile.avatar_url}
-                    alt={profile.display_name || user.email || 'User'}
-                    className="w-16 h-16 mx-auto rounded-full border-2 border-cosmic shadow-lg"
-                  />
-                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-cosmic rounded-full flex items-center justify-center">
-                    <Sparkles className="w-3 h-3 text-white" />
-                  </div>
-                </div>
-              ) : (
-                <div className="relative">
-                  <div className="w-16 h-16 mx-auto rounded-full bg-cosmic-gradient flex items-center justify-center text-white font-cosmic text-xl shadow-lg">
-                    {profile?.display_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || '✨'}
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                    <Stars className="w-3 h-3 text-white" />
-                  </div>
-                </div>
-              )}
-              <Sparkles className="w-6 h-6 absolute top-0 left-1/2 transform -translate-x-12 text-cosmic/60 animate-pulse" />
-              <Stars className="w-4 h-4 absolute bottom-2 right-1/2 transform translate-x-12 text-primary/40 animate-ping" />
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="font-cosmic text-xl font-bold text-cosmic-gradient">
-                {t('newsletter.welcome.title')}
-              </h3>
-              <p className="font-mystical text-muted-foreground">
-                {profile?.display_name && (
-                  <span className="block font-semibold text-foreground mb-1">
-                    {profile.display_name}
-                  </span>
-                )}
-                {t('newsletter.welcome.message')}
-              </p>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-cosmic/10 rounded-full">
-                <Stars className="w-4 h-4 text-cosmic" />
-                <span className="font-mystical text-xs text-cosmic font-medium">
-                  {t('newsletter.welcome.status')}
-                </span>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   if (isSuccess) {
     return (
@@ -334,48 +227,6 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
               </div>
             </div>
 
-            {/* Account Creation Option */}
-            {!compact && !user && (
-              <div className="space-y-3 pt-2 border-t border-border/30">
-                <div className="flex items-start space-x-2">
-                  <Checkbox
-                    id="create-account"
-                    checked={createAccount}
-                    onCheckedChange={(checked) => setCreateAccount(Boolean(checked))}
-                    className="mt-0.5"
-                  />
-                  <Label
-                    htmlFor="create-account"
-                    className="font-mystical text-sm text-foreground leading-relaxed cursor-pointer"
-                  >
-                    {t('newsletter.account.create')}
-                    <span className="block text-xs text-muted-foreground mt-1">
-                      {t('newsletter.account.benefits')}
-                    </span>
-                  </Label>
-                </div>
-
-                {createAccount && (
-                  <div className="space-y-2 ml-6">
-                    <Label htmlFor="newsletter-password" className="font-mystical text-sm">
-                      {t('newsletter.password.label')} *
-                    </Label>
-                    <Input
-                      id="newsletter-password"
-                      type="password"
-                      placeholder={t('newsletter.password.placeholder')}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="cosmic-input transition-all duration-300 focus:border-cosmic focus:ring-cosmic/20"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      {t('newsletter.password.hint')}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-
             <div className="flex items-start space-x-2 pt-2 relative z-10">
               <Checkbox
                 id="newsletter-consent"
@@ -394,15 +245,13 @@ const NewsletterSignup: React.FC<NewsletterSignupProps> = ({
             </div>
           </div>
 
-
-
           <Button
             type="submit"
-            disabled={isSubmitting || !email || !firstName || !lastName || !consent || (createAccount && !password)}
+            disabled={isSubmitting || !email || !firstName || !lastName || !consent}
             className="w-full cosmic-hover bg-cosmic-gradient hover:shadow-cosmic text-white font-mystical transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:hover:shadow-none pointer-events-auto relative z-10"
             size={compact ? "default" : "lg"}
           >
-           {isSubmitting ? t('newsletter.buttonLoading') : t('newsletter.button')}
+            {isSubmitting ? t('newsletter.buttonLoading') : t('newsletter.button')}
           </Button>
         </form>
       </CardContent>

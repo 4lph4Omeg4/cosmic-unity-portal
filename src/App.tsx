@@ -1,12 +1,11 @@
 // src/App.tsx
 import React, { useEffect } from "react";
 
-// Supabase client (uit src/utils/supabase.ts)
-import { supabase } from "@/utils/supabase";
+
 
 // Providers & UI
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "@/hooks/useAuth";
+
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
@@ -17,8 +16,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Pages
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Profile from "./pages/Profile";
+
 import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import About from "./pages/About";
@@ -37,90 +35,57 @@ import NotFound from "./pages/NotFound";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 
-// Onboarding
-import OnboardingDemo from "@/components/onboarding/OnboardingDemo";
-import OnboardingTest from "@/pages/OnboardingTest";
-import OnboardingRedirect from "@/pages/OnboardingRedirect";
-import TestPage from "@/pages/TestPage";
+
 
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
-  // --- Supabase: optionele, veilige smoke-test ---
-  useEffect(() => {
-    const url = import.meta.env.VITE_SUPABASE_URL;
-    const anon = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    if (!url || !anon) {
-      console.warn("⚠️ Supabase env vars ontbreken (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY).");
-      return;
-    }
 
-    // Als je VITE_SUPABASE_HEALTH_TABLE zet (bv. "organizations"), testen we 1 query.
-    const healthTable = import.meta.env.VITE_SUPABASE_HEALTH_TABLE;
-    if (!healthTable) {
-      console.log("✅ Supabase client geïnitialiseerd.");
-      return;
-    }
-
-    (async () => {
-      const { data, error } = await supabase.from(healthTable).select("*").limit(1);
-      if (error) {
-        console.error("❌ Supabase smoke-test error:", error.message);
-      } else {
-        console.log("✅ Supabase smoke-test ok. Sample:", data);
-      }
-    })();
-  }, []);
-  // --- Einde Supabase smoke-test ---
 
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <AuthProvider>
-          <TooltipProvider>
-              <Toaster />
-              <Sonner />
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
 
-              <BrowserRouter>
-                <Routes>
-                  {/* Public routes */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/ego-to-eden" element={<EgoToEden />} />
-                  <Route path="/unity" element={<Unity />} />
-                  <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
+          <BrowserRouter>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<Index />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/ego-to-eden" element={<EgoToEden />} />
+              <Route path="/unity" element={<Unity />} />
+              <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
 
-                  {/* Policies (NL/EN/DE) */}
-                  <Route path="/privacybeleid" element={<PrivacyPolicy />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/datenschutz" element={<PrivacyPolicy />} />
-                  <Route path="/retourbeleid" element={<RefundPolicy />} />
-                  <Route path="/refund-policy" element={<RefundPolicy />} />
-                  <Route path="/rückgaberecht" element={<RefundPolicy />} />
-                  <Route path="/verzendbeleid" element={<ShippingPolicy />} />
-                  <Route path="/shipping-policy" element={<ShippingPolicy />} />
-                  <Route path="/versandrichtlinien" element={<ShippingPolicy />} />
-                  <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
-                  <Route path="/terms-of-service" element={<TermsOfService />} />
-                  <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
+              {/* Policies (NL/EN/DE) */}
+              <Route path="/privacybeleid" element={<PrivacyPolicy />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/datenschutz" element={<PrivacyPolicy />} />
+              <Route path="/retourbeleid" element={<RefundPolicy />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/rückgaberecht" element={<RefundPolicy />} />
+              <Route path="/verzendbeleid" element={<ShippingPolicy />} />
+              <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              <Route path="/versandrichtlinien" element={<ShippingPolicy />} />
+              <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
 
-                  <Route path="/digitempel" element={<UnderConstruction />} />
+              <Route path="/digitempel" element={<UnderConstruction />} />
 
 
-                  {/* Catch-all */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
+              {/* Catch-all */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
 
-              <SpeedInsights />
-              <Analytics />
-            </TooltipProvider>
-        </AuthProvider>
+          <SpeedInsights />
+          <Analytics />
+        </TooltipProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

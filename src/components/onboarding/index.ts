@@ -1,5 +1,0 @@
-export { default as OnboardingWizard } from './OnboardingWizard'
-export { default as ProfileStep } from './steps/ProfileStep'
-export { default as OrganizationStep } from './steps/OrganizationStep'
-export { default as SocialsStep } from './steps/SocialsStep'
-export { default as PreferencesStep } from './steps/PreferencesStep'

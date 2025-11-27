@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 interface StorageImageProps {
   bucket: string;
@@ -17,30 +16,16 @@ const StorageImage: React.FC<StorageImageProps> = ({
   fallback = '/placeholder.svg'
 }) => {
   const [imageUrl, setImageUrl] = useState<string>(fallback);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // No loading needed if just fallback
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const getImageUrl = async () => {
-      try {
-        const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-        
-        if (data?.publicUrl) {
-          setImageUrl(data.publicUrl);
-          setError(false);
-        } else {
-          setError(true);
-        }
-      } catch (err) {
-        console.error('Error loading image:', err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getImageUrl();
-  }, [bucket, path]);
+    // Since Supabase is removed, we can't fetch the image.
+    // We'll just use the fallback or a placeholder.
+    // If you have public URLs, you could hardcode the base URL here.
+    // For now, we default to fallback.
+    setImageUrl(fallback);
+  }, [bucket, path, fallback]);
 
   const handleImageError = () => {
     setError(true);
@@ -49,15 +34,11 @@ const StorageImage: React.FC<StorageImageProps> = ({
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {loading && (
-        <div className="absolute inset-0 bg-cosmic-gradient animate-pulse rounded-lg"></div>
-      )}
       <img
-        src={error ? fallback : imageUrl}
+        src={imageUrl}
         alt={alt}
-        className={`w-full h-full object-cover transition-all duration-300 ${
-          loading ? 'opacity-0' : 'opacity-100'
-        } ${error ? 'filter grayscale' : ''}`}
+        className={`w-full h-full object-cover transition-all duration-300 ${loading ? 'opacity-0' : 'opacity-100'
+          } ${error ? 'filter grayscale' : ''}`}
         onLoad={() => setLoading(false)}
         onError={handleImageError}
       />

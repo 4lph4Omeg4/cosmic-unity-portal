@@ -1,3 +1,0 @@
-# Cron configuration for scheduled publisher
-# This runs every 5 minutes to check for scheduled posts
-schedule: "*/5 * * * *"

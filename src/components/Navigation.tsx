@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/hooks/useProfile';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Menu, X, Star, Home, BookOpen, Mail, User, LogOut, LogIn, Users } from 'lucide-react';
+import { Menu, X, Star, Home, BookOpen, Mail, Users } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
-  const { profile } = useProfile();
   const { t, language } = useLanguage();
   const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
   const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
@@ -26,12 +20,6 @@ const Navigation = () => {
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
   ];
-
-
-  async function handleSignOut() {
-    await signOut();
-    navigate('/');
-  }
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -65,8 +53,8 @@ const Navigation = () => {
                   key={item.name}
                   to={item.href}
                   className={`font-mystical text-sm transition-all duration-300 hover:text-primary ${isActive(item.href)
-                      ? 'text-cosmic glow-accent'
-                      : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-cosmic glow-accent'
+                    : 'text-muted-foreground hover:text-foreground'
                     }`}
                 >
                   {item.name}
@@ -78,55 +66,6 @@ const Navigation = () => {
           {/* Desktop Action Buttons */}
           <div className="hidden lg:flex items-center gap-2">
             <LanguageSelector />
-            <div className="flex items-center gap-4">
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={profile?.avatar_url} />
-                        <AvatarFallback className="bg-cosmic-gradient text-white">
-                          {profile?.display_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || '?'}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end">
-                    <DropdownMenuItem asChild className="font-mystical">
-                      <Link to="/profile" className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        <span>{t('nav.profile')}</span>
-                      </Link>
-                    </DropdownMenuItem>
-
-                    {/* Timeline Alchemy Direct Link */}
-                    <DropdownMenuItem asChild className="font-mystical">
-                      <a href="https://www.timeline-alchemy.nl" className="flex items-center" target="_blank" rel="noopener noreferrer">
-                        <Star className="mr-2 h-4 w-4" />
-                        <span>Timeline Alchemy</span>
-                      </a>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem className="font-mystical">
-                      <span className="text-xs text-muted-foreground">{user.email}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut} className="font-mystical">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>{t('nav.logout')}</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Button
-                  variant="mystical"
-                  onClick={() => navigate('/auth')}
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  {t('nav.login')}
-                </Button>
-              )}
-            </div>
           </div>
 
           {/* Mobile actions */}
@@ -166,8 +105,8 @@ const Navigation = () => {
                   key={item.name}
                   to={item.href}
                   className={`flex items-center px-3 py-2 rounded-md text-base font-mystical cosmic-hover ${isActive(item.href)
-                      ? 'text-cosmic bg-cosmic/10'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                    ? 'text-cosmic bg-cosmic/10'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -176,48 +115,6 @@ const Navigation = () => {
                 </Link>
               )
             ))}
-
-
-            {/* Auth Section Mobile */}
-            <div className="pt-4 border-t border-border/20">
-              {user ? (
-                <div className="space-y-3">
-                  <Link
-                    to="/profile"
-                    className="flex items-center gap-3 px-3 py-2 cosmic-hover rounded-md"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={profile?.avatar_url} />
-                      <AvatarFallback className="bg-cosmic-gradient text-white text-sm">
-                        {profile?.display_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || '?'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-mystical text-sm">{profile?.display_name || 'Profiel'}</span>
-                      <span className="text-xs text-muted-foreground">{user.email}</span>
-                    </div>
-                  </Link>
-                  <Button
-                    variant="outline"
-                    className="w-full mx-3"
-                    onClick={handleSignOut}
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    {t('nav.logout')}
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  variant="mystical"
-                  className="w-full mx-3"
-                  onClick={() => navigate('/auth')}
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  {t('nav.login')}
-                </Button>
-              )}
-            </div>
           </div>
         </div>
       )}

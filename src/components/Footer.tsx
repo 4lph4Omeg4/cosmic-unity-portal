@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/hooks/useProfile';
 import { Star, Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import NewsletterSignup from '@/components/NewsletterSignup';
@@ -9,8 +7,6 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { t, language } = useLanguage();
-  const { user } = useAuth();
-  const { profile } = useProfile();
   const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
   const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
 
