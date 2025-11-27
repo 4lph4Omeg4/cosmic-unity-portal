@@ -11,7 +11,7 @@ const Footer = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const { profile } = useProfile();
-  const timelineAlchemyEntryHref = 'https://timeline-alchemy.nl';
+  const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
   const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
 
   // Generate language-specific policy URLs
@@ -126,7 +126,7 @@ const Footer = () => {
                   </a>
                   <a href="https://www.tiktok.com/@sh4m4ni4k?_t=ZN-8tl32THb6yk&_r=1" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-cosmic cosmic-hover">
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                     </svg>
                   </a>
                 </div>
@@ -140,8 +140,8 @@ const Footer = () => {
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-end space-x-2 text-sm">
-                  <a 
-                    href="mailto:sh4m4ni4k@sh4m4ni4k.nl" 
+                  <a
+                    href="mailto:sh4m4ni4k@sh4m4ni4k.nl"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
                   >
                     sh4m4ni4k@sh4m4ni4k.nl
@@ -149,8 +149,8 @@ const Footer = () => {
                   <Mail className="w-4 h-4 text-cosmic" />
                 </div>
                 <div className="flex items-center justify-end space-x-2 text-sm">
-                  <a 
-                    href="tel:+31613163277" 
+                  <a
+                    href="tel:+31613163277"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
                   >
                     06 13163277
@@ -183,21 +183,21 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
             <p className="font-mystical text-sm text-muted-foreground">
               © {currentYear} SH4M4NI4K - The Chosen Ones. {t('footer.copyright')}
             </p>
           </div>
           <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-sm">
-            <Link 
-              to={policyUrls.privacy} 
+            <Link
+              to={policyUrls.privacy}
               className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
             >
               {t('footer.privacy')}
             </Link>
-            <Link 
-              to={policyUrls.terms} 
+            <Link
+              to={policyUrls.terms}
               className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
             >
               {t('footer.terms')}
