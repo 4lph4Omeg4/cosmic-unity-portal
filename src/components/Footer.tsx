@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
-import NewsletterSignup from '@/components/NewsletterSignup';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -17,28 +16,24 @@ const Footer = () => {
         return {
           privacy: '/privacybeleid',
           terms: '/algemene-voorwaarden',
-          shipping: '/verzendbeleid',
           refund: '/retourbeleid'
         };
       case 'en':
         return {
           privacy: '/privacy-policy',
           terms: '/terms-of-service',
-          shipping: '/shipping-policy',
           refund: '/refund-policy'
         };
       case 'de':
         return {
           privacy: '/datenschutz',
           terms: '/nutzungsbedingungen',
-          shipping: '/versandrichtlinien',
           refund: '/rückgaberecht'
         };
       default:
         return {
           privacy: '/privacybeleid',
           terms: '/algemene-voorwaarden',
-          shipping: '/verzendbeleid',
           refund: '/retourbeleid'
         };
     }

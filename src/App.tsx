@@ -21,11 +21,8 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import EgoToEden from "./pages/EgoToEden";
-import Unity from "./pages/Unity";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
-import ShippingPolicy from "./pages/ShippingPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import UnderConstruction from "./pages/UnderConstruction";
 import NotFound from "./pages/NotFound";
@@ -57,9 +54,6 @@ const App: React.FC = () => {
               <Route path="/blog/:blogHandle/:articleHandle" element={<BlogArticle />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/ego-to-eden" element={<EgoToEden />} />
-              <Route path="/unity" element={<Unity />} />
-              <Route path="/eenheid-gezien-door-het-enkele-oog" element={<Unity />} />
 
               {/* Policies (NL/EN/DE) */}
               <Route path="/privacybeleid" element={<PrivacyPolicy />} />
@@ -68,9 +62,9 @@ const App: React.FC = () => {
               <Route path="/retourbeleid" element={<RefundPolicy />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
               <Route path="/rückgaberecht" element={<RefundPolicy />} />
-              <Route path="/verzendbeleid" element={<ShippingPolicy />} />
-              <Route path="/shipping-policy" element={<ShippingPolicy />} />
-              <Route path="/versandrichtlinien" element={<ShippingPolicy />} />
+              <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
               <Route path="/algemene-voorwaarden" element={<TermsOfService />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
