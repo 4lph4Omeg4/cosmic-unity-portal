@@ -122,7 +122,7 @@ const Contact = () => {
                         href="mailto:sh4m4ni4k@sh4m4ni4k.nl"
                         className="font-mystical text-muted-foreground hover:text-cosmic transition-colors"
                       >
-                        sh4m4ni4k@sh4m4ni4k.nl
+                        timeline-alchemy@sh4m4ni4k.nl
                       </a>
                     </div>
                   </div>
@@ -149,8 +149,7 @@ const Contact = () => {
                     <div>
                       <p className="font-mystical font-semibold text-foreground">{t('contact.info.location')}</p>
                       <div className="font-mystical text-muted-foreground">
-                        <p>Poststraat 47B</p>
-                        <p>6371VL Landgraaf</p>
+                        <p>Landgraaf</p>
                         <p>Nederland</p>
                       </div>
                     </div>
