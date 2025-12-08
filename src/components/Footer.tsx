@@ -135,7 +135,7 @@ const Footer = () => {
                     href="mailto:sh4m4ni4k@sh4m4ni4k.nl"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
                   >
-                    sh4m4ni4k@sh4m4ni4k.nl
+                    timeline-alchemy@sh4m4ni4k.nl
                   </a>
                   <Mail className="w-4 h-4 text-cosmic" />
                 </div>
@@ -150,9 +150,8 @@ const Footer = () => {
                 </div>
                 <div className="flex items-start justify-end space-x-2 text-sm">
                   <span className="font-mystical text-muted-foreground">
-                    Landgraaf<br />
-                    Nederland
-                  </span>
+                    Landgraaf, NL<br />
+                   </span>
                   <MapPin className="w-4 h-4 text-cosmic mt-0.5" />
                 </div>
               </div>
