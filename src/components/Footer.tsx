@@ -150,8 +150,7 @@ const Footer = () => {
                 </div>
                 <div className="flex items-start justify-end space-x-2 text-sm">
                   <span className="font-mystical text-muted-foreground">
-                    Poststraat 47B<br />
-                    6371VL Landgraaf<br />
+                    Landgraaf<br />
                     Nederland
                   </span>
                   <MapPin className="w-4 h-4 text-cosmic mt-0.5" />
