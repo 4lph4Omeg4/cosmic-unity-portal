@@ -9,37 +9,7 @@ const Footer = () => {
   const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
   const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
 
-  // Generate language-specific policy URLs
-  const getPolicyUrls = () => {
-    switch (language) {
-      case 'nl':
-        return {
-          privacy: '/privacybeleid',
-          terms: '/algemene-voorwaarden',
-          refund: '/retourbeleid'
-        };
-      case 'en':
-        return {
-          privacy: '/privacy-policy',
-          terms: '/terms-of-service',
-          refund: '/refund-policy'
-        };
-      case 'de':
-        return {
-          privacy: '/datenschutz',
-          terms: '/nutzungsbedingungen',
-          refund: '/rückgaberecht'
-        };
-      default:
-        return {
-          privacy: '/privacybeleid',
-          terms: '/algemene-voorwaarden',
-          refund: '/retourbeleid'
-        };
-    }
-  };
 
-  const policyUrls = getPolicyUrls();
 
   const footerLinks = {
     community: [
@@ -177,22 +147,13 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
             <p className="font-mystical text-sm text-muted-foreground">
-              © {currentYear} SH4M4NI4K - The Chosen Ones. {t('footer.copyright')}
+              © {currentYear} SH4M4NI4K - The Chosen Ones.
             </p>
           </div>
           <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-sm">
-            <Link
-              to={policyUrls.privacy}
-              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-            >
-              {t('footer.privacy')}
-            </Link>
-            <Link
-              to={policyUrls.terms}
-              className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
-            >
-              {t('footer.terms')}
-            </Link>
+            <p className="font-mystical text-sm text-muted-foreground">
+              {t('footer.copyright')}
+            </p>
           </div>
         </div>
       </div>
