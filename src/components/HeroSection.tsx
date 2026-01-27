@@ -7,11 +7,11 @@ import { useLanguage } from '@/hooks/useLanguage';
 
 const HeroSection = () => {
   const { t } = useLanguage();
-  
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${cosmicHero})` }}
       >
@@ -51,18 +51,18 @@ const HeroSection = () => {
 
         {/* Call to Action */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Link to="/digitempel">
+          <a href="https://www.timeline-alchemy.nl" target="_blank" rel="noopener noreferrer">
             <Button variant="cosmic" size="lg" className="group">
-              {t('hero.cta.explore')}
+              Timeline Alchemy
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-          </Link>
-          <Link to="/blog">
+          </a>
+          <a href="https://www.timeless-awareness.nl" target="_blank" rel="noopener noreferrer">
             <Button variant="energy" size="lg" className="group">
               <Zap className="mr-2 h-5 w-5" />
-              Blog
+              Timeless Awareness
             </Button>
-          </Link>
+          </a>
         </div>
 
         {/* Sacred Statistics */}
