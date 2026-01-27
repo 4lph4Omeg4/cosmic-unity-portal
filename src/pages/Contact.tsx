@@ -11,11 +11,11 @@ import { useLanguage } from '@/hooks/useLanguage';
 
 const Contact = () => {
   const { t } = useLanguage();
-  
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Header */}
@@ -25,11 +25,11 @@ const Contact = () => {
                 <Star className="w-6 h-6 text-cosmic-foreground" />
               </div>
             </div>
-            
+
             <h1 className="font-cosmic text-4xl md:text-6xl font-bold mb-6">
               <span className="text-mystical-gradient">{t('contact.title.contact')}</span>
             </h1>
-            
+
             <p className="font-mystical text-lg text-muted-foreground max-w-2xl mx-auto">
               {t('contact.subtitle')}
             </p>
@@ -50,51 +50,51 @@ const Contact = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName" className="font-mystical">{t('contact.form.firstName')}</Label>
-                    <Input 
-                      id="firstName" 
+                    <Input
+                      id="firstName"
                       placeholder={t('contact.form.firstNamePlaceholder')}
                       className="bg-input/50 border-border/50 focus:border-cosmic cosmic-hover"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName" className="font-mystical">{t('contact.form.lastName')}</Label>
-                    <Input 
-                      id="lastName" 
+                    <Input
+                      id="lastName"
                       placeholder={t('contact.form.lastNamePlaceholder')}
                       className="bg-input/50 border-border/50 focus:border-cosmic cosmic-hover"
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="email" className="font-mystical">{t('contact.form.email')}</Label>
-                  <Input 
-                    id="email" 
-                    type="email" 
+                  <Input
+                    id="email"
+                    type="email"
                     placeholder={t('contact.form.emailPlaceholder')}
                     className="bg-input/50 border-border/50 focus:border-cosmic cosmic-hover"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="subject" className="font-mystical">{t('contact.form.subject')}</Label>
-                  <Input 
-                    id="subject" 
+                  <Input
+                    id="subject"
                     placeholder={t('contact.form.subjectPlaceholder')}
                     className="bg-input/50 border-border/50 focus:border-cosmic cosmic-hover"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="message" className="font-mystical">{t('contact.form.message')}</Label>
-                  <Textarea 
-                    id="message" 
+                  <Textarea
+                    id="message"
                     placeholder={t('contact.form.messagePlaceholder')}
                     rows={6}
                     className="bg-input/50 border-border/50 focus:border-cosmic cosmic-hover resize-none"
                   />
                 </div>
-                
+
                 <Button variant="cosmic" size="lg" className="w-full group">
                   {t('contact.form.send')}
                   <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -118,22 +118,22 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="font-mystical font-semibold text-foreground">{t('contact.info.email')}</p>
-                      <a 
-                        href="mailto:sh4m4ni4k@sh4m4ni4k.nl"
+                      <a
+                        href="mailto:support@timeline-alchemy.com"
                         className="font-mystical text-muted-foreground hover:text-cosmic transition-colors"
                       >
-                        timeline-alchemy@sh4m4ni4k.nl
+                        support@timeline-alchemy.com
                       </a>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-4 cosmic-hover">
                     <div className="w-12 h-12 bg-mystical/20 rounded-full flex items-center justify-center">
                       <Phone className="w-6 h-6 text-mystical" />
                     </div>
                     <div>
                       <p className="font-mystical font-semibold text-foreground">{t('contact.info.phone')}</p>
-                      <a 
+                      <a
                         href="tel:+31613163277"
                         className="font-mystical text-muted-foreground hover:text-cosmic transition-colors"
                       >
@@ -141,7 +141,7 @@ const Contact = () => {
                       </a>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start space-x-4 cosmic-hover">
                     <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mt-1">
                       <MapPin className="w-6 h-6 text-accent" />
@@ -192,7 +192,7 @@ const Contact = () => {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
