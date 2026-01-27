@@ -12,11 +12,13 @@ const Navigation = () => {
   const { t, language } = useLanguage();
   const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
   const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
+  const timelessAwarenessHref = 'https://www.timeless-awareness.nl';
+
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star, external: true },
     { name: 'Cosmic Community Creator', href: cosmicCommunityCreatorHref, icon: Users, external: true },
-    { name: 'Blog', href: '/blog', icon: BookOpen },
+    { name: 'Timeless Awareness', href: timelessAwarenessHref, icon: BookOpen, external: true },
     { name: t('nav.about'), href: '/about', icon: Star },
     { name: t('nav.contact'), href: '/contact', icon: Mail },
   ];

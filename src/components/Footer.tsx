@@ -8,16 +8,15 @@ const Footer = () => {
   const { t, language } = useLanguage();
   const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
   const cosmicCommunityCreatorHref = 'https://cosmic-community-creator.vercel.app/';
+  const timelessAwarenessHref = 'https://www.timeless-awareness.nl';
 
-
-
-  const footerLinks = {
-    community: [
-      { name: 'Blog', href: '/blog' },
-      { name: t('footer.about'), href: '/about' },
-      { name: t('footer.contact'), href: '/contact' },
-    ]
-  };
+  const footerLinks = [
+    { name: 'Timeless Awareness', href: timelessAwarenessHref, external: true },
+    { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, external: true },
+    { name: 'Cosmic Community Creator', href: cosmicCommunityCreatorHref, external: true },
+    { name: t('footer.about'), href: '/about', external: false },
+    { name: t('footer.contact'), href: '/contact', external: false },
+  ];
 
   return (
     <footer className="bg-card/50 backdrop-blur-md border-t border-border">
@@ -32,37 +31,27 @@ const Footer = () => {
                 Links
               </h3>
               <ul className="space-y-2">
-                {footerLinks.community.map((link) => (
+                {footerLinks.map((link) => (
                   <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                    >
-                      {link.name}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
-
-                <li>
-                  <a
-                    href={timelineAlchemyEntryHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                  >
-                    Timeline Alchemy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={cosmicCommunityCreatorHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover text-sm"
-                  >
-                    Cosmic Community Creator
-                  </a>
-                </li>
               </ul>
             </div>
 
@@ -102,10 +91,10 @@ const Footer = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-end space-x-2 text-sm">
                   <a
-                    href="mailto:sh4m4ni4k@sh4m4ni4k.nl"
+                    href="mailto:support@timeline-alchemy.com"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
                   >
-                    timeline-alchemy@sh4m4ni4k.nl
+                    support@timeline-alchemy.com
                   </a>
                   <Mail className="w-4 h-4 text-cosmic" />
                 </div>
