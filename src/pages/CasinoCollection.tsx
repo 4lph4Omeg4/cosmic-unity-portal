@@ -141,8 +141,8 @@ const CasinoCollection = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 { id: 'pack3', isFeatured: false },
-                { id: 'pack2', isFeatured: true },
-                { id: 'pack1', isFeatured: false },
+                { id: 'pack1', isFeatured: true },
+                { id: 'pack2', isFeatured: false },
                 { id: 'pack6', isFeatured: false },
                 { id: 'pack5', isFeatured: true },
                 { id: 'pack4', isFeatured: false },
@@ -157,9 +157,9 @@ const CasinoCollection = () => {
                     </div>
                     <h4 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-2">{t(`casino.packs.${pack.id}.title` as any)}</h4>
                     <p className="font-mystical text-lg text-secondary mb-4">{t(`casino.packs.${pack.id}.desc` as any)}</p>
-                    <Button className={`w-full cosmic-hover text-white border-none cursor-pointer ${pack.isFeatured ? 'bg-mystical-gradient' : 'bg-cosmic-gradient'}`}>
-                      {t('common.buyNow')} - {t(`casino.packs.${pack.id}.price` as any)}
-                    </Button>
+                    <div className={`w-full text-center py-3 rounded-xl font-bold transition-all duration-300 ${pack.isFeatured ? 'bg-mystical-gradient text-white shadow-cosmic' : 'bg-cosmic/10 text-cosmic border border-cosmic/30'}`}>
+                      {t(`casino.packs.${pack.id}.price` as any)}
+                    </div>
                   </div>
                 </div>
               ))}
