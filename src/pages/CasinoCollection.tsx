@@ -140,24 +140,21 @@ const CasinoCollection = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { id: 'pack3', isFeatured: false },
-                { id: 'pack1', isFeatured: true },
-                { id: 'pack2', isFeatured: false },
-                { id: 'pack6', isFeatured: false },
-                { id: 'pack5', isFeatured: true },
-                { id: 'pack4', isFeatured: false },
+                { id: 'pack3' },
+                { id: 'pack1' },
+                { id: 'pack2' },
+                { id: 'pack6' },
+                { id: 'pack5' },
+                { id: 'pack4' },
               ].map((pack) => (
-                <div key={pack.id} className={`bg-card/50 backdrop-blur-md border p-6 rounded-2xl cosmic-hover group relative ${pack.isFeatured ? 'border-cosmic/50' : 'border-border'}`}>
-                  {pack.isFeatured && (
-                    <div className="absolute -inset-1 bg-cosmic-gradient opacity-20 group-hover:opacity-40 blur rounded-2xl transition-opacity duration-500 pointer-events-none"></div>
-                  )}
+                <div key={pack.id} className="bg-card/50 backdrop-blur-md border border-border p-6 rounded-2xl cosmic-hover group relative">
                   <div className="relative z-10 w-full">
-                    <div className={`rounded-xl overflow-hidden mb-6 shadow-md ${pack.isFeatured ? 'border border-cosmic/50 shadow-cosmic' : 'border border-cosmic/30'}`}>
+                    <div className="rounded-xl overflow-hidden mb-6 shadow-md border border-cosmic/30">
                       <img src={`/images/${pack.id}.jpg`} alt={t(`casino.packs.${pack.id}.title` as any)} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
                     <h4 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-2">{t(`casino.packs.${pack.id}.title` as any)}</h4>
                     <p className="font-mystical text-lg text-secondary mb-4">{t(`casino.packs.${pack.id}.desc` as any)}</p>
-                    <div className={`w-full text-center py-2.5 rounded-lg border backdrop-blur-sm text-sm font-medium tracking-wide ${pack.isFeatured ? 'border-cosmic/20 bg-cosmic/5 text-cosmic/80' : 'border-border/40 bg-background/40 text-muted-foreground'}`}>
+                    <div className="w-full text-center py-2.5 rounded-lg border border-border/40 bg-background/40 backdrop-blur-sm text-sm font-medium tracking-wide text-muted-foreground">
                       {t(`casino.packs.${pack.id}.price` as any)}
                     </div>
                   </div>
