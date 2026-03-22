@@ -26,6 +26,7 @@ import RefundPolicy from "./pages/RefundPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import UnderConstruction from "./pages/UnderConstruction";
 import NotFound from "./pages/NotFound";
+import CasinoCollection from "./pages/CasinoCollection";
 
 
 // Analytics
@@ -70,6 +71,7 @@ const App: React.FC = () => {
               <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
 
               <Route path="/digitempel" element={<UnderConstruction />} />
+              <Route path="/casino-collection" element={<CasinoCollection />} />
 
 
               {/* Catch-all */}

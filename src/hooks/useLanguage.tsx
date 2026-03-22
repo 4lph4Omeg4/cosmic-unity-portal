@@ -183,6 +183,45 @@ const translations = {
       profile: 'Profiel',
       logout: 'Uitloggen',
       cart: 'Winkelwagen',
+      casinoCollection: 'Cosmic Casino Collectie',
+    },
+    casino: {
+      title: 'Cosmic Casino Collectie',
+      welcome: 'Welkom in het kosmische gamingrijk. Download onze exclusieve casino-applicaties rechtstreeks op je apparaat. Alle betalingen worden veilig verwerkt via Stripe.',
+      secureApk: 'Beveiligde APK',
+      stripeOnly: 'Alleen Stripe Betalingen',
+      firstTrinity: 'De Eerste Drie-eenheid',
+      firstTrinityDesc: 'Het inaugurele trio van kosmische game-ervaringen.',
+      secondTrinity: 'De Tweede Drie-eenheid',
+      secondTrinityDesc: 'Reis dieper in de mysteries van overvloed.',
+      downloadApk: 'Download APK',
+      comingSoon: 'Binnenkort Beschikbaar',
+      games: {
+        universalSlots: {
+          title: 'Universal Slots',
+          desc: 'Draai de slots om de kosmische rollen uit te lijnen en verzilver het overvloedraamwerk.'
+        },
+        blackholeBlackjack: {
+          title: 'Blackhole Blackjack',
+          desc: 'Trotseer de kosmische leegte in deze spannende draai aan klassiek blackjack.'
+        },
+        galacticPoker: {
+          title: 'Galactic Poker',
+          desc: 'Roep de sterren aan en verhoog de inzet bij intergalactisch poker.'
+        },
+        innerSpace: {
+          title: 'Inner-Space',
+          desc: 'Reis door de mystieke rijken en verken je innerlijke universum.'
+        },
+        placeholder2: {
+          title: 'Placeholder 2',
+          desc: 'Een aankomende ervaring die het overvloedraamwerk uitbreidt.'
+        },
+        placeholder3: {
+          title: 'Placeholder 3',
+          desc: 'Een aankomende ervaring die het overvloedraamwerk uitbreidt.'
+        }
+      }
     },
     footer: {
       allProducts: 'Alle producten',
@@ -772,6 +811,45 @@ const translations = {
       profile: 'Profile',
       logout: 'Logout',
       cart: 'Cart',
+      casinoCollection: 'Cosmic Casino Collection',
+    },
+    casino: {
+      title: 'Cosmic Casino Collection',
+      welcome: 'Welcome to the cosmic gaming realm. Download our exclusive casino applications directly to your device. All payments are securely processed through Stripe.',
+      secureApk: 'Secure APK',
+      stripeOnly: 'Stripe Payments Only',
+      firstTrinity: 'First Trinity',
+      firstTrinityDesc: 'The inaugural trio of cosmic gaming experiences.',
+      secondTrinity: 'Second Trinity',
+      secondTrinityDesc: 'Journey deeper into the mysteries of abundance.',
+      downloadApk: 'Download APK',
+      comingSoon: 'Coming Soon',
+      games: {
+        universalSlots: {
+          title: 'Universal Slots',
+          desc: 'Spin the slots to align the cosmic reels and tap into the abundance framework.'
+        },
+        blackholeBlackjack: {
+          title: 'Blackhole Blackjack',
+          desc: 'Face the cosmic void in this thrilling twist on classic blackjack.'
+        },
+        galacticPoker: {
+          title: 'Galactic Poker',
+          desc: 'Call the stars and raise the stakes in intergalactic poker.'
+        },
+        innerSpace: {
+          title: 'Inner-Space',
+          desc: 'Journey through the mystic realms and explore your inner universe.'
+        },
+        placeholder2: {
+          title: 'Placeholder 2',
+          desc: 'An upcoming experience expanding the abundance framework.'
+        },
+        placeholder3: {
+          title: 'Placeholder 3',
+          desc: 'An upcoming experience expanding the abundance framework.'
+        }
+      }
     },
     footer: {
       allProducts: 'All Products',
@@ -1361,6 +1439,45 @@ const translations = {
       profile: 'Profil',
       logout: 'Abmelden',
       cart: 'Warenkorb',
+      casinoCollection: 'Cosmic Casino Kollektion',
+    },
+    casino: {
+      title: 'Cosmic Casino Kollektion',
+      welcome: 'Willkommen im kosmischen Gaming-Reich. Laden Sie unsere exklusiven Casino-Anwendungen direkt auf Ihr Gerät herunter. Alle Zahlungen werden sicher über Stripe abgewickelt.',
+      secureApk: 'Sichere APK',
+      stripeOnly: 'Nur Stripe-Zahlungen',
+      firstTrinity: 'Die erste Dreifaltigkeit',
+      firstTrinityDesc: 'Das erste Trio an kosmischen Spielerlebnissen.',
+      secondTrinity: 'Die zweite Dreifaltigkeit',
+      secondTrinityDesc: 'Reisen Sie tiefer in die Geheimnisse des Reichtums.',
+      downloadApk: 'APK herunterladen',
+      comingSoon: 'Demnächst',
+      games: {
+        universalSlots: {
+          title: 'Universal Slots',
+          desc: 'Drehen Sie die Slots, um die kosmischen Rollen und Reichtümer auszurichten.'
+        },
+        blackholeBlackjack: {
+          title: 'Blackhole Blackjack',
+          desc: 'Stellen Sie sich der kosmischen Leere in dieser spannenden Interpretation des klassischen Blackjack.'
+        },
+        galacticPoker: {
+          title: 'Galactic Poker',
+          desc: 'Rufen Sie die Sterne an und erhöhen Sie die Einsätze beim intergalaktischen Poker.'
+        },
+        innerSpace: {
+          title: 'Inner-Space',
+          desc: 'Reisen Sie durch mystische Welten und erkunden Sie Ihr inneres Universum.'
+        },
+        placeholder2: {
+          title: 'Platzhalter 2',
+          desc: 'Ein zukünftiges Erlebnis, das das System des Reichtums erweitert.'
+        },
+        placeholder3: {
+          title: 'Platzhalter 3',
+          desc: 'Ein zukünftiges Erlebnis, das das System des Reichtums erweitert.'
+        }
+      }
     },
     footer: {
       allProducts: 'Alle Produkte',

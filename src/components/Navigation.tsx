@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Star, Home, BookOpen, Mail, Users } from 'lucide-react';
+import { Menu, X, Star, Home, BookOpen, Mail, Users, Gamepad2 } from 'lucide-react';
 import LanguageSelector from '@/components/LanguageSelector';
 
 const Navigation = () => {
@@ -17,6 +17,7 @@ const Navigation = () => {
   const navigation = [
     { name: t('nav.home'), href: '/', icon: Home },
     { name: 'Timeline Alchemy', href: timelineAlchemyEntryHref, icon: Star, external: true },
+    { name: t('nav.casinoCollection'), href: '/casino-collection', icon: Gamepad2, external: false },
     { name: 'Cosmic Community Creator', href: cosmicCommunityCreatorHref, icon: Users, external: true },
     { name: 'Timeless Awareness', href: timelessAwarenessHref, icon: BookOpen, external: true },
     { name: t('nav.about'), href: '/about', icon: Star },
