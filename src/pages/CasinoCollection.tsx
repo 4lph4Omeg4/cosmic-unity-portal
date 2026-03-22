@@ -157,7 +157,7 @@ const CasinoCollection = () => {
                     </div>
                     <h4 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-2">{t(`casino.packs.${pack.id}.title` as any)}</h4>
                     <p className="font-mystical text-lg text-secondary mb-4">{t(`casino.packs.${pack.id}.desc` as any)}</p>
-                    <div className={`w-full text-center py-3 rounded-xl font-bold transition-all duration-300 ${pack.isFeatured ? 'bg-mystical-gradient text-white shadow-cosmic' : 'bg-cosmic/10 text-cosmic border border-cosmic/30'}`}>
+                    <div className={`w-full text-center py-2.5 rounded-lg border backdrop-blur-sm text-sm font-medium tracking-wide ${pack.isFeatured ? 'border-cosmic/20 bg-cosmic/5 text-cosmic/80' : 'border-border/40 bg-background/40 text-muted-foreground'}`}>
                       {t(`casino.packs.${pack.id}.price` as any)}
                     </div>
                   </div>
