@@ -24,7 +24,6 @@ import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import TermsOfService from "./pages/TermsOfService";
-import UnderConstruction from "./pages/UnderConstruction";
 import NotFound from "./pages/NotFound";
 import CasinoCollection from "./pages/CasinoCollection";
 
@@ -70,7 +69,6 @@ const App: React.FC = () => {
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/nutzungsbedingungen" element={<TermsOfService />} />
 
-              <Route path="/digitempel" element={<UnderConstruction />} />
               <Route path="/casino-collection" element={<CasinoCollection />} />
 
 

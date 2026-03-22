@@ -224,9 +224,9 @@ const translations = {
           title: 'Inner-Space',
           desc: 'Reis door de mystieke rijken en verken je innerlijke universum.'
         },
-        placeholder2: {
-          title: 'Placeholder 2',
-          desc: 'Een aankomende ervaring die het overvloedraamwerk uitbreidt.'
+        cosmicCommunityCreator: {
+          title: 'Cosmic Community Creator',
+          desc: 'Breng je eigen community tot leven met dit krachtige platform voor kosmische verbinding.'
         },
         placeholder3: {
           title: 'Placeholder 3',
@@ -863,9 +863,9 @@ const translations = {
           title: 'Inner-Space',
           desc: 'Journey through the mystic realms and explore your inner universe.'
         },
-        placeholder2: {
-          title: 'Placeholder 2',
-          desc: 'An upcoming experience expanding the abundance framework.'
+        cosmicCommunityCreator: {
+          title: 'Cosmic Community Creator',
+          desc: 'Bring your own community to life with this powerful platform for cosmic connection.'
         },
         placeholder3: {
           title: 'Placeholder 3',
@@ -1502,9 +1502,9 @@ const translations = {
           title: 'Inner-Space',
           desc: 'Reisen Sie durch mystische Welten und erkunden Sie Ihr inneres Universum.'
         },
-        placeholder2: {
-          title: 'Platzhalter 2',
-          desc: 'Ein zukünftiges Erlebnis, das das System des Reichtums erweitert.'
+        cosmicCommunityCreator: {
+          title: 'Cosmic Community Creator',
+          desc: 'Erwecken Sie Ihre eigene Community zum Leben mit dieser leistungsstarken Plattform für kosmische Verbindung.'
         },
         placeholder3: {
           title: 'Platzhalter 3',

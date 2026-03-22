@@ -11,10 +11,8 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${cosmicHero})` }}
-      >
+      <div className="absolute inset-0">
+        <img src={cosmicHero} alt="Cosmic Background" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/60 backdrop-blur-sm"></div>
       </div>
 
@@ -22,7 +20,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 border border-cosmic rounded-full animate-mystical-float"></div>
         <div className="absolute top-3/4 right-1/4 w-24 h-24 border border-accent rotate-45 animate-cosmic-pulse"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-20 h-20 border border-secondary rounded-full animate-mystical-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-1/4 left-1/3 w-20 h-20 border border-secondary rounded-full animate-mystical-float [animation-delay:2s]"></div>
       </div>
 
       {/* Content */}
@@ -92,7 +90,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/4 w-2 h-2 bg-cosmic rounded-full animate-mystical-float opacity-60"></div>
         <div className="absolute top-2/3 right-1/3 w-1 h-1 bg-accent rounded-full animate-cosmic-pulse opacity-80"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-3 h-3 bg-secondary rounded-full animate-mystical-float opacity-40" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-1/3 left-1/2 w-3 h-3 bg-secondary rounded-full animate-mystical-float opacity-40 [animation-delay:1s]"></div>
       </div>
     </section>
   );

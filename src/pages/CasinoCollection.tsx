@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Gamepad2, Download, ShieldCheck, CreditCard } from 'lucide-react';
+import { Gamepad2, Download, ShieldCheck, CreditCard, Users, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -48,11 +48,12 @@ const CasinoCollection = () => {
           icon: <Gamepad2 className="w-16 h-16 text-mystical" />
         },
         {
-          title: t('casino.games.placeholder2.title'),
-          description: t('casino.games.placeholder2.desc'),
-          apkLink: '#',
-          isPlaceholder: true,
-          icon: <Gamepad2 className="w-16 h-16 text-muted-foreground opacity-50" />
+          title: t('casino.games.cosmicCommunityCreator.title'),
+          description: t('casino.games.cosmicCommunityCreator.desc'),
+          apkLink: 'https://cosmic-community-creator.vercel.app/',
+          isPlaceholder: false,
+          isExternal: true,
+          icon: <Users className="w-16 h-16 text-accent drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
         },
         {
           title: t('casino.games.placeholder3.title'),
@@ -112,9 +113,9 @@ const CasinoCollection = () => {
                           {game.description}
                         </p>
                         <Button asChild className={`w-full ${game.isPlaceholder ? 'bg-muted text-muted-foreground pointer-events-none' : 'cosmic-hover bg-cosmic-gradient text-white border-none cursor-pointer'}`}>
-                          <a href={game.apkLink} download={!game.isPlaceholder}>
-                            <Download className="w-4 h-4 mr-2" />
-                            {game.isPlaceholder ? t('casino.comingSoon') : t('casino.downloadApk')}
+                          <a href={game.apkLink} download={!game.isPlaceholder && !game.isExternal} target={game.isExternal ? '_blank' : undefined} rel={game.isExternal ? 'noopener noreferrer' : undefined}>
+                            {game.isExternal ? <ExternalLink className="w-4 h-4 mr-2" /> : <Download className="w-4 h-4 mr-2" />}
+                            {game.isPlaceholder ? t('casino.comingSoon') : (game.isExternal ? 'Open App' : t('casino.downloadApk'))}
                           </a>
                         </Button>
                       </div>
