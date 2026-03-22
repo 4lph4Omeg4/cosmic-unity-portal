@@ -196,6 +196,17 @@ const translations = {
       secondTrinityDesc: 'Reis dieper in de mysteries van overvloed.',
       downloadApk: 'Download APK',
       comingSoon: 'Binnenkort Beschikbaar',
+      ecosystemTitle: 'Kosmisch Krediet Ecosysteem',
+      ecosystemDesc: 'Ons ecosysteem van games vertrouwt allemaal op hetzelfde kredietbeheersysteem, zodat aankopen cross-platform kunnen worden gebruikt in alle verbonden apps. Zowel huidige als toekomstige toevoegingen zullen naadloos dezelfde coherente gebruikerservaring ondersteunen.',
+      creditPacks: 'Credit Packs',
+      packs: {
+        pack1: { title: 'Cosmic Pocket Pack', desc: '5500 SC', price: '€4,99' },
+        pack2: { title: 'Nebula Boost Pack', desc: '12.000 SC', price: '€9,99' },
+        pack3: { title: 'Spark Pack', desc: '1000 SC', price: '€0,99' },
+        pack4: { title: 'Universal Whale Vault', desc: '150.000 SC', price: '€99,99' },
+        pack5: { title: 'Galaxy Vault', desc: '70.000 SC', price: '€49,99' },
+        pack6: { title: 'Supernova Pack', desc: '26.000 SC', price: '€19,99' }
+      },
       games: {
         universalSlots: {
           title: 'Universal Slots',
@@ -824,6 +835,17 @@ const translations = {
       secondTrinityDesc: 'Journey deeper into the mysteries of abundance.',
       downloadApk: 'Download APK',
       comingSoon: 'Coming Soon',
+      ecosystemTitle: 'Cosmic Credit Ecosystem',
+      ecosystemDesc: 'Our ecosystem of games all rely upon the same credit-management system, so purchases can be used cross-platform throughout all connected apps. Current and future additions will seamlessly support the same coherent user experiences.',
+      creditPacks: 'Credit Packs',
+      packs: {
+        pack1: { title: 'Cosmic Pocket Pack', desc: '5500 SC', price: '€4.99' },
+        pack2: { title: 'Nebula Boost Pack', desc: '12,000 SC', price: '€9.99' },
+        pack3: { title: 'Spark Pack', desc: '1000 SC', price: '€0.99' },
+        pack4: { title: 'Universal Whale Vault', desc: '150,000 SC', price: '€99.99' },
+        pack5: { title: 'Galaxy Vault', desc: '70,000 SC', price: '€49.99' },
+        pack6: { title: 'Supernova Pack', desc: '26,000 SC', price: '€19.99' }
+      },
       games: {
         universalSlots: {
           title: 'Universal Slots',
@@ -1452,6 +1474,17 @@ const translations = {
       secondTrinityDesc: 'Reisen Sie tiefer in die Geheimnisse des Reichtums.',
       downloadApk: 'APK herunterladen',
       comingSoon: 'Demnächst',
+      ecosystemTitle: 'Kosmisches Kredit-Ökosystem',
+      ecosystemDesc: 'Unser Ökosystem an Spielen greift auf dasselbe Kreditverwaltungssystem zurück. Somit können Käufe plattformübergreifend in allen verbundenen Apps genutzt werden. Aktuelle und zukünftige Erweiterungen werden nahtlos dasselbe kohärente Nutzererlebnis unterstützen.',
+      creditPacks: 'Credit Packs',
+      packs: {
+        pack1: { title: 'Cosmic Pocket Pack', desc: '5500 SC', price: '€4,99' },
+        pack2: { title: 'Nebula Boost Pack', desc: '12.000 SC', price: '€9,99' },
+        pack3: { title: 'Spark Pack', desc: '1000 SC', price: '€0,99' },
+        pack4: { title: 'Universal Whale Vault', desc: '150.000 SC', price: '€99,99' },
+        pack5: { title: 'Galaxy Vault', desc: '70.000 SC', price: '€49,99' },
+        pack6: { title: 'Supernova Pack', desc: '26.000 SC', price: '€19,99' }
+      },
       games: {
         universalSlots: {
           title: 'Universal Slots',

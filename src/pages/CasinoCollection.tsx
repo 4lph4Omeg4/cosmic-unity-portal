@@ -124,6 +124,47 @@ const CasinoCollection = () => {
               </div>
             ))}
           </div>
+
+          {/* Ecosystem Section */}
+          <div className="mt-32 max-w-5xl mx-auto text-center">
+            <h2 className="font-cosmic text-3xl md:text-4xl font-bold text-cosmic-gradient mb-6">
+              {t('casino.ecosystemTitle')}
+            </h2>
+            <p className="font-mystical text-lg text-muted-foreground mb-16 leading-relaxed max-w-3xl mx-auto">
+              {t('casino.ecosystemDesc')}
+            </p>
+
+            <h3 className="font-cosmic text-2xl font-bold text-mystical-gradient mb-8">
+              {t('casino.creditPacks')}
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { id: 'pack3', isFeatured: false },
+                { id: 'pack2', isFeatured: true },
+                { id: 'pack1', isFeatured: false },
+                { id: 'pack6', isFeatured: false },
+                { id: 'pack5', isFeatured: true },
+                { id: 'pack4', isFeatured: false },
+              ].map((pack) => (
+                <div key={pack.id} className={`bg-card/50 backdrop-blur-md border p-6 rounded-2xl cosmic-hover group relative ${pack.isFeatured ? 'border-cosmic/50' : 'border-border'}`}>
+                  {pack.isFeatured && (
+                    <div className="absolute -inset-1 bg-cosmic-gradient opacity-20 group-hover:opacity-40 blur rounded-2xl transition-opacity duration-500 pointer-events-none"></div>
+                  )}
+                  <div className="relative z-10 w-full">
+                    <div className={`rounded-xl overflow-hidden mb-6 shadow-md ${pack.isFeatured ? 'border border-cosmic/50 shadow-cosmic' : 'border border-cosmic/30'}`}>
+                      <img src={`/images/${pack.id}.jpg`} alt={t(`casino.packs.${pack.id}.title` as any)} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <h4 className="font-cosmic text-xl font-bold text-cosmic-gradient mb-2">{t(`casino.packs.${pack.id}.title` as any)}</h4>
+                    <p className="font-mystical text-lg text-secondary mb-4">{t(`casino.packs.${pack.id}.desc` as any)}</p>
+                    <Button className={`w-full cosmic-hover text-white border-none cursor-pointer ${pack.isFeatured ? 'bg-mystical-gradient' : 'bg-cosmic-gradient'}`}>
+                      {t('common.buyNow')} - {t(`casino.packs.${pack.id}.price` as any)}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
 

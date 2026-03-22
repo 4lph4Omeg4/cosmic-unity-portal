@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Star, Zap } from 'lucide-react';
+import { ArrowRight, Star, Zap, Gamepad2 } from 'lucide-react';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -50,13 +50,19 @@ const HeroSection = () => {
         </p>
 
         {/* Call to Action */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center mb-12">
           <a href="https://www.timeline-alchemy.nl" target="_blank" rel="noopener noreferrer">
             <Button variant="cosmic" size="lg" className="group">
               Timeline Alchemy
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </a>
+          <Link to="/casino-collection">
+            <Button variant="outline" size="lg" className="group border-cosmic hover:bg-cosmic/20 transition-all duration-300">
+              <Gamepad2 className="mr-2 h-5 w-5 text-cosmic" />
+              <span className="text-cosmic-gradient font-semibold">{t('nav.casinoCollection')}</span>
+            </Button>
+          </Link>
           <a href="https://www.timeless-awareness.nl" target="_blank" rel="noopener noreferrer">
             <Button variant="energy" size="lg" className="group">
               <Zap className="mr-2 h-5 w-5" />
