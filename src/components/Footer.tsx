@@ -90,10 +90,10 @@ const Footer = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-end space-x-2 text-sm">
                   <a
-                    href="mailto:support@timeline-alchemy.com"
+                    href="mailto:dennis@timeline-alchemy.com"
                     className="font-mystical text-muted-foreground hover:text-cosmic cosmic-hover"
                   >
-                    support@timeline-alchemy.com
+                    dennis@timeline-alchemy.com
                   </a>
                   <Mail className="w-4 h-4 text-cosmic" />
                 </div>

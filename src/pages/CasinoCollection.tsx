@@ -16,15 +16,17 @@ const CasinoCollection = () => {
         {
           title: t('casino.games.universalSlots.title'),
           description: t('casino.games.universalSlots.desc'),
-          apkLink: '#',
+          apkLink: 'https://cosmic-casino-beta.vercel.app/',
           isPlaceholder: false,
+          isExternal: true,
           icon: <img src="/images/universal-slots.png" alt="Cosmic Casino" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         },
         {
           title: t('casino.games.blackholeBlackjack.title'),
           description: t('casino.games.blackholeBlackjack.desc'),
-          apkLink: '#',
+          apkLink: 'https://cosmic-blackjack.vercel.app/',
           isPlaceholder: false,
+          isExternal: true,
           icon: <img src="/images/blackhole-blackjack.png" alt="BlackHole Blackjack" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         },
         {
@@ -45,7 +47,7 @@ const CasinoCollection = () => {
           description: t('casino.games.innerSpace.desc'),
           apkLink: '#',
           isPlaceholder: false,
-          icon: <Gamepad2 className="w-16 h-16 text-mystical" />
+          icon: <img src="/images/inner-space.png" alt="Inner Space" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         },
         {
           title: t('casino.games.cosmicCommunityCreator.title'),
@@ -53,7 +55,7 @@ const CasinoCollection = () => {
           apkLink: 'https://cosmic-community-creator.vercel.app/',
           isPlaceholder: false,
           isExternal: true,
-          icon: <Users className="w-16 h-16 text-accent drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+          icon: <img src="/images/cosmic-community-creator.png" alt="Cosmic Community Creator" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         },
         {
           title: t('casino.games.placeholder3.title'),
