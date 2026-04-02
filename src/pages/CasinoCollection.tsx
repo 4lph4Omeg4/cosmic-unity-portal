@@ -45,7 +45,7 @@ const CasinoCollection = () => {
         {
           title: t('casino.games.innerSpace.title'),
           description: t('casino.games.innerSpace.desc'),
-          apkLink: '#',
+          apkLink: 'https://inner-space-flutter-app.vercel.app/',
           isPlaceholder: false,
           icon: <img src="/images/inner-space.png" alt="Inner Space" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         },
@@ -71,7 +71,7 @@ const CasinoCollection = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
-      
+
       <main className="flex-grow relative overflow-hidden py-24">
         {/* Sacred Geometry Background Elements */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -100,7 +100,7 @@ const CasinoCollection = () => {
                   <h2 className="font-cosmic text-3xl font-bold text-mystical-gradient mb-4">{trinity.title}</h2>
                   <p className="font-mystical text-muted-foreground text-lg">{trinity.description}</p>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {trinity.games.map((game, idx) => (
                     <div key={idx} className="bg-card/50 backdrop-blur-md border border-border p-8 rounded-2xl cosmic-hover group flex flex-col">
