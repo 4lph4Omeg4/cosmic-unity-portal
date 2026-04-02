@@ -47,6 +47,7 @@ const CasinoCollection = () => {
           description: t('casino.games.innerSpace.desc'),
           apkLink: 'https://inner-space-flutter-app.vercel.app/',
           isPlaceholder: false,
+          isExternal: true,
           icon: <img src="/images/inner-space.png" alt="Inner Space" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         },
         {
