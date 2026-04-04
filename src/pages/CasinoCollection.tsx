@@ -32,8 +32,9 @@ const CasinoCollection = () => {
         {
           title: t('casino.games.galacticPoker.title'),
           description: t('casino.games.galacticPoker.desc'),
-          apkLink: '#',
+          apkLink: 'https://galactic-poker.vercel.app/',
           isPlaceholder: false,
+          isExternal: true,
           icon: <img src="/images/galactic-poker.png" alt="Galactic Poker" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
         }
       ]
