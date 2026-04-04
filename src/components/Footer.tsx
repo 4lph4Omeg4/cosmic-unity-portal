@@ -6,7 +6,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { t, language } = useLanguage();
-  const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.nl';
+  const timelineAlchemyEntryHref = 'https://www.timeline-alchemy.com';
   const timelessAwarenessHref = 'https://www.timeless-awareness.nl';
 
   const footerLinks = [
