@@ -16,7 +16,7 @@ const CasinoCollection = () => {
         {
           title: t('casino.games.universalSlots.title'),
           description: t('casino.games.universalSlots.desc'),
-          apkLink: 'https://cosmic-casino-beta.vercel.app/',
+          apkLink: 'https://slots.cosmic-casino.one/',
           isPlaceholder: false,
           isExternal: true,
           icon: <img src="/images/universal-slots.png" alt="Cosmic Casino" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
@@ -24,7 +24,7 @@ const CasinoCollection = () => {
         {
           title: t('casino.games.blackholeBlackjack.title'),
           description: t('casino.games.blackholeBlackjack.desc'),
-          apkLink: 'https://cosmic-blackjack.vercel.app/',
+          apkLink: 'https://blackjack.cosmic-casino.one/',
           isPlaceholder: false,
           isExternal: true,
           icon: <img src="/images/blackhole-blackjack.png" alt="BlackHole Blackjack" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
@@ -32,7 +32,7 @@ const CasinoCollection = () => {
         {
           title: t('casino.games.galacticPoker.title'),
           description: t('casino.games.galacticPoker.desc'),
-          apkLink: 'https://galactic-poker.vercel.app/',
+          apkLink: 'https://poker.cosmic-casino.one/',
           isPlaceholder: false,
           isExternal: true,
           icon: <img src="/images/galactic-poker.png" alt="Galactic Poker" className="w-24 h-24 object-contain rounded-xl drop-shadow-lg" />
